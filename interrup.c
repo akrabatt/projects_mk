@@ -13,7 +13,7 @@ extern void transmit(void);
 void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
     
     if(count1++ == 100){
-        PORTAbits.RA1 = LATAbits.LATA1 ^ 1;
+        PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
         transmit();
         count1 = 0;
     }
@@ -22,7 +22,7 @@ void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
 
 void __ISR_AT_VECTOR (_TIMER_2_VECTOR, IPL5SRS) T2Interrupt(void) {
     if(count2++ == 100) {
-        PORTBbits.RB11 = LATBbits.LATB11 ^ 1;
+        PORTEbits.RE1 = LATEbits.LATE1 ^ 1;
         count2 = 0;
     }
     IFS0bits.T2IF = 0;

@@ -92,8 +92,8 @@ void timer_2_init(void) {
 }   //init timer2
 
 void port_init(void) {
-    TRISA = 0x0;    // port init in output
-    TRISB = 0x0;
+    TRISE = 0x0;    // port init in output
+//    TRISB = 0x0;
 }   //port init
 
 void uart5_init(void) {     //init uart settings
