@@ -94,6 +94,17 @@ void timer_2_init(void) {
 void port_init(void) {
     TRISE = 0x0;    // port init in output
 //    TRISB = 0x0;
+    ANSELEbits.ANSE4 = 0;   //pin RE4 changed in to D
+    
+    SDI5Rbits.SDI5R = 0b0101;           //SDI5 --> RPB9
+    
+    U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14    
+    U5RXRbits.U5RXR = 0b1101;           //U5RX --> RPA14 
+    
+    RPF12Rbits.RPF12R = 0b0010;         //U4TX    
+    RPA15Rbits.RPA15R = 0b0011;         //U5TX
+    
+    RPB10Rbits.RPB10R = 0b1001;         //SDO5
 }   //port init
 
 void uart5_init(void) {     //init uart settings

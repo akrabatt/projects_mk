@@ -14,6 +14,7 @@ void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
     
     if(count1++ == 100){
         PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
+        PORTEbits.RE3 = LATEbits.LATE3 ^ 1;
         transmit();
         count1 = 0;
     }
@@ -23,6 +24,7 @@ void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
 void __ISR_AT_VECTOR (_TIMER_2_VECTOR, IPL5SRS) T2Interrupt(void) {
     if(count2++ == 100) {
         PORTEbits.RE1 = LATEbits.LATE1 ^ 1;
+        PORTEbits.RE4 = LATEbits.LATE4 ^ 1;
         count2 = 0;
     }
     IFS0bits.T2IF = 0;
