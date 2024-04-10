@@ -9,14 +9,17 @@ extern void timer_1_init(void); //test comment
 extern void timer_2_init(void);
 extern void port_init(void);
 extern void stop_uart_tx(void);
+extern void uart5_init (void);
 
 void main(void) {
     
     //initialization
     InitSys();
+    port_init();
     timer_1_init();
     timer_2_init();
-    port_init();
+    uart5_init();
+    
     
     while(1){
         stop_uart_tx();
