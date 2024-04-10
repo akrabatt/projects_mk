@@ -23,6 +23,7 @@ void stop_uart_tx(void)
 			U5STAbits.OERR=0;
 		}        
     }
+	if (U4STAbits.OERR||U4STAbits.FERR)	{U4STAbits.OERR=0;}
 }
 
 void start_tx_usart (void)
