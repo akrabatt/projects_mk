@@ -1,5 +1,7 @@
 #include <xc.h>
 #include <p32xxxx.h>
+#include "def.h"
+#include "str.h"
 
 
 int count1, count2;     //tesc com
@@ -16,6 +18,7 @@ void main(void) {
     //initialization
     InitSys();
     port_init();
+    
     timer_1_init();
     timer_2_init();
     uart5_init();

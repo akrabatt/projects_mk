@@ -4,6 +4,7 @@
 #include "def.h"
 #include "str.h"
 
+// test comment     
 
 #pragma config FMIIEN = OFF             // Ethernet RMII/MII Enable (RMII Enabled)
 #pragma config FETHIO = ON              // Ethernet I/O Pin Select (Default Ethernet I/O)
@@ -49,6 +50,8 @@
 
 // DEVCP0
 #pragma config CP = OFF 
+
+tag_usart usart5;
 
 
 void InitSys(void){     //init sysem settings
@@ -162,6 +165,7 @@ void uart5_init(void) {     //init uart settings
     U5STAbits.URXEN = 1;                /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
     U5STAbits.UTXISEL = 0b00;           /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
     U5MODEbits.ON = 1;                   /* Enable UART module 1 */     
+    usart5.mb_status.tx_mode = INT_type; //test on dev branch
 }   
 
 // void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned  short  TMR1_ON) {

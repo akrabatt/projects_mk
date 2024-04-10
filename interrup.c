@@ -13,8 +13,8 @@ extern void transmit(void);
 void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
     
     if(count1++ == 100){
-        PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
-        PORTEbits.RE3 = LATEbits.LATE3 ^ 1;
+//        PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
+//        PORTEbits.RE3 = LATEbits.LATE3 ^ 1;
         transmit();
         count1 = 0;
     }
@@ -54,5 +54,7 @@ void __ISR_AT_VECTOR (_UART5_TX_VECTOR, IPL4SRS) U5TXInterrupt(void)  {
             IEC5bits.U5TXIE = 0;
         }
 	}
+    PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
+    PORTEbits.RE3 = LATEbits.LATE3 ^ 1;
 	IFS5bits.U5TXIF=0;
 }
