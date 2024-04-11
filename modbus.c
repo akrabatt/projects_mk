@@ -463,20 +463,21 @@ void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres)
 
 
 
-void mbs (struct tag_usart * usart, unsigned char mbs_addres)
-{  
-	if (!usart->mb_status.modb_received)	{return;}		//return if nothing received
+void mbs (struct tag_usart * usart, unsigned char mbs_addres) {  
+	if (!usart->mb_status.modb_received) {
+		return;	//return if nothing received
+	}		
 
-	if (usart->in_buffer[0]==mbs_addres) 	{  mbs_uni ( usart, mbs_addres); return;	}	//?????????? ?????? ?????????? ?????
-	else {		close_mb (usart);	return;	} 
+	if (usart->in_buffer[0]==mbs_addres) {
+		mbs_uni(usart, mbs_addres); 
+		return;	
+		}	
+	else {
+		close_mb(usart);	
+		return;	
+		} 
 
 }
-
-
-
-/* *****************************************************************************
- End of File
- */
 
 
 

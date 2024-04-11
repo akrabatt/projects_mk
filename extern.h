@@ -28,7 +28,7 @@ extern unsigned short help_load;
 extern float fpos, fcurr, fpres, resss;
 
     
- extern union tag_direct{
+extern union tag_direct{
 	struct  {
 		union {
 			struct {
@@ -81,7 +81,7 @@ extern float fpos, fcurr, fpres, resss;
 					};
 				};
 			unsigned short output [54];
-		      };
+		};
 		union {
 			struct {
 				float fl_1;                          	//  55
@@ -105,11 +105,11 @@ extern float fpos, fcurr, fpres, resss;
 					unsigned command_Istab_On :1;           	// Comman ON current stabilization function
 					unsigned command_Integ_ON :1;           	// Comman ON I-unit into the PI-regulator (current current stabilization function)
 					unsigned             :28;               	// Last 12 bits = byte for value of Kp regulator (current current stabilization function)
-					};
-				};		
+				};
+			};		
 			unsigned short input [24];
-			};
 		};
+	};
 	unsigned short buf [78] ;
 	} MB, MB_swap, calibr, calibr_swap;	// ???????? ?????? 2000 - 2078 (READ / WRITE)
 
@@ -150,7 +150,7 @@ extern struct tag_usart{
 		    unsigned 				:15;		// 18-32
 				} mb_status;
 	
-		} usart4, usart5;
+	} usart4, usart5;
     
         
 extern struct tag_ch 
@@ -248,23 +248,23 @@ extern union tag_Modbus {
         union {
 			struct {
 				unsigned flap_On  :1;			// 1
-				unsigned start  :1;			// 2 команда пуск
+				unsigned start  :1;			// 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 				unsigned ignit_allow :1;		// 4 Comman ON current stabilization function
-				unsigned CV_dir_ctrl :1;		// 8 режим прямого управления ТРК
-				unsigned PWM_dir_ctrl :1;		// 16 режим прямого управления ШИМ 
-				unsigned ign_ctrl :1;			// 32 режим проверки зажигания 
-				unsigned unlock :1;			// 64 деблокировка
-				unsigned AO :1;				// 128 команда аварийного останова
-				unsigned clr_err_cnt :1;		// 256 очистка счетчиков ошибок
-				unsigned stop :1;			// 512 команда стоп - выход из диагностических режимов 
-				unsigned press_mode_int :1;		// 1024 давление по интерфейсу
-				unsigned press_mode_analog :1;		// 2048 давление по аналогу
-				unsigned deep_on :1;			// 4096 глубокое запаздывание
-				unsigned NO :1;				// 8192 нормальный останов
-				unsigned stop_pid_on :1;		// 16384 приостановка пид-регулятора				
-				unsigned stop_pid_off :1;		// 32768 включение пид-регулятора	
-				unsigned forced_pid_on :1;		// 65536 включение форсированного пид-регулятора				
-				unsigned forced_pid_off :1;		// 131072 выключение форсированного пид-регулятора
+				unsigned CV_dir_ctrl :1;		// 8 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+				unsigned PWM_dir_ctrl :1;		// 16 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ 
+				unsigned ign_ctrl :1;			// 32 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
+				unsigned unlock :1;			// 64 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned AO :1;				// 128 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned clr_err_cnt :1;		// 256 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned stop :1;			// 512 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
+				unsigned press_mode_int :1;		// 1024 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned press_mode_analog :1;		// 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned deep_on :1;			// 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned NO :1;				// 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned stop_pid_on :1;		// 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ				
+				unsigned stop_pid_off :1;		// 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ	
+				unsigned forced_pid_on :1;		// 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ				
+				unsigned forced_pid_off :1;		// 131072 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				unsigned             :14;		// Last 8 bits = byte for value of Kp regulator (current current stabilization function)
 				};
 			unsigned long cmd1;						// 1
@@ -285,14 +285,14 @@ extern union tag_Modbus {
         unsigned short ADC_CV_pos;      //25
         unsigned short ADC_CV_curr;     //26
         unsigned short pulses_11;       //27      
-	unsigned short pulses_40;	//28	количество импульсов по каналу оборотов на обин оборот по каналу синхронизации
+	unsigned short pulses_40;	//28	пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         float err_rpm;                  //29
         union {
 		struct {
-			unsigned CV_locked :1;				// 1 "закусывание" ТРК
-			unsigned press_via_analog :1;			// 2 1 - работа по аналоговому сигналу; 0 - работа по интерфейсу
-			unsigned CV_magnet_brake :1;			// 4 обрыв электромагнита ТРК
-			unsigned CV_sensor_err :1;			// 8 недостоверность датчика положения ТРК
+			unsigned CV_locked :1;				// 1 "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅ
+			unsigned press_via_analog :1;			// 2 1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ; 0 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			unsigned CV_magnet_brake :1;			// 4 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+			unsigned CV_sensor_err :1;			// 8 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 			unsigned deep_mode :1;				// 16 Command ON 
 			unsigned Protect_unswitch :1;			// 32 Command ON 
 			unsigned DI1_ctrl :1;				// 64 Command ON 
@@ -300,12 +300,12 @@ extern union tag_Modbus {
 			unsigned CONTROL2 :1;				// 256 
 			unsigned CONTROL3 :1;				// 512 
 			unsigned CONTROL4 :1;				// 1024 
-			unsigned s12 :1;		// 2048 давление по аналогу
-			unsigned deep_is_on :1;		// 4096 глубокое запаздывание
-			unsigned stop_pid :1;		// 8192 отключен пид-регулятор
-			unsigned miss_sync :1;		// 16384 пропуски канала синхронизации
-			unsigned miss_rpm :1;		// 32768 пропуски канала оборотов	
-			unsigned forced_pid :1;		// 65536 включен форсированный ПИД
+			unsigned s12 :1;		// 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			unsigned deep_is_on :1;		// 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			unsigned stop_pid :1;		// 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			unsigned miss_sync :1;		// 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			unsigned miss_rpm :1;		// 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ	
+			unsigned forced_pid :1;		// 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 			unsigned             :15;	// Last 16 bits = byte for value of Kp regulator (current current stabilization function)
 			};
 		unsigned long statuses;			// 31
@@ -337,7 +337,7 @@ extern union tag_diag {
         float charge_hold [CYLINDERS_NUM];	    //  -   middle discharge time capture for 10 cylinders
     };
     unsigned short buf [112];
-} MB_diagn, MB_diagn_sw;			// MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270  диагностические данные
+} MB_diagn, MB_diagn_sw;			// MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
 extern unsigned short dir_sc_low [CYLINDERS_NUM] ;
 extern unsigned short dir_br_low [CYLINDERS_NUM] ;
@@ -382,7 +382,7 @@ extern union tag_MB_conf {
         float PID_deadband;		            //57    reserve
 	float KP_res_limit ;			    //59    reserve
 	float CV_check_level ;			    //61    reserve
-	float UOZ_shift_ind [CYLINDERS_NUM];	    //63 - 82    индивидуальные подстройки  углов
+	float UOZ_shift_ind [CYLINDERS_NUM];	    //63 - 82    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅпїЅпїЅпїЅ
         };
 //    unsigned short buf [168];
     unsigned short buf [90];     

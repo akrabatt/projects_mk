@@ -250,7 +250,7 @@ void tmr2_init (void)   {
 
 
 
-void OC3_init (void)    {
+void OC3_init (void)    {       //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 OC3CON = 0x0000;        // Turn off the OC3 when performing the setup
 T4CON = 0;
 OC3R = 100;          // Initialize primary Compare register
@@ -264,90 +264,7 @@ IPC4bits.T4IP = 4;      // Set T4 interrupt priority to 4
 //T4CONbits.ON = 1;      // Enable Timer4
 //OC3CONbits.ON = 1;     // Enable OC3//
 }
-/* сигнал синхронизации*/
-void IC1_init (void)    {
-    IC1CONbits.ICM = 3; 
-    IC1CONbits.FEDGE = 0;
-    IC1CONbits.ICTMR = 1;
-    IC1CONbits.C32 = 1;
-    IC1CONbits.ICI = 0;
-    IEC0bits.IC1IE = 1;
-    IPC1bits.IC1IP = 4;
-    IPC1bits.IC1IS = 0;
-    IEC0bits.IC1EIE = 1;
-    IPC1bits.IC1EIP = 0;
-    IPC1bits.IC1EIS = 0;
-    IC1CONbits.ON = 0;  }
-/* сигнал оборотов */
-void IC6_init (void)    {
-    IC6CONbits.ICM = 3; 
-    IC6CONbits.FEDGE = 0;
-    IC6CONbits.ICTMR = 1;
-    IC6CONbits.C32 = 1;
-    IC6CONbits.ICI = 0;
-    IEC0bits.IC6IE = 1;
-    IPC7bits.IC6IP = 4;
-    IPC7bits.IC6IS = 0;
-    IEC0bits.IC6EIE = 1;
-    IPC7bits.IC6EIP = 0;
-    IPC7bits.IC6EIS = 0;
-    IC6CONbits.ON = 0;  }
-
-void IC3_init (void)    {
-    IC3CONbits.ICM = 3; 
-    IC3CONbits.FEDGE = 0;
-    IC3CONbits.ICTMR = 1;
-    IC3CONbits.C32 = 1;
-    IC3CONbits.ICI = 0;
-    IEC0bits.IC3IE = 1;
-    IPC4bits.IC3IP = 4;
-    IPC4bits.IC3IS = 0;
-    IEC0bits.IC3EIE = 1;
-    IPC3bits.IC3EIP = 0;
-    IPC3bits.IC3EIS = 0;
-    IC3CONbits.ON = 0;  }
-
-void IC4_init (void)    {
-    IC4CONbits.ICM = 3; 
-    IC4CONbits.FEDGE = 0;
-    IC4CONbits.ICTMR = 1;
-    IC4CONbits.C32 = 1;
-    IC4CONbits.ICI = 0;
-    IEC0bits.IC4IE = 1;
-    IPC5bits.IC4IP = 4;
-    IPC5bits.IC4IS = 0;
-    IEC0bits.IC4EIE = 1;
-    IPC5bits.IC4EIP = 0;
-    IPC5bits.IC4EIS = 0;
-    IC4CONbits.ON = 0;  }
-
-void IC7_init (void)    {
-    IC7CONbits.ICM = 3; 
-    IC7CONbits.FEDGE = 0;
-    IC7CONbits.ICTMR = 1;
-    IC7CONbits.C32 = 1;
-    IC7CONbits.ICI = 0;
-    IEC1bits.IC7IE = 1;
-    IPC8bits.IC7IP = 4;
-    IPC8bits.IC7IS = 0;
-    IEC1bits.IC7EIE = 1;
-    IPC8bits.IC7EIP = 0;
-    IPC8bits.IC7EIS = 0;
-    IC7CONbits.ON = 0;  }
-
-void IC8_init (void)    {
-    IC8CONbits.ICM = 3; 
-    IC8CONbits.FEDGE = 0;
-    IC8CONbits.ICTMR = 1;
-    IC8CONbits.C32 = 1;
-    IC8CONbits.ICI = 0;
-    IEC1bits.IC8IE = 1;
-    IPC9bits.IC8IP = 4;
-    IPC9bits.IC8IS = 0;
-    IEC1bits.IC8EIE = 1;
-    IPC9bits.IC8EIP = 0;
-    IPC9bits.IC8EIS = 0;
-    IC8CONbits.ON = 0;  }
+/* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
 
 
 void uart5_init(void)   {
@@ -419,7 +336,9 @@ void spi5_init (void)   {
     baudLow = PBCLK2_ / (2 * (t_brg + 2));
     errorHigh = baudHigh - baudRate;
     errorLow = baudRate - baudLow;
-    if (errorHigh > errorLow) {  t_brg++;   }
+    if (errorHigh > errorLow) {  
+        t_brg++;   
+        }
     SPI5BRG = t_brg;
     SPI5CONbits.ON = 1;
 }
@@ -452,10 +371,6 @@ void InitializeSystem(void)
 //    DRV_ADC_Initialize_F();
     ADC_init_scan ();
     conf_read ();
-    IC3_init ();
-    IC4_init ();
-    IC7_init ();
-    IC8_init ();
     tmr2_init ();
     tmr_5_init ();
     tmr_1_init (100, 0, 0);
@@ -472,13 +387,14 @@ void InitializeSystem(void)
     PRISS = 0x76543210;
     
     /* Set Interrupt Controller for multi-vector mode */
-    INTCONSET = _INTCON_MVEC_MASK;
+    INTCONSET = _INTCON_MVEC_MASK;  //
 
     /* Enable Interrupt Exceptions */
     // set the CP0 status IE bit high to turn on interrupts globally
     __builtin_enable_interrupts();
 
     /* Enable the peripheral */
+    /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
     T2CONbits.TON = 1;
     T4CONbits.ON = 1;      // Enable Timer 4
     T5CONbits.ON = 1;      // Enable Timer 5
