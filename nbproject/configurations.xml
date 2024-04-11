@@ -5,7 +5,6 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>define.h</itemPath>
-      <itemPath>SPI______.h</itemPath>
       <itemPath>extern.h</itemPath>
       <itemPath>global.h</itemPath>
       <itemPath>int_p32mz1024efh100.h</itemPath>
@@ -22,7 +21,6 @@
       <itemPath>IC_measure.c</itemPath>
       <itemPath>Ignition.c</itemPath>
       <itemPath>OC_pid.c</itemPath>
-      <itemPath>SPI______.C</itemPath>
       <itemPath>control.c</itemPath>
       <itemPath>interrupt_proc.c</itemPath>
       <itemPath>interupt.c</itemPath>

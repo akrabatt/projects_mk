@@ -69,7 +69,7 @@ unsigned short cc;
 //        }
 //    middle_40 /= (FILT_CRPM * 40);
 //    Pos = Modbus.RPM40 ;    
-    Pos = middle_40 ;    
+//    Pos = middle_40 ;    
     
     motor_Clearance_Error = Set - Pos;
     
@@ -125,7 +125,7 @@ void reset_condition_ (void)
     Modbus_sw.CV_set = 0;
     Modbus_sw.RPM_set = 0;
     AO_ignit_error = 0;
-    middle_40 = 0;
+//    middle_40 = 0;
     motor_I_Result = 0;
     Modbus.cmd1 = 0;
     Modbus_sw.cmd1 = 0;
