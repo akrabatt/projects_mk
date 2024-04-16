@@ -60,9 +60,9 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #pragma config FDMTEN = OFF             // Deadman Timer Enable (Deadman Timer is disabled)
 
 // DEVCFG0
-#pragma config DEBUG = OFF              // Background Debugger Enable (Debugger is disabled)
+#pragma config DEBUG = ON              // Background Debugger Enable (Debugger is disabled)
 #pragma config JTAGEN = OFF             // JTAG Enable (JTAG Disabled)
-#pragma config ICESEL = ICS_PGx2        // ICE/ICD Comm Channel Select (Communicate on PGEC2/PGED2)
+#pragma config ICESEL = ICS_PGx1        // ICE/ICD Comm Channel Select (Communicate on PGEC2/PGED2)
 #pragma config TRCEN = ON               // Trace Enable (Trace features in the CPU are enabled)
 #pragma config BOOTISA = MIPS32         // Boot ISA Selection (Boot code and Exception code is MIPS32)
 #pragma config FECCCON = OFF_UNLOCKED   // Dynamic Flash ECC Configuration (ECC and Dynamic ECC are disabled (ECCCON bits are writable))
@@ -163,18 +163,12 @@ void port_init (void) {
     ANSELG = SYS_PORT_G_ANSEL;
     
     /*  PPS configuration   */
-    U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14    
+    U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14 /назначаем 14-ю ножку порта В на приемник для UART5
     U5RXRbits.U5RXR = 0b1101;           //U5RX --> RPA14    
 
-    IC3Rbits.IC3R = 0b0010;             //IC3 --> RPF4
-    IC4Rbits.IC4R = 0b0010;             //IC4 --> RPF5
+    SDI5Rbits.SDI5R = 0b0101;           //SDI5 --> RPB9 /назначаем как вход последовательных данных
     
-    IC7Rbits.IC7R = 0b0100;             //IC7 --> RPF1
-    IC8Rbits.IC8R = 0b0100;             //IC8 --> RPF0
-    
-    SDI5Rbits.SDI5R = 0b0101;           //SDI5 --> RPB9
-    
-    RPC14Rbits.RPC14R = 0b1011;         //OC3
+    RPC14Rbits.RPC14R = 0b1011;         //OC3   //генерирует прерывания на сравнении с таймером 4
     RPA15Rbits.RPA15R = 0b0011;         //U5TX
     RPF12Rbits.RPF12R = 0b0010;         //U4TX    
     RPB10Rbits.RPB10R = 0b1001;         //SDO5
@@ -350,12 +344,11 @@ void InitializeSystem(void)
     // No wait setting required for main data RAM
 
     // Prefetch-cache: Enable prefetch for PFM (any PFM instructions or data)
-    PRECONbits.PREFEN = 3;
+    PRECONbits.PREFEN = 3;  //предварительная выборка данных загружать их в кэш
     // Flash PM Wait States: MZ Flash runs at 2 wait states @ 200 MHz
-    PRECONbits.PFMWS = 2;
+    PRECONbits.PFMWS = 2;   //чето со временем связанно
     // PBClk3 set to 8 MHz (assumes SYSCLK = 200 MHz via configuration bits)
     // Unlock Sequence
-
     SYSKEY = 0xAA996655;
     SYSKEY = 0x556699AA;
     // Modify PB3DIV
@@ -367,7 +360,7 @@ void InitializeSystem(void)
     
     port_init ();
     spi5_init ();
-    help_load = 1;
+    help_load = 1;  
 //    DRV_ADC_Initialize_F();
     ADC_init_scan ();
     conf_read ();

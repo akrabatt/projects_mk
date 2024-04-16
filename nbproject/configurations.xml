@@ -18,17 +18,17 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>IC_measure.c</itemPath>
-      <itemPath>Ignition.c</itemPath>
-      <itemPath>OC_pid.c</itemPath>
       <itemPath>control.c</itemPath>
       <itemPath>interrupt_proc.c</itemPath>
       <itemPath>interupt.c</itemPath>
-      <itemPath>motor_control.c</itemPath>
       <itemPath>ramtron_drv.c</itemPath>
       <itemPath>init.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>modbus.c</itemPath>
+      <itemPath>IC_measure.c</itemPath>
+      <itemPath>Ignition.c</itemPath>
+      <itemPath>OC_pid.c</itemPath>
+      <itemPath>motor_control.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -47,7 +47,7 @@
         <targetDevice>PIC32MZ1024EFH100</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>1.44</languageToolchainVersion>
         <platform>3</platform>
