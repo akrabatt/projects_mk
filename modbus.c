@@ -55,7 +55,8 @@ const char auchCRCLo[] = {
     0x5D, 0x9D, 0x5F, 0x9F, 0x9E, 0x5E, 0x5A, 0x9A, 0x9B, 0x5B, 0x99, 0x59, 0x58, 0x98, 0x88,
     0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E, 0x8F, 0x4F, 0x8D, 0x4D, 0x4C, 0x8C,
     0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80,
-    0x40};
+    0x40
+};
 
 unsigned char uchCRCHi = 0xFF;
 unsigned char uchCRCLo = 0xFF;
@@ -80,7 +81,7 @@ void PIC_CRC16(unsigned char *puchMsg, unsigned short usDataLen)
     //	return (uchCRCHi, uchCRCLo); 
 }
 
-static const unsigned int wCRCTable [] ={
+static const unsigned int wCRCTable [] = {
     0x0000, 0xc0c1, 0xc181, 0x0140, 0xc301, 0x03c0, 0x0280, 0xc241,
     0xc601, 0x06c0, 0x0780, 0xc741, 0x0500, 0xc5c1, 0xc481, 0x0440,
     0xcc01, 0x0cc0, 0x0d80, 0xcd41, 0x0f00, 0xcfc1, 0xce81, 0x0e40,
@@ -424,15 +425,13 @@ void mbs_uni(struct tag_usart * usart, unsigned char mbs_addres) {
         if (((usart->in_buffer_count - 9) != usart->in_buffer[0x06])&&(usart->in_buffer[1] == 0x10)) // quantity must be equal to
         { // number received bytes - 9 bytes
             length_err = 1;
-        }
-        else {
+        } else {
             length_err = 0;
         }
         if (((usart->in_buffer_count - 9) != (num_reg * 2))&&(usart->in_buffer[1] == 0x10)) // num reg*2 must be equal to
         {
             length_err = 1;
-        }
-        else {
+        } else {
             length_err = 0;
         }
 
@@ -505,8 +504,7 @@ void mbs(struct tag_usart * usart, unsigned char mbs_addres) {
     if (usart->in_buffer[0] == mbs_addres) {
         mbs_uni(usart, mbs_addres);
         return;
-    }
-    else {
+    } else {
         close_mb(usart);
         return;
     }

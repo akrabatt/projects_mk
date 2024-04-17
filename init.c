@@ -6,24 +6,23 @@
 
 
 extern void DRV_ADC_Initialize_F(void);
-extern void ADC_interrupt_F (void);
-extern void DMA1_init (void);
-extern void DMA4_init (void);
-extern void conf_read (void);
+extern void ADC_interrupt_F(void);
+extern void DMA1_init(void);
+extern void DMA4_init(void);
+extern void conf_read(void);
 
-extern void DMA0_init (void);
-extern void DMA2_init (void);
-extern void DMA3_init (void);
-extern void DMA5_init (void);
-extern void tmr_6_init (unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num);
-extern void tmr_7_init (unsigned short T7_delay, unsigned short TMR7_IE, unsigned short TMR7_ON, unsigned short chan_num);
+extern void DMA0_init(void);
+extern void DMA2_init(void);
+extern void DMA3_init(void);
+extern void DMA5_init(void);
+extern void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num);
+extern void tmr_7_init(unsigned short T7_delay, unsigned short TMR7_IE, unsigned short TMR7_ON, unsigned short chan_num);
 
 
-extern void ADC_init_scan (void);
+extern void ADC_init_scan(void);
 
-extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) 
-{ 
- return (int)p<0?((int)p&0x1fffffffL):(unsigned int)((unsigned char*)p+0x40000000L); 
+extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) {
+    return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char*) p + 0x40000000L);
 }
 
 
@@ -145,7 +144,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #define SYS_PORT_G_CNPD         0x0
 #define SYS_PORT_G_CNEN         0x0
 
-void port_init (void) {
+void port_init(void) {
     TRISA = SYS_PORT_A_TRIS;
     ANSELA = SYS_PORT_A_ANSEL;
     TRISB = SYS_PORT_B_TRIS;
@@ -154,233 +153,238 @@ void port_init (void) {
     ANSELC = SYS_PORT_C_ANSEL;
     TRISD = SYS_PORT_D_TRIS;
     ANSELD = SYS_PORT_D_ANSEL;
-    LATD = SYS_PORT_D_LAT  ;
+    LATD = SYS_PORT_D_LAT;
     TRISE = SYS_PORT_E_TRIS;
     ANSELE = SYS_PORT_E_ANSEL;
     TRISF = SYS_PORT_F_TRIS;
     ANSELF = SYS_PORT_F_ANSEL;
     TRISG = SYS_PORT_G_TRIS;
     ANSELG = SYS_PORT_G_ANSEL;
-    
-    /*  PPS configuration   */
-    U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14 /назначаем 14-ю ножку порта В на приемник для UART5
-    U5RXRbits.U5RXR = 0b1101;           //U5RX --> RPA14    
 
-    SDI5Rbits.SDI5R = 0b0101;           //SDI5 --> RPB9 /назначаем как вход последовательных данных
-    
-    RPC14Rbits.RPC14R = 0b1011;         //OC3   //генерирует прерывания на сравнении с таймером 4
-    RPA15Rbits.RPA15R = 0b0011;         //U5TX
-    RPF12Rbits.RPF12R = 0b0010;         //U4TX    
-    RPB10Rbits.RPB10R = 0b1001;         //SDO5
+    //    TRISD |= 
+
+    /*Rx*/
+    U1RXRbits.U1RXR = 0b0000; //U1RX --> RPD2
+    U2RXRbits.U2RXR = 0b0100; //U2RX --> RPD4
+    U3RXRbits.U3RXR = 0b0111; //U3RX --> RPC13
+    U4RXRbits.U4RXR = 0b0010; //U4RX --> RPB14 /назначаем 14-ю ножку порта В на приемник для UART5
+    U5RXRbits.U5RXR = 0b1101; //U5RX --> RPA14    
+
+    SDI5Rbits.SDI5R = 0b0101; //SDI5 --> RPB9 /назначаем как вход последовательных данных
+
+    RPC14Rbits.RPC14R = 0b1011; //OC3   //генерирует прерывания на сравнении с таймером 4
+    /*Tx*/
+    RPD3Rbits.RPD3R = 0b0001; //U1TX
+    RPD5Rbits.RPD5R = 0b0010; //U2TX
+    RPC14Rbits.RPC14R = 0b0001; //U3TX
+    RPA15Rbits.RPA15R = 0b0011; //U5TX
+    RPF12Rbits.RPF12R = 0b0010; //U4TX  
+
+    RPB10Rbits.RPB10R = 0b1001; //SDO5
 }
 
-void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned  short  TMR1_ON)
-	{
+void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned short TMR1_ON) {
     T1CONbits.TON = 0;
-	TMR1=0x0000;
-	PR1=T1_delay;					//
-	IEC0bits.T1IE=TMR1_IE;
-	IPC1bits.T1IP=0b10;			// priority = 2
-	T1CONbits.TCKPS=0;				//T1 prescaler 1:8
-	T1CONbits.TON=TMR1_ON;
-	}
+    TMR1 = 0x0000;
+    PR1 = T1_delay; //
+    IEC0bits.T1IE = TMR1_IE;
+    IPC1bits.T1IP = 0b10; // priority = 2
+    T1CONbits.TCKPS = 0; //T1 prescaler 1:8
+    T1CONbits.TON = TMR1_ON;
+}
 
-void tmr_5_init(void)
-	{
+void tmr_5_init(void) {
     T5CONbits.TON = 0;
-	TMR5=0x0000;
-	PR5 = TMR4CLK / (OC_FREQ * (FILTER ));   
-    IFS0bits.T5IF = 0;      // Clear the T5 interrupt flag
-	IEC0bits.T5IE = 0;
-	IPC6bits.T5IP = 0b10;			// priority = 2
-	T5CONbits.TCKPS = 0;				//T1 prescaler 1:8
-	T5CONbits.TON = 1;
-	}
+    TMR5 = 0x0000;
+    PR5 = TMR4CLK / (OC_FREQ * (FILTER));
+    IFS0bits.T5IF = 0; // Clear the T5 interrupt flag
+    IEC0bits.T5IE = 0;
+    IPC6bits.T5IP = 0b10; // priority = 2
+    T5CONbits.TCKPS = 0; //T1 prescaler 1:8
+    T5CONbits.TON = 1;
+}
 
-void tmr_9_init(unsigned short T9_delay, unsigned short TMR9_IE, unsigned short TMR9_ON)
-	{
+void tmr_9_init(unsigned short T9_delay, unsigned short TMR9_IE, unsigned short TMR9_ON) {
     T9CONbits.TON = 0;
-	TMR9 = 0x0000;
-	PR9 = T9_delay;					//
-	IEC1bits.T9IE = TMR9_IE;
-    IPC10bits.T9IP=0b10;			// priority = 2
-	T9CONbits.TCKPS = 0b00;				//T1 prescaler 1:8
-	T9CONbits.TON = TMR9_ON;
-	}
+    TMR9 = 0x0000;
+    PR9 = T9_delay; //
+    IEC1bits.T9IE = TMR9_IE;
+    IPC10bits.T9IP = 0b10; // priority = 2
+    T9CONbits.TCKPS = 0b00; //T1 prescaler 1:8
+    T9CONbits.TON = TMR9_ON;
+}
 
-void tmr6_init (void)   {
+void tmr6_init(void) {
     T6CONbits.TON = 0;
-	TMR6=0x0000;
-	PR6=1500;					//
-	IEC0bits.T6IE = 1;
-	IPC7bits.T6IP = 0b10;			// priority = 2
-	T6CONbits.TCKPS=7;				//T1 prescaler 1:256
-	T6CONbits.TON = 0;
-    }
+    TMR6 = 0x0000;
+    PR6 = 1500; //
+    IEC0bits.T6IE = 1;
+    IPC7bits.T6IP = 0b10; // priority = 2
+    T6CONbits.TCKPS = 7; //T1 prescaler 1:256
+    T6CONbits.TON = 0;
+}
 
-void tmr7_init (void)   {
+void tmr7_init(void) {
     T7CONbits.TON = 0;
-	TMR7=0x0000;
-	PR7=1500;					//
-	IEC1bits.T7IE = 1;
-	IPC8bits.T7IP = 0b10;			// priority = 2
-	T7CONbits.TCKPS=7;				//T1 prescaler 1:256
-	T7CONbits.TON = 0;
-    }
+    TMR7 = 0x0000;
+    PR7 = 1500; //
+    IEC1bits.T7IE = 1;
+    IPC8bits.T7IP = 0b10; // priority = 2
+    T7CONbits.TCKPS = 7; //T1 prescaler 1:256
+    T7CONbits.TON = 0;
+}
 
-void tmr2_init (void)   {
+void tmr2_init(void) {
     T2CONbits.TON = 0;
-    T2CONbits.TCKPS = 0;    // Pre-Scale = 1:8 (T2Clk: 31250Hz)
+    T2CONbits.TCKPS = 0; // Pre-Scale = 1:8 (T2Clk: 31250Hz)
     T2CONbits.T32 = 1;
     TMR2 = 0xFFFF;
     TMR3 = 0xFFFF;
     PR2 = 0xFFFF;
     PR3 = 0xFFFF;
-    IPC2bits.T2IP = 1;      // Set the interrupt priority to 4
-    IFS0bits.T2IF = 0;      // Reset the Timer 2 interrupt flag
-    IEC0bits.T2IE = 0;      // Enable interrupts from Timer 2
+    IPC2bits.T2IP = 1; // Set the interrupt priority to 4
+    IFS0bits.T2IF = 0; // Reset the Timer 2 interrupt flag
+    IEC0bits.T2IE = 0; // Enable interrupts from Timer 2
     T2CONbits.TON = 1;
 }
 
-
-
-void OC3_init (void)    {       //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-OC3CON = 0x0000;        // Turn off the OC3 when performing the setup
-T4CON = 0;
-OC3R = 100;          // Initialize primary Compare register
-OC3RS = 3000;         // Initialize secondary Compare register
-OC3CON = 0x0006;        // Configure for PWM mode without Fault pin enabled
-T4CONbits.TCKPS = 0;
-PR4 = TMR4CLK / OC_FREQ;           // Set period
-IFS0bits.T4IF = 0;      // Clear the T4 interrupt flag
-IEC0bits.T4IE = 1;      // Enable T4 interrupt
-IPC4bits.T4IP = 4;      // Set T4 interrupt priority to 4
-//T4CONbits.ON = 1;      // Enable Timer4
-//OC3CONbits.ON = 1;     // Enable OC3//
+void OC3_init(void) { //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+    OC3CON = 0x0000; // Turn off the OC3 when performing the setup
+    T4CON = 0;
+    OC3R = 100; // Initialize primary Compare register
+    OC3RS = 3000; // Initialize secondary Compare register
+    OC3CON = 0x0006; // Configure for PWM mode without Fault pin enabled
+    T4CONbits.TCKPS = 0;
+    PR4 = TMR4CLK / OC_FREQ; // Set period
+    IFS0bits.T4IF = 0; // Clear the T4 interrupt flag
+    IEC0bits.T4IE = 1; // Enable T4 interrupt
+    IPC4bits.T4IP = 4; // Set T4 interrupt priority to 4
+    //T4CONbits.ON = 1;      // Enable Timer4
+    //OC3CONbits.ON = 1;     // Enable OC3//
 }
+
 /* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
 
 
-void uart5_init(void)   {
-    U5MODEbits.USIDL = 0;                   /* Continue in Idle mode */
-    U5MODEbits.LPBACK = 0;                  /* Disable LoopBack */
-    U5MODEbits.PDSEL = 0b00;                /* 8-bit data, no parity */
-    U5MODEbits.STSEL = 0;                   /* One Stop bit */
-    U5MODEbits.BRGH = 0;                    /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U5BRG = PBCLK2_ / (U5_speed * 16) - 1;    //1Mbit
-    IFS5bits.U5TXIF = 0;                /* Clear interrupt flag */
-    IPC45bits.U5TXIP = 2;                // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC45bits.U5TXIS = 0;                // sub priority, 0 is Low priority
-    IEC5bits.U5TXIE = 0;                /* Enable receive interrupts */
-    IFS5bits.U5RXIF = 0;                /* Clear interrupt flag */
-    IPC45bits.U5RXIP = 2;                // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC45bits.U5RXIS = 0;                // sub priority, 0 is Low priority
-    IEC5bits.U5RXIE = 1;                /* Enable receive interrupts */
-    U5STAbits.UTXEN = 1;                /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U5STAbits.URXEN = 1;                /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U5STAbits.UTXISEL = 0b10;           /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
-    U5MODEbits.ON = 1;                   /* Enable UART module 1 */     
+void uart5_init(void) {
+    U5MODEbits.USIDL = 0; /* Continue in Idle mode */
+    U5MODEbits.LPBACK = 0; /* Disable LoopBack */
+    U5MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
+    U5MODEbits.STSEL = 0; /* One Stop bit */
+    U5MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
+    U5BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
+    IFS5bits.U5TXIF = 0; /* Clear interrupt flag */
+    IPC45bits.U5TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC45bits.U5TXIS = 0; // sub priority, 0 is Low priority
+    IEC5bits.U5TXIE = 0; /* Enable receive interrupts */
+    IFS5bits.U5RXIF = 0; /* Clear interrupt flag */
+    IPC45bits.U5RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC45bits.U5RXIS = 0; // sub priority, 0 is Low priority
+    IEC5bits.U5RXIE = 1; /* Enable receive interrupts */
+    U5STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
+    U5STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
+    U5STAbits.UTXISEL = 0b10; /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
+    U5MODEbits.ON = 1; /* Enable UART module 1 */
 }
 
-void uart4_init(void)   {
-    U4MODEbits.USIDL = 0;                   /* Continue in Idle mode */
-    U4MODEbits.LPBACK = 0;                  /* Disable LoopBack */
-    U4MODEbits.PDSEL = 0b00;                /* 8-bit data, no parity */
-    U4MODEbits.STSEL = 0;                   /* One Stop bit */
-    U4MODEbits.BRGH = 0;                    /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U4BRG = PBCLK2_ / (U4_speed * 16) - 1;    //1Mbit
-    IFS5bits.U4TXIF = 0;                /* Clear interrupt flag */
-    IPC43bits.U4TXIP = 2;                // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC43bits.U4TXIS = 0;                // sub priority, 0 is Low priority
-    IEC5bits.U4TXIE = 0;                /* Enable receive interrupts */
-    IFS5bits.U4RXIF = 0;                /* Clear interrupt flag */
-    IPC42bits.U4RXIP = 2;                // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC42bits.U4RXIS = 0;                // sub priority, 0 is Low priority
-    IEC5bits.U4RXIE = 1;                /* Enable receive interrupts */
-    U4STAbits.UTXEN = 1;                /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U4STAbits.URXEN = 1;                /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U4STAbits.UTXISEL = 0b10;          
-    U4MODEbits.ON = 1;     
+void uart4_init(void) {
+    U4MODEbits.USIDL = 0; /* Continue in Idle mode */
+    U4MODEbits.LPBACK = 0; /* Disable LoopBack */
+    U4MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
+    U4MODEbits.STSEL = 0; /* One Stop bit */
+    U4MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
+    U4BRG = PBCLK2_ / (U4_speed * 16) - 1; //1Mbit
+    IFS5bits.U4TXIF = 0; /* Clear interrupt flag */
+    IPC43bits.U4TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC43bits.U4TXIS = 0; // sub priority, 0 is Low priority
+    IEC5bits.U4TXIE = 0; /* Enable receive interrupts */
+    IFS5bits.U4RXIF = 0; /* Clear interrupt flag */
+    IPC42bits.U4RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC42bits.U4RXIS = 0; // sub priority, 0 is Low priority
+    IEC5bits.U4RXIE = 1; /* Enable receive interrupts */
+    U4STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
+    U4STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
+    U4STAbits.UTXISEL = 0b10;
+    U4MODEbits.ON = 1;
 }
 
-void spi5_init (void)   {
+void spi5_init(void) {
     unsigned int t_brg;
     unsigned int baudHigh;
     unsigned int baudLow;
     unsigned int errorHigh;
     unsigned int errorLow;
     unsigned int baudRate;
-    
+
     baudRate = 8294400;
-    
+
     SPI5CONbits.ON = 0;
     SPI5CONbits.MSTEN = 1;
     SPI5CONbits.MSSEN = 0;
     SPI5CONbits.SIDL = 0;
     SPI5CONbits.CKP = 0;
-    SPI5CONbits.CKE = 1;    
+    SPI5CONbits.CKE = 1;
     SPI5CONbits.SMP = 0;
     SPI5CONbits.MODE16 = 0;
     SPI5CONbits.MODE32 = 0;
     SPI5CONbits.FRMEN = 0;
     SPI5CON2bits.AUDEN = 0;
     SPI5CONbits.ENHBUF = 1;
-	t_brg = (((PBCLK2_/baudRate)/2) - 1);
+    t_brg = (((PBCLK2_ / baudRate) / 2) - 1);
     baudHigh = PBCLK2_ / (2 * (t_brg + 1));
     baudLow = PBCLK2_ / (2 * (t_brg + 2));
     errorHigh = baudHigh - baudRate;
     errorLow = baudRate - baudLow;
-    if (errorHigh > errorLow) {  
-        t_brg++;   
-        }
+    if (errorHigh > errorLow) {
+        t_brg++;
+    }
     SPI5BRG = t_brg;
     SPI5CONbits.ON = 1;
 }
 
-void InitializeSystem(void)
-{
+void InitializeSystem(void) {
     // PIC32MZ CPU Speed Optimizations (Cache/Wait States/Peripheral Bus Clks)
     // On reset, I+D cache is enabled for max performace setting (write-back with write allocation)
     // No wait setting required for main data RAM
 
     // Prefetch-cache: Enable prefetch for PFM (any PFM instructions or data)
-    PRECONbits.PREFEN = 3;  //предварительная выборка данных загружать их в кэш
+    PRECONbits.PREFEN = 3; //предварительная выборка данных загружать их в кэш
     // Flash PM Wait States: MZ Flash runs at 2 wait states @ 200 MHz
-    PRECONbits.PFMWS = 2;   //чето со временем связанно
+    PRECONbits.PFMWS = 2; //чето со временем связанно
     // PBClk3 set to 8 MHz (assumes SYSCLK = 200 MHz via configuration bits)
     // Unlock Sequence
     SYSKEY = 0xAA996655;
     SYSKEY = 0x556699AA;
     // Modify PB3DIV
-    PB2DIVbits.PBDIV = 3;       // PBCLK = SYSCLK/8 = 24883200 Hz)
-    CFGCONbits.OCACLK = 1;  
-    PB3DIVbits.PBDIV = 3;       // PBCLK3 = SYSCLK/25 (= 200/25 = 8 MHz)
+    PB2DIVbits.PBDIV = 3; // PBCLK = SYSCLK/8 = 24883200 Hz)
+    CFGCONbits.OCACLK = 1;
+    PB3DIVbits.PBDIV = 3; // PBCLK3 = SYSCLK/25 (= 200/25 = 8 MHz)
     // Lock sequence
     SYSKEY = 0x33333333;
-    
-    port_init ();
-    spi5_init ();
-    help_load = 1;  
-//    DRV_ADC_Initialize_F();
-    ADC_init_scan ();
-    conf_read ();
-    tmr2_init ();
-    tmr_5_init ();
-    tmr_1_init (100, 0, 0);
-    tmr_9_init (100, 0 ,0);
-    tmr6_init ();
-    tmr7_init ();
-    OC3_init ();  
+
+    port_init();
+    spi5_init();
+    help_load = 1;
+    //    DRV_ADC_Initialize_F();
+    ADC_init_scan();
+    conf_read();
+    tmr2_init();
+    tmr_5_init();
+    tmr_1_init(100, 0, 0);
+    tmr_9_init(100, 0, 0);
+    tmr6_init();
+    tmr7_init();
+    OC3_init();
     uart5_init();
     uart4_init();
-    DMA1_init ();
-    DMA4_init ();
+    DMA1_init();
+    DMA4_init();
 
     /* Assign PIC32MZ shadow register sets to specific CPU IPLs */
     PRISS = 0x76543210;
-    
+
     /* Set Interrupt Controller for multi-vector mode */
-    INTCONSET = _INTCON_MVEC_MASK;  //
+    INTCONSET = _INTCON_MVEC_MASK; //
 
     /* Enable Interrupt Exceptions */
     // set the CP0 status IE bit high to turn on interrupts globally
@@ -389,11 +393,11 @@ void InitializeSystem(void)
     /* Enable the peripheral */
     /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
     T2CONbits.TON = 1;
-    T4CONbits.ON = 1;      // Enable Timer 4
-    T5CONbits.ON = 1;      // Enable Timer 5
-    OC3CONbits.ON = 1;     // Enable OC3//
-//    ADCCON3bits.GSWTRG = 1;
-} 
+    T4CONbits.ON = 1; // Enable Timer 4
+    T5CONbits.ON = 1; // Enable Timer 5
+    OC3CONbits.ON = 1; // Enable OC3//
+    //    ADCCON3bits.GSWTRG = 1;
+}
 
 /******************************************************************************
  * Function:        void InitializeSystem(void)
