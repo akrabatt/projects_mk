@@ -32,6 +32,12 @@ extern "C" {
 #define  ENAB_RX5   PORTFbits.RF2 = 0	
 #define  ENAB_TX4   PORTBbits.RB12 = 1
 #define  ENAB_RX4   PORTBbits.RB12 = 0 
+#define  ENAB_TX3   PORTBbits.RB15 = 1
+#define  ENAB_RX3   PORTBbits.RB15 = 0 
+#define  ENAB_TX2   PORTDbits.RD13 = 1
+#define  ENAB_RX2   PORTDbits.RD13 = 0 
+#define  ENAB_TX1   PORTDbits.RD1 = 1
+#define  ENAB_RX1   PORTDbits.RD1 = 0 
 
 #define  OUT_SIZE		0x100
 #define  IN_SIZE		0x100

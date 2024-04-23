@@ -160,6 +160,10 @@ void port_init(void) {
     ANSELF = SYS_PORT_F_ANSEL;
     TRISG = SYS_PORT_G_TRIS;
     ANSELG = SYS_PORT_G_ANSEL;
+    TRISBbits.TRISB15 |= 0; //44 ножка энейбл на выход 3uart
+    TRISDbits.TRISD13 |= 0; //80 ножка энейбл на выход 2uart
+    TRISDbits.TRISD1 |= 0; //76 ножка энейбл на выход 1uart
+
 
     //    TRISD |= 
 
@@ -177,8 +181,8 @@ void port_init(void) {
     RPD3Rbits.RPD3R = 0b0001; //U1TX
     RPD5Rbits.RPD5R = 0b0010; //U2TX
     RPC14Rbits.RPC14R = 0b0001; //U3TX
-    RPA15Rbits.RPA15R = 0b0011; //U5TX
     RPF12Rbits.RPF12R = 0b0010; //U4TX  
+    RPA15Rbits.RPA15R = 0b0011; //U5TX
 
     RPB10Rbits.RPB10R = 0b1001; //SDO5
 }

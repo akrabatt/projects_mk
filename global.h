@@ -10,10 +10,16 @@ extern "C" {
 
     unsigned char __attribute__((coherent)) buf_tx5 [300];
     unsigned char __attribute__((coherent)) buf_tx4 [300];
+    unsigned char __attribute__((coherent)) buf_tx3 [300];
+    unsigned char __attribute__((coherent)) buf_tx2 [300];
+    unsigned char __attribute__((coherent)) buf_tx1 [300];
 
 
     unsigned int U4_speed;
     unsigned int U5_speed;
+    unsigned int U3_speed;
+    unsigned int U2_speed;
+    unsigned int U1_speed;
 
     unsigned int start_ctrl;
     unsigned int start_pid_reg;
