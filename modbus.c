@@ -276,6 +276,21 @@ void stop_uart_tx_dma(void) {
             U5STAbits.OERR = 0;
         }
     }
+    if (usart3.mb_status.tx_mode == DMA_type) {
+        if ((usart3.mb_status.modb_transmiting == 1)&&(U3STAbits.TRMT)) {
+            usart3.mb_status.modb_transmiting = 0;
+            DMA_uni(&usart3, 1, 0, 0);
+            usart3.mb_status.modb_received = 0;
+            usart3.mb_status.modb_receiving = 0;
+            usart3.in_buffer_count = 0;
+            IFS3bits.U1RXIF
+            ENAB_RX3;
+            IEC3bits.U1RXIE = 1;
+        }
+        if (U3STAbits.OERR || U3STAbits.FERR) {
+            U3STAbits.OERR = 0;
+        }
+    }
 }
 
 void close_mb(struct tag_usart * usart) {

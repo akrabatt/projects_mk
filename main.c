@@ -26,6 +26,9 @@ int main(void) {
     /* режим работы usart  по ДМА */
     usart5.mb_status.tx_mode = DMA_type;
     usart4.mb_status.tx_mode = DMA_type;
+    usart3.mb_status.tx_mode = DMA_type;
+    usart2.mb_status.tx_mode = DMA_type;
+    usart1.mb_status.tx_mode = DMA_type;
     /* режим работы по прерываниям */
     // usart1.mb_status.tx_mode = INT_type;
     // usart4.mb_status.tx_mode = INT_type;

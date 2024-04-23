@@ -154,7 +154,7 @@ extern "C" {
             unsigned tx_start : 1; // 17
             unsigned : 15; // 18-32
         } mb_status;
-    } usart4, usart5;
+    } usart1, usart2, usart3, usart4, usart5;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

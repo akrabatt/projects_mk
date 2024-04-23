@@ -16,6 +16,9 @@ extern "C" {
     extern unsigned short swapshort(unsigned short data);
 
 
+    extern unsigned int U1_speed;
+    extern unsigned int U2_speed;
+    extern unsigned int U3_speed;
     extern unsigned int U4_speed;
     extern unsigned int U5_speed;
 
@@ -155,7 +158,7 @@ extern "C" {
             unsigned tx_start : 1; // 17
             unsigned : 15; // 18-32
         } mb_status;
-    } usart4, usart5;
+    } usart1, usart2, usart3, usart4, usart5;
 
     extern struct tag_ch {
         unsigned short teeth; // ?????????? ?????
