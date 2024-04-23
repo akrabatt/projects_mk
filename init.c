@@ -312,6 +312,27 @@ void uart4_init(void) {
     U4MODEbits.ON = 1;
 }
 
+void uart3_init(void) {
+    U3MODEbits.USIDL = 0; /* Continue in Idle mode */
+    U3MODEbits.LPBACK = 0; /* Disable LoopBack */
+    U3MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
+    U3MODEbits.STSEL = 0; /* One Stop bit */
+    U3MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
+    U3BRG = PBCLK2_ / (U3_speed * 16) - 1; //1Mbit
+    IFS4bits.U3TXIF = 0; /* Clear interrupt flag */
+    IPC39bits.U3TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC39bits.U3TXIS = 0; // sub priority, 0 is Low priority
+    IEC4bits.U3TXIE = 0; /* Enable receive interrupts */
+    IFS4bits.U3RXIF = 0; /* Clear interrupt flag */
+    IPC39bits.U3RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC39bits.U3RXIS = 0; // sub priority, 0 is Low priority
+    IEC4bits.U3RXIE = 1; /* Enable receive interrupts */
+    U3STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
+    U3STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
+    U3STAbits.UTXISEL = 0b10;
+    U3MODEbits.ON = 1;
+}
+
 void spi5_init(void) {
     unsigned int t_brg;
     unsigned int baudHigh;
@@ -372,15 +393,17 @@ void InitializeSystem(void) {
     //    DRV_ADC_Initialize_F();
     ADC_init_scan();
     conf_read();
+    
+    tmr_1_init(100, 0, 0);
     tmr2_init();
     tmr_5_init();
-    tmr_1_init(100, 0, 0);
-    tmr_9_init(100, 0, 0);
     tmr6_init();
     tmr7_init();
+    tmr_9_init(100, 0, 0);
     OC3_init();
     uart5_init();
     uart4_init();
+    uart3_init();
     DMA5_init();
     DMA4_init();
 
