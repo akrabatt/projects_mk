@@ -381,7 +381,7 @@ void InitializeSystem(void) {
     OC3_init();
     uart5_init();
     uart4_init();
-    DMA1_init();
+    DMA5_init();
     DMA4_init();
 
     /* Assign PIC32MZ shadow register sets to specific CPU IPLs */

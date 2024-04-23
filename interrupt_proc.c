@@ -55,13 +55,13 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
 {
     if (usart == &usart5)
     {
-        DCH1SSA = _VirtToPhys(&buf_tx5); // transfer source physical address
-        DCH1DSA = _VirtToPhys(&U5TXREG); // transfer destination physical address
-        DCH1SSIZ = cnt;                  // source size at most 200 bytes
-        DCH1DSIZ = 1;                    // dst size is 1 byte
-        DCH1CSIZ = 1;                    // one byte per UART transfer request
-        DCH1CONbits.CHEN = on;
-        DCH1ECONbits.CFORCE = force;
+        DCH5SSA = _VirtToPhys(&buf_tx5); // transfer source physical address
+        DCH5DSA = _VirtToPhys(&U5TXREG); // transfer destination physical address
+        DCH5SSIZ = cnt;                  // source size at most 200 bytes
+        DCH5DSIZ = 1;                    // dst size is 1 byte
+        DCH5CSIZ = 1;                    // one byte per UART transfer request
+        DCH5CONbits.CHEN = on;
+        DCH5ECONbits.CFORCE = force;
     }
     if (usart == &usart4)
     {
@@ -75,20 +75,20 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
     }
 }
 
-void DMA1_init(void)
+void DMA5_init(void)
 {
     DMACONSET = 0x00008000; // enable the DMA controller
-    DCH1CON = 0x2;          // channel 1 off, priority 2
-    DCH1ECONbits.CHSIRQ = _UART5_TX_VECTOR;
-    DCH1ECONbits.SIRQEN = 1;
-    DCH1SSA = _VirtToPhys(&buf_tx5); // transfer source physical address
-    DCH1DSA = _VirtToPhys(&U5TXREG); // transfer destination physical address
-    DCH1SSIZ = 38;                   // source size at most 200 bytes
-    DCH1DSIZ = 1;                    // dst size is 1 byte
-    DCH1CSIZ = 1;                    // one byte per UART transfer request
-    DCH1INTCLR = 0x00ff00ff;         // DMA1: clear events, disable interrupts
+    DCH5CON = 0x2;          // channel 1 off, priority 2
+    DCH5ECONbits.CHSIRQ = _UART5_TX_VECTOR;
+    DCH5ECONbits.SIRQEN = 1;
+    DCH5SSA = _VirtToPhys(&buf_tx5); // transfer source physical address
+    DCH5DSA = _VirtToPhys(&U5TXREG); // transfer destination physical address
+    DCH5SSIZ = 38;                   // source size at most 200 bytes
+    DCH5DSIZ = 1;                    // dst size is 1 byte
+    DCH5CSIZ = 1;                    // one byte per UART transfer request
+    DCH5INTCLR = 0x00ff00ff;         // DMA1: clear events, disable interrupts
     // DCH1INTbits.CHSDIF = 0;
-    DCH1CONbits.CHEN = 0;
+    DCH5CONbits.CHEN = 0;
 }
 void DMA4_init(void)
 {
@@ -108,7 +108,7 @@ void DMA4_init(void)
 
 void test_uart_dma(void)
 {
-    DMA1_init();
+    DMA5_init();
     ENAB_TX5;
     ENAB_TX5;
     DCH1CONbits.CHEN = 1;
