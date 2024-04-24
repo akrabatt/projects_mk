@@ -289,29 +289,6 @@ void uart5_init(void) {
         U5STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
         U5STAbits.UTXISEL = 0b10; /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
         U5MODEbits.ON = 1; /* Enable UART module 1 */
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    // Включаем тактирование UART5
-//    PMD5bits.U5MD = 0; // Включаем модуль UART5
-//
-//    // Настраиваем режим работы UART5
-//    U5MODE = 0; // Очищаем регистр режима UART5
-//    U5MODEbits.UARTEN = 0; // Выключаем UART5 на время настройки
-//    U5MODEbits.PDSEL = 0b00; // 8 бит данных, без четности
-//    U5MODEbits.STSEL = 0; // 1 стоповый бит
-//
-//    // Настраиваем скорость передачи данных
-//    U5BRG = 86; // Устанавливаем скорость 115200 бод при частоте ядра 200 МГц
-//
-//    // Включаем прерывания UART5
-//    IPC45bits.U5RXIP = 5; // Устанавливаем приоритет прерывания приема UART5 на 5
-//    IPC45bits.U5TXIP = 5; // Устанавливаем приоритет прерывания передачи UART5 на 5
-//    IEC5bits.U5RXIE = 1; // Разрешаем прерывание по приему данных
-//    IEC5bits.U5TXIE = 1; // Разрешаем прерывание по передаче данных
-//
-//    // Включаем UART5
-//    U5MODEbits.UARTEN = 1; // Включаем UART5
-//    U5STAbits.UTXEN = 1; // Разрешаем передачу данных
-//    U5STAbits.URXEN = 1; // Разрешаем прием данных
 }
 
 void uart4_init(void) {
