@@ -59,7 +59,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #pragma config FDMTEN = OFF             // Deadman Timer Enable (Deadman Timer is disabled)
 
 // DEVCFG0
-#pragma config DEBUG = ON              // Background Debugger Enable (Debugger is disabled)
+#pragma config DEBUG = OFF              // Background Debugger Enable (Debugger is disabled)
 #pragma config JTAGEN = OFF             // JTAG Enable (JTAG Disabled)
 #pragma config ICESEL = ICS_PGx1        // ICE/ICD Comm Channel Select (Communicate on PGEC2/PGED2)
 #pragma config TRCEN = ON               // Trace Enable (Trace features in the CPU are enabled)
@@ -271,24 +271,47 @@ void OC3_init(void) { //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 
 
 void uart5_init(void) {
-    U5MODEbits.USIDL = 0; /* Continue in Idle mode */
-    U5MODEbits.LPBACK = 0; /* Disable LoopBack */
-    U5MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
-    U5MODEbits.STSEL = 0; /* One Stop bit */
-    U5MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U5BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
-    IFS5bits.U5TXIF = 0; /* Clear interrupt flag */
-    IPC45bits.U5TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC45bits.U5TXIS = 0; // sub priority, 0 is Low priority
-    IEC5bits.U5TXIE = 0; /* Enable receive interrupts */
-    IFS5bits.U5RXIF = 0; /* Clear interrupt flag */
-    IPC45bits.U5RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC45bits.U5RXIS = 0; // sub priority, 0 is Low priority
-    IEC5bits.U5RXIE = 1; /* Enable receive interrupts */
-    U5STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U5STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U5STAbits.UTXISEL = 0b10; /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
-    U5MODEbits.ON = 1; /* Enable UART module 1 */
+        U5MODEbits.USIDL = 0; /* Continue in Idle mode */
+        U5MODEbits.LPBACK = 0; /* Disable LoopBack */
+        U5MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
+        U5MODEbits.STSEL = 0; /* One Stop bit */
+        U5MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
+        U5BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
+        IFS5bits.U5TXIF = 0; /* Clear interrupt flag */
+        IPC45bits.U5TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+        IPC45bits.U5TXIS = 0; // sub priority, 0 is Low priority
+        IEC5bits.U5TXIE = 0; /* Enable receive interrupts */
+        IFS5bits.U5RXIF = 0; /* Clear interrupt flag */
+        IPC45bits.U5RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+        IPC45bits.U5RXIS = 0; // sub priority, 0 is Low priority
+        IEC5bits.U5RXIE = 1; /* Enable receive interrupts */
+        U5STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
+        U5STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
+        U5STAbits.UTXISEL = 0b10; /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
+        U5MODEbits.ON = 1; /* Enable UART module 1 */
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    // Включаем тактирование UART5
+//    PMD5bits.U5MD = 0; // Включаем модуль UART5
+//
+//    // Настраиваем режим работы UART5
+//    U5MODE = 0; // Очищаем регистр режима UART5
+//    U5MODEbits.UARTEN = 0; // Выключаем UART5 на время настройки
+//    U5MODEbits.PDSEL = 0b00; // 8 бит данных, без четности
+//    U5MODEbits.STSEL = 0; // 1 стоповый бит
+//
+//    // Настраиваем скорость передачи данных
+//    U5BRG = 86; // Устанавливаем скорость 115200 бод при частоте ядра 200 МГц
+//
+//    // Включаем прерывания UART5
+//    IPC45bits.U5RXIP = 5; // Устанавливаем приоритет прерывания приема UART5 на 5
+//    IPC45bits.U5TXIP = 5; // Устанавливаем приоритет прерывания передачи UART5 на 5
+//    IEC5bits.U5RXIE = 1; // Разрешаем прерывание по приему данных
+//    IEC5bits.U5TXIE = 1; // Разрешаем прерывание по передаче данных
+//
+//    // Включаем UART5
+//    U5MODEbits.UARTEN = 1; // Включаем UART5
+//    U5STAbits.UTXEN = 1; // Разрешаем передачу данных
+//    U5STAbits.URXEN = 1; // Разрешаем прием данных
 }
 
 void uart4_init(void) {
@@ -393,7 +416,7 @@ void InitializeSystem(void) {
     //    DRV_ADC_Initialize_F();
     ADC_init_scan();
     conf_read();
-    
+
     tmr_1_init(100, 0, 0);
     tmr2_init();
     tmr_5_init();
@@ -403,7 +426,7 @@ void InitializeSystem(void) {
     OC3_init();
     uart5_init();
     uart4_init();
-    uart3_init();
+//    uart3_init();
     DMA5_init();
     DMA4_init();
 

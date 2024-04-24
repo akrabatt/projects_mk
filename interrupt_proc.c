@@ -59,9 +59,9 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
         DCH5DSA = _VirtToPhys(&U5TXREG); // transfer destination physical address
         DCH5SSIZ = cnt;                  // source size at most 200 bytes
         DCH5DSIZ = 1;                    // dst size is 1 byte
-        DCH5CSIZ = 1;                    // one byte per UART transfer request
-        DCH5CONbits.CHEN = on;
-        DCH5ECONbits.CFORCE = force;
+        DCH1CSIZ = 1;                    // one byte per UART transfer request
+        DCH1CONbits.CHEN = on;
+        DCH1ECONbits.CFORCE = force;
     }
     if (usart == &usart4)
     {
