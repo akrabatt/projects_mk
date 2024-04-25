@@ -73,6 +73,36 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
         DCH4CONbits.CHEN = on;
         DCH4ECONbits.CFORCE = force;
     }
+     if (usart == &usart3)
+    {
+        DCH3SSA = _VirtToPhys(&buf_tx3); // transfer source physical address
+        DCH3DSA = _VirtToPhys(&U3TXREG); // transfer destination physical address
+        DCH3SSIZ = cnt;                  // source size at most 200 bytes
+        DCH3DSIZ = 1;                    // dst size is 1 byte
+        DCH3CSIZ = 1;                    // one byte per UART transfer request
+        DCH3CONbits.CHEN = on;
+        DCH3ECONbits.CFORCE = force;
+    }
+    if (usart == &usart2)
+    {
+        DCH2SSA = _VirtToPhys(&buf_tx2); // transfer source physical address
+        DCH2DSA = _VirtToPhys(&U2TXREG); // transfer destination physical address
+        DCH2SSIZ = cnt;                  // source size at most 200 bytes
+        DCH2DSIZ = 1;                    // dst size is 1 byte
+        DCH2CSIZ = 1;                    // one byte per UART transfer request
+        DCH2CONbits.CHEN = on;
+        DCH2ECONbits.CFORCE = force;
+    }
+    if (usart == &usart1)
+    {
+        DCH1SSA = _VirtToPhys(&buf_tx1); // transfer source physical address
+        DCH1DSA = _VirtToPhys(&U1TXREG); // transfer destination physical address
+        DCH1SSIZ = cnt;                  // source size at most 200 bytes
+        DCH1DSIZ = 1;                    // dst size is 1 byte
+        DCH1CSIZ = 1;                    // one byte per UART transfer request
+        DCH1CONbits.CHEN = on;
+        DCH1ECONbits.CFORCE = force;
+    }
 }
 
 void DMA5_init(void)
@@ -104,6 +134,51 @@ void DMA4_init(void)
     DCH4INTCLR = 0x00ff00ff;         // DMA1: clear events, disable interrupts
     // DCH4INTbits.CHSDIF = 0;
     DCH4CONbits.CHEN = 0;
+}
+void DMA3_init(void)
+{
+    DMACONSET = 0x00008000; // enable the DMA controller
+    DCH3CON = 0x2;          // channel 1 off, priority 2
+    DCH3ECONbits.CHSIRQ = _UART3_TX_VECTOR;
+    DCH3ECONbits.SIRQEN = 1;
+    DCH3SSA = _VirtToPhys(&buf_tx3); // transfer source physical address
+    DCH3DSA = _VirtToPhys(&U3TXREG); // transfer destination physical address
+    DCH3SSIZ = 38;                   // source size at most 200 bytes
+    DCH3DSIZ = 1;                    // dst size is 1 byte
+    DCH3CSIZ = 1;                    // one byte per UART transfer request
+    DCH3INTCLR = 0x00ff00ff;         // DMA1: clear events, disable interrupts
+    // DCH4INTbits.CHSDIF = 0;
+    DCH3CONbits.CHEN = 0;
+}
+void DMA2_init(void)
+{
+    DMACONSET = 0x00008000; // enable the DMA controller
+    DCH2CON = 0x2;          // channel 1 off, priority 2
+    DCH2ECONbits.CHSIRQ = _UART2_TX_VECTOR;
+    DCH2ECONbits.SIRQEN = 1;
+    DCH2SSA = _VirtToPhys(&buf_tx2); // transfer source physical address
+    DCH2DSA = _VirtToPhys(&U2TXREG); // transfer destination physical address
+    DCH2SSIZ = 38;                   // source size at most 200 bytes
+    DCH2DSIZ = 1;                    // dst size is 1 byte
+    DCH2CSIZ = 1;                    // one byte per UART transfer request
+    DCH2INTCLR = 0x00ff00ff;         // DMA1: clear events, disable interrupts
+    // DCH4INTbits.CHSDIF = 0;
+    DCH2CONbits.CHEN = 0;
+}
+void DMA1_init(void)
+{
+    DMACONSET = 0x00008000; // enable the DMA controller
+    DCH1CON = 0x2;          // channel 1 off, priority 2
+    DCH1ECONbits.CHSIRQ = _UART1_TX_VECTOR;
+    DCH1ECONbits.SIRQEN = 1;
+    DCH1SSA = _VirtToPhys(&buf_tx1); // transfer source physical address
+    DCH1DSA = _VirtToPhys(&U1TXREG); // transfer destination physical address
+    DCH1SSIZ = 38;                   // source size at most 200 bytes
+    DCH1DSIZ = 1;                    // dst size is 1 byte
+    DCH1CSIZ = 1;                    // one byte per UART transfer request
+    DCH1INTCLR = 0x00ff00ff;         // DMA1: clear events, disable interrupts
+    // DCH4INTbits.CHSDIF = 0;
+    DCH1CONbits.CHEN = 0;
 }
 
 void test_uart_dma(void)

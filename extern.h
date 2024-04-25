@@ -10,6 +10,9 @@ extern "C" {
 
     extern unsigned char __attribute__((coherent)) buf_tx5 [300];
     extern unsigned char __attribute__((coherent)) buf_tx4 [300];
+    extern unsigned char __attribute__((coherent)) buf_tx3 [300];
+    extern unsigned char __attribute__((coherent)) buf_tx2 [300];
+    extern unsigned char __attribute__((coherent)) buf_tx1 [300];
 
     extern float swapfloat(float data);
     extern unsigned long swaplong(unsigned long data);
