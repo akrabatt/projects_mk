@@ -189,6 +189,30 @@ void start_tx_usart(struct tag_usart * usart) {
         ENAB_TX5;
         IEC5bits.U5TXIE = 1; //enable TX interrupt
     }
+    if (usart == &usart3) {
+        IEC4bits.U3RXIE = 0; //disable RX interrupt
+        usart->mb_status.modb_transmiting = 1;
+        usart->out_buffer_count = 0;
+        usart->mb_status.last_byte = 0;
+        ENAB_TX3;
+        IEC4bits.U3TXIE = 1; //enable TX interrupt
+    }
+    //    if (usart == &usart2) {
+    //        IEC4bits.U2RXIE = 0; //disable RX interrupt
+    //        usart->mb_status.modb_transmiting = 1;
+    //        usart->out_buffer_count = 0;
+    //        usart->mb_status.last_byte = 0;
+    //        ENAB_TX2;
+    //        IEC4bits.U2TXIE = 1; //enable TX interrupt
+    //    }
+    if (usart == &usart1) {
+        IEC3bits.U1RXIE = 0; //disable RX interrupt
+        usart->mb_status.modb_transmiting = 1;
+        usart->out_buffer_count = 0;
+        usart->mb_status.last_byte = 0;
+        ENAB_TX1;
+        IEC3bits.U1TXIE = 1; //enable TX interrupt
+    }
 }
 
 void start_tx_usart_dma(struct tag_usart * usart, unsigned short count) {
