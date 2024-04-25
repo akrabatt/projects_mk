@@ -187,25 +187,24 @@ void port_init(void) {
     RPB10Rbits.RPB10R = 0b1001; //SDO5
 }
 
-void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned short TMR1_ON) {
+void tmr_1_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
     T1CONbits.TON = 0;
     TMR1 = 0x0000;
-    PR1 = T1_delay; //
-    IEC0bits.T1IE = TMR1_IE;
+    PR1 = T_delay; //
+    IEC0bits.T1IE = TMR_IE;
     IPC1bits.T1IP = 0b10; // priority = 2
     T1CONbits.TCKPS = 0; //T1 prescaler 1:8
-    T1CONbits.TON = TMR1_ON;
+    T1CONbits.TON = TMR_ON;
 }
 
-void tmr_5_init(void) {
+void tmr_5_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
     T5CONbits.TON = 0;
     TMR5 = 0x0000;
-    PR5 = TMR4CLK / (OC_FREQ * (FILTER));
-    IFS0bits.T5IF = 0; // Clear the T5 interrupt flag
-    IEC0bits.T5IE = 0;
+    PR5 = T_delay; //
+    IEC0bits.T5IE = TMR_IE;
     IPC6bits.T5IP = 0b10; // priority = 2
     T5CONbits.TCKPS = 0; //T1 prescaler 1:8
-    T5CONbits.TON = 1;
+    T5CONbits.TON = TMR_ON;
 }
 
 void tmr_9_init(unsigned short T9_delay, unsigned short TMR9_IE, unsigned short TMR9_ON) {
@@ -437,7 +436,7 @@ void InitializeSystem(void) {
 
     tmr_1_init(100, 0, 0);
     tmr2_init();
-    tmr_5_init();
+    tmr_5_init(100, 0, 0);
     tmr6_init();
     tmr7_init();
     tmr_9_init(100, 0, 0);
@@ -445,6 +444,8 @@ void InitializeSystem(void) {
     uart5_init();
     uart4_init();
 //    uart3_init();
+//    uart2_init();
+//    uart1_init();
     DMA5_init();
     DMA4_init();
 

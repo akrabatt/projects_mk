@@ -46,6 +46,8 @@ void __ISR_AT_VECTOR(_ADC_VECTOR, IPL4SRS) ADCInterrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void) {
+    T1CONbits.TON = 0;
+    
     IFS0bits.T5IF = 0;
 }
 
@@ -58,6 +60,7 @@ void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
     T1Interrupt_(&usart5);
     IFS0bits.T1IF = 0;
 }
+
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
     T9CONbits.TON = 0;
