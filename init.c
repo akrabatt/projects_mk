@@ -270,24 +270,24 @@ void OC3_init(void) { //����� ���
 
 
 void uart5_init(void) {
-        U5MODEbits.USIDL = 0; /* Continue in Idle mode */
-        U5MODEbits.LPBACK = 0; /* Disable LoopBack */
-        U5MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
-        U5MODEbits.STSEL = 0; /* One Stop bit */
-        U5MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
-        U5BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
-        IFS5bits.U5TXIF = 0; /* Clear interrupt flag */
-        IPC45bits.U5TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-        IPC45bits.U5TXIS = 0; // sub priority, 0 is Low priority
-        IEC5bits.U5TXIE = 0; /* Enable receive interrupts */
-        IFS5bits.U5RXIF = 0; /* Clear interrupt flag */
-        IPC45bits.U5RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-        IPC45bits.U5RXIS = 0; // sub priority, 0 is Low priority
-        IEC5bits.U5RXIE = 1; /* Enable receive interrupts */
-        U5STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-        U5STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-        U5STAbits.UTXISEL = 0b10; /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
-        U5MODEbits.ON = 1; /* Enable UART module 1 */
+    U5MODEbits.USIDL = 0; /* Continue in Idle mode */
+    U5MODEbits.LPBACK = 0; /* Disable LoopBack */
+    U5MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
+    U5MODEbits.STSEL = 0; /* One Stop bit */
+    U5MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
+    U5BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
+    IFS5bits.U5TXIF = 0; /* Clear interrupt flag */
+    IPC45bits.U5TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC45bits.U5TXIS = 0; // sub priority, 0 is Low priority
+    IEC5bits.U5TXIE = 0; /* Enable receive interrupts */
+    IFS5bits.U5RXIF = 0; /* Clear interrupt flag */
+    IPC45bits.U5RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC45bits.U5RXIS = 0; // sub priority, 0 is Low priority
+    IEC5bits.U5RXIE = 1; /* Enable receive interrupts */
+    U5STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
+    U5STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
+    U5STAbits.UTXISEL = 0b10; /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
+    U5MODEbits.ON = 1; /* Enable UART module 1 */
 }
 
 void uart4_init(void) {
@@ -331,6 +331,7 @@ void uart3_init(void) {
     U3STAbits.UTXISEL = 0b10;
     U3MODEbits.ON = 1;
 }
+
 void uart2_init(void) {
     U2MODEbits.USIDL = 0; /* Continue in Idle mode */
     U2MODEbits.LPBACK = 0; /* Disable LoopBack */
@@ -443,9 +444,9 @@ void InitializeSystem(void) {
     OC3_init();
     uart5_init();
     uart4_init();
-//    uart3_init();
-//    uart2_init();
-//    uart1_init();
+    //    uart3_init();
+    //    uart2_init();
+    //    uart1_init();
     DMA5_init();
     DMA4_init();
 

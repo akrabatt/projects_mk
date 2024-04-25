@@ -47,7 +47,7 @@ void __ISR_AT_VECTOR(_ADC_VECTOR, IPL4SRS) ADCInterrupt(void) {
 
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void) {
     T1CONbits.TON = 0;
-    
+    T5Interrupt_(&usart5);
     IFS0bits.T5IF = 0;
 }
 
@@ -55,9 +55,9 @@ void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void) {
 
 //void __ISR_AT_VECTOR (_ADC_DATA32_VECTOR, IPL4SRS) ADC32Interrupt(void)  {	LED_8 = 1; ADC_interrupt_F (); IFS1bits.ADCIF = 0; LED_8 = 0; IFS2bits.ADCD32IF = 0; } 
 
-void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
+void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) { 
     T1CONbits.TON = 0;
-    T1Interrupt_(&usart5);
+    
     IFS0bits.T1IF = 0;
 }
 
@@ -96,7 +96,7 @@ void __ISR_AT_VECTOR(_UART5_RX_VECTOR, IPL4SRS) U5RXInterrupt(void) {
         usart5.mb_status.modb_received = 1;
         usart5.mb_status.modb_receiving = 0;
     }
-    tmr_1_init(frame_delay_1, 1, 1);
+    tmr_5_init(frame_delay_1, 1, 1);
     IFS5bits.U5RXIF = 0;
 }
 
