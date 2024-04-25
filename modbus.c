@@ -182,12 +182,12 @@ void start_tx_usart(struct tag_usart * usart) {
     }
 
     if (usart == &usart5) {
-        IEC3bits.U1RXIE = 0; //disable RX interrupt
+        IEC5bits.U5RXIE = 0; //disable RX interrupt
         usart->mb_status.modb_transmiting = 1;
         usart->out_buffer_count = 0;
         usart->mb_status.last_byte = 0;
         ENAB_TX5;
-        IEC3bits.U1TXIE = 1; //enable TX interrupt
+        IEC5bits.U5TXIE = 1; //enable TX interrupt
     }
 }
 
