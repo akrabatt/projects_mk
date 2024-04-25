@@ -197,7 +197,7 @@ void start_tx_usart(struct tag_usart * usart) {
         ENAB_TX3;
         IEC4bits.U3TXIE = 1; //enable TX interrupt
     }
-        if (usart == &usart2) {
+    if (usart == &usart2) {
         IEC4bits.U2RXIE = 0; //disable RX interrupt
         usart->mb_status.modb_transmiting = 1;
         usart->out_buffer_count = 0;
@@ -239,6 +239,22 @@ void start_tx_usart_dma(struct tag_usart * usart, unsigned short count) {
         usart->mb_status.modb_transmiting = 1;
         DMA_uni(&usart3, count, 1, 1);
         IEC4bits.U3TXIE = 0;
+    }
+    if (usart == &usart2) {
+        ENAB_TX2;
+        memcpy((void*) (buf_tx2), (const void*) (usart->out_buffer), (count));
+        IEC4bits.U2RXIE = 0;
+        usart->mb_status.modb_transmiting = 1;
+        DMA_uni(&usart2, count, 1, 1);
+        IEC4bits.U2TXIE = 0;
+    }
+    if (usart == &usart1) {
+        ENAB_TX1;
+        memcpy((void*) (buf_tx1), (const void*) (usart->out_buffer), (count));
+        IEC3bits.U1RXIE = 0;
+        usart->mb_status.modb_transmiting = 1;
+        DMA_uni(&usart1, count, 1, 1);
+        IEC3bits.U1TXIE = 0;
     }
 }
 
