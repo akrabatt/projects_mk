@@ -332,6 +332,47 @@ void uart3_init(void) {
     U3STAbits.UTXISEL = 0b10;
     U3MODEbits.ON = 1;
 }
+void uart2_init(void) {
+    U2MODEbits.USIDL = 0; /* Continue in Idle mode */
+    U2MODEbits.LPBACK = 0; /* Disable LoopBack */
+    U2MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
+    U2MODEbits.STSEL = 0; /* One Stop bit */
+    U2MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
+    U2BRG = PBCLK2_ / (U2_speed * 16) - 1; //1Mbit
+    IFS4bits.U2TXIF = 0; /* Clear interrupt flag */
+    IPC36bits.U2TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC36bits.U2TXIS = 0; // sub priority, 0 is Low priority
+    IEC4bits.U2TXIE = 0; /* Enable receive interrupts */
+    IFS4bits.U2RXIF = 0; /* Clear interrupt flag */
+    IPC36bits.U2RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC36bits.U2RXIS = 0; // sub priority, 0 is Low priority
+    IEC4bits.U2RXIE = 1; /* Enable receive interrupts */
+    U2STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
+    U2STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
+    U2STAbits.UTXISEL = 0b10;
+    U2MODEbits.ON = 1;
+}
+
+void uart1_init(void) {
+    U1MODEbits.USIDL = 0; /* Continue in Idle mode */
+    U1MODEbits.LPBACK = 0; /* Disable LoopBack */
+    U1MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
+    U1MODEbits.STSEL = 0; /* One Stop bit */
+    U1MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
+    U1BRG = PBCLK2_ / (U1_speed * 16) - 1; //1Mbit
+    IFS3bits.U1TXIF = 0; /* Clear interrupt flag */
+    IPC28bits.U1TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC28bits.U1TXIS = 0; // sub priority, 0 is Low priority
+    IEC3bits.U1TXIE = 0; /* Enable receive interrupts */
+    IFS3bits.U1RXIF = 0; /* Clear interrupt flag */
+    IPC28bits.U1RXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
+    IPC28bits.U1RXIS = 0; // sub priority, 0 is Low priority
+    IEC3bits.U1RXIE = 1; /* Enable receive interrupts */
+    U1STAbits.UTXEN = 1; /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
+    U1STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
+    U1STAbits.UTXISEL = 0b10;
+    U1MODEbits.ON = 1;
+}
 
 void spi5_init(void) {
     unsigned int t_brg;
