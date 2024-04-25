@@ -197,14 +197,14 @@ void start_tx_usart(struct tag_usart * usart) {
         ENAB_TX3;
         IEC4bits.U3TXIE = 1; //enable TX interrupt
     }
-    //    if (usart == &usart2) {
-    //        IEC4bits.U2RXIE = 0; //disable RX interrupt
-    //        usart->mb_status.modb_transmiting = 1;
-    //        usart->out_buffer_count = 0;
-    //        usart->mb_status.last_byte = 0;
-    //        ENAB_TX2;
-    //        IEC4bits.U2TXIE = 1; //enable TX interrupt
-    //    }
+        if (usart == &usart2) {
+        IEC4bits.U2RXIE = 0; //disable RX interrupt
+        usart->mb_status.modb_transmiting = 1;
+        usart->out_buffer_count = 0;
+        usart->mb_status.last_byte = 0;
+        ENAB_TX2;
+        IEC4bits.U2TXIE = 1; //enable TX interrupt
+    }
     if (usart == &usart1) {
         IEC3bits.U1RXIE = 0; //disable RX interrupt
         usart->mb_status.modb_transmiting = 1;
@@ -231,6 +231,14 @@ void start_tx_usart_dma(struct tag_usart * usart, unsigned short count) {
         usart->mb_status.modb_transmiting = 1;
         DMA_uni(&usart5, count, 1, 1);
         IEC5bits.U5TXIE = 0;
+    }
+    if (usart == &usart3) {
+        ENAB_TX3;
+        memcpy((void*) (buf_tx3), (const void*) (usart->out_buffer), (count));
+        IEC4bits.U3RXIE = 0;
+        usart->mb_status.modb_transmiting = 1;
+        DMA_uni(&usart3, count, 1, 1);
+        IEC4bits.U3TXIE = 0;
     }
 }
 
