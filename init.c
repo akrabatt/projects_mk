@@ -11,15 +11,11 @@ extern void DMA1_init(void);
 extern void DMA4_init(void);
 extern void conf_read(void);
 
-extern void DMA0_init(void);
 extern void DMA2_init(void);
 extern void DMA3_init(void);
 extern void DMA5_init(void);
 extern void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num);
 extern void tmr_7_init(unsigned short T7_delay, unsigned short TMR7_IE, unsigned short TMR7_ON, unsigned short chan_num);
-
-
-extern void ADC_init_scan(void);
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) {
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char*) p + 0x40000000L);
@@ -431,8 +427,6 @@ void InitializeSystem(void) {
     port_init();
     spi5_init();
     help_load = 1;
-    //    DRV_ADC_Initialize_F();
-    ADC_init_scan();
     conf_read();
 
     tmr_1_init(100, 0, 0);

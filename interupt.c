@@ -37,23 +37,11 @@ extern void IC4_measure(void);
 
 unsigned short send_dma;
 
-void __ISR_AT_VECTOR(_ADC_VECTOR, IPL4SRS) ADCInterrupt(void) {
-    LED_7_ON;
-    ADC_interrupt_F();
-    LED_7_OFF;
-    IFS1bits.ADCIF = 0;
-    ADCCON3bits.GSWTRG = 0;
-}
-
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void) {
-    T1CONbits.TON = 0;
+    T5CONbits.TON = 0;
     T5Interrupt_(&usart5);
     IFS0bits.T5IF = 0;
 }
-
-//void __ISR_AT_VECTOR (_ADC_DATA10_VECTOR, IPL4SRS) ADC10Interrupt(void)  {	LED_8 = 1; ADC_interrupt_F (); IFS1bits.ADCIF = 0; LED_8 = 0; IFS2bits.ADCD10IF = 0; }  
-
-//void __ISR_AT_VECTOR (_ADC_DATA32_VECTOR, IPL4SRS) ADC32Interrupt(void)  {	LED_8 = 1; ADC_interrupt_F (); IFS1bits.ADCIF = 0; LED_8 = 0; IFS2bits.ADCD32IF = 0; } 
 
 void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) { 
     T1CONbits.TON = 0;

@@ -384,6 +384,36 @@ void stop_uart_tx_dma(void) {
             U3STAbits.OERR = 0;
         }
     }
+    if (usart2.mb_status.tx_mode == DMA_type) {
+        if ((usart2.mb_status.modb_transmiting == 1)&&(U2STAbits.TRMT)) {
+            usart2.mb_status.modb_transmiting = 0;
+            DMA_uni(&usart2, 1, 0, 0);
+            usart2.mb_status.modb_received = 0;
+            usart2.mb_status.modb_receiving = 0;
+            usart2.in_buffer_count = 0;
+            IFS4bits.U2RXIF;
+            ENAB_RX2;
+            IEC4bits.U2RXIE = 1;
+        }
+        if (U2STAbits.OERR || U2STAbits.FERR) {
+            U2STAbits.OERR = 0;
+        }
+    }
+    if (usart1.mb_status.tx_mode == DMA_type) {
+        if ((usart1.mb_status.modb_transmiting == 1)&&(U1STAbits.TRMT)) {
+            usart1.mb_status.modb_transmiting = 0;
+            DMA_uni(&usart1, 1, 0, 0);
+            usart1.mb_status.modb_received = 0;
+            usart1.mb_status.modb_receiving = 0;
+            usart1.in_buffer_count = 0;
+            IFS3bits.U1RXIF;
+            ENAB_RX1;
+            IEC3bits.U1RXIE = 1;
+        }
+        if (U1STAbits.OERR || U1STAbits.FERR) {
+            U1STAbits.OERR = 0;
+        }
+    }
 }
 
 void close_mb(struct tag_usart * usart) {
