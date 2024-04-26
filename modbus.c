@@ -290,6 +290,51 @@ void stop_uart_tx(void) {
             U5STAbits.OERR = 0;
         }
     }
+    if (usart3.mb_status.tx_mode == INT_type) {
+        if ((usart3.mb_status.modb_transmiting == 1)&&(U3STAbits.TRMT)&&(IEC4bits.U3TXIE == 0)) {
+            usart3.mb_status.last_byte = 0;
+            usart3.mb_status.modb_received = 0;
+            usart3.mb_status.modb_receiving = 0;
+            usart3.in_buffer_count = 0;
+            usart3.mb_status.modb_transmiting = 0;
+            IFS4bits.U3RXIF = 0;
+            ENAB_RX3;
+            IEC4bits.U3RXIE = 1; //disable RX interrupt
+        }
+        if (U3STAbits.OERR || U3STAbits.FERR) {
+            U3STAbits.OERR = 0;
+        }
+    }
+    if (usart2.mb_status.tx_mode == INT_type) {
+        if ((usart2.mb_status.modb_transmiting == 1)&&(U2STAbits.TRMT)&&(IEC4bits.U2TXIE == 0)) {
+            usart2.mb_status.last_byte = 0;
+            usart2.mb_status.modb_received = 0;
+            usart2.mb_status.modb_receiving = 0;
+            usart2.in_buffer_count = 0;
+            usart2.mb_status.modb_transmiting = 0;
+            IFS4bits.U2RXIF = 0;
+            ENAB_RX2;
+            IEC4bits.U2RXIE = 1; //disable RX interrupt
+        }
+        if (U2STAbits.OERR || U2STAbits.FERR) {
+            U2STAbits.OERR = 0;
+        }
+    }
+    if (usart1.mb_status.tx_mode == INT_type) {
+        if ((usart1.mb_status.modb_transmiting == 1)&&(U1STAbits.TRMT)&&(IEC3bits.U1TXIE == 0)) {
+            usart1.mb_status.last_byte = 0;
+            usart1.mb_status.modb_received = 0;
+            usart1.mb_status.modb_receiving = 0;
+            usart1.in_buffer_count = 0;
+            usart1.mb_status.modb_transmiting = 0;
+            IFS3bits.U1RXIF = 0;
+            ENAB_RX1;
+            IEC3bits.U1RXIE = 1; //disable RX interrupt
+        }
+        if (U1STAbits.OERR || U1STAbits.FERR) {
+            U1STAbits.OERR = 0;
+        }
+    }
 }
 
 void stop_uart_tx_dma(void) {
