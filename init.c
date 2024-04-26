@@ -5,7 +5,6 @@
 #include "extern.h"
 
 
-extern void DRV_ADC_Initialize_F(void);
 extern void ADC_interrupt_F(void);
 extern void DMA1_init(void);
 extern void DMA4_init(void);
