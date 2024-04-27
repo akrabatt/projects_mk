@@ -212,14 +212,14 @@ void tmr_9_init(unsigned short T9_delay, unsigned short TMR9_IE, unsigned short 
     T9CONbits.TON = TMR9_ON;
 }
 
-void tmr6_init(void) {
+void tmr6_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
     T6CONbits.TON = 0;
     TMR6 = 0x0000;
-    PR6 = 1500; //
-    IEC0bits.T6IE = 1;
+    PR6 = T_delay; //
+    IEC0bits.T6IE = TMR_IE;
     IPC7bits.T6IP = 0b10; // priority = 2
-    T6CONbits.TCKPS = 7; //T1 prescaler 1:256
-    T6CONbits.TON = 0;
+    T6CONbits.TCKPS = 0; //T1 prescaler 1:8
+    T6CONbits.TON = TMR_ON;
 }
 
 void tmr7_init(void) {
@@ -431,7 +431,7 @@ void InitializeSystem(void) {
     tmr_1_init(100, 0, 0);
     tmr2_init();
     tmr_5_init(100, 0, 0);
-    tmr6_init();
+    tmr6_init(100, 0, 0);
     tmr7_init();
     tmr_9_init(100, 0, 0);
     OC3_init();
