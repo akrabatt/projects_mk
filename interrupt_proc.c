@@ -28,11 +28,41 @@ void T1Interrupt_(struct tag_usart *usart)
         usart->mb_status.modb_receiving = 0;
     }
 }
+void T4Interrupt_(struct tag_usart *usart)
+{
+    T4CONbits.TON = 0;
+    IFS0bits.T4IF = 0;
+    if (usart->mb_status.modb_receiving)
+    {
+        usart->mb_status.modb_received = 1;
+        usart->mb_status.modb_receiving = 0;
+    }
+}
 
 void T5Interrupt_(struct tag_usart *usart)
 {
     T5CONbits.TON = 0;
     IFS0bits.T5IF = 0;
+    if (usart->mb_status.modb_receiving)
+    {
+        usart->mb_status.modb_received = 1;
+        usart->mb_status.modb_receiving = 0;
+    }
+}
+void T6Interrupt_(struct tag_usart *usart)
+{
+    T6CONbits.TON = 0;
+    IFS0bits.T6IF = 0;
+    if (usart->mb_status.modb_receiving)
+    {
+        usart->mb_status.modb_received = 1;
+        usart->mb_status.modb_receiving = 0;
+    }
+}
+void T7Interrupt_(struct tag_usart *usart)
+{
+    T7CONbits.TON = 0;
+    IFS1bits.T7IF = 0;
     if (usart->mb_status.modb_receiving)
     {
         usart->mb_status.modb_received = 1;

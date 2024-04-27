@@ -1,10 +1,7 @@
-
-
 #include <xc.h>
 #include <sys/attribs.h>    /* contains __ISR() Macros */
 #include "define.h"
 #include "extern.h"
-
 
 
 extern void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned short TMR1_ON);
@@ -18,7 +15,6 @@ extern void counters(void);
 extern void motor_control(void);
 extern void pid_control(float Kp, float Kd, float Ki);
 extern void ADC_data_store(void);
-
 extern void ADC_interrupt_F(void);
 extern void ADC_dma_store(void);
 extern void IC1Interrupt_(void);
@@ -34,26 +30,27 @@ extern void IC7_measure(void);
 extern void IC8_measure(void);
 extern void IC3_measure(void);
 extern void IC4_measure(void);
-
 unsigned short send_dma;
+
+
+//TIMERS
+void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
+    T1CONbits.TON = 0;
+    IFS0bits.T1IF = 0;
+}
+
+void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void) {
+    ignit_stop();
+    ADCCON3bits.GSWTRG = 1;
+    IFS0bits.T4IF = 0;
+    counters();
+    start_pid_reg = 1; //pid_control(MB_conf.CV_KP, MB_conf.CV_KD, MB_conf.CV_KI);
+}
 
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void) {
     T5CONbits.TON = 0;
     T5Interrupt_(&usart5);
     IFS0bits.T5IF = 0;
-}
-
-void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) { 
-    T1CONbits.TON = 0;
-    
-    IFS0bits.T1IF = 0;
-}
-
-
-void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
-    T9CONbits.TON = 0;
-    T9Interrupt_(&usart4);
-    IFS1bits.T9IF = 0;
 }
 
 void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void) {
@@ -66,14 +63,14 @@ void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void) {
     IFS1bits.T7IF = 0;
 }
 
-void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void) {
-    ignit_stop();
-    ADCCON3bits.GSWTRG = 1;
-    IFS0bits.T4IF = 0;
-    counters();
-    start_pid_reg = 1; //pid_control(MB_conf.CV_KP, MB_conf.CV_KD, MB_conf.CV_KI);
+void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
+    T9CONbits.TON = 0;
+    T9Interrupt_(&usart4);
+    IFS1bits.T9IF = 0;
 }
 
+
+//TX/RX
 void __ISR_AT_VECTOR(_UART5_RX_VECTOR, IPL4SRS) U5RXInterrupt(void) {
     IFS5bits.U5RXIF = 0;
     usart5.mb_status.modb_receiving = 1;
