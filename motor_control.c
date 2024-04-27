@@ -131,14 +131,14 @@ void reset_condition_ (void)
     Modbus_sw.cmd1 = 0;
     TAP_OFF;
     ign_alowed = 0;
-    led_off () ;
+//    led_off () ;
     Modbus.AO_reason = 0; Modbus_sw.AO_reason = 0;
     Modbus.AO_cyl_num = 0; Modbus_sw.AO_cyl_num = 0;
     Modbus.num_check_cyl = 0; Modbus_sw.num_check_cyl = 0;
     Modbus.err_rpm = 0; Modbus_sw.err_rpm = 0;
     AO_ignit_error = 0;
     charge_fail = 0;
-    clr_charge_err ();
+//    clr_charge_err ();
     for (cc = 0; cc < (FILT_CRPM * 40); cc++)  
         {
         middle_buf40 [cc] = 0;

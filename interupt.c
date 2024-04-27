@@ -21,7 +21,7 @@ extern void IC1Interrupt_(void);
 extern void IC6Interrupt_(void);
 extern void Timer6Interrupt(void);
 extern void Timer7Interrupt(void);
-extern void ignit_stop(void);
+//extern void ignit_stop(void);
 extern void IC3Int3527(void);
 extern void IC4Int3527(void);
 extern void IC7Int(void);
@@ -34,13 +34,14 @@ unsigned short send_dma;
 
 
 //TIMERS
+
 void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
     T1CONbits.TON = 0;
     IFS0bits.T1IF = 0;
 }
 
 void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void) {
-    ignit_stop();
+//    ignit_stop();
     ADCCON3bits.GSWTRG = 1;
     IFS0bits.T4IF = 0;
     counters();
@@ -60,18 +61,19 @@ void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void) {
-    Timer7Interrupt();
+//    Timer7Interrupt();
     IFS1bits.T7IF = 0;
 }
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
-//    T9CONbits.TON = 0;
-//    T9Interrupt_(&usart4);
-//    IFS1bits.T9IF = 0;
+    //    T9CONbits.TON = 0;
+    //    T9Interrupt_(&usart4);
+    //    IFS1bits.T9IF = 0;
 }
 
 
 //TX/RX
+
 void __ISR_AT_VECTOR(_UART5_RX_VECTOR, IPL4SRS) U5RXInterrupt(void) {
     IFS5bits.U5RXIF = 0;
     usart5.mb_status.modb_receiving = 1;
@@ -143,14 +145,14 @@ void __ISR_AT_VECTOR(_INPUT_CAPTURE_4_VECTOR, IPL4SRS) IC4Interrupt(void) {
 } //IC4Int3527 ();
 
 void __ISR_AT_VECTOR(_INPUT_CAPTURE_7_VECTOR, IPL4SRS) IC7Interrupt(void) {
-    IC7_measure();
-    IC7Int();
+//    IC7_measure();
+//    IC7Int();
     IFS1bits.IC7IF = 0;
 }
 
 void __ISR_AT_VECTOR(_INPUT_CAPTURE_8_VECTOR, IPL4SRS) IC8Interrupt(void) {
-    IC8_measure();
-    IC8Int();
+//    IC8_measure();
+//    IC8Int();
     IFS1bits.IC8IF = 0;
 }
 

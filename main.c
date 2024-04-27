@@ -44,7 +44,7 @@ int main(void) {
 
         if (start_ctrl == 1) {
             start_ctrl = 0;
-            main_control();
+//            main_control();
         }
         LED_8 = help_strobe & help_reset;
     }

@@ -13,7 +13,7 @@ extern void conf_read(void);
 extern void DMA2_init(void);
 extern void DMA3_init(void);
 extern void DMA5_init(void);
-extern void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num);
+//extern void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num);
 extern void tmr_7_init(unsigned short T7_delay, unsigned short TMR7_IE, unsigned short TMR7_ON, unsigned short chan_num);
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) {
@@ -192,6 +192,27 @@ void tmr_1_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TM
     T1CONbits.TON = TMR_ON;
 }
 
+void tmr_2_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
+    //    T2CONbits.TON = 0;
+    //    T2CONbits.TCKPS = 0; // Pre-Scale = 1:8 (T2Clk: 31250Hz)
+    //    T2CONbits.T32 = 1;
+    //    TMR2 = 0xFFFF;
+    //    TMR3 = 0xFFFF;
+    //    PR2 = 0xFFFF;
+    //    PR3 = 0xFFFF;
+    //    IPC2bits.T2IP = 1; // Set the interrupt priority to 4
+    //    IFS0bits.T2IF = 0; // Reset the Timer 2 interrupt flag
+    //    IEC0bits.T2IE = 0; // Enable interrupts from Timer 2
+    //    T2CONbits.TON = 1;
+    T2CONbits.TON = 0;
+    TMR2 = 0x0000;
+    PR2 = T_delay; //
+    IEC0bits.T2IE = TMR_IE;
+    IPC2bits.T2IP = 0b10; // priority = 2
+    T2CONbits.TCKPS = 0; //T1 prescaler 1:8
+    T2CONbits.TON = TMR_ON;
+}
+
 void tmr_5_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
     T5CONbits.TON = 0;
     TMR5 = 0x0000;
@@ -212,7 +233,7 @@ void tmr_9_init(unsigned short T9_delay, unsigned short TMR9_IE, unsigned short 
     T9CONbits.TON = TMR9_ON;
 }
 
-void tmr6_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
+void tmr_6_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
     T6CONbits.TON = 0;
     TMR6 = 0x0000;
     PR6 = T_delay; //
@@ -230,20 +251,6 @@ void tmr7_init(void) {
     IPC8bits.T7IP = 0b10; // priority = 2
     T7CONbits.TCKPS = 7; //T1 prescaler 1:256
     T7CONbits.TON = 0;
-}
-
-void tmr2_init(void) {
-    T2CONbits.TON = 0;
-    T2CONbits.TCKPS = 0; // Pre-Scale = 1:8 (T2Clk: 31250Hz)
-    T2CONbits.T32 = 1;
-    TMR2 = 0xFFFF;
-    TMR3 = 0xFFFF;
-    PR2 = 0xFFFF;
-    PR3 = 0xFFFF;
-    IPC2bits.T2IP = 1; // Set the interrupt priority to 4
-    IFS0bits.T2IF = 0; // Reset the Timer 2 interrupt flag
-    IEC0bits.T2IE = 0; // Enable interrupts from Timer 2
-    T2CONbits.TON = 1;
 }
 
 void OC3_init(void) { //����� ���
@@ -429,9 +436,9 @@ void InitializeSystem(void) {
     conf_read();
 
     tmr_1_init(100, 0, 0);
-    tmr2_init();
+    tmr_2_init(100, 0, 0);
     tmr_5_init(100, 0, 0);
-    tmr6_init(100, 0, 0);
+    tmr_6_init(100, 0, 0);
     tmr7_init();
     tmr_9_init(100, 0, 0);
     OC3_init();

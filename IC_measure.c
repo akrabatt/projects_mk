@@ -139,7 +139,7 @@ void measure_sync (void)
     hold = ch_1.fast_delta;
 //    if ((sync_counter_11 == 11) && (sync_status == 1)) { sync_counter_11 = 0; sync_status = 1; }
     if ((holdbb > holdb) && (holdb > hold)) {sync_status = 1; sync_control (); sync_counter_11 = 0; }
-    if (ign_alowed == 1) {ignit_distributor (); }        // режим работы по алгоритму регулирования УОЗ
+//    if (ign_alowed == 1) {ignit_distributor (); }        // режим работы по алгоритму регулирования УОЗ
 
 
     MB_swap.angle_3 = swapfloat (ch_1.delta);    

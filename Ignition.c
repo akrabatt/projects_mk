@@ -159,14 +159,14 @@ void Timer6Interrupt(void) {
     ign_stat_even = 2;
 }
 
-void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num) {
-    ign_six = chan_num;
-    T6CONbits.ON = 0;
-    TMR6 = 0x0;
-    PR6 = T6_delay;
-    IEC0bits.T6IE = TMR6_IE;
-    T6CONbits.ON = TMR6_ON;
-}
+//void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num) {
+//    ign_six = chan_num;
+//    T6CONbits.ON = 0;
+//    TMR6 = 0x0;
+//    PR6 = T6_delay;
+//    IEC0bits.T6IE = TMR6_IE;
+//    T6CONbits.ON = TMR6_ON;
+//}
 
 /*              каналы 1, 3, 5, 7, 9         */
 void Timer7Interrupt(void) {
@@ -268,8 +268,7 @@ void ignit_distributor(void) // режим работы по алгоритму от давления регулирова
     else {
         if (ch_1.rpm < RPM_UOZ_MIN) {
             Modbus.actual_UOZ = LOW_UOZ;
-        }
-        else {
+        } else {
             Modbus.actual_UOZ = (ch_1.rpm - RPM_UOZ_MIN) * NOM_UOZ / sett_diff;
         }
     }
@@ -280,8 +279,8 @@ void ignit_distributor(void) // режим работы по алгоритму от давления регулирова
     if (tmr_set > 65535) {
         tmr_set = 65535;
     }
-    if ((cylinder == 2) || (cylinder == 4) || (cylinder == 6) || (cylinder == 8) || (cylinder == 10)) {
-        tmr_6_init(tmr_set, 1, 1, cylinder);
+//    if ((cylinder == 2) || (cylinder == 4) || (cylinder == 6) || (cylinder == 8) || (cylinder == 10)) {
+//        tmr_6_init(tmr_set, 1, 1, cylinder);
     }
     if ((cylinder == 1) || (cylinder == 3) || (cylinder == 5) || (cylinder == 7) || (cylinder == 9)) {
         tmr_7_init(tmr_set, 1, 1, cylinder);
@@ -295,9 +294,9 @@ void ignit_check(unsigned short cyl_num) { //  ign_err_check ();                
     if ((cyl_num == 1) || (cyl_num == 3) || (cyl_num == 5) || (cyl_num == 7) || (cyl_num == 9)) {
         tmr_7_init(150, 1, 1, cyl_num);
     }
-    if ((cyl_num == 2) || (cyl_num == 4) || (cyl_num == 6) || (cyl_num == 8) || (cyl_num == 10)) {
-        tmr_6_init(150, 1, 1, cyl_num);
-    }
+//    if ((cyl_num == 2) || (cyl_num == 4) || (cyl_num == 6) || (cyl_num == 8) || (cyl_num == 10)) {
+//        tmr_6_init(150, 1, 1, cyl_num);
+//    }
 }
 
 unsigned short bit_set(unsigned short cyl, unsigned short candle) {
