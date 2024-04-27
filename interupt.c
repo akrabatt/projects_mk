@@ -54,7 +54,8 @@ void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void) {
-    Timer6Interrupt();
+    T6CONbits.TON = 0;
+    T6Interrupt_(&usart4);
     IFS0bits.T6IF = 0;
 }
 
@@ -64,9 +65,9 @@ void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
-    T9CONbits.TON = 0;
-    T9Interrupt_(&usart4);
-    IFS1bits.T9IF = 0;
+//    T9CONbits.TON = 0;
+//    T9Interrupt_(&usart4);
+//    IFS1bits.T9IF = 0;
 }
 
 
@@ -108,7 +109,7 @@ void __ISR_AT_VECTOR(_UART4_RX_VECTOR, IPL4SRS) U4RXInterrupt(void) {
         usart4.mb_status.modb_received = 1;
         usart4.mb_status.modb_receiving = 0;
     }
-    tmr_9_init(frame_delay_1, 1, 1);
+    tmr_6_init(frame_delay_1, 1, 1);
     IFS5bits.U4RXIF = 0;
 }
 
