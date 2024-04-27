@@ -25,6 +25,14 @@ void T1Interrupt_(struct tag_usart *usart) {
         usart->mb_status.modb_receiving = 0;
     }
 }
+void T2Interrupt_(struct tag_usart *usart) {
+    T2CONbits.TON = 0;
+    IFS0bits.T2IF = 0;
+    if (usart->mb_status.modb_receiving) {
+        usart->mb_status.modb_received = 1;
+        usart->mb_status.modb_receiving = 0;
+    }
+}
 
 void T4Interrupt_(struct tag_usart *usart) {
     T4CONbits.TON = 0;

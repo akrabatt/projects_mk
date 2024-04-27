@@ -14,7 +14,7 @@ extern void DMA2_init(void);
 extern void DMA3_init(void);
 extern void DMA5_init(void);
 //extern void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num);
-extern void tmr_7_init(unsigned short T7_delay, unsigned short TMR7_IE, unsigned short TMR7_ON, unsigned short chan_num);
+//extern void tmr_7_init(unsigned short T7_delay, unsigned short TMR7_IE, unsigned short TMR7_ON, unsigned short chan_num);
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) {
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char*) p + 0x40000000L);
@@ -243,14 +243,14 @@ void tmr_6_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TM
     T6CONbits.TON = TMR_ON;
 }
 
-void tmr7_init(void) {
+void tmr_7_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
     T7CONbits.TON = 0;
     TMR7 = 0x0000;
-    PR7 = 1500; //
-    IEC1bits.T7IE = 1;
+    PR7 = T_delay; //
+    IEC1bits.T7IE = TMR_IE;
     IPC8bits.T7IP = 0b10; // priority = 2
-    T7CONbits.TCKPS = 7; //T1 prescaler 1:256
-    T7CONbits.TON = 0;
+    T7CONbits.TCKPS = 0; //T1 prescaler 1:8
+    T7CONbits.TON = TMR_ON;
 }
 
 void OC3_init(void) { //����� ���
@@ -439,7 +439,7 @@ void InitializeSystem(void) {
     tmr_2_init(100, 0, 0);
     tmr_5_init(100, 0, 0);
     tmr_6_init(100, 0, 0);
-    tmr7_init();
+    tmr_7_init(100, 0, 0);
     tmr_9_init(100, 0, 0);
     OC3_init();
     uart5_init();
@@ -468,26 +468,3 @@ void InitializeSystem(void) {
     OC3CONbits.ON = 1; // Enable OC3//
     //    ADCCON3bits.GSWTRG = 1;
 }
-
-/******************************************************************************
- * Function:        void InitializeSystem(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This routine takes care of all of the system
- *                  initialization that is required.
- *
- * Note:
- *
- *****************************************************************************/
-
-
-/* *****************************************************************************
- End of File
- */

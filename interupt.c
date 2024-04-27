@@ -4,8 +4,9 @@
 #include "extern.h"
 
 
-extern void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned short TMR1_ON);
+//extern void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned short TMR1_ON);
 extern void T1Interrupt_(struct tag_usart * usart);
+extern void T2Interrupt_(struct tag_usart * usart);
 extern void T5Interrupt_(struct tag_usart * usart);
 extern void T9Interrupt_(struct tag_usart * usart);
 extern void mbs(struct tag_usart * usart, unsigned char mbs_addres, union tag_direct * dir);
@@ -37,7 +38,13 @@ unsigned short send_dma;
 
 void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
     T1CONbits.TON = 0;
+    T1Interrupt_(&usart1);
     IFS0bits.T1IF = 0;
+}
+
+void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void) {
+    T2CONbits.TON = 0;
+    IFS0bits.T2IF = 0;
 }
 
 void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void) {
