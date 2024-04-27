@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=init.c interrup.c main.c modbus.c
+SOURCEFILES_QUOTED_IF_SPACED=control.c interrupt_proc.c interupt.c ramtron_drv.c init.c main.c modbus.c IC_measure.c Ignition.c OC_pid.c motor_control.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/init.o ${OBJECTDIR}/interrup.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/init.o.d ${OBJECTDIR}/interrup.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/modbus.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/control.o ${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/init.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/IC_measure.o ${OBJECTDIR}/Ignition.o ${OBJECTDIR}/OC_pid.o ${OBJECTDIR}/motor_control.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/control.o.d ${OBJECTDIR}/interrupt_proc.o.d ${OBJECTDIR}/interupt.o.d ${OBJECTDIR}/ramtron_drv.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/modbus.o.d ${OBJECTDIR}/IC_measure.o.d ${OBJECTDIR}/Ignition.o.d ${OBJECTDIR}/OC_pid.o.d ${OBJECTDIR}/motor_control.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/init.o ${OBJECTDIR}/interrup.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o
+OBJECTFILES=${OBJECTDIR}/control.o ${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/init.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/IC_measure.o ${OBJECTDIR}/Ignition.o ${OBJECTDIR}/OC_pid.o ${OBJECTDIR}/motor_control.o
 
 # Source Files
-SOURCEFILES=init.c interrup.c main.c modbus.c
+SOURCEFILES=control.c interrupt_proc.c interupt.c ramtron_drv.c init.c main.c modbus.c IC_measure.c Ignition.c OC_pid.c motor_control.c
 
 
 
@@ -107,19 +107,40 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+${OBJECTDIR}/control.o: control.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/control.o.d 
+	@${RM} ${OBJECTDIR}/control.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/control.o.d" -o ${OBJECTDIR}/control.o control.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/control.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/interrupt_proc.o: interrupt_proc.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/interrupt_proc.o.d 
+	@${RM} ${OBJECTDIR}/interrupt_proc.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interrupt_proc.o.d" -o ${OBJECTDIR}/interrupt_proc.o interrupt_proc.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/interrupt_proc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/interupt.o: interupt.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/interupt.o.d 
+	@${RM} ${OBJECTDIR}/interupt.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interupt.o.d" -o ${OBJECTDIR}/interupt.o interupt.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/interupt.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/ramtron_drv.o: ramtron_drv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/ramtron_drv.o.d 
+	@${RM} ${OBJECTDIR}/ramtron_drv.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/ramtron_drv.o.d" -o ${OBJECTDIR}/ramtron_drv.o ramtron_drv.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/ramtron_drv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
 ${OBJECTDIR}/init.o: init.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/init.o.d 
 	@${RM} ${OBJECTDIR}/init.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/init.o.d" -o ${OBJECTDIR}/init.o init.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/init.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/interrup.o: interrup.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/interrup.o.d 
-	@${RM} ${OBJECTDIR}/interrup.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interrup.o.d" -o ${OBJECTDIR}/interrup.o interrup.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
-	@${FIXDEPS} "${OBJECTDIR}/interrup.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -135,20 +156,69 @@ ${OBJECTDIR}/modbus.o: modbus.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/modbus.o.d" -o ${OBJECTDIR}/modbus.o modbus.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/modbus.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
+${OBJECTDIR}/IC_measure.o: IC_measure.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/IC_measure.o.d 
+	@${RM} ${OBJECTDIR}/IC_measure.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/IC_measure.o.d" -o ${OBJECTDIR}/IC_measure.o IC_measure.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/IC_measure.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/Ignition.o: Ignition.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/Ignition.o.d 
+	@${RM} ${OBJECTDIR}/Ignition.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/Ignition.o.d" -o ${OBJECTDIR}/Ignition.o Ignition.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/Ignition.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/OC_pid.o: OC_pid.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/OC_pid.o.d 
+	@${RM} ${OBJECTDIR}/OC_pid.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/OC_pid.o.d" -o ${OBJECTDIR}/OC_pid.o OC_pid.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/OC_pid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/motor_control.o: motor_control.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/motor_control.o.d 
+	@${RM} ${OBJECTDIR}/motor_control.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/motor_control.o.d" -o ${OBJECTDIR}/motor_control.o motor_control.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/motor_control.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
 else
+${OBJECTDIR}/control.o: control.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/control.o.d 
+	@${RM} ${OBJECTDIR}/control.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/control.o.d" -o ${OBJECTDIR}/control.o control.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/control.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/interrupt_proc.o: interrupt_proc.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/interrupt_proc.o.d 
+	@${RM} ${OBJECTDIR}/interrupt_proc.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interrupt_proc.o.d" -o ${OBJECTDIR}/interrupt_proc.o interrupt_proc.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/interrupt_proc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/interupt.o: interupt.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/interupt.o.d 
+	@${RM} ${OBJECTDIR}/interupt.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interupt.o.d" -o ${OBJECTDIR}/interupt.o interupt.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/interupt.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/ramtron_drv.o: ramtron_drv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/ramtron_drv.o.d 
+	@${RM} ${OBJECTDIR}/ramtron_drv.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/ramtron_drv.o.d" -o ${OBJECTDIR}/ramtron_drv.o ramtron_drv.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/ramtron_drv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
 ${OBJECTDIR}/init.o: init.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/init.o.d 
 	@${RM} ${OBJECTDIR}/init.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/init.o.d" -o ${OBJECTDIR}/init.o init.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/init.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/interrup.o: interrup.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/interrup.o.d 
-	@${RM} ${OBJECTDIR}/interrup.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/interrup.o.d" -o ${OBJECTDIR}/interrup.o interrup.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
-	@${FIXDEPS} "${OBJECTDIR}/interrup.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -163,6 +233,34 @@ ${OBJECTDIR}/modbus.o: modbus.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/modbus.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/modbus.o.d" -o ${OBJECTDIR}/modbus.o modbus.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/modbus.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/IC_measure.o: IC_measure.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/IC_measure.o.d 
+	@${RM} ${OBJECTDIR}/IC_measure.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/IC_measure.o.d" -o ${OBJECTDIR}/IC_measure.o IC_measure.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/IC_measure.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/Ignition.o: Ignition.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/Ignition.o.d 
+	@${RM} ${OBJECTDIR}/Ignition.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/Ignition.o.d" -o ${OBJECTDIR}/Ignition.o Ignition.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/Ignition.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/OC_pid.o: OC_pid.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/OC_pid.o.d 
+	@${RM} ${OBJECTDIR}/OC_pid.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/OC_pid.o.d" -o ${OBJECTDIR}/OC_pid.o OC_pid.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/OC_pid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/motor_control.o: motor_control.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/motor_control.o.d 
+	@${RM} ${OBJECTDIR}/motor_control.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/motor_control.o.d" -o ${OBJECTDIR}/motor_control.o motor_control.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	@${FIXDEPS} "${OBJECTDIR}/motor_control.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 endif
 
