@@ -25,7 +25,7 @@ extern "C" {
     unsigned int start_pid_reg;
 
 
-    unsigned short help_strobe;
+//    unsigned short help_strobe;
     unsigned short help_reset;
     unsigned short help_load;
 

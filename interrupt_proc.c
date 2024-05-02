@@ -469,32 +469,29 @@ void discret_ctrl(void) {
     }
 }
 
-void counters(void) {
-    if (_divider >= 25) {
-        //        mpid_control(MB_conf.KP_mpid, MB_conf.KD_mpid, MB_conf.KI_mpid);
-        _divider = 0;
-        _100msec++;
-        _1000msec++;
-        discret_ctrl();
-        start_ctrl = 1;
-        //        main_control ();                                                        // ���������� ����������
-        if (_100msec >= 10) {
-            _100msec = 0;
-            help_strobe ^= 1;
-            stop_inactive();
+//void counters(void) {
+//    if (_divider >= 25) {
+//        //        mpid_control(MB_conf.KP_mpid, MB_conf.KD_mpid, MB_conf.KI_mpid);
+//        _divider = 0;
+//        _100msec++;
+//        _1000msec++;
+//        discret_ctrl();
+//        start_ctrl = 1;
+//        //        main_control ();                                                        // ���������� ����������
+//        if (_100msec >= 10) {
+//            _100msec = 0;
+//            help_strobe ^= 1;
+//            stop_inactive();
+//
+//            if ((MB_conf.max_RPM <= 350) || (MB_conf.max_RPM >= 390)) {
+//                load_config();
+//            } // help_load =0;
+//        } //
+//        if (_1000msec >= 100) {
+//            _1000msec = 0;
+//            conf_check();
+//        }
+//    }
+//    _divider++;
+//}
 
-            if ((MB_conf.max_RPM <= 350) || (MB_conf.max_RPM >= 390)) {
-                load_config();
-            } // help_load =0;
-        } //
-        if (_1000msec >= 100) {
-            _1000msec = 0;
-            conf_check();
-        }
-    }
-    _divider++;
-}
-
-/* *****************************************************************************
- End of File
- */

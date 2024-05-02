@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=interrupt_proc.c interupt.c ramtron_drv.c init.c main.c modbus.c IC_measure.c OC_pid.c
+SOURCEFILES_QUOTED_IF_SPACED=interrupt_proc.c interupt.c ramtron_drv.c init.c main.c modbus.c OC_pid.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/init.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/IC_measure.o ${OBJECTDIR}/OC_pid.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/interrupt_proc.o.d ${OBJECTDIR}/interupt.o.d ${OBJECTDIR}/ramtron_drv.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/modbus.o.d ${OBJECTDIR}/IC_measure.o.d ${OBJECTDIR}/OC_pid.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/init.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/OC_pid.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/interrupt_proc.o.d ${OBJECTDIR}/interupt.o.d ${OBJECTDIR}/ramtron_drv.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/modbus.o.d ${OBJECTDIR}/OC_pid.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/init.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/IC_measure.o ${OBJECTDIR}/OC_pid.o
+OBJECTFILES=${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/init.o ${OBJECTDIR}/main.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/OC_pid.o
 
 # Source Files
-SOURCEFILES=interrupt_proc.c interupt.c ramtron_drv.c init.c main.c modbus.c IC_measure.c OC_pid.c
+SOURCEFILES=interrupt_proc.c interupt.c ramtron_drv.c init.c main.c modbus.c OC_pid.c
 
 
 
@@ -149,13 +149,6 @@ ${OBJECTDIR}/modbus.o: modbus.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/modbus.o.d" -o ${OBJECTDIR}/modbus.o modbus.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/modbus.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/IC_measure.o: IC_measure.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/IC_measure.o.d 
-	@${RM} ${OBJECTDIR}/IC_measure.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/IC_measure.o.d" -o ${OBJECTDIR}/IC_measure.o IC_measure.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
-	@${FIXDEPS} "${OBJECTDIR}/IC_measure.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
 ${OBJECTDIR}/OC_pid.o: OC_pid.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/OC_pid.o.d 
@@ -205,13 +198,6 @@ ${OBJECTDIR}/modbus.o: modbus.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/modbus.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/modbus.o.d" -o ${OBJECTDIR}/modbus.o modbus.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/modbus.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/IC_measure.o: IC_measure.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/IC_measure.o.d 
-	@${RM} ${OBJECTDIR}/IC_measure.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/IC_measure.o.d" -o ${OBJECTDIR}/IC_measure.o IC_measure.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
-	@${FIXDEPS} "${OBJECTDIR}/IC_measure.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/OC_pid.o: OC_pid.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 

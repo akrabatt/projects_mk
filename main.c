@@ -44,13 +44,13 @@ int main(void) {
         mbs(&usart4, 1); //  4
         mbs(&usart1, 1); //  4
         //    stop_uart_tx();
-        PORTGbits.RG7 = help_strobe & help_reset; //мигалка и лампочка вотчдог
+//        PORTGbits.RG7 = help_strobe & help_reset; //мигалка и лампочка вотчдог
 
         if (start_ctrl == 1) {
             start_ctrl = 0;
 //            main_control();
         }
-        LED_8 = help_strobe & help_reset;
+//        LED_8 = help_strobe & help_reset;
     }
 
 }

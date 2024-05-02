@@ -50,15 +50,12 @@ filt_i              0x14              build/default/production/OC_pid.o
 ign_timer7          0x4               build/default/production/main.o
 filt_c              0x14              build/default/production/OC_pid.o
 calibr              0x9c              build/default/production/main.o
-phase               0x4               build/default/production/IC_measure.o
 counter_40          0x2               build/default/production/main.o
 DI1_cnt             0x4               build/default/production/interrupt_proc.o
-holdb               0x4               build/default/production/IC_measure.o
 AO_ignit_br_low     0x2               build/default/production/main.o
 middle_buf11        0xb0              build/default/production/main.o
 Modbus              0xa4              build/default/production/main.o
 U3_speed            0x4               build/default/production/main.o
-phase_delta         0x4               build/default/production/IC_measure.o
 MB_diagn            0xe0              build/default/production/main.o
 resss               0x4               build/default/production/main.o
 lock11              0x2               build/default/production/main.o
@@ -95,7 +92,6 @@ num_reg             0x2               build/default/production/modbus.o
 counter_11          0x2               build/default/production/main.o
 MB_sw_conf          0xb4              build/default/production/main.o
 sync_counter_11     0x2               build/default/production/main.o
-holdbb              0x4               build/default/production/IC_measure.o
 MB_diag             0x8c              build/default/production/main.o
 uoz_etap            0x2               build/default/production/main.o
 ign_stat1           0x2               build/default/production/main.o
@@ -110,11 +106,9 @@ pulse_started       0x2               build/default/production/main.o
 AO_ignit_sc_low     0x2               build/default/production/main.o
 length_err          0x2               build/default/production/modbus.o
 U2_speed            0x4               build/default/production/main.o
-ring_2              0x5f0             build/default/production/IC_measure.o
 U1_speed            0x4               build/default/production/main.o
 dir_br_high         0x14              build/default/production/main.o
 temp_32             0x2               build/default/production/OC_pid.o
-ring_1              0x5f0             build/default/production/IC_measure.o
 btemp_32            0x28              build/default/production/OC_pid.o
 _100msec            0x4               build/default/production/interrupt_proc.o
 middle_11           0x4               build/default/production/main.o
@@ -132,15 +126,12 @@ MB_diag_sw          0x8c              build/default/production/main.o
 ucStoredData        0x1               build/default/production/ramtron_drv.o
 temp_timer          0x4               build/default/production/main.o
 charge_fail         0x2               build/default/production/main.o
-help_strobe         0x2               build/default/production/main.o
 sync_status         0x2               build/default/production/main.o
 num3                0x2               build/default/production/modbus.o
 unsync_error        0x2               build/default/production/main.o
 count_i             0x2               build/default/production/OC_pid.o
-koeff               0x4               build/default/production/IC_measure.o
 _divider            0x4               build/default/production/interrupt_proc.o
 U4_speed            0x4               build/default/production/main.o
-hold                0x4               build/default/production/IC_measure.o
 AO_ignit_br_high    0x2               build/default/production/main.o
 count_c             0x2               build/default/production/OC_pid.o
 dir_sc_low          0x14              build/default/production/main.o
@@ -170,32 +161,30 @@ section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
 .simple_tlb_refill_excp 0x9d000000           0x10          16   
 .text.general_exception 0x9d000010           0xdc         220   
-.rodata                 0x9d0000ec            0x8           8  Read-only const 
-.text._on_reset         0x9d0000f4            0x8           8   
+.text._on_reset         0x9d0000ec            0x8           8   
+.text._on_bootstrap     0x9d0000f4            0x8           8   
 .cache_err_excpt        0x9d000100           0x10          16   
 .text.main_entry        0x9d000110           0x54          84   
 .rodata                 0x9d000164           0x18          24  Read-only const 
 .app_excpt              0x9d000180           0x10          16  General-Exception 
 .text._bootstrap_except 0x9d000190           0x48          72   
 .rodata                 0x9d0001d8           0x24          36  Read-only const 
-.vectors                0x9d000200         0x192c        6444   
-.text                   0x9d001b2c         0x378c       14220  App's exec code 
-.text                   0x9d0052b8         0x249c        9372  App's exec code 
-.text                   0x9d007754         0x18b4        6324  App's exec code 
-.rodata                 0x9d009008          0x600        1536  Read-only const 
-.dinit                  0x9d009608          0x4b0        1200   
-.text                   0x9d009ab8          0x2fc         764  App's exec code 
-.text._cache_err_except 0x9d009db4           0xd8         216   
-.text.simple_tlb_refill 0x9d009e8c           0xd8         216   
-.tlb.__pic32_tlb_init_e 0x9d009f64           0xbc         188   
-.text._general_exceptio 0x9d00a020           0x48          72   
-.text._cache_err_except 0x9d00a068           0x48          72   
-.text._simple_tlb_refil 0x9d00a0b0           0x48          72   
-.text                   0x9d00a0f8           0x44          68  App's exec code 
-.rodata                 0x9d00a13c           0x18          24  Read-only const 
-.text                   0x9d00a154           0x18          24  App's exec code 
-.text._on_bootstrap     0x9d00a16c            0x8           8   
-      Total kseg0_program_mem used  :      0xa168       41320  3.9% of 0x100000
+.vectors                0x9d000200         0x13e8        5096   
+.text                   0x9d0015e8         0x3684       13956  App's exec code 
+.text                   0x9d004c6c         0x24a0        9376  App's exec code 
+.text                   0x9d00710c          0x684        1668  App's exec code 
+.rodata                 0x9d007790          0x600        1536  Read-only const 
+.dinit                  0x9d007d90          0x4a0        1184   
+.text                   0x9d008230          0x2a4         676  App's exec code 
+.text._cache_err_except 0x9d0084d4           0xd8         216   
+.text.simple_tlb_refill 0x9d0085ac           0xd8         216   
+.tlb.__pic32_tlb_init_e 0x9d008684           0xbc         188   
+.text._general_exceptio 0x9d008740           0x48          72   
+.text._cache_err_except 0x9d008788           0x48          72   
+.text._simple_tlb_refil 0x9d0087d0           0x48          72   
+.text                   0x9d008818           0x44          68  App's exec code 
+.text                   0x9d00885c           0x18          24  App's exec code 
+      Total kseg0_program_mem used  :      0x8868       34920  3.3% of 0x100000
 
 kseg0 Boot-Memory Usage
 section                    address  length [bytes]      (dec)  Description
@@ -209,7 +198,7 @@ section                    address  length [bytes]      (dec)  Description
 .bev_excpt              0xbfc00380           0x10          16  BEV-Exception 
          Total kseg1_boot_mem used  :       0x230         560  48.6% of 0x480
         --------------------------------------------------------------------------
-         Total Program Memory used  :      0xa398       41880  4.0% of 0x100480
+         Total Program Memory used  :      0x8a98       35480  3.4% of 0x100480
         --------------------------------------------------------------------------
 
 
@@ -217,22 +206,22 @@ kseg0 Data-Memory Usage
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
 .sdata                  0x80000000           0x28          40  Small init data 
-.sbss                   0x80000028          0x134         308  Small uninit data 
-.bss                    0x8000015c         0x233c        9020  Uninitialized data 
-.bss                    0x80002e80           0x20          32  Uninitialized data 
-.data                   0x80002ea0           0x18          24  Initialized data 
-.COHERENTBSS$           0x800024a0          0x9dc        2524   
-         Total kseg0_data_mem used  :      0x2eac       11948  2.3% of 0x80000
+.sbss                   0x80000028          0x11c         284  Small uninit data 
+.bss                    0x80000144         0x175c        5980  Uninitialized data 
+.bss                    0x80002280           0x20          32  Uninitialized data 
+.data                   0x800022a0           0x18          24  Initialized data 
+.COHERENTBSS$           0x800018a0          0x9dc        2524   
+         Total kseg0_data_mem used  :      0x22b4        8884  1.7% of 0x80000
         --------------------------------------------------------------------------
-            Total Data Memory used  :      0x2eac       11948  2.3% of 0x80000
+            Total Data Memory used  :      0x22b4        8884  1.7% of 0x80000
         --------------------------------------------------------------------------
 
 
 Dynamic Data-Memory Reservation
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
-heap                    0x80002ec0           0x10          16  Reserved for heap 
-stack                   0x80002ee8        0x7d110      512272  Reserved for stack 
+heap                    0x800022c0           0x10          16  Reserved for heap 
+stack                   0x800022e8        0x7dd10      515344  Reserved for stack 
 
         --------------------------------------------------------------------------
 
@@ -245,7 +234,6 @@ Discarded input sections
  .reginfo       0x00000000       0x18 build/default/production/init.o
  .reginfo       0x00000000       0x18 build/default/production/main.o
  .reginfo       0x00000000       0x18 build/default/production/modbus.o
- .reginfo       0x00000000       0x18 build/default/production/IC_measure.o
  .reginfo       0x00000000       0x18 build/default/production/OC_pid.o
  .reginfo       0x00000000       0x18 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100\default_isr_vectors.o
  .discard       0x00000000        0x4 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100\default_isr_vectors.o
@@ -444,7 +432,6 @@ LOAD build/default/production/ramtron_drv.o
 LOAD build/default/production/init.o
 LOAD build/default/production/main.o
 LOAD build/default/production/modbus.o
-LOAD build/default/production/IC_measure.o
 LOAD build/default/production/OC_pid.o
                 0x00000001                __MPLAB_BUILD = 0x1
 LOAD c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100\default_isr_vectors.o
@@ -927,624 +914,616 @@ END GROUP
  *(.gen_handler)
  .gen_handler   0x9d000180       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100/crt0_mips32r2.o
 
-.vectors        0x9d000200     0x192c
-                0x00001ae4                __vector_offset_0 = DEFINED (__vector_dispatch_0)?(. - _ebase_address):__vector_offset_default
+.vectors        0x9d000200     0x13e8
+                0x000015a0                __vector_offset_0 = DEFINED (__vector_dispatch_0)?(. - _ebase_address):__vector_offset_default
  *(.vector_0)
-                0x00001ae4                __vector_offset_1 = DEFINED (__vector_dispatch_1)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_1 = DEFINED (__vector_dispatch_1)?(. - _ebase_address):__vector_offset_default
  *(.vector_1)
-                0x00001ae4                __vector_offset_2 = DEFINED (__vector_dispatch_2)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_2 = DEFINED (__vector_dispatch_2)?(. - _ebase_address):__vector_offset_default
  *(.vector_2)
-                0x00001ae4                __vector_offset_3 = DEFINED (__vector_dispatch_3)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_3 = DEFINED (__vector_dispatch_3)?(. - _ebase_address):__vector_offset_default
  *(.vector_3)
                 0x00000200                __vector_offset_4 = DEFINED (__vector_dispatch_4)?(. - _ebase_address):__vector_offset_default
  *(.vector_4)
- .vector_4      0x9d000200      0x1d0 build/default/production/interupt.o
+ .vector_4      0x9d000200      0x200 build/default/production/interupt.o
                 0x9d000200                T1Interrupt
-                0x00001ae4                __vector_offset_5 = DEFINED (__vector_dispatch_5)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_5 = DEFINED (__vector_dispatch_5)?(. - _ebase_address):__vector_offset_default
  *(.vector_5)
-                0x00001ae4                __vector_offset_6 = DEFINED (__vector_dispatch_6)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_6 = DEFINED (__vector_dispatch_6)?(. - _ebase_address):__vector_offset_default
  *(.vector_6)
-                0x00001ae4                __vector_offset_7 = DEFINED (__vector_dispatch_7)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_7 = DEFINED (__vector_dispatch_7)?(. - _ebase_address):__vector_offset_default
  *(.vector_7)
-                0x00001ae4                __vector_offset_8 = DEFINED (__vector_dispatch_8)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_8 = DEFINED (__vector_dispatch_8)?(. - _ebase_address):__vector_offset_default
  *(.vector_8)
-                0x000003d0                __vector_offset_9 = DEFINED (__vector_dispatch_9)?(. - _ebase_address):__vector_offset_default
+                0x00000400                __vector_offset_9 = DEFINED (__vector_dispatch_9)?(. - _ebase_address):__vector_offset_default
  *(.vector_9)
- .vector_9      0x9d0003d0       0x80 build/default/production/interupt.o
-                0x9d0003d0                T2Interrupt
-                0x00001ae4                __vector_offset_10 = DEFINED (__vector_dispatch_10)?(. - _ebase_address):__vector_offset_default
+ .vector_9      0x9d000400       0x80 build/default/production/interupt.o
+                0x9d000400                T2Interrupt
+                0x000015a0                __vector_offset_10 = DEFINED (__vector_dispatch_10)?(. - _ebase_address):__vector_offset_default
  *(.vector_10)
-                0x00001ae4                __vector_offset_11 = DEFINED (__vector_dispatch_11)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_11 = DEFINED (__vector_dispatch_11)?(. - _ebase_address):__vector_offset_default
  *(.vector_11)
-                0x00001ae4                __vector_offset_12 = DEFINED (__vector_dispatch_12)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_12 = DEFINED (__vector_dispatch_12)?(. - _ebase_address):__vector_offset_default
  *(.vector_12)
-                0x00001ae4                __vector_offset_13 = DEFINED (__vector_dispatch_13)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_13 = DEFINED (__vector_dispatch_13)?(. - _ebase_address):__vector_offset_default
  *(.vector_13)
-                0x00001ae4                __vector_offset_14 = DEFINED (__vector_dispatch_14)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_14 = DEFINED (__vector_dispatch_14)?(. - _ebase_address):__vector_offset_default
  *(.vector_14)
-                0x00001ae4                __vector_offset_15 = DEFINED (__vector_dispatch_15)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_15 = DEFINED (__vector_dispatch_15)?(. - _ebase_address):__vector_offset_default
  *(.vector_15)
-                0x00000450                __vector_offset_16 = DEFINED (__vector_dispatch_16)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_16 = DEFINED (__vector_dispatch_16)?(. - _ebase_address):__vector_offset_default
  *(.vector_16)
- .vector_16     0x9d000450      0x1c0 build/default/production/interupt.o
-                0x9d000450                IC3Interrupt
-                0x00001ae4                __vector_offset_17 = DEFINED (__vector_dispatch_17)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_17 = DEFINED (__vector_dispatch_17)?(. - _ebase_address):__vector_offset_default
  *(.vector_17)
-                0x00001ae4                __vector_offset_18 = DEFINED (__vector_dispatch_18)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_18 = DEFINED (__vector_dispatch_18)?(. - _ebase_address):__vector_offset_default
  *(.vector_18)
-                0x00000610                __vector_offset_19 = DEFINED (__vector_dispatch_19)?(. - _ebase_address):__vector_offset_default
+                0x00000480                __vector_offset_19 = DEFINED (__vector_dispatch_19)?(. - _ebase_address):__vector_offset_default
  *(.vector_19)
- .vector_19     0x9d000610      0x1d4 build/default/production/interupt.o
-                0x9d000610                T4Interrupt
-                0x00001ae4                __vector_offset_20 = DEFINED (__vector_dispatch_20)?(. - _ebase_address):__vector_offset_default
+ .vector_19     0x9d000480       0x80 build/default/production/interupt.o
+                0x9d000480                T4Interrupt
+                0x000015a0                __vector_offset_20 = DEFINED (__vector_dispatch_20)?(. - _ebase_address):__vector_offset_default
  *(.vector_20)
-                0x000007e4                __vector_offset_21 = DEFINED (__vector_dispatch_21)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_21 = DEFINED (__vector_dispatch_21)?(. - _ebase_address):__vector_offset_default
  *(.vector_21)
- .vector_21     0x9d0007e4      0x1c0 build/default/production/interupt.o
-                0x9d0007e4                IC4Interrupt
-                0x00001ae4                __vector_offset_22 = DEFINED (__vector_dispatch_22)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_22 = DEFINED (__vector_dispatch_22)?(. - _ebase_address):__vector_offset_default
  *(.vector_22)
-                0x00001ae4                __vector_offset_23 = DEFINED (__vector_dispatch_23)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_23 = DEFINED (__vector_dispatch_23)?(. - _ebase_address):__vector_offset_default
  *(.vector_23)
-                0x000009a4                __vector_offset_24 = DEFINED (__vector_dispatch_24)?(. - _ebase_address):__vector_offset_default
+                0x00000500                __vector_offset_24 = DEFINED (__vector_dispatch_24)?(. - _ebase_address):__vector_offset_default
  *(.vector_24)
- .vector_24     0x9d0009a4      0x1d0 build/default/production/interupt.o
-                0x9d0009a4                T5Interrupt
-                0x00001ae4                __vector_offset_25 = DEFINED (__vector_dispatch_25)?(. - _ebase_address):__vector_offset_default
+ .vector_24     0x9d000500      0x1d0 build/default/production/interupt.o
+                0x9d000500                T5Interrupt
+                0x000015a0                __vector_offset_25 = DEFINED (__vector_dispatch_25)?(. - _ebase_address):__vector_offset_default
  *(.vector_25)
-                0x00001ae4                __vector_offset_26 = DEFINED (__vector_dispatch_26)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_26 = DEFINED (__vector_dispatch_26)?(. - _ebase_address):__vector_offset_default
  *(.vector_26)
-                0x00001ae4                __vector_offset_27 = DEFINED (__vector_dispatch_27)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_27 = DEFINED (__vector_dispatch_27)?(. - _ebase_address):__vector_offset_default
  *(.vector_27)
-                0x00000b74                __vector_offset_28 = DEFINED (__vector_dispatch_28)?(. - _ebase_address):__vector_offset_default
+                0x000006d0                __vector_offset_28 = DEFINED (__vector_dispatch_28)?(. - _ebase_address):__vector_offset_default
  *(.vector_28)
- .vector_28     0x9d000b74      0x1d0 build/default/production/interupt.o
-                0x9d000b74                T6Interrupt
-                0x00001ae4                __vector_offset_29 = DEFINED (__vector_dispatch_29)?(. - _ebase_address):__vector_offset_default
+ .vector_28     0x9d0006d0      0x1d0 build/default/production/interupt.o
+                0x9d0006d0                T6Interrupt
+                0x000015a0                __vector_offset_29 = DEFINED (__vector_dispatch_29)?(. - _ebase_address):__vector_offset_default
  *(.vector_29)
-                0x00001ae4                __vector_offset_30 = DEFINED (__vector_dispatch_30)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_30 = DEFINED (__vector_dispatch_30)?(. - _ebase_address):__vector_offset_default
  *(.vector_30)
-                0x00001ae4                __vector_offset_31 = DEFINED (__vector_dispatch_31)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_31 = DEFINED (__vector_dispatch_31)?(. - _ebase_address):__vector_offset_default
  *(.vector_31)
-                0x00000d44                __vector_offset_32 = DEFINED (__vector_dispatch_32)?(. - _ebase_address):__vector_offset_default
+                0x000008a0                __vector_offset_32 = DEFINED (__vector_dispatch_32)?(. - _ebase_address):__vector_offset_default
  *(.vector_32)
- .vector_32     0x9d000d44       0x70 build/default/production/interupt.o
-                0x9d000d44                T7Interrupt
-                0x00001ae4                __vector_offset_33 = DEFINED (__vector_dispatch_33)?(. - _ebase_address):__vector_offset_default
+ .vector_32     0x9d0008a0       0x70 build/default/production/interupt.o
+                0x9d0008a0                T7Interrupt
+                0x000015a0                __vector_offset_33 = DEFINED (__vector_dispatch_33)?(. - _ebase_address):__vector_offset_default
  *(.vector_33)
-                0x00000db4                __vector_offset_34 = DEFINED (__vector_dispatch_34)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_34 = DEFINED (__vector_dispatch_34)?(. - _ebase_address):__vector_offset_default
  *(.vector_34)
- .vector_34     0x9d000db4       0x70 build/default/production/interupt.o
-                0x9d000db4                IC7Interrupt
-                0x00001ae4                __vector_offset_35 = DEFINED (__vector_dispatch_35)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_35 = DEFINED (__vector_dispatch_35)?(. - _ebase_address):__vector_offset_default
  *(.vector_35)
-                0x00001ae4                __vector_offset_36 = DEFINED (__vector_dispatch_36)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_36 = DEFINED (__vector_dispatch_36)?(. - _ebase_address):__vector_offset_default
  *(.vector_36)
-                0x00001ae4                __vector_offset_37 = DEFINED (__vector_dispatch_37)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_37 = DEFINED (__vector_dispatch_37)?(. - _ebase_address):__vector_offset_default
  *(.vector_37)
-                0x00000e24                __vector_offset_38 = DEFINED (__vector_dispatch_38)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_38 = DEFINED (__vector_dispatch_38)?(. - _ebase_address):__vector_offset_default
  *(.vector_38)
- .vector_38     0x9d000e24       0x70 build/default/production/interupt.o
-                0x9d000e24                IC8Interrupt
-                0x00001ae4                __vector_offset_39 = DEFINED (__vector_dispatch_39)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_39 = DEFINED (__vector_dispatch_39)?(. - _ebase_address):__vector_offset_default
  *(.vector_39)
-                0x00000e94                __vector_offset_40 = DEFINED (__vector_dispatch_40)?(. - _ebase_address):__vector_offset_default
+                0x00000910                __vector_offset_40 = DEFINED (__vector_dispatch_40)?(. - _ebase_address):__vector_offset_default
  *(.vector_40)
- .vector_40     0x9d000e94       0x60 build/default/production/interupt.o
-                0x9d000e94                T9Interrupt
-                0x00001ae4                __vector_offset_41 = DEFINED (__vector_dispatch_41)?(. - _ebase_address):__vector_offset_default
+ .vector_40     0x9d000910       0xa0 build/default/production/interupt.o
+                0x9d000910                T9Interrupt
+                0x000015a0                __vector_offset_41 = DEFINED (__vector_dispatch_41)?(. - _ebase_address):__vector_offset_default
  *(.vector_41)
-                0x00001ae4                __vector_offset_42 = DEFINED (__vector_dispatch_42)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_42 = DEFINED (__vector_dispatch_42)?(. - _ebase_address):__vector_offset_default
  *(.vector_42)
-                0x00001ae4                __vector_offset_43 = DEFINED (__vector_dispatch_43)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_43 = DEFINED (__vector_dispatch_43)?(. - _ebase_address):__vector_offset_default
  *(.vector_43)
-                0x00001ae4                __vector_offset_44 = DEFINED (__vector_dispatch_44)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_44 = DEFINED (__vector_dispatch_44)?(. - _ebase_address):__vector_offset_default
  *(.vector_44)
-                0x00001ae4                __vector_offset_45 = DEFINED (__vector_dispatch_45)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_45 = DEFINED (__vector_dispatch_45)?(. - _ebase_address):__vector_offset_default
  *(.vector_45)
-                0x00001ae4                __vector_offset_46 = DEFINED (__vector_dispatch_46)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_46 = DEFINED (__vector_dispatch_46)?(. - _ebase_address):__vector_offset_default
  *(.vector_46)
-                0x00001ae4                __vector_offset_47 = DEFINED (__vector_dispatch_47)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_47 = DEFINED (__vector_dispatch_47)?(. - _ebase_address):__vector_offset_default
  *(.vector_47)
-                0x00001ae4                __vector_offset_48 = DEFINED (__vector_dispatch_48)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_48 = DEFINED (__vector_dispatch_48)?(. - _ebase_address):__vector_offset_default
  *(.vector_48)
-                0x00001ae4                __vector_offset_49 = DEFINED (__vector_dispatch_49)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_49 = DEFINED (__vector_dispatch_49)?(. - _ebase_address):__vector_offset_default
  *(.vector_49)
-                0x00001ae4                __vector_offset_50 = DEFINED (__vector_dispatch_50)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_50 = DEFINED (__vector_dispatch_50)?(. - _ebase_address):__vector_offset_default
  *(.vector_50)
-                0x00001ae4                __vector_offset_51 = DEFINED (__vector_dispatch_51)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_51 = DEFINED (__vector_dispatch_51)?(. - _ebase_address):__vector_offset_default
  *(.vector_51)
-                0x00001ae4                __vector_offset_52 = DEFINED (__vector_dispatch_52)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_52 = DEFINED (__vector_dispatch_52)?(. - _ebase_address):__vector_offset_default
  *(.vector_52)
-                0x00001ae4                __vector_offset_53 = DEFINED (__vector_dispatch_53)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_53 = DEFINED (__vector_dispatch_53)?(. - _ebase_address):__vector_offset_default
  *(.vector_53)
-                0x00001ae4                __vector_offset_54 = DEFINED (__vector_dispatch_54)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_54 = DEFINED (__vector_dispatch_54)?(. - _ebase_address):__vector_offset_default
  *(.vector_54)
-                0x00001ae4                __vector_offset_55 = DEFINED (__vector_dispatch_55)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_55 = DEFINED (__vector_dispatch_55)?(. - _ebase_address):__vector_offset_default
  *(.vector_55)
-                0x00001ae4                __vector_offset_56 = DEFINED (__vector_dispatch_56)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_56 = DEFINED (__vector_dispatch_56)?(. - _ebase_address):__vector_offset_default
  *(.vector_56)
-                0x00001ae4                __vector_offset_57 = DEFINED (__vector_dispatch_57)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_57 = DEFINED (__vector_dispatch_57)?(. - _ebase_address):__vector_offset_default
  *(.vector_57)
-                0x00001ae4                __vector_offset_58 = DEFINED (__vector_dispatch_58)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_58 = DEFINED (__vector_dispatch_58)?(. - _ebase_address):__vector_offset_default
  *(.vector_58)
-                0x00001ae4                __vector_offset_59 = DEFINED (__vector_dispatch_59)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_59 = DEFINED (__vector_dispatch_59)?(. - _ebase_address):__vector_offset_default
  *(.vector_59)
-                0x00001ae4                __vector_offset_60 = DEFINED (__vector_dispatch_60)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_60 = DEFINED (__vector_dispatch_60)?(. - _ebase_address):__vector_offset_default
  *(.vector_60)
-                0x00001ae4                __vector_offset_61 = DEFINED (__vector_dispatch_61)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_61 = DEFINED (__vector_dispatch_61)?(. - _ebase_address):__vector_offset_default
  *(.vector_61)
-                0x00001ae4                __vector_offset_62 = DEFINED (__vector_dispatch_62)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_62 = DEFINED (__vector_dispatch_62)?(. - _ebase_address):__vector_offset_default
  *(.vector_62)
-                0x00001ae4                __vector_offset_63 = DEFINED (__vector_dispatch_63)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_63 = DEFINED (__vector_dispatch_63)?(. - _ebase_address):__vector_offset_default
  *(.vector_63)
-                0x00001ae4                __vector_offset_64 = DEFINED (__vector_dispatch_64)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_64 = DEFINED (__vector_dispatch_64)?(. - _ebase_address):__vector_offset_default
  *(.vector_64)
-                0x00001ae4                __vector_offset_65 = DEFINED (__vector_dispatch_65)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_65 = DEFINED (__vector_dispatch_65)?(. - _ebase_address):__vector_offset_default
  *(.vector_65)
-                0x00001ae4                __vector_offset_66 = DEFINED (__vector_dispatch_66)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_66 = DEFINED (__vector_dispatch_66)?(. - _ebase_address):__vector_offset_default
  *(.vector_66)
-                0x00001ae4                __vector_offset_67 = DEFINED (__vector_dispatch_67)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_67 = DEFINED (__vector_dispatch_67)?(. - _ebase_address):__vector_offset_default
  *(.vector_67)
-                0x00001ae4                __vector_offset_68 = DEFINED (__vector_dispatch_68)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_68 = DEFINED (__vector_dispatch_68)?(. - _ebase_address):__vector_offset_default
  *(.vector_68)
-                0x00001ae4                __vector_offset_69 = DEFINED (__vector_dispatch_69)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_69 = DEFINED (__vector_dispatch_69)?(. - _ebase_address):__vector_offset_default
  *(.vector_69)
-                0x00001ae4                __vector_offset_70 = DEFINED (__vector_dispatch_70)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_70 = DEFINED (__vector_dispatch_70)?(. - _ebase_address):__vector_offset_default
  *(.vector_70)
-                0x00001ae4                __vector_offset_71 = DEFINED (__vector_dispatch_71)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_71 = DEFINED (__vector_dispatch_71)?(. - _ebase_address):__vector_offset_default
  *(.vector_71)
-                0x00001ae4                __vector_offset_72 = DEFINED (__vector_dispatch_72)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_72 = DEFINED (__vector_dispatch_72)?(. - _ebase_address):__vector_offset_default
  *(.vector_72)
-                0x00001ae4                __vector_offset_73 = DEFINED (__vector_dispatch_73)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_73 = DEFINED (__vector_dispatch_73)?(. - _ebase_address):__vector_offset_default
  *(.vector_73)
-                0x00001ae4                __vector_offset_74 = DEFINED (__vector_dispatch_74)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_74 = DEFINED (__vector_dispatch_74)?(. - _ebase_address):__vector_offset_default
  *(.vector_74)
-                0x00001ae4                __vector_offset_75 = DEFINED (__vector_dispatch_75)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_75 = DEFINED (__vector_dispatch_75)?(. - _ebase_address):__vector_offset_default
  *(.vector_75)
-                0x00001ae4                __vector_offset_76 = DEFINED (__vector_dispatch_76)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_76 = DEFINED (__vector_dispatch_76)?(. - _ebase_address):__vector_offset_default
  *(.vector_76)
-                0x00001ae4                __vector_offset_77 = DEFINED (__vector_dispatch_77)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_77 = DEFINED (__vector_dispatch_77)?(. - _ebase_address):__vector_offset_default
  *(.vector_77)
-                0x00001ae4                __vector_offset_78 = DEFINED (__vector_dispatch_78)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_78 = DEFINED (__vector_dispatch_78)?(. - _ebase_address):__vector_offset_default
  *(.vector_78)
-                0x00001ae4                __vector_offset_79 = DEFINED (__vector_dispatch_79)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_79 = DEFINED (__vector_dispatch_79)?(. - _ebase_address):__vector_offset_default
  *(.vector_79)
-                0x00001ae4                __vector_offset_80 = DEFINED (__vector_dispatch_80)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_80 = DEFINED (__vector_dispatch_80)?(. - _ebase_address):__vector_offset_default
  *(.vector_80)
-                0x00001ae4                __vector_offset_81 = DEFINED (__vector_dispatch_81)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_81 = DEFINED (__vector_dispatch_81)?(. - _ebase_address):__vector_offset_default
  *(.vector_81)
-                0x00001ae4                __vector_offset_82 = DEFINED (__vector_dispatch_82)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_82 = DEFINED (__vector_dispatch_82)?(. - _ebase_address):__vector_offset_default
  *(.vector_82)
-                0x00001ae4                __vector_offset_83 = DEFINED (__vector_dispatch_83)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_83 = DEFINED (__vector_dispatch_83)?(. - _ebase_address):__vector_offset_default
  *(.vector_83)
-                0x00001ae4                __vector_offset_84 = DEFINED (__vector_dispatch_84)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_84 = DEFINED (__vector_dispatch_84)?(. - _ebase_address):__vector_offset_default
  *(.vector_84)
-                0x00001ae4                __vector_offset_85 = DEFINED (__vector_dispatch_85)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_85 = DEFINED (__vector_dispatch_85)?(. - _ebase_address):__vector_offset_default
  *(.vector_85)
-                0x00001ae4                __vector_offset_86 = DEFINED (__vector_dispatch_86)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_86 = DEFINED (__vector_dispatch_86)?(. - _ebase_address):__vector_offset_default
  *(.vector_86)
-                0x00001ae4                __vector_offset_87 = DEFINED (__vector_dispatch_87)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_87 = DEFINED (__vector_dispatch_87)?(. - _ebase_address):__vector_offset_default
  *(.vector_87)
-                0x00001ae4                __vector_offset_88 = DEFINED (__vector_dispatch_88)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_88 = DEFINED (__vector_dispatch_88)?(. - _ebase_address):__vector_offset_default
  *(.vector_88)
-                0x00001ae4                __vector_offset_89 = DEFINED (__vector_dispatch_89)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_89 = DEFINED (__vector_dispatch_89)?(. - _ebase_address):__vector_offset_default
  *(.vector_89)
-                0x00001ae4                __vector_offset_90 = DEFINED (__vector_dispatch_90)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_90 = DEFINED (__vector_dispatch_90)?(. - _ebase_address):__vector_offset_default
  *(.vector_90)
-                0x00001ae4                __vector_offset_91 = DEFINED (__vector_dispatch_91)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_91 = DEFINED (__vector_dispatch_91)?(. - _ebase_address):__vector_offset_default
  *(.vector_91)
-                0x00001ae4                __vector_offset_92 = DEFINED (__vector_dispatch_92)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_92 = DEFINED (__vector_dispatch_92)?(. - _ebase_address):__vector_offset_default
  *(.vector_92)
-                0x00001ae4                __vector_offset_93 = DEFINED (__vector_dispatch_93)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_93 = DEFINED (__vector_dispatch_93)?(. - _ebase_address):__vector_offset_default
  *(.vector_93)
-                0x00001ae4                __vector_offset_94 = DEFINED (__vector_dispatch_94)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_94 = DEFINED (__vector_dispatch_94)?(. - _ebase_address):__vector_offset_default
  *(.vector_94)
-                0x00001ae4                __vector_offset_95 = DEFINED (__vector_dispatch_95)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_95 = DEFINED (__vector_dispatch_95)?(. - _ebase_address):__vector_offset_default
  *(.vector_95)
-                0x00001ae4                __vector_offset_96 = DEFINED (__vector_dispatch_96)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_96 = DEFINED (__vector_dispatch_96)?(. - _ebase_address):__vector_offset_default
  *(.vector_96)
-                0x00001ae4                __vector_offset_97 = DEFINED (__vector_dispatch_97)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_97 = DEFINED (__vector_dispatch_97)?(. - _ebase_address):__vector_offset_default
  *(.vector_97)
-                0x00001ae4                __vector_offset_98 = DEFINED (__vector_dispatch_98)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_98 = DEFINED (__vector_dispatch_98)?(. - _ebase_address):__vector_offset_default
  *(.vector_98)
-                0x00001ae4                __vector_offset_99 = DEFINED (__vector_dispatch_99)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_99 = DEFINED (__vector_dispatch_99)?(. - _ebase_address):__vector_offset_default
  *(.vector_99)
-                0x00001ae4                __vector_offset_100 = DEFINED (__vector_dispatch_100)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_100 = DEFINED (__vector_dispatch_100)?(. - _ebase_address):__vector_offset_default
  *(.vector_100)
-                0x00001ae4                __vector_offset_101 = DEFINED (__vector_dispatch_101)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_101 = DEFINED (__vector_dispatch_101)?(. - _ebase_address):__vector_offset_default
  *(.vector_101)
-                0x00001ae4                __vector_offset_102 = DEFINED (__vector_dispatch_102)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_102 = DEFINED (__vector_dispatch_102)?(. - _ebase_address):__vector_offset_default
  *(.vector_102)
-                0x00001ae4                __vector_offset_103 = DEFINED (__vector_dispatch_103)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_103 = DEFINED (__vector_dispatch_103)?(. - _ebase_address):__vector_offset_default
  *(.vector_103)
-                0x00001ae4                __vector_offset_104 = DEFINED (__vector_dispatch_104)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_104 = DEFINED (__vector_dispatch_104)?(. - _ebase_address):__vector_offset_default
  *(.vector_104)
-                0x00001ae4                __vector_offset_105 = DEFINED (__vector_dispatch_105)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_105 = DEFINED (__vector_dispatch_105)?(. - _ebase_address):__vector_offset_default
  *(.vector_105)
-                0x00001ae4                __vector_offset_106 = DEFINED (__vector_dispatch_106)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_106 = DEFINED (__vector_dispatch_106)?(. - _ebase_address):__vector_offset_default
  *(.vector_106)
-                0x00001ae4                __vector_offset_107 = DEFINED (__vector_dispatch_107)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_107 = DEFINED (__vector_dispatch_107)?(. - _ebase_address):__vector_offset_default
  *(.vector_107)
-                0x00001ae4                __vector_offset_108 = DEFINED (__vector_dispatch_108)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_108 = DEFINED (__vector_dispatch_108)?(. - _ebase_address):__vector_offset_default
  *(.vector_108)
-                0x00001ae4                __vector_offset_109 = DEFINED (__vector_dispatch_109)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_109 = DEFINED (__vector_dispatch_109)?(. - _ebase_address):__vector_offset_default
  *(.vector_109)
-                0x00001ae4                __vector_offset_110 = DEFINED (__vector_dispatch_110)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_110 = DEFINED (__vector_dispatch_110)?(. - _ebase_address):__vector_offset_default
  *(.vector_110)
-                0x00001ae4                __vector_offset_111 = DEFINED (__vector_dispatch_111)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_111 = DEFINED (__vector_dispatch_111)?(. - _ebase_address):__vector_offset_default
  *(.vector_111)
-                0x00001ae4                __vector_offset_112 = DEFINED (__vector_dispatch_112)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_112 = DEFINED (__vector_dispatch_112)?(. - _ebase_address):__vector_offset_default
  *(.vector_112)
-                0x00000ef4                __vector_offset_113 = DEFINED (__vector_dispatch_113)?(. - _ebase_address):__vector_offset_default
+                0x000009b0                __vector_offset_113 = DEFINED (__vector_dispatch_113)?(. - _ebase_address):__vector_offset_default
  *(.vector_113)
- .vector_113    0x9d000ef4      0x28c build/default/production/interupt.o
-                0x9d000ef4                U1RXInterrupt
-                0x00001180                __vector_offset_114 = DEFINED (__vector_dispatch_114)?(. - _ebase_address):__vector_offset_default
+ .vector_113    0x9d0009b0      0x28c build/default/production/interupt.o
+                0x9d0009b0                U1RXInterrupt
+                0x00000c3c                __vector_offset_114 = DEFINED (__vector_dispatch_114)?(. - _ebase_address):__vector_offset_default
  *(.vector_114)
- .vector_114    0x9d001180      0x140 build/default/production/interupt.o
-                0x9d001180                U1TXInterrupt
-                0x00001ae4                __vector_offset_115 = DEFINED (__vector_dispatch_115)?(. - _ebase_address):__vector_offset_default
+ .vector_114    0x9d000c3c      0x140 build/default/production/interupt.o
+                0x9d000c3c                U1TXInterrupt
+                0x000015a0                __vector_offset_115 = DEFINED (__vector_dispatch_115)?(. - _ebase_address):__vector_offset_default
  *(.vector_115)
-                0x00001ae4                __vector_offset_116 = DEFINED (__vector_dispatch_116)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_116 = DEFINED (__vector_dispatch_116)?(. - _ebase_address):__vector_offset_default
  *(.vector_116)
-                0x00001ae4                __vector_offset_117 = DEFINED (__vector_dispatch_117)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_117 = DEFINED (__vector_dispatch_117)?(. - _ebase_address):__vector_offset_default
  *(.vector_117)
-                0x00001ae4                __vector_offset_118 = DEFINED (__vector_dispatch_118)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_118 = DEFINED (__vector_dispatch_118)?(. - _ebase_address):__vector_offset_default
  *(.vector_118)
-                0x00001ae4                __vector_offset_119 = DEFINED (__vector_dispatch_119)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_119 = DEFINED (__vector_dispatch_119)?(. - _ebase_address):__vector_offset_default
  *(.vector_119)
-                0x00001ae4                __vector_offset_120 = DEFINED (__vector_dispatch_120)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_120 = DEFINED (__vector_dispatch_120)?(. - _ebase_address):__vector_offset_default
  *(.vector_120)
-                0x00001ae4                __vector_offset_121 = DEFINED (__vector_dispatch_121)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_121 = DEFINED (__vector_dispatch_121)?(. - _ebase_address):__vector_offset_default
  *(.vector_121)
-                0x00001ae4                __vector_offset_122 = DEFINED (__vector_dispatch_122)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_122 = DEFINED (__vector_dispatch_122)?(. - _ebase_address):__vector_offset_default
  *(.vector_122)
-                0x00001ae4                __vector_offset_123 = DEFINED (__vector_dispatch_123)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_123 = DEFINED (__vector_dispatch_123)?(. - _ebase_address):__vector_offset_default
  *(.vector_123)
-                0x00001ae4                __vector_offset_124 = DEFINED (__vector_dispatch_124)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_124 = DEFINED (__vector_dispatch_124)?(. - _ebase_address):__vector_offset_default
  *(.vector_124)
-                0x00001ae4                __vector_offset_125 = DEFINED (__vector_dispatch_125)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_125 = DEFINED (__vector_dispatch_125)?(. - _ebase_address):__vector_offset_default
  *(.vector_125)
-                0x00001ae4                __vector_offset_126 = DEFINED (__vector_dispatch_126)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_126 = DEFINED (__vector_dispatch_126)?(. - _ebase_address):__vector_offset_default
  *(.vector_126)
-                0x00001ae4                __vector_offset_127 = DEFINED (__vector_dispatch_127)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_127 = DEFINED (__vector_dispatch_127)?(. - _ebase_address):__vector_offset_default
  *(.vector_127)
-                0x00001ae4                __vector_offset_128 = DEFINED (__vector_dispatch_128)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_128 = DEFINED (__vector_dispatch_128)?(. - _ebase_address):__vector_offset_default
  *(.vector_128)
-                0x00001ae4                __vector_offset_129 = DEFINED (__vector_dispatch_129)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_129 = DEFINED (__vector_dispatch_129)?(. - _ebase_address):__vector_offset_default
  *(.vector_129)
-                0x00001ae4                __vector_offset_130 = DEFINED (__vector_dispatch_130)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_130 = DEFINED (__vector_dispatch_130)?(. - _ebase_address):__vector_offset_default
  *(.vector_130)
-                0x00001ae4                __vector_offset_131 = DEFINED (__vector_dispatch_131)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_131 = DEFINED (__vector_dispatch_131)?(. - _ebase_address):__vector_offset_default
  *(.vector_131)
-                0x00001ae4                __vector_offset_132 = DEFINED (__vector_dispatch_132)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_132 = DEFINED (__vector_dispatch_132)?(. - _ebase_address):__vector_offset_default
  *(.vector_132)
-                0x00001ae4                __vector_offset_133 = DEFINED (__vector_dispatch_133)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_133 = DEFINED (__vector_dispatch_133)?(. - _ebase_address):__vector_offset_default
  *(.vector_133)
-                0x000012c0                __vector_offset_134 = DEFINED (__vector_dispatch_134)?(. - _ebase_address):__vector_offset_default
+                0x00000d7c                __vector_offset_134 = DEFINED (__vector_dispatch_134)?(. - _ebase_address):__vector_offset_default
  *(.vector_134)
- .vector_134    0x9d0012c0       0x8c build/default/production/interupt.o
-                0x9d0012c0                __DMA0Interrupt
-                0x00001ae4                __vector_offset_135 = DEFINED (__vector_dispatch_135)?(. - _ebase_address):__vector_offset_default
+ .vector_134    0x9d000d7c       0x8c build/default/production/interupt.o
+                0x9d000d7c                __DMA0Interrupt
+                0x000015a0                __vector_offset_135 = DEFINED (__vector_dispatch_135)?(. - _ebase_address):__vector_offset_default
  *(.vector_135)
-                0x00001ae4                __vector_offset_136 = DEFINED (__vector_dispatch_136)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_136 = DEFINED (__vector_dispatch_136)?(. - _ebase_address):__vector_offset_default
  *(.vector_136)
-                0x00001ae4                __vector_offset_137 = DEFINED (__vector_dispatch_137)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_137 = DEFINED (__vector_dispatch_137)?(. - _ebase_address):__vector_offset_default
  *(.vector_137)
-                0x00001ae4                __vector_offset_138 = DEFINED (__vector_dispatch_138)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_138 = DEFINED (__vector_dispatch_138)?(. - _ebase_address):__vector_offset_default
  *(.vector_138)
-                0x00001ae4                __vector_offset_139 = DEFINED (__vector_dispatch_139)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_139 = DEFINED (__vector_dispatch_139)?(. - _ebase_address):__vector_offset_default
  *(.vector_139)
-                0x00001ae4                __vector_offset_140 = DEFINED (__vector_dispatch_140)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_140 = DEFINED (__vector_dispatch_140)?(. - _ebase_address):__vector_offset_default
  *(.vector_140)
-                0x00001ae4                __vector_offset_141 = DEFINED (__vector_dispatch_141)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_141 = DEFINED (__vector_dispatch_141)?(. - _ebase_address):__vector_offset_default
  *(.vector_141)
-                0x00001ae4                __vector_offset_142 = DEFINED (__vector_dispatch_142)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_142 = DEFINED (__vector_dispatch_142)?(. - _ebase_address):__vector_offset_default
  *(.vector_142)
-                0x00001ae4                __vector_offset_143 = DEFINED (__vector_dispatch_143)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_143 = DEFINED (__vector_dispatch_143)?(. - _ebase_address):__vector_offset_default
  *(.vector_143)
-                0x00001ae4                __vector_offset_144 = DEFINED (__vector_dispatch_144)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_144 = DEFINED (__vector_dispatch_144)?(. - _ebase_address):__vector_offset_default
  *(.vector_144)
-                0x00001ae4                __vector_offset_145 = DEFINED (__vector_dispatch_145)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_145 = DEFINED (__vector_dispatch_145)?(. - _ebase_address):__vector_offset_default
  *(.vector_145)
-                0x00001ae4                __vector_offset_146 = DEFINED (__vector_dispatch_146)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_146 = DEFINED (__vector_dispatch_146)?(. - _ebase_address):__vector_offset_default
  *(.vector_146)
-                0x00001ae4                __vector_offset_147 = DEFINED (__vector_dispatch_147)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_147 = DEFINED (__vector_dispatch_147)?(. - _ebase_address):__vector_offset_default
  *(.vector_147)
-                0x00001ae4                __vector_offset_148 = DEFINED (__vector_dispatch_148)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_148 = DEFINED (__vector_dispatch_148)?(. - _ebase_address):__vector_offset_default
  *(.vector_148)
-                0x00001ae4                __vector_offset_149 = DEFINED (__vector_dispatch_149)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_149 = DEFINED (__vector_dispatch_149)?(. - _ebase_address):__vector_offset_default
  *(.vector_149)
-                0x00001ae4                __vector_offset_150 = DEFINED (__vector_dispatch_150)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_150 = DEFINED (__vector_dispatch_150)?(. - _ebase_address):__vector_offset_default
  *(.vector_150)
-                0x00001ae4                __vector_offset_151 = DEFINED (__vector_dispatch_151)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_151 = DEFINED (__vector_dispatch_151)?(. - _ebase_address):__vector_offset_default
  *(.vector_151)
-                0x00001ae4                __vector_offset_152 = DEFINED (__vector_dispatch_152)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_152 = DEFINED (__vector_dispatch_152)?(. - _ebase_address):__vector_offset_default
  *(.vector_152)
-                0x00001ae4                __vector_offset_153 = DEFINED (__vector_dispatch_153)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_153 = DEFINED (__vector_dispatch_153)?(. - _ebase_address):__vector_offset_default
  *(.vector_153)
-                0x00001ae4                __vector_offset_154 = DEFINED (__vector_dispatch_154)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_154 = DEFINED (__vector_dispatch_154)?(. - _ebase_address):__vector_offset_default
  *(.vector_154)
-                0x00001ae4                __vector_offset_155 = DEFINED (__vector_dispatch_155)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_155 = DEFINED (__vector_dispatch_155)?(. - _ebase_address):__vector_offset_default
  *(.vector_155)
-                0x00001ae4                __vector_offset_156 = DEFINED (__vector_dispatch_156)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_156 = DEFINED (__vector_dispatch_156)?(. - _ebase_address):__vector_offset_default
  *(.vector_156)
-                0x00001ae4                __vector_offset_157 = DEFINED (__vector_dispatch_157)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_157 = DEFINED (__vector_dispatch_157)?(. - _ebase_address):__vector_offset_default
  *(.vector_157)
-                0x00001ae4                __vector_offset_158 = DEFINED (__vector_dispatch_158)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_158 = DEFINED (__vector_dispatch_158)?(. - _ebase_address):__vector_offset_default
  *(.vector_158)
-                0x00001ae4                __vector_offset_159 = DEFINED (__vector_dispatch_159)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_159 = DEFINED (__vector_dispatch_159)?(. - _ebase_address):__vector_offset_default
  *(.vector_159)
-                0x00001ae4                __vector_offset_160 = DEFINED (__vector_dispatch_160)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_160 = DEFINED (__vector_dispatch_160)?(. - _ebase_address):__vector_offset_default
  *(.vector_160)
-                0x00001ae4                __vector_offset_161 = DEFINED (__vector_dispatch_161)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_161 = DEFINED (__vector_dispatch_161)?(. - _ebase_address):__vector_offset_default
  *(.vector_161)
-                0x00001ae4                __vector_offset_162 = DEFINED (__vector_dispatch_162)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_162 = DEFINED (__vector_dispatch_162)?(. - _ebase_address):__vector_offset_default
  *(.vector_162)
-                0x00001ae4                __vector_offset_163 = DEFINED (__vector_dispatch_163)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_163 = DEFINED (__vector_dispatch_163)?(. - _ebase_address):__vector_offset_default
  *(.vector_163)
-                0x00001ae4                __vector_offset_164 = DEFINED (__vector_dispatch_164)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_164 = DEFINED (__vector_dispatch_164)?(. - _ebase_address):__vector_offset_default
  *(.vector_164)
-                0x00001ae4                __vector_offset_165 = DEFINED (__vector_dispatch_165)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_165 = DEFINED (__vector_dispatch_165)?(. - _ebase_address):__vector_offset_default
  *(.vector_165)
-                0x00001ae4                __vector_offset_166 = DEFINED (__vector_dispatch_166)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_166 = DEFINED (__vector_dispatch_166)?(. - _ebase_address):__vector_offset_default
  *(.vector_166)
-                0x00001ae4                __vector_offset_167 = DEFINED (__vector_dispatch_167)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_167 = DEFINED (__vector_dispatch_167)?(. - _ebase_address):__vector_offset_default
  *(.vector_167)
-                0x00001ae4                __vector_offset_168 = DEFINED (__vector_dispatch_168)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_168 = DEFINED (__vector_dispatch_168)?(. - _ebase_address):__vector_offset_default
  *(.vector_168)
-                0x00001ae4                __vector_offset_169 = DEFINED (__vector_dispatch_169)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_169 = DEFINED (__vector_dispatch_169)?(. - _ebase_address):__vector_offset_default
  *(.vector_169)
-                0x00001ae4                __vector_offset_170 = DEFINED (__vector_dispatch_170)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_170 = DEFINED (__vector_dispatch_170)?(. - _ebase_address):__vector_offset_default
  *(.vector_170)
-                0x0000134c                __vector_offset_171 = DEFINED (__vector_dispatch_171)?(. - _ebase_address):__vector_offset_default
+                0x00000e08                __vector_offset_171 = DEFINED (__vector_dispatch_171)?(. - _ebase_address):__vector_offset_default
  *(.vector_171)
- .vector_171    0x9d00134c      0x28c build/default/production/interupt.o
-                0x9d00134c                U4RXInterrupt
-                0x000015d8                __vector_offset_172 = DEFINED (__vector_dispatch_172)?(. - _ebase_address):__vector_offset_default
+ .vector_171    0x9d000e08      0x28c build/default/production/interupt.o
+                0x9d000e08                U4RXInterrupt
+                0x00001094                __vector_offset_172 = DEFINED (__vector_dispatch_172)?(. - _ebase_address):__vector_offset_default
  *(.vector_172)
- .vector_172    0x9d0015d8      0x140 build/default/production/interupt.o
-                0x9d0015d8                U4TXInterrupt
-                0x00001ae4                __vector_offset_173 = DEFINED (__vector_dispatch_173)?(. - _ebase_address):__vector_offset_default
+ .vector_172    0x9d001094      0x140 build/default/production/interupt.o
+                0x9d001094                U4TXInterrupt
+                0x000015a0                __vector_offset_173 = DEFINED (__vector_dispatch_173)?(. - _ebase_address):__vector_offset_default
  *(.vector_173)
-                0x00001ae4                __vector_offset_174 = DEFINED (__vector_dispatch_174)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_174 = DEFINED (__vector_dispatch_174)?(. - _ebase_address):__vector_offset_default
  *(.vector_174)
-                0x00001ae4                __vector_offset_175 = DEFINED (__vector_dispatch_175)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_175 = DEFINED (__vector_dispatch_175)?(. - _ebase_address):__vector_offset_default
  *(.vector_175)
-                0x00001ae4                __vector_offset_176 = DEFINED (__vector_dispatch_176)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_176 = DEFINED (__vector_dispatch_176)?(. - _ebase_address):__vector_offset_default
  *(.vector_176)
-                0x00001ae4                __vector_offset_177 = DEFINED (__vector_dispatch_177)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_177 = DEFINED (__vector_dispatch_177)?(. - _ebase_address):__vector_offset_default
  *(.vector_177)
-                0x00001ae4                __vector_offset_178 = DEFINED (__vector_dispatch_178)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_178 = DEFINED (__vector_dispatch_178)?(. - _ebase_address):__vector_offset_default
  *(.vector_178)
-                0x00001ae4                __vector_offset_179 = DEFINED (__vector_dispatch_179)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_179 = DEFINED (__vector_dispatch_179)?(. - _ebase_address):__vector_offset_default
  *(.vector_179)
-                0x00001718                __vector_offset_180 = DEFINED (__vector_dispatch_180)?(. - _ebase_address):__vector_offset_default
+                0x000011d4                __vector_offset_180 = DEFINED (__vector_dispatch_180)?(. - _ebase_address):__vector_offset_default
  *(.vector_180)
- .vector_180    0x9d001718      0x28c build/default/production/interupt.o
-                0x9d001718                U5RXInterrupt
-                0x000019a4                __vector_offset_181 = DEFINED (__vector_dispatch_181)?(. - _ebase_address):__vector_offset_default
+ .vector_180    0x9d0011d4      0x28c build/default/production/interupt.o
+                0x9d0011d4                U5RXInterrupt
+                0x00001460                __vector_offset_181 = DEFINED (__vector_dispatch_181)?(. - _ebase_address):__vector_offset_default
  *(.vector_181)
- .vector_181    0x9d0019a4      0x140 build/default/production/interupt.o
-                0x9d0019a4                U5TXInterrupt
-                0x00001ae4                __vector_offset_182 = DEFINED (__vector_dispatch_182)?(. - _ebase_address):__vector_offset_default
+ .vector_181    0x9d001460      0x140 build/default/production/interupt.o
+                0x9d001460                U5TXInterrupt
+                0x000015a0                __vector_offset_182 = DEFINED (__vector_dispatch_182)?(. - _ebase_address):__vector_offset_default
  *(.vector_182)
-                0x00001ae4                __vector_offset_183 = DEFINED (__vector_dispatch_183)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_183 = DEFINED (__vector_dispatch_183)?(. - _ebase_address):__vector_offset_default
  *(.vector_183)
-                0x00001ae4                __vector_offset_184 = DEFINED (__vector_dispatch_184)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_184 = DEFINED (__vector_dispatch_184)?(. - _ebase_address):__vector_offset_default
  *(.vector_184)
-                0x00001ae4                __vector_offset_185 = DEFINED (__vector_dispatch_185)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_185 = DEFINED (__vector_dispatch_185)?(. - _ebase_address):__vector_offset_default
  *(.vector_185)
-                0x00001ae4                __vector_offset_186 = DEFINED (__vector_dispatch_186)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_186 = DEFINED (__vector_dispatch_186)?(. - _ebase_address):__vector_offset_default
  *(.vector_186)
-                0x00001ae4                __vector_offset_187 = DEFINED (__vector_dispatch_187)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_187 = DEFINED (__vector_dispatch_187)?(. - _ebase_address):__vector_offset_default
  *(.vector_187)
-                0x00001ae4                __vector_offset_188 = DEFINED (__vector_dispatch_188)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_188 = DEFINED (__vector_dispatch_188)?(. - _ebase_address):__vector_offset_default
  *(.vector_188)
-                0x00001ae4                __vector_offset_189 = DEFINED (__vector_dispatch_189)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_189 = DEFINED (__vector_dispatch_189)?(. - _ebase_address):__vector_offset_default
  *(.vector_189)
-                0x00001ae4                __vector_offset_190 = DEFINED (__vector_dispatch_190)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_190 = DEFINED (__vector_dispatch_190)?(. - _ebase_address):__vector_offset_default
  *(.vector_190)
-                0x00001ae4                __vector_offset_191 = DEFINED (__vector_dispatch_191)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_191 = DEFINED (__vector_dispatch_191)?(. - _ebase_address):__vector_offset_default
  *(.vector_191)
-                0x00001ae4                __vector_offset_192 = DEFINED (__vector_dispatch_192)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_192 = DEFINED (__vector_dispatch_192)?(. - _ebase_address):__vector_offset_default
  *(.vector_192)
-                0x00001ae4                __vector_offset_193 = DEFINED (__vector_dispatch_193)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_193 = DEFINED (__vector_dispatch_193)?(. - _ebase_address):__vector_offset_default
  *(.vector_193)
-                0x00001ae4                __vector_offset_194 = DEFINED (__vector_dispatch_194)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_194 = DEFINED (__vector_dispatch_194)?(. - _ebase_address):__vector_offset_default
  *(.vector_194)
-                0x00001ae4                __vector_offset_195 = DEFINED (__vector_dispatch_195)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_195 = DEFINED (__vector_dispatch_195)?(. - _ebase_address):__vector_offset_default
  *(.vector_195)
-                0x00001ae4                __vector_offset_196 = DEFINED (__vector_dispatch_196)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_196 = DEFINED (__vector_dispatch_196)?(. - _ebase_address):__vector_offset_default
  *(.vector_196)
-                0x00001ae4                __vector_offset_197 = DEFINED (__vector_dispatch_197)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_197 = DEFINED (__vector_dispatch_197)?(. - _ebase_address):__vector_offset_default
  *(.vector_197)
-                0x00001ae4                __vector_offset_198 = DEFINED (__vector_dispatch_198)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_198 = DEFINED (__vector_dispatch_198)?(. - _ebase_address):__vector_offset_default
  *(.vector_198)
-                0x00001ae4                __vector_offset_199 = DEFINED (__vector_dispatch_199)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_199 = DEFINED (__vector_dispatch_199)?(. - _ebase_address):__vector_offset_default
  *(.vector_199)
-                0x00001ae4                __vector_offset_200 = DEFINED (__vector_dispatch_200)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_200 = DEFINED (__vector_dispatch_200)?(. - _ebase_address):__vector_offset_default
  *(.vector_200)
-                0x00001ae4                __vector_offset_201 = DEFINED (__vector_dispatch_201)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_201 = DEFINED (__vector_dispatch_201)?(. - _ebase_address):__vector_offset_default
  *(.vector_201)
-                0x00001ae4                __vector_offset_202 = DEFINED (__vector_dispatch_202)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_202 = DEFINED (__vector_dispatch_202)?(. - _ebase_address):__vector_offset_default
  *(.vector_202)
-                0x00001ae4                __vector_offset_203 = DEFINED (__vector_dispatch_203)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_203 = DEFINED (__vector_dispatch_203)?(. - _ebase_address):__vector_offset_default
  *(.vector_203)
-                0x00001ae4                __vector_offset_204 = DEFINED (__vector_dispatch_204)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_204 = DEFINED (__vector_dispatch_204)?(. - _ebase_address):__vector_offset_default
  *(.vector_204)
-                0x00001ae4                __vector_offset_205 = DEFINED (__vector_dispatch_205)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_205 = DEFINED (__vector_dispatch_205)?(. - _ebase_address):__vector_offset_default
  *(.vector_205)
-                0x00001ae4                __vector_offset_206 = DEFINED (__vector_dispatch_206)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_206 = DEFINED (__vector_dispatch_206)?(. - _ebase_address):__vector_offset_default
  *(.vector_206)
-                0x00001ae4                __vector_offset_207 = DEFINED (__vector_dispatch_207)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_207 = DEFINED (__vector_dispatch_207)?(. - _ebase_address):__vector_offset_default
  *(.vector_207)
-                0x00001ae4                __vector_offset_208 = DEFINED (__vector_dispatch_208)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_208 = DEFINED (__vector_dispatch_208)?(. - _ebase_address):__vector_offset_default
  *(.vector_208)
-                0x00001ae4                __vector_offset_209 = DEFINED (__vector_dispatch_209)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_209 = DEFINED (__vector_dispatch_209)?(. - _ebase_address):__vector_offset_default
  *(.vector_209)
-                0x00001ae4                __vector_offset_210 = DEFINED (__vector_dispatch_210)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_210 = DEFINED (__vector_dispatch_210)?(. - _ebase_address):__vector_offset_default
  *(.vector_210)
-                0x00001ae4                __vector_offset_211 = DEFINED (__vector_dispatch_211)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_211 = DEFINED (__vector_dispatch_211)?(. - _ebase_address):__vector_offset_default
  *(.vector_211)
-                0x00001ae4                __vector_offset_212 = DEFINED (__vector_dispatch_212)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_212 = DEFINED (__vector_dispatch_212)?(. - _ebase_address):__vector_offset_default
  *(.vector_212)
-                0x00001ae4                __vector_offset_213 = DEFINED (__vector_dispatch_213)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_213 = DEFINED (__vector_dispatch_213)?(. - _ebase_address):__vector_offset_default
  *(.vector_213)
-                0x00001ae4                __vector_offset_214 = DEFINED (__vector_dispatch_214)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_214 = DEFINED (__vector_dispatch_214)?(. - _ebase_address):__vector_offset_default
  *(.vector_214)
-                0x00001ae4                __vector_offset_215 = DEFINED (__vector_dispatch_215)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_215 = DEFINED (__vector_dispatch_215)?(. - _ebase_address):__vector_offset_default
  *(.vector_215)
-                0x00001ae4                __vector_offset_216 = DEFINED (__vector_dispatch_216)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_216 = DEFINED (__vector_dispatch_216)?(. - _ebase_address):__vector_offset_default
  *(.vector_216)
-                0x00001ae4                __vector_offset_217 = DEFINED (__vector_dispatch_217)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_217 = DEFINED (__vector_dispatch_217)?(. - _ebase_address):__vector_offset_default
  *(.vector_217)
-                0x00001ae4                __vector_offset_218 = DEFINED (__vector_dispatch_218)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_218 = DEFINED (__vector_dispatch_218)?(. - _ebase_address):__vector_offset_default
  *(.vector_218)
-                0x00001ae4                __vector_offset_219 = DEFINED (__vector_dispatch_219)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_219 = DEFINED (__vector_dispatch_219)?(. - _ebase_address):__vector_offset_default
  *(.vector_219)
-                0x00001ae4                __vector_offset_220 = DEFINED (__vector_dispatch_220)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_220 = DEFINED (__vector_dispatch_220)?(. - _ebase_address):__vector_offset_default
  *(.vector_220)
-                0x00001ae4                __vector_offset_221 = DEFINED (__vector_dispatch_221)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_221 = DEFINED (__vector_dispatch_221)?(. - _ebase_address):__vector_offset_default
  *(.vector_221)
-                0x00001ae4                __vector_offset_222 = DEFINED (__vector_dispatch_222)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_222 = DEFINED (__vector_dispatch_222)?(. - _ebase_address):__vector_offset_default
  *(.vector_222)
-                0x00001ae4                __vector_offset_223 = DEFINED (__vector_dispatch_223)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_223 = DEFINED (__vector_dispatch_223)?(. - _ebase_address):__vector_offset_default
  *(.vector_223)
-                0x00001ae4                __vector_offset_224 = DEFINED (__vector_dispatch_224)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_224 = DEFINED (__vector_dispatch_224)?(. - _ebase_address):__vector_offset_default
  *(.vector_224)
-                0x00001ae4                __vector_offset_225 = DEFINED (__vector_dispatch_225)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_225 = DEFINED (__vector_dispatch_225)?(. - _ebase_address):__vector_offset_default
  *(.vector_225)
-                0x00001ae4                __vector_offset_226 = DEFINED (__vector_dispatch_226)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_226 = DEFINED (__vector_dispatch_226)?(. - _ebase_address):__vector_offset_default
  *(.vector_226)
-                0x00001ae4                __vector_offset_227 = DEFINED (__vector_dispatch_227)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_227 = DEFINED (__vector_dispatch_227)?(. - _ebase_address):__vector_offset_default
  *(.vector_227)
-                0x00001ae4                __vector_offset_228 = DEFINED (__vector_dispatch_228)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_228 = DEFINED (__vector_dispatch_228)?(. - _ebase_address):__vector_offset_default
  *(.vector_228)
-                0x00001ae4                __vector_offset_229 = DEFINED (__vector_dispatch_229)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_229 = DEFINED (__vector_dispatch_229)?(. - _ebase_address):__vector_offset_default
  *(.vector_229)
-                0x00001ae4                __vector_offset_230 = DEFINED (__vector_dispatch_230)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_230 = DEFINED (__vector_dispatch_230)?(. - _ebase_address):__vector_offset_default
  *(.vector_230)
-                0x00001ae4                __vector_offset_231 = DEFINED (__vector_dispatch_231)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_231 = DEFINED (__vector_dispatch_231)?(. - _ebase_address):__vector_offset_default
  *(.vector_231)
-                0x00001ae4                __vector_offset_232 = DEFINED (__vector_dispatch_232)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_232 = DEFINED (__vector_dispatch_232)?(. - _ebase_address):__vector_offset_default
  *(.vector_232)
-                0x00001ae4                __vector_offset_233 = DEFINED (__vector_dispatch_233)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_233 = DEFINED (__vector_dispatch_233)?(. - _ebase_address):__vector_offset_default
  *(.vector_233)
-                0x00001ae4                __vector_offset_234 = DEFINED (__vector_dispatch_234)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_234 = DEFINED (__vector_dispatch_234)?(. - _ebase_address):__vector_offset_default
  *(.vector_234)
-                0x00001ae4                __vector_offset_235 = DEFINED (__vector_dispatch_235)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_235 = DEFINED (__vector_dispatch_235)?(. - _ebase_address):__vector_offset_default
  *(.vector_235)
-                0x00001ae4                __vector_offset_236 = DEFINED (__vector_dispatch_236)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_236 = DEFINED (__vector_dispatch_236)?(. - _ebase_address):__vector_offset_default
  *(.vector_236)
-                0x00001ae4                __vector_offset_237 = DEFINED (__vector_dispatch_237)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_237 = DEFINED (__vector_dispatch_237)?(. - _ebase_address):__vector_offset_default
  *(.vector_237)
-                0x00001ae4                __vector_offset_238 = DEFINED (__vector_dispatch_238)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_238 = DEFINED (__vector_dispatch_238)?(. - _ebase_address):__vector_offset_default
  *(.vector_238)
-                0x00001ae4                __vector_offset_239 = DEFINED (__vector_dispatch_239)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_239 = DEFINED (__vector_dispatch_239)?(. - _ebase_address):__vector_offset_default
  *(.vector_239)
-                0x00001ae4                __vector_offset_240 = DEFINED (__vector_dispatch_240)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_240 = DEFINED (__vector_dispatch_240)?(. - _ebase_address):__vector_offset_default
  *(.vector_240)
-                0x00001ae4                __vector_offset_241 = DEFINED (__vector_dispatch_241)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_241 = DEFINED (__vector_dispatch_241)?(. - _ebase_address):__vector_offset_default
  *(.vector_241)
-                0x00001ae4                __vector_offset_242 = DEFINED (__vector_dispatch_242)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_242 = DEFINED (__vector_dispatch_242)?(. - _ebase_address):__vector_offset_default
  *(.vector_242)
-                0x00001ae4                __vector_offset_243 = DEFINED (__vector_dispatch_243)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_243 = DEFINED (__vector_dispatch_243)?(. - _ebase_address):__vector_offset_default
  *(.vector_243)
-                0x00001ae4                __vector_offset_244 = DEFINED (__vector_dispatch_244)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_244 = DEFINED (__vector_dispatch_244)?(. - _ebase_address):__vector_offset_default
  *(.vector_244)
-                0x00001ae4                __vector_offset_245 = DEFINED (__vector_dispatch_245)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_245 = DEFINED (__vector_dispatch_245)?(. - _ebase_address):__vector_offset_default
  *(.vector_245)
-                0x00001ae4                __vector_offset_246 = DEFINED (__vector_dispatch_246)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_246 = DEFINED (__vector_dispatch_246)?(. - _ebase_address):__vector_offset_default
  *(.vector_246)
-                0x00001ae4                __vector_offset_247 = DEFINED (__vector_dispatch_247)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_247 = DEFINED (__vector_dispatch_247)?(. - _ebase_address):__vector_offset_default
  *(.vector_247)
-                0x00001ae4                __vector_offset_248 = DEFINED (__vector_dispatch_248)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_248 = DEFINED (__vector_dispatch_248)?(. - _ebase_address):__vector_offset_default
  *(.vector_248)
-                0x00001ae4                __vector_offset_249 = DEFINED (__vector_dispatch_249)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_249 = DEFINED (__vector_dispatch_249)?(. - _ebase_address):__vector_offset_default
  *(.vector_249)
-                0x00001ae4                __vector_offset_250 = DEFINED (__vector_dispatch_250)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_250 = DEFINED (__vector_dispatch_250)?(. - _ebase_address):__vector_offset_default
  *(.vector_250)
-                0x00001ae4                __vector_offset_251 = DEFINED (__vector_dispatch_251)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_251 = DEFINED (__vector_dispatch_251)?(. - _ebase_address):__vector_offset_default
  *(.vector_251)
-                0x00001ae4                __vector_offset_252 = DEFINED (__vector_dispatch_252)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_252 = DEFINED (__vector_dispatch_252)?(. - _ebase_address):__vector_offset_default
  *(.vector_252)
-                0x00001ae4                __vector_offset_253 = DEFINED (__vector_dispatch_253)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_253 = DEFINED (__vector_dispatch_253)?(. - _ebase_address):__vector_offset_default
  *(.vector_253)
-                0x00001ae4                __vector_offset_254 = DEFINED (__vector_dispatch_254)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_254 = DEFINED (__vector_dispatch_254)?(. - _ebase_address):__vector_offset_default
  *(.vector_254)
-                0x00001ae4                __vector_offset_255 = DEFINED (__vector_dispatch_255)?(. - _ebase_address):__vector_offset_default
+                0x000015a0                __vector_offset_255 = DEFINED (__vector_dispatch_255)?(. - _ebase_address):__vector_offset_default
  *(.vector_255)
-                0x00001ae4                __vector_offset_default = (. - _ebase_address)
+                0x000015a0                __vector_offset_default = (. - _ebase_address)
  *(.vector_default)
  .vector_default
-                0x9d001ae4       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
-                0x9d001ae4                _DefaultInterrupt
+                0x9d0015a0       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+                0x9d0015a0                _DefaultInterrupt
 
 .startup
  *(.startup)
 
-.text           0x9d001b2c        0x0
+.text           0x9d0015e8        0x0
  *(.stub .gnu.linkonce.t.*)
  *(.text.*personality*)
  *(.mips16.fn.*)
  *(.mips16.call.*)
  *(.gnu.warning)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.init           0x9d001b2c        0x0
+.init           0x9d0015e8        0x0
  *crti.o(.init)
  *crtbegin.o(.init)
  *(EXCLUDE_FILE(*crtn.o *crtend?.o *crtend.o) .init)
  *crtend.o(.init)
  *crtn.o(.init)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.fini           0x9d001b2c        0x0
+.fini           0x9d0015e8        0x0
  *(.fini)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.preinit_array  0x9d001b2c        0x0
-                0x9d001b2c                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x9d0015e8        0x0
+                0x9d0015e8                PROVIDE (__preinit_array_start, .)
  *(.preinit_array)
-                0x9d001b2c                PROVIDE (__preinit_array_end, .)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                PROVIDE (__preinit_array_end, .)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.init_array     0x9d001b2c        0x0
-                0x9d001b2c                PROVIDE (__init_array_start, .)
+.init_array     0x9d0015e8        0x0
+                0x9d0015e8                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array)
-                0x9d001b2c                PROVIDE (__init_array_end, .)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                PROVIDE (__init_array_end, .)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.fini_array     0x9d001b2c        0x0
-                0x9d001b2c                PROVIDE (__fini_array_start, .)
+.fini_array     0x9d0015e8        0x0
+                0x9d0015e8                PROVIDE (__fini_array_start, .)
  *(SORT(.fini_array.*))
  *(.fini_array)
-                0x9d001b2c                PROVIDE (__fini_array_end, .)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                PROVIDE (__fini_array_end, .)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.ctors          0x9d001b2c        0x0
+.ctors          0x9d0015e8        0x0
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.dtors          0x9d001b2c        0x0
+.dtors          0x9d0015e8        0x0
  *crtbegin.o(.dtors)
  *crtbegin?.o(.dtors)
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                . = ALIGN (0x4)
 
-.rodata         0x9d001b2c        0x0
+.rodata         0x9d0015e8        0x0
  *(.gnu.linkonce.r.*)
  *(.rodata1)
-                0x9d001b2c                . = ALIGN (0x4)
+                0x9d0015e8                . = ALIGN (0x4)
 
 .sdata2         0x9fc004b0        0x0
  *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
@@ -1631,7 +1610,7 @@ END GROUP
                 0x80000028                _data_end = .
                 0x80000028                _bss_begin = .
 
-.sbss           0x80000028      0x134
+.sbss           0x80000028      0x11c
                 0x80000028                _sbss_begin = .
  *(.dynsbss)
  *(.sbss .sbss.* .gnu.linkonce.sb.*)
@@ -1710,9 +1689,8 @@ END GROUP
                 0x800000f4                fcurr
                 0x800000f8                temp_timer
                 0x800000fc                charge_fail
-                0x800000fe                help_strobe
-                0x80000100                sync_status
-                0x80000102                unsync_error
+                0x800000fe                sync_status
+                0x80000100                unsync_error
                 0x80000104                U4_speed
                 0x80000108                AO_ignit_br_high
                 0x8000010a                sync_pulse
@@ -1729,70 +1707,60 @@ END GROUP
                 0x80000126                num3
                 0x80000128                start_reg
  *fill*         0x8000012a        0x2 
- .scommon       0x8000012c       0x18 build/default/production/IC_measure.o
-                0x8000012c                phase
-                0x80000130                holdb
-                0x80000134                phase_delta
-                0x80000138                holdbb
-                0x8000013c                koeff
-                0x80000140                hold
- .scommon       0x80000144       0x16 build/default/production/OC_pid.o
-                0x80000144                temp_10
-                0x80000146                adc_count
-                0x80000148                f10
-                0x8000014c                temp_32
-                0x80000150                f32
-                0x80000154                count_i
-                0x80000156                count_c
-                0x80000158                OC_val
-                0x8000015a                _sbss_end = .
-                0x8000015c                . = ALIGN (0x4)
- *fill*         0x8000015a        0x2 
+ .scommon       0x8000012c       0x16 build/default/production/OC_pid.o
+                0x8000012c                temp_10
+                0x8000012e                adc_count
+                0x80000130                f10
+                0x80000134                temp_32
+                0x80000138                f32
+                0x8000013c                count_i
+                0x8000013e                count_c
+                0x80000140                OC_val
+                0x80000142                _sbss_end = .
+                0x80000144                . = ALIGN (0x4)
+ *fill*         0x80000142        0x2 
 
-.bss            0x8000015c     0x233c
+.bss            0x80000144     0x175c
  *(.dynbss)
  *(COMMON)
- COMMON         0x8000015c        0xa build/default/production/ramtron_drv.o
-                0x8000015c                usSpiBuf
- *fill*         0x80000166        0x2 
- COMMON         0x80000168     0x16d8 build/default/production/main.o
-                0x80000168                usart1
-                0x80000384                usart4
-                0x800005a0                usart5
-                0x800007bc                usart3
-                0x800009d8                usart2
-                0x80000bf4                calibr
-                0x80000c90                middle_buf11
-                0x80000d40                Modbus
-                0x80000de4                MB_diagn
-                0x80000ec4                ch_1
-                0x80000f24                ch_2
-                0x80000f84                MB_diagn_sw
-                0x80001064                MB_sw_conf
-                0x80001118                MB_diag
-                0x800011a4                MB_conf
-                0x80001258                dir_br_high
-                0x8000126c                MB_swap
-                0x80001308                discharge_capt
-                0x80001330                MB
-                0x800013cc                MB_diag_sw
-                0x80001458                dir_sc_low
-                0x8000146c                Modbus_sw
-                0x80001510                middle_buf40
-                0x80001790                dir_br_low
-                0x800017a4                calibr_swap
- COMMON         0x80001840      0xbe0 build/default/production/IC_measure.o
-                0x80001840                ring_2
-                0x80001e30                ring_1
- COMMON         0x80002420       0x78 build/default/production/OC_pid.o
-                0x80002420                btemp_10
-                0x80002448                filt_i
-                0x8000245c                filt_c
-                0x80002470                btemp_32
-                0x80002498                . = ALIGN ((. != 0x0)?0x4:0x1)
-                0x80002498                . = ALIGN (0x4)
-                0x80002498                _end = .
-                0x80002498                _bss_end = .
+ COMMON         0x80000144        0xa build/default/production/ramtron_drv.o
+                0x80000144                usSpiBuf
+ *fill*         0x8000014e        0x2 
+ COMMON         0x80000150     0x16d8 build/default/production/main.o
+                0x80000150                usart1
+                0x8000036c                usart4
+                0x80000588                usart5
+                0x800007a4                usart3
+                0x800009c0                usart2
+                0x80000bdc                calibr
+                0x80000c78                middle_buf11
+                0x80000d28                Modbus
+                0x80000dcc                MB_diagn
+                0x80000eac                ch_1
+                0x80000f0c                ch_2
+                0x80000f6c                MB_diagn_sw
+                0x8000104c                MB_sw_conf
+                0x80001100                MB_diag
+                0x8000118c                MB_conf
+                0x80001240                dir_br_high
+                0x80001254                MB_swap
+                0x800012f0                discharge_capt
+                0x80001318                MB
+                0x800013b4                MB_diag_sw
+                0x80001440                dir_sc_low
+                0x80001454                Modbus_sw
+                0x800014f8                middle_buf40
+                0x80001778                dir_br_low
+                0x8000178c                calibr_swap
+ COMMON         0x80001828       0x78 build/default/production/OC_pid.o
+                0x80001828                btemp_10
+                0x80001850                filt_i
+                0x80001864                filt_c
+                0x80001878                btemp_32
+                0x800018a0                . = ALIGN ((. != 0x0)?0x4:0x1)
+                0x800018a0                . = ALIGN (0x4)
+                0x800018a0                _end = .
+                0x800018a0                _bss_end = .
                 0x00080000                _bmxdudba_address = 0x80000
                 0x00080000                _bmxdupba_address = 0x80000
 
@@ -1821,7 +1789,6 @@ END GROUP
  .mdebug.abi32  0x00000000        0x0 build/default/production/init.o
  .mdebug.abi32  0x00000000        0x0 build/default/production/main.o
  .mdebug.abi32  0x00000000        0x0 build/default/production/modbus.o
- .mdebug.abi32  0x00000000        0x0 build/default/production/IC_measure.o
  .mdebug.abi32  0x00000000        0x0 build/default/production/OC_pid.o
  .mdebug.abi32  0x00000000        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
  .mdebug.abi32  0x00000000        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
@@ -1879,7 +1846,6 @@ END GROUP
  .comment       0x00000000       0x3d build/default/production/init.o
  .comment       0x00000000       0x3d build/default/production/main.o
  .comment       0x00000000       0x3d build/default/production/modbus.o
- .comment       0x00000000       0x3d build/default/production/IC_measure.o
  .comment       0x00000000       0x3d build/default/production/OC_pid.o
  .comment       0x00000000       0x3d c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
  .comment       0x00000000       0x3d c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
@@ -1905,121 +1871,115 @@ END GROUP
  *.elf(.debug_sfnames)
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x268
+.debug_aranges  0x00000000      0x228
  *.elf(.debug_aranges)
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 build/default/production/interrupt_proc.o
  .debug_aranges
-                0x00000020       0xa8 build/default/production/interupt.o
+                0x00000020       0x88 build/default/production/interupt.o
  .debug_aranges
-                0x000000c8       0x20 build/default/production/ramtron_drv.o
+                0x000000a8       0x20 build/default/production/ramtron_drv.o
  .debug_aranges
-                0x000000e8       0x20 build/default/production/init.o
+                0x000000c8       0x20 build/default/production/init.o
  .debug_aranges
-                0x00000108       0x20 build/default/production/main.o
+                0x000000e8       0x20 build/default/production/main.o
  .debug_aranges
-                0x00000128       0x20 build/default/production/modbus.o
+                0x00000108       0x20 build/default/production/modbus.o
  .debug_aranges
-                0x00000148       0x20 build/default/production/IC_measure.o
+                0x00000128       0x20 build/default/production/OC_pid.o
  .debug_aranges
-                0x00000168       0x20 build/default/production/OC_pid.o
+                0x00000148       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
  .debug_aranges
-                0x00000188       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+                0x00000168       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
  .debug_aranges
-                0x000001a8       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+                0x00000188       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
  .debug_aranges
-                0x000001c8       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+                0x000001a8       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
  .debug_aranges
-                0x000001e8       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+                0x000001c8       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
  .debug_aranges
-                0x00000208       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+                0x000001e8       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
  .debug_aranges
-                0x00000228       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_aranges
-                0x00000248       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+                0x00000208       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
 .debug_pubnames
  *.elf(.debug_pubnames)
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x15855
+.debug_info     0x00000000    0x1362d
  *.elf(.debug_info .gnu.linkonce.wi.*)
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000     0x2ff2 build/default/production/interrupt_proc.o
- .debug_info    0x00002ff2     0x28d4 build/default/production/interupt.o
- .debug_info    0x000058c6      0xe94 build/default/production/ramtron_drv.o
- .debug_info    0x0000675a     0x59f5 build/default/production/init.o
- .debug_info    0x0000c14f     0x2553 build/default/production/main.o
- .debug_info    0x0000e6a2     0x3b84 build/default/production/modbus.o
- .debug_info    0x00012226     0x1d26 build/default/production/IC_measure.o
- .debug_info    0x00013f4c     0x129d build/default/production/OC_pid.o
- .debug_info    0x000151e9       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_info    0x000152de       0xce c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_info    0x000153ac       0xd6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_info    0x00015482       0xe8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_info    0x0001556a       0xf1 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_info    0x0001565b       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_info    0x00015750      0x105 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_info    0x00000000     0x2c5a build/default/production/interrupt_proc.o
+ .debug_info    0x00002c5a     0x29ca build/default/production/interupt.o
+ .debug_info    0x00005624      0xe94 build/default/production/ramtron_drv.o
+ .debug_info    0x000064b8     0x59f5 build/default/production/init.o
+ .debug_info    0x0000bead     0x22f3 build/default/production/main.o
+ .debug_info    0x0000e1a0     0x3b84 build/default/production/modbus.o
+ .debug_info    0x00011d24     0x129d build/default/production/OC_pid.o
+ .debug_info    0x00012fc1       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_info    0x000130b6       0xce c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_info    0x00013184       0xd6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_info    0x0001325a       0xe8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_info    0x00013342       0xf1 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_info    0x00013433       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_info    0x00013528      0x105 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
-.debug_abbrev   0x00000000     0x11f3
+.debug_abbrev   0x00000000      0xf9c
  *.elf(.debug_abbrev)
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x270 build/default/production/interrupt_proc.o
- .debug_abbrev  0x00000270      0x1b7 build/default/production/interupt.o
- .debug_abbrev  0x00000427      0x270 build/default/production/ramtron_drv.o
- .debug_abbrev  0x00000697      0x1ad build/default/production/init.o
- .debug_abbrev  0x00000844      0x1a7 build/default/production/main.o
- .debug_abbrev  0x000009eb      0x2de build/default/production/modbus.o
- .debug_abbrev  0x00000cc9      0x219 build/default/production/IC_measure.o
- .debug_abbrev  0x00000ee2      0x1f9 build/default/production/OC_pid.o
- .debug_abbrev  0x000010db       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_abbrev  0x00001103       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_abbrev  0x0000112b       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_abbrev  0x00001153       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_abbrev  0x0000117b       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_abbrev  0x000011a3       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_abbrev  0x000011cb       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_abbrev  0x00000000      0x245 build/default/production/interrupt_proc.o
+ .debug_abbrev  0x00000245      0x1a4 build/default/production/interupt.o
+ .debug_abbrev  0x000003e9      0x270 build/default/production/ramtron_drv.o
+ .debug_abbrev  0x00000659      0x1ad build/default/production/init.o
+ .debug_abbrev  0x00000806      0x1a7 build/default/production/main.o
+ .debug_abbrev  0x000009ad      0x2de build/default/production/modbus.o
+ .debug_abbrev  0x00000c8b      0x1f9 build/default/production/OC_pid.o
+ .debug_abbrev  0x00000e84       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_abbrev  0x00000eac       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_abbrev  0x00000ed4       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_abbrev  0x00000efc       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_abbrev  0x00000f24       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_abbrev  0x00000f4c       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_abbrev  0x00000f74       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
-.debug_line     0x00000000     0x1621
+.debug_line     0x00000000     0x13d5
  *.elf(.debug_line)
  *(.debug_line)
- .debug_line    0x00000000      0x32f build/default/production/interrupt_proc.o
- .debug_line    0x0000032f      0x29c build/default/production/interupt.o
- .debug_line    0x000005cb      0x254 build/default/production/ramtron_drv.o
- .debug_line    0x0000081f      0x245 build/default/production/init.o
- .debug_line    0x00000a64       0xe6 build/default/production/main.o
- .debug_line    0x00000b4a      0x34c build/default/production/modbus.o
- .debug_line    0x00000e96      0x1da build/default/production/IC_measure.o
- .debug_line    0x00001070      0x13d build/default/production/OC_pid.o
- .debug_line    0x000011ad       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_line    0x00001254       0x94 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_line    0x000012e8       0x98 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_line    0x00001380       0xa6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_line    0x00001426       0xa5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_line    0x000014cb       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_line    0x00001572       0xaf c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_line    0x00000000      0x31a build/default/production/interrupt_proc.o
+ .debug_line    0x0000031a      0x244 build/default/production/interupt.o
+ .debug_line    0x0000055e      0x254 build/default/production/ramtron_drv.o
+ .debug_line    0x000007b2      0x246 build/default/production/init.o
+ .debug_line    0x000009f8       0xe0 build/default/production/main.o
+ .debug_line    0x00000ad8      0x34c build/default/production/modbus.o
+ .debug_line    0x00000e24      0x13d build/default/production/OC_pid.o
+ .debug_line    0x00000f61       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_line    0x00001008       0x94 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_line    0x0000109c       0x98 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_line    0x00001134       0xa6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_line    0x000011da       0xa5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_line    0x0000127f       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_line    0x00001326       0xaf c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
-.debug_frame    0x00000000     0x10f0
+.debug_frame    0x00000000      0xde4
  *.elf(.debug_frame)
  *(.debug_frame)
- .debug_frame   0x00000000      0x250 build/default/production/interrupt_proc.o
- .debug_frame   0x00000250      0x544 build/default/production/interupt.o
- .debug_frame   0x00000794      0x224 build/default/production/ramtron_drv.o
- .debug_frame   0x000009b8      0x1f0 build/default/production/init.o
- .debug_frame   0x00000ba8       0x2c build/default/production/main.o
- .debug_frame   0x00000bd4      0x244 build/default/production/modbus.o
- .debug_frame   0x00000e18      0x178 build/default/production/IC_measure.o
- .debug_frame   0x00000f90       0x50 build/default/production/OC_pid.o
- .debug_frame   0x00000fe0       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_frame   0x0000100c       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_frame   0x0000102c       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_frame   0x0000104c       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_frame   0x0000106c       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_frame   0x00001098       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_frame   0x000010c4       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_frame   0x00000000      0x230 build/default/production/interrupt_proc.o
+ .debug_frame   0x00000230      0x3d0 build/default/production/interupt.o
+ .debug_frame   0x00000600      0x224 build/default/production/ramtron_drv.o
+ .debug_frame   0x00000824      0x1f0 build/default/production/init.o
+ .debug_frame   0x00000a14       0x2c build/default/production/main.o
+ .debug_frame   0x00000a40      0x244 build/default/production/modbus.o
+ .debug_frame   0x00000c84       0x50 build/default/production/OC_pid.o
+ .debug_frame   0x00000cd4       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_frame   0x00000d00       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_frame   0x00000d20       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_frame   0x00000d40       0x20 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_frame   0x00000d60       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_frame   0x00000d8c       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_frame   0x00000db8       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
-.debug_str      0x00000000      0x310
+.debug_str      0x00000000      0x2ec
  *.elf(.debug_str)
  *(.debug_str)
  .debug_str     0x00000000       0xa8 build/default/production/interrupt_proc.o
@@ -2028,15 +1988,14 @@ END GROUP
  .debug_str     0x00000126       0xff build/default/production/init.o
  .debug_str     0x00000225       0x3a build/default/production/main.o
  .debug_str     0x0000025f       0x8d build/default/production/modbus.o
- .debug_str     0x000002ec       0x24 build/default/production/IC_measure.o
- .debug_str     0x00000310        0x0 build/default/production/OC_pid.o
- .debug_str     0x00000310        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_str     0x00000310        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_str     0x00000310        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_str     0x00000310        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_str     0x00000310        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_str     0x00000310        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_str     0x00000310        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_str     0x000002ec        0x0 build/default/production/OC_pid.o
+ .debug_str     0x000002ec        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_str     0x000002ec        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_str     0x000002ec        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_str     0x000002ec        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_str     0x000002ec        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_str     0x000002ec        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_str     0x000002ec        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
 .debug_loc      0x00000000       0xb0
  *.elf(.debug_loc)
@@ -2070,17 +2029,17 @@ END GROUP
  *.elf(.debug_pubtypes)
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x108
+.debug_ranges   0x00000000       0xe8
  *.elf(.debug_ranges)
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x98 build/default/production/interupt.o
- .debug_ranges  0x00000098       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_ranges  0x000000a8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_ranges  0x000000b8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_ranges  0x000000c8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_ranges  0x000000d8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_ranges  0x000000e8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_ranges  0x000000f8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_ranges  0x00000000       0x78 build/default/production/interupt.o
+ .debug_ranges  0x00000078       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_ranges  0x00000088       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_ranges  0x00000098       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_ranges  0x000000a8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_ranges  0x000000b8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_ranges  0x000000c8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_ranges  0x000000d8       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
 .gnu.attributes
                 0x00000000       0x10
@@ -2098,23 +2057,21 @@ END GROUP
  .gnu.attributes
                 0x00000050       0x10 build/default/production/modbus.o
  .gnu.attributes
-                0x00000060       0x10 build/default/production/IC_measure.o
+                0x00000060       0x10 build/default/production/OC_pid.o
  .gnu.attributes
-                0x00000070       0x10 build/default/production/OC_pid.o
+                0x00000070       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
  .gnu.attributes
-                0x00000080       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+                0x00000080       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
  .gnu.attributes
-                0x00000090       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+                0x00000090       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
  .gnu.attributes
-                0x000000a0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+                0x000000a0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
  .gnu.attributes
-                0x000000b0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+                0x000000b0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
  .gnu.attributes
-                0x000000c0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+                0x000000c0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
  .gnu.attributes
-                0x000000d0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .gnu.attributes
-                0x000000e0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+                0x000000d0       0x10 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
                 0x9d000000                PROVIDE (__pic32_init_cache_program_base_addr, 0x9d000000)
                 0x80000000                PROVIDE (__pic32_init_cache_data_base_addr, 0x80000000)
                 0xd0000000                PROVIDE (__pic32_init_sqi_kseg2_virtual_base_addr, 0xd0000000)
@@ -2206,8 +2163,8 @@ LOAD data_init
 .reginfo        0x00000000       0x18
  .reginfo       0x00000000       0x18 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100/crt0_mips32r2.o
 
-.stack          0x80002ee8      0x400
- .stack         0x80002ee8      0x400 stack
+.stack          0x800022e8      0x400
+ .stack         0x800022e8      0x400 stack
 
 .__vector_offset_BF810540_data
                 0xbf810540      0x178
@@ -2254,40 +2211,40 @@ LOAD data_init
  .__vector_offset_BF810894_data
                 0xbf810894        0x4 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100\vector_offset_init.o
 
-.COHERENTBSS$   0xa00024a0      0x9dc
- .COHERENTBSS$  0xa00024a0      0x12c build/default/production/main.o
-                0xa00024a0                buf_tx5
+.COHERENTBSS$   0xa00018a0      0x9dc
+ .COHERENTBSS$  0xa00018a0      0x12c build/default/production/main.o
+                0xa00018a0                buf_tx5
  .bss.buf_tx4.buf_tx4
-                0xa00025cc      0x12c build/default/production/main.o
-                0xa00025cc                buf_tx4
+                0xa00019cc      0x12c build/default/production/main.o
+                0xa00019cc                buf_tx4
  .bss.buf_tx3.buf_tx3
-                0xa00026f8      0x12c build/default/production/main.o
-                0xa00026f8                buf_tx3
+                0xa0001af8      0x12c build/default/production/main.o
+                0xa0001af8                buf_tx3
  .bss.buf_tx2.buf_tx2
-                0xa0002824      0x12c build/default/production/main.o
-                0xa0002824                buf_tx2
+                0xa0001c24      0x12c build/default/production/main.o
+                0xa0001c24                buf_tx2
  .bss.buf_tx1.buf_tx1
-                0xa0002950      0x12c build/default/production/main.o
-                0xa0002950                buf_tx1
+                0xa0001d50      0x12c build/default/production/main.o
+                0xa0001d50                buf_tx1
  .bss.adc1f.adc1f
-                0xa0002a7c      0x100 build/default/production/OC_pid.o
-                0xa0002a7c                adc1f
+                0xa0001e7c      0x100 build/default/production/OC_pid.o
+                0xa0001e7c                adc1f
  .bss.adc2f.adc2f
-                0xa0002b7c      0x100 build/default/production/OC_pid.o
-                0xa0002b7c                adc2f
+                0xa0001f7c      0x100 build/default/production/OC_pid.o
+                0xa0001f7c                adc2f
  .bss.adc3f.adc3f
-                0xa0002c7c      0x100 build/default/production/OC_pid.o
-                0xa0002c7c                adc3f
+                0xa000207c      0x100 build/default/production/OC_pid.o
+                0xa000207c                adc3f
  .bss.adc4f.adc4f
-                0xa0002d7c      0x100 build/default/production/OC_pid.o
-                0xa0002d7c                adc4f
+                0xa000217c      0x100 build/default/production/OC_pid.o
+                0xa000217c                adc4f
 
-.bss            0x80002e80       0x20
- .bss           0x80002e80       0x20 build/default/production/OC_pid.o
+.bss            0x80002280       0x20
+ .bss           0x80002280       0x20 build/default/production/OC_pid.o
 
-.data           0x80002ea0       0x18
- .data          0x80002ea0       0x18 build/default/production/ramtron_drv.o
-                0x80002ea0                RAMTRON_RAM
+.data           0x800022a0       0x18
+ .data          0x800022a0       0x18 build/default/production/ramtron_drv.o
+                0x800022a0                RAMTRON_RAM
 
 .bss            0x00000000        0x0
  .bss           0x00000000        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
@@ -2401,12 +2358,6 @@ LOAD data_init
  .data          0x00000000        0x0 build/default/production/OC_pid.o
 
 .bss            0x00000000        0x0
- .bss           0x00000000        0x0 build/default/production/IC_measure.o
-
-.data           0x00000000        0x0
- .data          0x00000000        0x0 build/default/production/IC_measure.o
-
-.bss            0x00000000        0x0
  .bss           0x00000000        0x0 build/default/production/modbus.o
 
 .data           0x00000000        0x0
@@ -2457,111 +2408,98 @@ LOAD data_init
                 0xbfc00480       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\debug-exception-return.o
                 0xbfc00480                __DbgExecReturn
 
-.text           0x9d001b2c     0x378c
- .text          0x9d001b2c     0x1fb8 build/default/production/modbus.o
-                0x9d001b2c                PIC_CRC16
-                0x9d001be8                MODBUS_CRC16_calculate
-                0x9d001c8c                swapshort
-                0x9d001cd0                swapfloat
-                0x9d001d24                swaplong
-                0x9d001d78                start_tx_usart
-                0x9d001ff4                start_tx_usart_dma
-                0x9d002334                stop_uart_tx
-                0x9d002900                stop_uart_tx_dma
-                0x9d002e80                close_mb
-                0x9d002ecc                answer_illegal
-                0x9d002f70                answer_illegal_func
-                0x9d002fe4                answer_illegal_data_addr
-                0x9d003058                answer_illegal_data_val
-                0x9d0030cc                mbs_03
-                0x9d003234                mbs_10
-                0x9d003614                mbs_uni
-                0x9d003a54                mbs
- .text          0x9d003ae4     0x17d4 build/default/production/interrupt_proc.o
-                0x9d003ae4                T1Interrupt_
-                0x9d003b60                T2Interrupt_
-                0x9d003bdc                T4Interrupt_
-                0x9d003c58                T5Interrupt_
-                0x9d003cd4                T6Interrupt_
-                0x9d003d50                T7Interrupt_
-                0x9d003dcc                T9Interrupt_
-                0x9d003e48                DMA_uni
-                0x9d00435c                DMA5_init
-                0x9d004478                DMA4_init
-                0x9d004594                DMA3_init
-                0x9d0046b0                DMA2_init
-                0x9d0047cc                DMA1_init
-                0x9d0048e8                test_uart_dma
-                0x9d004968                conf_read
-                0x9d004cd8                conf_check
-                0x9d005070                discret_ctrl
-                0x9d0051b0                counters
+.text           0x9d0015e8     0x3684
+ .text          0x9d0015e8     0x1fb8 build/default/production/modbus.o
+                0x9d0015e8                PIC_CRC16
+                0x9d0016a4                MODBUS_CRC16_calculate
+                0x9d001748                swapshort
+                0x9d00178c                swapfloat
+                0x9d0017e0                swaplong
+                0x9d001834                start_tx_usart
+                0x9d001ab0                start_tx_usart_dma
+                0x9d001df0                stop_uart_tx
+                0x9d0023bc                stop_uart_tx_dma
+                0x9d00293c                close_mb
+                0x9d002988                answer_illegal
+                0x9d002a2c                answer_illegal_func
+                0x9d002aa0                answer_illegal_data_addr
+                0x9d002b14                answer_illegal_data_val
+                0x9d002b88                mbs_03
+                0x9d002cf0                mbs_10
+                0x9d0030d0                mbs_uni
+                0x9d003510                mbs
+ .text          0x9d0035a0     0x16cc build/default/production/interrupt_proc.o
+                0x9d0035a0                T1Interrupt_
+                0x9d00361c                T2Interrupt_
+                0x9d003698                T4Interrupt_
+                0x9d003714                T5Interrupt_
+                0x9d003790                T6Interrupt_
+                0x9d00380c                T7Interrupt_
+                0x9d003888                T9Interrupt_
+                0x9d003904                DMA_uni
+                0x9d003e18                DMA5_init
+                0x9d003f34                DMA4_init
+                0x9d004050                DMA3_init
+                0x9d00416c                DMA2_init
+                0x9d004288                DMA1_init
+                0x9d0043a4                test_uart_dma
+                0x9d004424                conf_read
+                0x9d004794                conf_check
+                0x9d004b2c                discret_ctrl
 
-.text           0x9d0052b8     0x249c
- .text          0x9d0052b8     0x126c build/default/production/ramtron_drv.o
-                0x9d0052b8                SPI_BufferWrite
-                0x9d005304                SPI_BufferRead
-                0x9d005348                vMemDelay
-                0x9d005394                vMemoryInit
-                0x9d0053b4                getcs_FRAM
-                0x9d005520                putcs_FRAM
-                0x9d005710                getss_FRAM
-                0x9d0058d8                putss_FRAM
-                0x9d005b1c                getc_FRAM
-                0x9d005c58                putc_FRAM
-                0x9d005e2c                put_cmd_FRAM
-                0x9d005f5c                we_FRAM
-                0x9d006010                wd_FRAM
-                0x9d0060c4                erase_FRAM
-                0x9d00629c                pgetc_FRAM
-                0x9d0063e0                vSPI5InterruptHandler
-                0x9d006474                load_config
- .text          0x9d006524     0x1230 build/default/production/init.o
-                0x9d006524                port_init
-                0x9d006710                tmr_1_init
-                0x9d0067cc                tmr_2_init
-                0x9d006888                tmr_5_init
-                0x9d006944                tmr_9_init
-                0x9d006a00                tmr_6_init
-                0x9d006abc                tmr_7_init
-                0x9d006b78                OC3_init
-                0x9d006c20                uart5_init
-                0x9d006d98                uart4_init
-                0x9d006f10                uart3_init
-                0x9d007088                uart2_init
-                0x9d007200                uart1_init
-                0x9d007378                spi5_init
-                0x9d007544                InitializeSystem
+.text           0x9d004c6c     0x24a0
+ .text          0x9d004c6c     0x126c build/default/production/ramtron_drv.o
+                0x9d004c6c                SPI_BufferWrite
+                0x9d004cb8                SPI_BufferRead
+                0x9d004cfc                vMemDelay
+                0x9d004d48                vMemoryInit
+                0x9d004d68                getcs_FRAM
+                0x9d004ed4                putcs_FRAM
+                0x9d0050c4                getss_FRAM
+                0x9d00528c                putss_FRAM
+                0x9d0054d0                getc_FRAM
+                0x9d00560c                putc_FRAM
+                0x9d0057e0                put_cmd_FRAM
+                0x9d005910                we_FRAM
+                0x9d0059c4                wd_FRAM
+                0x9d005a78                erase_FRAM
+                0x9d005c50                pgetc_FRAM
+                0x9d005d94                vSPI5InterruptHandler
+                0x9d005e28                load_config
+ .text          0x9d005ed8     0x1234 build/default/production/init.o
+                0x9d005ed8                port_init
+                0x9d0060c4                tmr_1_init
+                0x9d006180                tmr_2_init
+                0x9d00623c                tmr_5_init
+                0x9d0062f8                tmr_9_init
+                0x9d0063b8                tmr_6_init
+                0x9d006474                tmr_7_init
+                0x9d006530                OC3_init
+                0x9d0065d8                uart5_init
+                0x9d006750                uart4_init
+                0x9d0068c8                uart3_init
+                0x9d006a40                uart2_init
+                0x9d006bb8                uart1_init
+                0x9d006d30                spi5_init
+                0x9d006efc                InitializeSystem
 
-.text           0x9d007754     0x18b4
- .text          0x9d007754     0x1230 build/default/production/IC_measure.o
-                0x9d007754                measuring
-                0x9d007e88                rpm_compare
-                0x9d007f6c                tmr_8_init
-                0x9d008008                sync_control
-                0x9d00814c                measure_sync
-                0x9d00834c                measure_rpm
-                0x9d00842c                IC1Interrupt_
-                0x9d008534                IC3Interrupt_
-                0x9d00863c                IC6Interrupt_
-                0x9d0086fc                IC4Interrupt_
-                0x9d0087bc                stop_inactive
- .text          0x9d008984      0x684 build/default/production/OC_pid.o
-                0x9d008984                pid_control
+.text           0x9d00710c      0x684
+ .text          0x9d00710c      0x684 build/default/production/OC_pid.o
+                0x9d00710c                pid_control
 
-.rodata         0x9d009008      0x600
- .rodata        0x9d009008      0x600 build/default/production/modbus.o
-                0x9d009008                auchCRCHi
-                0x9d009108                auchCRCLo
+.rodata         0x9d007790      0x600
+ .rodata        0x9d007790      0x600 build/default/production/modbus.o
+                0x9d007790                auchCRCHi
+                0x9d007890                auchCRCLo
 
-.dinit          0x9d009608      0x4b0
- .dinit         0x9d009608      0x4b0 data_init
+.dinit          0x9d007d90      0x4a0
+ .dinit         0x9d007d90      0x4a0 data_init
 
-.text           0x9d009ab8      0x2fc
- .text          0x9d009ab8      0x194 build/default/production/main.o
-                0x9d009ab8                main
- .text          0x9d009c4c      0x168 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(memcpy.o)
-                0x9d009c4c                memcpy
+.text           0x9d008230      0x2a4
+ .text          0x9d008230      0x168 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(memcpy.o)
+                0x9d008230                memcpy
+ .text          0x9d008398      0x13c build/default/production/main.o
+                0x9d008398                main
 
 .text.general_exception
                 0x9d000010       0xdc
@@ -2570,22 +2508,22 @@ LOAD data_init
                 0x9d000010                _general_exception_context
 
 .text._cache_err_exception_context
-                0x9d009db4       0xd8
+                0x9d0084d4       0xd8
  .text._cache_err_exception_context
-                0x9d009db4       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(cache-err-exception.o)
-                0x9d009db4                _cache_err_exception_context
+                0x9d0084d4       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(cache-err-exception.o)
+                0x9d0084d4                _cache_err_exception_context
 
 .text.simple_tlb_refill_context
-                0x9d009e8c       0xd8
+                0x9d0085ac       0xd8
  .text.simple_tlb_refill_context
-                0x9d009e8c       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(simple-tlb-refill-exception.o)
-                0x9d009e8c                _simple_tlb_refill_exception_context
+                0x9d0085ac       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(simple-tlb-refill-exception.o)
+                0x9d0085ac                _simple_tlb_refill_exception_context
 
 .tlb.__pic32_tlb_init_ebi_sqi
-                0x9d009f64       0xbc
+                0x9d008684       0xbc
  .tlb.__pic32_tlb_init_ebi_sqi
-                0x9d009f64       0xbc c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(pic32_init_tlb_ebi_sqi.o)
-                0x9d009f64                __pic32_tlb_init_ebi_sqi
+                0x9d008684       0xbc c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(pic32_init_tlb_ebi_sqi.o)
+                0x9d008684                __pic32_tlb_init_ebi_sqi
 
 .text.main_entry
                 0x9d000110       0x54
@@ -2600,26 +2538,26 @@ LOAD data_init
                 0x9d000190                _bootstrap_exception_handler
 
 .text._general_exception_handler
-                0x9d00a020       0x48
+                0x9d008740       0x48
  .text._general_exception_handler
-                0x9d00a020       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
-                0x9d00a020                _general_exception_handler
+                0x9d008740       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+                0x9d008740                _general_exception_handler
 
 .text._cache_err_exception_handler
-                0x9d00a068       0x48
+                0x9d008788       0x48
  .text._cache_err_exception_handler
-                0x9d00a068       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
-                0x9d00a068                _cache_err_exception_handler
+                0x9d008788       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+                0x9d008788                _cache_err_exception_handler
 
 .text._simple_tlb_refill_exception_handler
-                0x9d00a0b0       0x48
+                0x9d0087d0       0x48
  .text._simple_tlb_refill_exception_handler
-                0x9d00a0b0       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
-                0x9d00a0b0                _simple_tlb_refill_exception_handler
+                0x9d0087d0       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+                0x9d0087d0                _simple_tlb_refill_exception_handler
 
-.text           0x9d00a0f8       0x44
- .text          0x9d00a0f8       0x44 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\pic32_software_reset.o
-                0x9d00a0f8                __pic32_software_reset
+.text           0x9d008818       0x44
+ .text          0x9d008818       0x44 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\pic32_software_reset.o
+                0x9d008818                __pic32_software_reset
 
 .rodata         0x9d0001d8       0x24
  .rodata        0x9d0001d8       0x24 build/default/production/OC_pid.o
@@ -2628,27 +2566,21 @@ LOAD data_init
  .rodata        0x9d000164       0x18 build/default/production/main.o
                 0x9d000164                cyl_order
 
-.rodata         0x9d00a13c       0x18
- .rodata        0x9d00a13c       0x18 build/default/production/IC_measure.o
-
-.text           0x9d00a154       0x18
- .text          0x9d00a154       0x18 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-nmi-handler.o)
-                0x9d00a154                _nmi_handler
-
-.rodata         0x9d0000ec        0x8
- .rodata        0x9d0000ec        0x8 build/default/production/interrupt_proc.o
+.text           0x9d00885c       0x18
+ .text          0x9d00885c       0x18 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-nmi-handler.o)
+                0x9d00885c                _nmi_handler
 
 .text._on_reset
-                0x9d0000f4        0x8
+                0x9d0000ec        0x8
  .text._on_reset
-                0x9d0000f4        0x8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
-                0x9d0000f4                _on_reset
+                0x9d0000ec        0x8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+                0x9d0000ec                _on_reset
 
 .text._on_bootstrap
-                0x9d00a16c        0x8
+                0x9d0000f4        0x8
  .text._on_bootstrap
-                0x9d00a16c        0x8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
-                0x9d00a16c                _on_bootstrap
+                0x9d0000f4        0x8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+                0x9d0000f4                _on_bootstrap
 
 .text           0x00000000        0x0
  .text          0x00000000        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)

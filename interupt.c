@@ -12,19 +12,6 @@ extern void T9Interrupt_(struct tag_usart * usart);
 extern void mbs(struct tag_usart * usart, unsigned char mbs_addres, union tag_direct * dir);
 extern void DMA_uni(struct tag_usart * usart, unsigned short cnt, unsigned short on, unsigned short force);
 extern void test_uart_dma(void);
-extern void counters(void);
-extern void motor_control(void);
-extern void pid_control(float Kp, float Kd, float Ki);
-extern void ADC_data_store(void);
-extern void ADC_interrupt_F(void);
-extern void ADC_dma_store(void);
-extern void IC1Interrupt_(void);
-extern void IC6Interrupt_(void);
-extern void Timer6Interrupt(void);
-extern void Timer7Interrupt(void);
-//extern void ignit_stop(void);
-extern void IC3Int3527(void);
-extern void IC4Int3527(void);
 extern void IC7Int(void);
 extern void IC8Int(void);
 extern void IC7_measure(void);
@@ -39,6 +26,7 @@ unsigned short send_dma;
 void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
     T1CONbits.TON = 0;
     T1Interrupt_(&usart1);
+    PORTEbits.RE3 = LATEbits.LATE3 ^ 1;
     IFS0bits.T1IF = 0;
 }
 
@@ -48,11 +36,8 @@ void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void) {
-//    ignit_stop();
-    ADCCON3bits.GSWTRG = 1;
+    T4CONbits.TON = 0;
     IFS0bits.T4IF = 0;
-    counters();
-    start_pid_reg = 1; //pid_control(MB_conf.CV_KP, MB_conf.CV_KD, MB_conf.CV_KI);
 }
 
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void) {
@@ -68,14 +53,15 @@ void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void) {
-//    Timer7Interrupt();
+    //    Timer7Interrupt();
     IFS1bits.T7IF = 0;
 }
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
     //    T9CONbits.TON = 0;
-    //    T9Interrupt_(&usart4);
-    //    IFS1bits.T9IF = 0;
+    PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
+    //    help_strobe ^= 1;
+    IFS1bits.T9IF = 0;
 }
 
 
@@ -134,6 +120,7 @@ void __ISR_AT_VECTOR(_UART4_TX_VECTOR, IPL4SRS) U4TXInterrupt(void) {
     }
     IFS5bits.U4TXIF = 0;
 }
+
 void __ISR_AT_VECTOR(_UART1_RX_VECTOR, IPL4SRS) U1RXInterrupt(void) {
     IFS3bits.U1RXIF = 0;
     usart1.mb_status.modb_receiving = 1;
@@ -145,8 +132,10 @@ void __ISR_AT_VECTOR(_UART1_RX_VECTOR, IPL4SRS) U1RXInterrupt(void) {
         usart1.mb_status.modb_receiving = 0;
     }
     tmr_1_init(frame_delay_1, 1, 1);
+
+
     IFS3bits.U1RXIF = 0;
-    
+
 }
 
 void __ISR_AT_VECTOR(_UART1_TX_VECTOR, IPL1SRS) U1TXInterrupt(void) {
@@ -162,36 +151,6 @@ void __ISR_AT_VECTOR(_UART1_TX_VECTOR, IPL1SRS) U1TXInterrupt(void) {
     IFS3bits.U1TXIF = 0;
 }
 
-
-
-//void __ISR_AT_VECTOR (_INPUT_CAPTURE_1_VECTOR, IPL4SRS) IC1Interrupt(void)   {IC1Interrupt_(); IFS0bits.IC1IF = 0; }
-
-//void __ISR_AT_VECTOR (_INPUT_CAPTURE_6_VECTOR, IPL4SRS) IC6Interrupt(void)   {IC6Interrupt_();  IFS0bits.IC6IF = 0; }
-
-void __ISR_AT_VECTOR(_INPUT_CAPTURE_3_VECTOR, IPL4SRS) IC3Interrupt(void) {
-    IC3Interrupt_();
-    measure_sync();
-    IFS0bits.IC3IF = 0;
-} //IC3Int3527 ();
-
-void __ISR_AT_VECTOR(_INPUT_CAPTURE_4_VECTOR, IPL4SRS) IC4Interrupt(void) {
-    IC4Interrupt_();
-    measure_rpm();
-    IFS0bits.IC4IF = 0;
-} //IC4Int3527 ();
-
-void __ISR_AT_VECTOR(_INPUT_CAPTURE_7_VECTOR, IPL4SRS) IC7Interrupt(void) {
-//    IC7_measure();
-//    IC7Int();
-    IFS1bits.IC7IF = 0;
-}
-
-void __ISR_AT_VECTOR(_INPUT_CAPTURE_8_VECTOR, IPL4SRS) IC8Interrupt(void) {
-//    IC8_measure();
-//    IC8Int();
-    IFS1bits.IC8IF = 0;
-}
-
 void __ISR_AT_VECTOR(_DMA0_VECTOR, IPL4SRS) __DMA0Interrupt(void) {
     int dmaFlags = DCH0INT & 0xff; // read the interrupt flags
 
@@ -201,25 +160,3 @@ void __ISR_AT_VECTOR(_DMA0_VECTOR, IPL4SRS) __DMA0Interrupt(void) {
     IFS4bits.DMA0IF = 0; // Be sure to clear the DMA0 interrupt flags
     // before exiting the service routine.
 }
-/*     */
-
-/*
-  
-
- 
-void __ISR_AT_VECTOR (_TIMER_2_VECTOR, ipl2AUTO) T2Interrupt(void)   {		IFS0bits.T2IF = 0; }  
- 
-void __ISR(_ADC_DF1_VECTOR , IPL1AUTO) ADC_DF1_ISR(void) { resss = ADCFLTR1bits.FLTRDATA; IFS1bits.ADCDF1IF = 0; } //clear flag
-void __ISR(_ADC_DF2_VECTOR , IPL1AUTO) ADC_DF2_ISR(void) { fpres = ADCFLTR2bits.FLTRDATA; IFS1bits.ADCDF2IF = 0; } //clear flag
-void __ISR(_ADC_DF3_VECTOR , IPL1AUTO) ADC_DF3_ISR(void) { fcurr = ADCFLTR3bits.FLTRDATA; IFS1bits.ADCDF3IF = 0; } //clear flag
-void __ISR(_ADC_DF4_VECTOR , IPL1AUTO) ADC_DF4_ISR(void) { fpos = ADCFLTR4bits.FLTRDATA; IFS1bits.ADCDF4IF = 0; } //clear flag
-void __ISR(_ADC_DATA1_VECTOR, IPL1AUTO) ADC_DATA1_ISR(void) { IFS1bits.ADCD1IF = 0; }//clear flag
-void __ISR(_ADC_DATA2_VECTOR, IPL1AUTO) ADC_DATA2_ISR(void) { IFS1bits.ADCD2IF = 0; }//clear flag
-void __ISR(_ADC_DATA3_VECTOR, IPL1AUTO) ADC_DATA3_ISR(void) { IFS1bits.ADCD1IF = 0; }//clear flag
-void __ISR(_ADC_DATA4_VECTOR, IPL1AUTO) ADC_DATA4_ISR(void) { IFS1bits.ADCD1IF = 0; } //clear flag
-
- */
-
-/* *****************************************************************************
- End of File
- */

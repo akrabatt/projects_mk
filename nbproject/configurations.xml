@@ -24,7 +24,6 @@
       <itemPath>init.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>modbus.c</itemPath>
-      <itemPath>IC_measure.c</itemPath>
       <itemPath>OC_pid.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"

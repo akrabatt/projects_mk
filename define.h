@@ -154,17 +154,17 @@ extern "C" {
 #define  LED_STOP_ON	PORTE = LATE | 0x0010		// �������� ��� ����� 586-��
 #define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		// �������� ��� ����� 586-��    
 
-#define  LED_SYNC	PORTEbits.RE3			// �������� ��� ����� 586-�� pin 99
-#define  LED_SYNC_ON	PORTE = LATE | 0x0008		// �������� ��� ����� 586-��
-#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		// �������� ��� ����� 586-��    
+//#define  LED_SYNC	PORTEbits.RE3			// �������� ��� ����� 586-�� pin 99
+//#define  LED_SYNC_ON	PORTE = LATE | 0x0008		// �������� ��� ����� 586-��
+//#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		// �������� ��� ����� 586-��    
 
 #define  LED_WIGN	PORTEbits.RE2			// �������� ��� ����� 586-�� pin 98
 #define  LED_WIGN_ON	PORTG = LATG | 0x0004		// �������� ��� ����� 586-��   
 #define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		// �������� ��� ����� 586-��   
 
-#define  LED_8		PORTEbits.RE0			// �������� ��� ����� 586-�� pin 91
-#define  LED_8_ON	PORTE = LATE | 0x0001		// �������� ��� ����� 586-��
-#define  LED_8_OFF	PORTE = LATE & 0xFFFE		// �������� ��� ����� 586-��        
+//#define  LED_8		PORTEbits.RE0			// �������� ��� ����� 586-�� pin 91
+//#define  LED_8_ON	PORTE = LATE | 0x0001		// �������� ��� ����� 586-��
+//#define  LED_8_OFF	PORTE = LATE & 0xFFFE		// �������� ��� ����� 586-��        
  
 #define  LED_7		PORTEbits.RE1			// �������� ��� ����� 586-�� pin 94
 #define  LED_7_ON	PORTE = LATE | 0x0002		// �������� ��� ����� 586-��   

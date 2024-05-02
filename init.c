@@ -230,7 +230,7 @@ void tmr_9_init(unsigned short T9_delay, unsigned short TMR9_IE, unsigned short 
     PR9 = T9_delay; //
     IEC1bits.T9IE = TMR9_IE;
     IPC10bits.T9IP = 0b10; // priority = 2
-    T9CONbits.TCKPS = 0b00; //T1 prescaler 1:8
+    T9CONbits.TCKPS = 0b11; //T1 prescaler 1:8
     T9CONbits.TON = TMR9_ON;
 }
 
@@ -441,7 +441,7 @@ void InitializeSystem(void) {
     tmr_5_init(100, 0, 0);
     tmr_6_init(100, 0, 0);
     tmr_7_init(100, 0, 0);
-    tmr_9_init(100, 0, 0);
+    tmr_9_init(40000, 1, 1);
     OC3_init();
     uart5_init();
     uart4_init();
