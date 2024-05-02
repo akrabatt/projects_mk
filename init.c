@@ -1,11 +1,9 @@
-
 #include <xc.h>
 #include <sys/attribs.h>    /* contains __ISR() Macros */
 #include "define.h"
 #include "extern.h"
 
 
-extern void ADC_interrupt_F(void);
 extern void DMA1_init(void);
 extern void DMA4_init(void);
 extern void conf_read(void);
@@ -13,8 +11,6 @@ extern void conf_read(void);
 extern void DMA2_init(void);
 extern void DMA3_init(void);
 extern void DMA5_init(void);
-//extern void tmr_6_init(unsigned short T6_delay, unsigned short TMR6_IE, unsigned short TMR6_ON, unsigned short chan_num);
-//extern void tmr_7_init(unsigned short T7_delay, unsigned short TMR7_IE, unsigned short TMR7_ON, unsigned short chan_num);
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) {
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char*) p + 0x40000000L);
@@ -71,15 +67,6 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 
 // DEVCP0
 #pragma config CP = OFF                 // Code Protect (Protection Disabled)
-
-// SEQ3
-/*
-// LED_LD1 (RG6)
-#define LED_LD1       	LATBbits.LATB6
-#define TRIS_LED_LD1  	TRISBbits.TRISB6
-#define LED_LD1_SET()   LATBSET = _LATB_LATB6_MASK;
-#define LED_LD1_CLR()   LATBCLR = _LATB_LATB6_MASK;
-#define LED_LD1_INV()   LATBINV = _LATB_LATB6_MASK;
 
 /*** Ports System Service Configuration ***/
 
@@ -155,13 +142,11 @@ void port_init(void) {
     ANSELF = SYS_PORT_F_ANSEL;
     TRISG = SYS_PORT_G_TRIS;
     ANSELG = SYS_PORT_G_ANSEL;
-//    TRISDbits.TRISD2 = 1;   //77 ножка в режим входа
+    //    TRISDbits.TRISD2 = 1;   //77 ножка в режим входа
     TRISBbits.TRISB15 = 0; //44 ножка энейбл на выход 3uart
     TRISDbits.TRISD13 = 0; //80 ножка энейбл на выход 2uart
     TRISDbits.TRISD1 = 0; //76 ножка энейбл на выход 1uart
 
-
-    //    TRISD |= 
 
     /*Rx*/
     U1RXRbits.U1RXR = 0b0000; //U1RX --> RPD2
@@ -194,17 +179,6 @@ void tmr_1_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TM
 }
 
 void tmr_2_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON) {
-    //    T2CONbits.TON = 0;
-    //    T2CONbits.TCKPS = 0; // Pre-Scale = 1:8 (T2Clk: 31250Hz)
-    //    T2CONbits.T32 = 1;
-    //    TMR2 = 0xFFFF;
-    //    TMR3 = 0xFFFF;
-    //    PR2 = 0xFFFF;
-    //    PR3 = 0xFFFF;
-    //    IPC2bits.T2IP = 1; // Set the interrupt priority to 4
-    //    IFS0bits.T2IF = 0; // Reset the Timer 2 interrupt flag
-    //    IEC0bits.T2IE = 0; // Enable interrupts from Timer 2
-    //    T2CONbits.TON = 1;
     T2CONbits.TON = 0;
     TMR2 = 0x0000;
     PR2 = T_delay; //
@@ -268,9 +242,6 @@ void OC3_init(void) { //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
     //T4CONbits.ON = 1;      // Enable Timer4
     //OC3CONbits.ON = 1;     // Enable OC3//
 }
-
-/* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
-
 
 void uart5_init(void) {
     U5MODEbits.USIDL = 0; /* Continue in Idle mode */
@@ -441,7 +412,7 @@ void InitializeSystem(void) {
     tmr_5_init(100, 0, 0);
     tmr_6_init(100, 0, 0);
     tmr_7_init(100, 0, 0);
-    tmr_9_init(40000, 1, 1);
+    tmr_9_init(65000, 1, 1);
     OC3_init();
     uart5_init();
     uart4_init();

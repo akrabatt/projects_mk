@@ -12,13 +12,13 @@ extern void T9Interrupt_(struct tag_usart * usart);
 extern void mbs(struct tag_usart * usart, unsigned char mbs_addres, union tag_direct * dir);
 extern void DMA_uni(struct tag_usart * usart, unsigned short cnt, unsigned short on, unsigned short force);
 extern void test_uart_dma(void);
-extern void IC7Int(void);
 extern void IC8Int(void);
 extern void IC7_measure(void);
 extern void IC8_measure(void);
 extern void IC3_measure(void);
 extern void IC4_measure(void);
 unsigned short send_dma;
+extern int blink_counter;
 
 
 //TIMERS
@@ -59,8 +59,12 @@ void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void) {
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
     //    T9CONbits.TON = 0;
-    PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
-    //    help_strobe ^= 1;
+
+    if (++blink_counter >= 10) {
+        blink_counter = 0;
+        PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
+    }
+
     IFS1bits.T9IF = 0;
 }
 

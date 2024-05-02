@@ -1,7 +1,4 @@
-
 #include "define.h"
-
-
 
 /* Provide C++ Compatibility */
 #ifdef __cplusplus
@@ -13,8 +10,9 @@ extern "C" {
     unsigned char __attribute__((coherent)) buf_tx3 [300];
     unsigned char __attribute__((coherent)) buf_tx2 [300];
     unsigned char __attribute__((coherent)) buf_tx1 [300];
-
-
+    
+    int blink_counter = 0;
+    
     unsigned int U4_speed;
     unsigned int U5_speed;
     unsigned int U3_speed;

@@ -6,12 +6,8 @@
 #include "define.h"
 #include "extern.h"
 
-extern void stop_inactive(void);
 extern void uart1_init(void);
 extern void uart4_init(void);
-extern void motor_regulator(float motor_Kp, float motor_Ki, float motor_Kd);
-extern void motor_control(void);
-extern void main_control(void);
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void *p) {
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char *) p + 0x40000000L);
@@ -25,6 +21,7 @@ void T1Interrupt_(struct tag_usart *usart) {
         usart->mb_status.modb_receiving = 0;
     }
 }
+
 void T2Interrupt_(struct tag_usart *usart) {
     T2CONbits.TON = 0;
     IFS0bits.T2IF = 0;
@@ -468,30 +465,4 @@ void discret_ctrl(void) {
         DI3_cnt = 0;
     }
 }
-
-//void counters(void) {
-//    if (_divider >= 25) {
-//        //        mpid_control(MB_conf.KP_mpid, MB_conf.KD_mpid, MB_conf.KI_mpid);
-//        _divider = 0;
-//        _100msec++;
-//        _1000msec++;
-//        discret_ctrl();
-//        start_ctrl = 1;
-//        //        main_control ();                                                        // ���������� ����������
-//        if (_100msec >= 10) {
-//            _100msec = 0;
-//            help_strobe ^= 1;
-//            stop_inactive();
-//
-//            if ((MB_conf.max_RPM <= 350) || (MB_conf.max_RPM >= 390)) {
-//                load_config();
-//            } // help_load =0;
-//        } //
-//        if (_1000msec >= 100) {
-//            _1000msec = 0;
-//            conf_check();
-//        }
-//    }
-//    _divider++;
-//}
 
