@@ -270,7 +270,7 @@ void uart4_init(void) {
     U4MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
     U4MODEbits.STSEL = 0; /* One Stop bit */
     U4MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U4BRG = PBCLK2_ / (U4_speed * 16) - 1; //1Mbit
+    U4BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
     IFS5bits.U4TXIF = 0; /* Clear interrupt flag */
     IPC43bits.U4TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
     IPC43bits.U4TXIS = 0; // sub priority, 0 is Low priority
@@ -333,7 +333,7 @@ void uart1_init(void) {
     U1MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
     U1MODEbits.STSEL = 0; /* One Stop bit */
     U1MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U1BRG = PBCLK2_ / (U4_speed * 16) - 1; //1Mbit
+    U1BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
     IFS3bits.U1TXIF = 0; /* Clear interrupt flag */
     IPC28bits.U1TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
     IPC28bits.U1TXIS = 0; // sub priority, 0 is Low priority
