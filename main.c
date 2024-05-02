@@ -22,6 +22,9 @@ int main(void) {
     help_reset = 1;
     ENAB_RX5; //направление прередачи порта А на прием    == PORTFbits.RF2 = 0	
     ENAB_RX4; // тоже самое но для другого интерфейса
+    ENAB_RX3; // тоже самое но для другого интерфейса
+    ENAB_RX2; // тоже самое но для другого интерфейса
+    ENAB_RX1; // тоже самое но для другого интерфейса
 
     /* режим работы usart  по ДМА */
     usart5.mb_status.tx_mode = DMA_type;
@@ -39,6 +42,7 @@ int main(void) {
         mbs(&usart5, 1); // вызов modbus slave usart5 по 5му порту с 1-м адрессом 
         stop_uart_tx_dma();
         mbs(&usart4, 1); //  4
+        mbs(&usart1, 1); //  4
         //    stop_uart_tx();
         PORTGbits.RG7 = help_strobe & help_reset; //мигалка и лампочка вотчдог
 

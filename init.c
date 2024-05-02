@@ -107,8 +107,8 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #define SYS_PORT_C_CNPD         0x0
 #define SYS_PORT_C_CNEN         0x0
 
-#define SYS_PORT_D_ANSEL        0x4000
-#define SYS_PORT_D_TRIS         0x4000
+#define SYS_PORT_D_ANSEL        0x0
+#define SYS_PORT_D_TRIS         0x4
 #define SYS_PORT_D_LAT          0x0
 #define SYS_PORT_D_ODC          0x0
 #define SYS_PORT_D_CNPU         0x0
@@ -147,7 +147,7 @@ void port_init(void) {
     TRISC = SYS_PORT_C_TRIS;
     ANSELC = SYS_PORT_C_ANSEL;
     TRISD = SYS_PORT_D_TRIS;
-    ANSELD = SYS_PORT_D_ANSEL;
+    ANSELD = 0;
     LATD = SYS_PORT_D_LAT;
     TRISE = SYS_PORT_E_TRIS;
     ANSELE = SYS_PORT_E_ANSEL;
@@ -155,9 +155,10 @@ void port_init(void) {
     ANSELF = SYS_PORT_F_ANSEL;
     TRISG = SYS_PORT_G_TRIS;
     ANSELG = SYS_PORT_G_ANSEL;
-    TRISBbits.TRISB15 |= 0; //44 ножка энейбл на выход 3uart
-    TRISDbits.TRISD13 |= 0; //80 ножка энейбл на выход 2uart
-    TRISDbits.TRISD1 |= 0; //76 ножка энейбл на выход 1uart
+//    TRISDbits.TRISD2 = 1;   //77 ножка в режим входа
+    TRISBbits.TRISB15 = 0; //44 ножка энейбл на выход 3uart
+    TRISDbits.TRISD13 = 0; //80 ножка энейбл на выход 2uart
+    TRISDbits.TRISD1 = 0; //76 ножка энейбл на выход 1uart
 
 
     //    TRISD |= 
@@ -361,7 +362,7 @@ void uart1_init(void) {
     U1MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
     U1MODEbits.STSEL = 0; /* One Stop bit */
     U1MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U1BRG = PBCLK2_ / (U1_speed * 16) - 1; //1Mbit
+    U1BRG = PBCLK2_ / (U4_speed * 16) - 1; //1Mbit
     IFS3bits.U1TXIF = 0; /* Clear interrupt flag */
     IPC28bits.U1TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
     IPC28bits.U1TXIS = 0; // sub priority, 0 is Low priority
@@ -446,9 +447,10 @@ void InitializeSystem(void) {
     uart4_init();
     //    uart3_init();
     //    uart2_init();
-    //    uart1_init();
+    uart1_init();
     DMA5_init();
     DMA4_init();
+    DMA1_init();
 
     /* Assign PIC32MZ shadow register sets to specific CPU IPLs */
     PRISS = 0x76543210;
@@ -463,6 +465,7 @@ void InitializeSystem(void) {
     /* Enable the peripheral */
     /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
     T2CONbits.TON = 1;
+    T1CONbits.TON = 1;
     T4CONbits.ON = 1; // Enable Timer 4
     T5CONbits.ON = 1; // Enable Timer 5
     OC3CONbits.ON = 1; // Enable OC3//
