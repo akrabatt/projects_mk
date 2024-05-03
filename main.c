@@ -33,10 +33,10 @@ int main(void) {
 
         mbs(&usart5, 1); // вызов modbus slave usart5 по 5му порту с 1-м адрессом 
         stop_uart_tx_dma();
-        mbs(&usart4, 1); //  4
-        mbs(&usart1, 1); //  4
-        mbs(&usart2, 1); //  4
-        mbs(&usart3, 1); //  4
+        mbs(&usart4, 1); 
+        mbs(&usart3, 1); 
+        mbs(&usart2, 1); 
+        mbs(&usart1, 1); 
         //    stop_uart_tx();
 
         if (start_ctrl == 1) {

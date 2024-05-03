@@ -87,7 +87,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #define SYS_PORT_B_CNEN         0x0
 
 #define SYS_PORT_C_ANSEL        0x0
-#define SYS_PORT_C_TRIS         0xd01e
+#define SYS_PORT_C_TRIS         0xb01e
 #define SYS_PORT_C_LAT          0x0
 #define SYS_PORT_C_ODC          0x0
 #define SYS_PORT_C_CNPU         0x0
@@ -111,7 +111,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #define SYS_PORT_E_CNEN         0x0
 
 #define SYS_PORT_F_ANSEL        0x0
-#define SYS_PORT_F_TRIS         0x313b
+#define SYS_PORT_F_TRIS         0x113b
 #define SYS_PORT_F_LAT          0x0
 #define SYS_PORT_F_ODC          0x0
 #define SYS_PORT_F_CNPU         0x0
@@ -416,11 +416,12 @@ void InitializeSystem(void) {
     OC3_init();
     uart5_init();
     uart4_init();
-    //    uart3_init();
+    uart3_init();
     uart2_init();
     uart1_init();
     DMA5_init();
     DMA4_init();
+    DMA3_init();
     DMA2_init();
     DMA1_init();
 
