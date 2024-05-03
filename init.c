@@ -95,7 +95,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #define SYS_PORT_C_CNEN         0x0
 
 #define SYS_PORT_D_ANSEL        0x0
-#define SYS_PORT_D_TRIS         0x4
+#define SYS_PORT_D_TRIS         0x14
 #define SYS_PORT_D_LAT          0x0
 #define SYS_PORT_D_ODC          0x0
 #define SYS_PORT_D_CNPU         0x0
@@ -144,7 +144,7 @@ void port_init(void) {
     ANSELG = SYS_PORT_G_ANSEL;
     //    TRISDbits.TRISD2 = 1;   //77 ножка в режим входа
     TRISBbits.TRISB15 = 0; //44 ножка энейбл на выход 3uart
-    TRISDbits.TRISD13 = 0; //80 ножка энейбл на выход 2uart
+//    TRISDbits.TRISD13 = 0; //80 ножка энейбл на выход 2uart
     TRISDbits.TRISD1 = 0; //76 ножка энейбл на выход 1uart
 
 
@@ -291,7 +291,7 @@ void uart3_init(void) {
     U3MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
     U3MODEbits.STSEL = 0; /* One Stop bit */
     U3MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U3BRG = PBCLK2_ / (U3_speed * 16) - 1; //1Mbit
+    U3BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
     IFS4bits.U3TXIF = 0; /* Clear interrupt flag */
     IPC39bits.U3TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
     IPC39bits.U3TXIS = 0; // sub priority, 0 is Low priority
@@ -312,7 +312,7 @@ void uart2_init(void) {
     U2MODEbits.PDSEL = 0b00; /* 8-bit data, no parity */
     U2MODEbits.STSEL = 0; /* One Stop bit */
     U2MODEbits.BRGH = 0; /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U2BRG = PBCLK2_ / (U2_speed * 16) - 1; //1Mbit
+    U2BRG = PBCLK2_ / (U5_speed * 16) - 1; //1Mbit
     IFS4bits.U2TXIF = 0; /* Clear interrupt flag */
     IPC36bits.U2TXIP = 2; // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
     IPC36bits.U2TXIS = 0; // sub priority, 0 is Low priority
@@ -417,10 +417,11 @@ void InitializeSystem(void) {
     uart5_init();
     uart4_init();
     //    uart3_init();
-    //    uart2_init();
+    uart2_init();
     uart1_init();
     DMA5_init();
     DMA4_init();
+    DMA2_init();
     DMA1_init();
 
     /* Assign PIC32MZ shadow register sets to specific CPU IPLs */
@@ -439,6 +440,7 @@ void InitializeSystem(void) {
     T1CONbits.TON = 1;
     T4CONbits.ON = 1; // Enable Timer 4
     T5CONbits.ON = 1; // Enable Timer 5
+    T2CONbits.ON = 1;
     OC3CONbits.ON = 1; // Enable OC3//
     //    ADCCON3bits.GSWTRG = 1;
 }

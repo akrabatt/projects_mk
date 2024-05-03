@@ -35,6 +35,8 @@ int main(void) {
         stop_uart_tx_dma();
         mbs(&usart4, 1); //  4
         mbs(&usart1, 1); //  4
+        mbs(&usart2, 1); //  4
+        mbs(&usart3, 1); //  4
         //    stop_uart_tx();
 
         if (start_ctrl == 1) {

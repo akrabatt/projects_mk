@@ -8,6 +8,7 @@
 
 extern void uart1_init(void);
 extern void uart4_init(void);
+extern int blink_counter;
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void *p) {
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char *) p + 0x40000000L);
@@ -463,6 +464,14 @@ void discret_ctrl(void) {
         }
     } else {
         DI3_cnt = 0;
+    }
+}
+
+void fun_blink_counter(void)
+{
+    if (++blink_counter >= 10) {
+        blink_counter = 0;
+        PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
     }
 }
 

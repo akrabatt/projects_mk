@@ -18,7 +18,7 @@ extern void IC8_measure(void);
 extern void IC3_measure(void);
 extern void IC4_measure(void);
 unsigned short send_dma;
-extern int blink_counter;
+extern void fun_blink_counter(void);
 
 
 //TIMERS
@@ -32,6 +32,8 @@ void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
 
 void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void) {
     T2CONbits.TON = 0;
+    T2Interrupt_(&usart2);
+    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
     IFS0bits.T2IF = 0;
 }
 
@@ -58,13 +60,8 @@ void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
-    //    T9CONbits.TON = 0;
-
-    if (++blink_counter >= 10) {
-        blink_counter = 0;
-        PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
-    }
-
+    
+    fun_blink_counter();
     IFS1bits.T9IF = 0;
 }
 
@@ -153,6 +150,36 @@ void __ISR_AT_VECTOR(_UART1_TX_VECTOR, IPL1SRS) U1TXInterrupt(void) {
         }
     }
     IFS3bits.U1TXIF = 0;
+}
+void __ISR_AT_VECTOR(_UART2_RX_VECTOR, IPL4SRS) U2RXInterrupt(void) {
+    IFS4bits.U2RXIF = 0;
+    usart2.mb_status.modb_receiving = 1;
+    while (U2STAbits.URXDA) {
+        usart2.in_buffer[usart2.in_buffer_count++] = U2RXREG;
+    }
+    if (usart2.in_buffer_count >= IN_SIZE1) {
+        usart2.mb_status.modb_received = 1;
+        usart2.mb_status.modb_receiving = 0;
+    }
+    tmr_2_init(frame_delay_1, 1, 1);
+
+
+    IFS4bits.U2RXIF = 0;
+//    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+
+}
+
+void __ISR_AT_VECTOR(_UART2_TX_VECTOR, IPL1SRS) U2TXInterrupt(void) {
+    IFS4bits.U2TXIF = 0;
+    while ((!U2STAbits.UTXBF)&&(!usart2.mb_status.last_byte)) //copy if buff  isn't full and byte is not last
+    {
+        U2TXREG = usart2.out_buffer[usart2.out_buffer_count++];
+        if (usart2.out_buffer_count >= (usart2.number_send)) {
+            usart2.mb_status.last_byte = 1;
+            IEC4bits.U2TXIE = 0;
+        }
+    }
+    IFS4bits.U2TXIF = 0;
 }
 
 void __ISR_AT_VECTOR(_DMA0_VECTOR, IPL4SRS) __DMA0Interrupt(void) {
