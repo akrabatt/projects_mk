@@ -10,20 +10,22 @@ extern "C" {
     unsigned char __attribute__((coherent)) buf_tx3 [300];
     unsigned char __attribute__((coherent)) buf_tx2 [300];
     unsigned char __attribute__((coherent)) buf_tx1 [300];
-    
+
     int blink_counter = 0;
-    
+
     unsigned int U4_speed;
     unsigned int U5_speed;
     unsigned int U3_speed;
     unsigned int U2_speed;
     unsigned int U1_speed;
+    
+    unsigned int frame_delay;
 
     unsigned int start_ctrl;
     unsigned int start_pid_reg;
 
 
-//    unsigned short help_strobe;
+    //    unsigned short help_strobe;
     unsigned short help_reset;
     unsigned short help_load;
 
@@ -156,7 +158,8 @@ extern "C" {
             unsigned coll_2 : 1; // 15
             unsigned coll_3 : 1; // 16
             unsigned tx_start : 1; // 17
-            unsigned : 15; // 18-32
+            unsigned master_start : 1; // 18
+            unsigned : 14; // 18-32
         } mb_status;
     } usart1, usart2, usart3, usart4, usart5;
 

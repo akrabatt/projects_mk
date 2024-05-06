@@ -11,7 +11,7 @@ extern "C" {
 #define EXAMPLE_CONSTANT 0
 
 #define num_zone_mops   8
-    
+
 #define SYS_CLK_FREQUENCY  (199065600ull)       // Fsys = 200 MHz
 #define CPU_CLK_FREQUENCY  SYS_CLK_FREQUENCY/2  // Fcpu = 200 MHz
 #define PB3_CLK_FREQUENCY SYS_CLK_FREQUENCY/27   // Fpb3 = 2 MHz
@@ -265,3 +265,18 @@ extern "C" {
 #define CV_SENSOR_BRAKE         13
 #define AO_5CYL_ERROR_EVEN	14
 #define AO_5CYL_ERROR_ODD	15
+
+
+    // for UART1_init
+#define URXISEL1	U1STAbits.URXISEL
+#define PDSEL1		U1MODEbits.PDSEL
+#define STSEL1		U1MODEbits.STSEL
+#define UARTEN1		U1MODEbits.UARTEN
+#define UTXEN1		U1STAbits.UTXEN
+#define  FOSC		9216000					//0x8CA000
+#define  PLL_rate		4
+#define  Fcy			((FOSC*PLL_rate)/4)
+#define rx_timeout1			35
+#define  receive	0
+
+    

@@ -10,6 +10,7 @@
 //#include "system_definitions.h"
 #include "define.h"
 #include "extern.h"
+#include "mops_mups_str.h"  
 
 
 
@@ -647,6 +648,172 @@ void mbs(struct tag_usart * usart, unsigned char mbs_addres) {
         return;
     }
 
+}
+
+void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift_03, unsigned int quant_03, unsigned int *dest, unsigned int speed) {
+
+    unsigned int cc;
+    if (!usart->mb_status.master_start) {
+        return;
+    }
+    switch (usart->mbm_status) {
+        case 0:
+        {
+            if (usart == &usart1) {
+                UART1_init(speed, 4);
+            }
+            if (usart == &usart2) {
+                UART2_init(speed, 4);
+            }
+            switch (speed) {
+                case 1:
+                {
+                    mbm_timeout = 240;
+                    break;
+                }
+                case 2:
+                {
+                    mbm_timeout = 120;
+                    break;
+                }
+                case 3:
+                {
+                    mbm_timeout = 80;
+                    break;
+                }
+                case 4:
+                {
+                    mbm_timeout = 40;
+                    break;
+                }
+                case 5:
+                {
+                    mbm_timeout = 20;
+                    break;
+                }
+                case 6:
+                {
+                    mbm_timeout = 12;
+                    break;
+                }
+                case 7:
+                {
+                    mbm_timeout = 5;
+                    break;
+                }
+                case 8:
+                {
+                    mbm_timeout = 4;
+                    break;
+                }
+            }
+            usart->mbm_status = 1;
+            break;
+        }
+        case 1:
+        {
+            usart->out_buffer[0x00] = mbm_adres;
+            usart->out_buffer[0x01] = 0x03;
+            usart->out_buffer[0x03] = shift_03 & 0x00FF;
+            usart->out_buffer[0x02] = (shift_03 >> 8) & 0x00FF;
+            usart->out_buffer[0x05] = quant_03 & 0x00FF;
+            usart->out_buffer[0x04] = (quant_03 >> 8) & 0x00FF;
+            PIC_CRC16(usart->out_buffer, 0x06);
+            usart->out_buffer[0x06] = uchCRCLo;
+            usart->out_buffer[0x07] = uchCRCHi;
+            usart->number_send = 0x08;
+            if (usart == &usart1) {
+                T4_delay_4 = mbm_timeout;
+                t4_del_4 = 1;
+            }
+            if (usart == &usart2) {
+                T4_delay_5 = mbm_timeout;
+                t4_del_5 = 1;
+            }
+            usart->mb_status.master_timeout = 0;
+            usart->mb_status.modb_received = 0;
+            usart->mb_status.byte_missing = 0;
+            usart->mb_status.crc_error = 0;
+            usart->mb_status.device_error = 0;
+            usart->mb_status.coll_1 = 0;
+            usart->mb_status.coll_2 = 0;
+            usart->mb_status.coll_3 = 0;
+            start_tx_usart(usart);
+            usart->mbm_status = 2;
+            break;
+        }
+        case 2:
+        {
+            if (!usart->mb_status.master_timeout && !usart->mb_status.modb_received)
+                return;
+            if (usart->mb_status.master_timeout) {
+                usart->mbm_err++;
+                usart->mbm_status = 0;
+                usart->mb_status.master_start = 0;
+                break;
+            }
+
+            if (usart->in_buffer[1] == 0x83) // modbus collisions
+            {
+                if (usart->in_buffer[2] == 0x01) {
+                    usart->mb_status.coll_1 = 1;
+                    usart->mbm_err++;
+                    usart->mb_status.master_start = 0;
+                    usart->mbm_status = 0;
+                    break;
+                }
+                if (usart->in_buffer[2] == 0x02) {
+                    usart->mb_status.coll_2 = 1;
+                    usart->mbm_err++;
+                    usart->mb_status.master_start = 0;
+                    usart->mbm_status = 0;
+                    break;
+                }
+                if (usart->in_buffer[2] == 0x03) {
+                    usart->mb_status.coll_3 = 1;
+                    usart->mbm_err++;
+                    usart->mb_status.master_start = 0;
+                    usart->mbm_status = 0;
+                    break;
+                }
+            }
+            //			if (usart->in_buffer_count!=(quant_03*2+5))									//byte missing
+            //				{usart->mbm_status=0; usart->mb_status.byte_missing=1; usart->mbm_err++; usart->mb_status.master_start=0; break;}
+            if (usart->in_buffer[0] != usart->out_buffer[0]) // wrong device address
+            {
+                usart->mbm_status = 0;
+                usart->mb_status.device_error = 1;
+                usart->mbm_err++;
+                usart->mb_status.master_start = 0;
+                break;
+            }
+            PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));
+            if (uchCRCLo | uchCRCHi) {
+                usart->mbm_status = 0;
+                usart->mb_status.crc_error = 1;
+                usart->mbm_err++;
+                usart->mb_status.master_start = 0;
+                break;
+            } // wrong crc
+
+            memcpy((void *) (dest), (const void *) (usart->in_buffer + 0x03), usart->in_buffer[2]);
+            for (cc = 0; cc < quant_03; cc++) {
+                MOPS.main_area[cc + shift_03] = MOPS_swap.main_area[cc + shift_03];
+                asm("swap %0" : "+r"(*(MOPS.main_area + cc + shift_03)));
+            }
+            usart->answer_count++;
+            usart->mb_status.master_error = 0;
+            usart->mb_status.master_start = 0;
+            usart->mbm_status = 0;
+            break;
+        }
+        default:
+        {
+            usart->mb_status.master_start = 0;
+            usart->mbm_status = 0;
+            break;
+        }
+    }
 }
 
 

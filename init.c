@@ -2,6 +2,7 @@
 #include <sys/attribs.h>    /* contains __ISR() Macros */
 #include "define.h"
 #include "extern.h"
+#include "int_p32mz1024efh100.h"
 
 
 extern void DMA1_init(void);
@@ -144,7 +145,7 @@ void port_init(void) {
     ANSELG = SYS_PORT_G_ANSEL;
     //    TRISDbits.TRISD2 = 1;   //77 ножка в режим входа
     TRISBbits.TRISB15 = 0; //44 ножка энейбл на выход 3uart
-//    TRISDbits.TRISD13 = 0; //80 ножка энейбл на выход 2uart
+    //    TRISDbits.TRISD13 = 0; //80 ножка энейбл на выход 2uart
     TRISDbits.TRISD1 = 0; //76 ножка энейбл на выход 1uart
 
 
@@ -346,6 +347,86 @@ void uart1_init(void) {
     U1STAbits.URXEN = 1; /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
     U1STAbits.UTXISEL = 0b10;
     U1MODEbits.ON = 1;
+}
+
+void UART1_init(unsigned int speed) {
+    U1MODE = 0x0000; // UART1 transmitter disabled
+
+    URXISEL1 = 0b00; // Int flag is set when a character is received
+    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
+    PDSEL1 = 0b00; // 8-bit data, no parity
+    STSEL1 = 0; // 1 Stop bit
+
+    IEC3bits.U1RXIE = 0;
+    IEC3bits.U1TXIE = 0;
+
+    switch (speed) {
+        case 1:
+        {
+            U1BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
+            frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+            break;
+        }
+        case 2:
+        {
+            U1BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
+            frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+            break;
+        }
+
+        case 3:
+        {
+            U1BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
+            frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+            break;
+        }
+
+        case 4:
+        {
+            U1BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
+            frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+            break;
+        }
+
+        case 5:
+        {
+            U1BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
+            frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+            break;
+        }
+
+        case 6:
+        {
+            U1BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+
+        case 7:
+        {
+            U1BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+            break;
+        }
+
+        case 8:
+        {
+            U1BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
+            frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+            break;
+        }
+
+        default:
+        {
+            U1BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+    }
+    UARTEN1 = 1; // UART1 enabled
+    UTXEN1 = 1;
+    IEC3bits.U1RXIE = 0;
+    enab = receive;
 }
 
 void spi5_init(void) {

@@ -159,7 +159,8 @@ extern "C" {
             unsigned coll_2 : 1; // 15
             unsigned coll_3 : 1; // 16
             unsigned tx_start : 1; // 17
-            unsigned : 15; // 18-32
+            unsigned master_start : 1; // 18
+            unsigned : 14; // 18-32
         } mb_status;
     } usart1, usart2, usart3, usart4, usart5;
 
