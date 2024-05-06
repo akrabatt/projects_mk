@@ -426,7 +426,7 @@ void UART1_init(unsigned int speed) {
     UARTEN1 = 1; // UART1 enabled
     UTXEN1 = 1;
     IEC3bits.U1RXIE = 0;
-    enab = receive;
+    ENAB_RX1 = receive;
 }
 
 void spi5_init(void) {
