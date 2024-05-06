@@ -10,15 +10,16 @@ extern "C" {
 #endif
 #define EXAMPLE_CONSTANT 0
 
-
+#define num_zone_mops   8
+    
 #define SYS_CLK_FREQUENCY  (199065600ull)       // Fsys = 200 MHz
 #define CPU_CLK_FREQUENCY  SYS_CLK_FREQUENCY/2  // Fcpu = 200 MHz
 #define PB3_CLK_FREQUENCY SYS_CLK_FREQUENCY/27   // Fpb3 = 2 MHz
 
 #define  PBCLK3_    49766400
 #define  PBCLK2_    49766400
-    
-// LED_LD1 (RG6)
+
+    // LED_LD1 (RG6)
 #define LED_LD1       	LATBbits.LATB6
 #define TRIS_LED_LD1  	TRISBbits.TRISB6
 #define LED_LD1_SET()   LATBSET = _LATB_LATB6_MASK;
@@ -44,17 +45,17 @@ extern "C" {
 #define  OUT_SIZE2		0xF0
 #define  IN_SIZE1		0xF0
 #define  INCAP_VOLUME   380    
-    
+
 #define  timeout1       55
 #define  timeout4       55    
- 
-    
-//#define  U1_speed		115200
-//#define  U4_speed		115200    
+
+
+    //#define  U1_speed		115200
+    //#define  U4_speed		115200    
 #define  frame_delay_1  PBCLK2_/115200*timeout1
 #define  frame_delay_4  PBCLK2_/115200*timeout4
-    
-/////////////////		Modbus alowed areas 		//////////////////////////
+
+    /////////////////		Modbus alowed areas 		//////////////////////////
 
 #define  START_READ     2000			// MB_swap - ?????????? ?????
 #define  END_READ       2078			// 
@@ -96,7 +97,7 @@ extern "C" {
 
 #define  MODBUS_READ_       ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))	
 #define  MODBUS_WRITE_		((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
-    
+
 #define  START_MB_DIAGN_READ            200			// config area - setting of engine parameters
 #define  END_MB_DIAGN_READ              312			// 
 #define  START_MB_DIAGN_WRITE           200			//
@@ -104,10 +105,10 @@ extern "C" {
 
 #define  MB_DIAGN_READ_           ((start_reg >= START_MB_DIAGN_READ) && (last_reg <= END_MB_DIAGN_READ))	
 #define  MB_DIAGN_WRITE_          ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))    
-    
+
 #define  RAMTRON_START              64
 #define  RAMTRON_START_CONFIG		512
-    
+
 #define  COORD_MAX			MB_conf.CV_pos_max
 #define  COORD_MIN			MB_conf.CV_pos_min
 #define  CUR_MAX			MB_conf.CV_curr_max
@@ -115,92 +116,92 @@ extern "C" {
 #define  CUR_SCALE			MB_conf.CV_curr_scale
 
 #define  CUR_CTRL_VAL       10
-//#define  CUR_CTRL_VAL			MB_conf.CV_check_level  
+    //#define  CUR_CTRL_VAL			MB_conf.CV_check_level  
 
 #define  INT_CLR			0.0  
 #define  INT_MCLR			1.0  
 #define  MREG_FREQ			100    
-    
+
 #define  TMR4CLK	    49776400
-//#define  TMR4CLK	    24883200
+    //#define  TMR4CLK	    24883200
 #define  OC_FREQ            3000    
 #define  OC_MAX             TMR4CLK / OC_FREQ -1
 #define  OC_MIN             1500
 #define   FILTER	        20    
 #define	  d_count_size	    4
-    
+
 #define  FILT_CRPM          4
-    
+
 #define  FILT_C             10
 #define  FILT_I             10
 #define  FILT_DISCRET       500
 #define  CYCLE              10
-    
+
 #define  TMAXUOZ            58320                  
-    
+
     ////////////////	End Modbus alowed area 	/////////////////////
 
-#define  STROBE		PORTGbits.RG7			// �������� ��� ����� 586-��
-    
-#define  LED_AO		PORTGbits.RG12			// �������� ��� ����� 586-�� pin 96
-#define  LED_AO_ON	PORTG = LATG | 0x1000		// �������� ��� ����� 586-��
-#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		// �������� ��� ����� 586-��
-    
-#define  LED_IGN	PORTGbits.RG13			// �������� ��� ����� 586-�� pin 97
-#define  LED_IGN_ON	PORTG = LATG | 0x2000		// �������� ��� ����� 586-��
-#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		// �������� ��� ����� 586-��
-     
-#define  LED_STOP	PORTEbits.RE4			// �������� ��� ����� 586-�� pin 100
-#define  LED_STOP_ON	PORTE = LATE | 0x0010		// �������� ��� ����� 586-��
-#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		// �������� ��� ����� 586-��    
+#define  STROBE		PORTGbits.RG7			
 
-//#define  LED_SYNC	PORTEbits.RE3			// �������� ��� ����� 586-�� pin 99
-//#define  LED_SYNC_ON	PORTE = LATE | 0x0008		// �������� ��� ����� 586-��
-//#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		// �������� ��� ����� 586-��    
+#define  LED_AO		PORTGbits.RG12			
+#define  LED_AO_ON	PORTG = LATG | 0x1000		
+#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		
 
-#define  LED_WIGN	PORTEbits.RE2			// �������� ��� ����� 586-�� pin 98
-#define  LED_WIGN_ON	PORTG = LATG | 0x0004		// �������� ��� ����� 586-��   
-#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		// �������� ��� ����� 586-��   
+#define  LED_IGN	PORTGbits.RG13			
+#define  LED_IGN_ON	PORTG = LATG | 0x2000		
+#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		
 
-//#define  LED_8		PORTEbits.RE0			// �������� ��� ����� 586-�� pin 91
-//#define  LED_8_ON	PORTE = LATE | 0x0001		// �������� ��� ����� 586-��
-//#define  LED_8_OFF	PORTE = LATE & 0xFFFE		// �������� ��� ����� 586-��        
- 
-#define  LED_7		PORTEbits.RE1			// �������� ��� ����� 586-�� pin 94
-#define  LED_7_ON	PORTE = LATE | 0x0002		// �������� ��� ����� 586-��   
-#define  LED_7_OFF	PORTE = LATE & 0xFFFD		// �������� ��� ����� 586-��   
-    
-    
-#define  LED9		PORTDbits.RD15			// �������� ��� ����� 586-�� pin 48
-#define  LED9_ON	PORTD = LATD | 0x8000		// �������� ��� ����� 586-��   
-#define  LED9_OFF	PORTD = LATD & 0x7FFF		// �������� ��� ����� 586-��       
-    
-#define  LED10		PORTAbits.RA2			// �������� ��� ����� 586-�� pin 59
-#define  LED10_ON	PORTA = LATA | 0x0004		// �������� ��� ����� 586-��   
-#define  LED10_OFF	PORTA = LATA & 0xFFFB		// �������� ��� ����� 586-��       
+#define  LED_STOP	PORTEbits.RE4			
+#define  LED_STOP_ON	PORTE = LATE | 0x0010		
+#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		  
 
-#define  DO_2		PORTAbits.RA3			// �������� ��� ����� 606-�� pin 60
-#define  DO_2_ON	PORTA = LATA | 0x0008		// �������� ��� ����� 606-��   
-#define  DO_2_OFF	PORTA = LATA & 0xFFF7		// �������� ��� ����� 606-��       
+    //#define  LED_SYNC	PORTEbits.RE3			
+    //#define  LED_SYNC_ON	PORTE = LATE | 0x0008		
+    //#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		
 
-#define  DO_1		PORTAbits.RA4			// �������� ��� ����� 606-�� pin 61
-#define  DO_1_ON	PORTA = LATA | 0x0010		// �������� ��� ����� 606-��   
-#define  DO_1_OFF	PORTA = LATA & 0xFFEF		// �������� ��� ����� 606-��   
+#define  LED_WIGN	PORTEbits.RE2			
+#define  LED_WIGN_ON	PORTG = LATG | 0x0004		
+#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		
 
-#define  IGN_ON		PORTDbits.RD5			// �������� ��� ����� 606-�� pin 82
+    //#define  LED_8		PORTEbits.RE0			
+    //#define  LED_8_ON	PORTE = LATE | 0x0001		
+    //#define  LED_8_OFF	PORTE = LATE & 0xFFFE		 
 
-#define  TAP_ON		PORTC = LATC | 0x2000		// �������� ��� ����� 586-�� pin 72
-#define  TAP_OFF	PORTC = LATC & 0xDFFF		// �������� ��� ����� 586-�� pin 72
+#define  LED_7		PORTEbits.RE1			
+#define  LED_7_ON	PORTE = LATE | 0x0002		
+#define  LED_7_OFF	PORTE = LATE & 0xFFFD		
 
-#define  IGN_1		PORTDbits.RD9			// �������� ��� ����� 586-�� pin 68
-#define  IGN_2		PORTDbits.RD2			// �������� ��� ����� 586-�� pin 77
-#define  IGN_3		PORTDbits.RD10			// �������� ��� ����� 586-�� pin 69
-#define  IGN_4		PORTDbits.RD3			// �������� ��� ����� 586-�� pin 78
-#define  IGN_5		PORTDbits.RD11			// �������� ��� ����� 586-�� pin 70
-#define  IGN_6		PORTDbits.RD12			// �������� ��� ����� 586-�� pin 79
-#define  IGN_7		PORTDbits.RD0			// �������� ��� ����� 586-�� pin 71
-#define  IGN_8		PORTDbits.RD13			// �������� ��� ����� 586-�� pin 80
-#define  IGN_9		PORTDbits.RD1			// �������� ��� ����� 586-�� pin 76
+
+#define  LED9		PORTDbits.RD15			
+#define  LED9_ON	PORTD = LATD | 0x8000		
+#define  LED9_OFF	PORTD = LATD & 0x7FFF		    
+
+#define  LED10		PORTAbits.RA2			
+#define  LED10_ON	PORTA = LATA | 0x0004		
+#define  LED10_OFF	PORTA = LATA & 0xFFFB		 
+
+#define  DO_2		PORTAbits.RA3			
+#define  DO_2_ON	PORTA = LATA | 0x0008		
+#define  DO_2_OFF	PORTA = LATA & 0xFFF7		
+
+#define  DO_1		PORTAbits.RA4			
+#define  DO_1_ON	PORTA = LATA | 0x0010		
+#define  DO_1_OFF	PORTA = LATA & 0xFFEF		
+
+#define  IGN_ON		PORTDbits.RD5			
+
+#define  TAP_ON		PORTC = LATC | 0x2000		
+#define  TAP_OFF	PORTC = LATC & 0xDFFF		
+
+#define  IGN_1		PORTDbits.RD9			
+#define  IGN_2		PORTDbits.RD2			
+#define  IGN_3		PORTDbits.RD10			
+#define  IGN_4		PORTDbits.RD3			
+#define  IGN_5		PORTDbits.RD11			
+#define  IGN_6		PORTDbits.RD12			
+#define  IGN_7		PORTDbits.RD0			
+#define  IGN_8		PORTDbits.RD13			
+#define  IGN_9		PORTDbits.RD1			
 #define  IGN_10		PORTDbits.RD4			// �������� ��� ����� 586-�� pin 81
 
 #define  ON_IGN_1       PORTD = LATD | 0x0200		// �������� ��� ����� 586-�� pin 68
@@ -213,7 +214,7 @@ extern "C" {
 #define  ON_IGN_8       PORTD = LATD | 0x2000		// �������� ��� ����� 586-�� pin 80
 #define  ON_IGN_9       PORTD = LATD | 0x0002		// �������� ��� ����� 586-�� pin 76
 #define  ON_IGN_10      PORTD = LATD | 0x0010		// �������� ��� ����� 586-�� pin 81
-    
+
 #define  IGN_RESET      PORTD = LATD & 0xC1E0		// �������� ��� ����� 586-��
 #define  MAX_CYL_NUM    10				// �������� ��� ����� 586-��
 
@@ -232,9 +233,9 @@ extern "C" {
 #define  DI_1		PORTAbits.RA5 			// �������� ��� ����� 606-�� pin 2
 #define  DI_2		PORTGbits.RG15			// �������� ��� ����� 606-�� pin 1
 #define  DI_3		PORTFbits.RF4 			// �������� ��� ����� 606-�� pin 64
-    
-//  Modbus data define
-/*    */
+
+    //  Modbus data define
+    /*    */
 #define  FLAP_SET	Modbus.CV_set
 #define  FLAP_POS	Modbus.CV_pos
 #define  FLAP_CURR	Modbus.CV_current    
@@ -245,7 +246,7 @@ extern "C" {
 #define  NOM_UOZ        MB_conf.UOZ_high
 #define  LOW_UOZ        MB_conf.UOZ_low
 #define  CONST_UOZ      MB_conf.constructive_UOZ
-    
+
 #define CYLINDERS_NUM	        10
 #define CANDLES_NUM	        1
 
@@ -264,7 +265,3 @@ extern "C" {
 #define CV_SENSOR_BRAKE         13
 #define AO_5CYL_ERROR_EVEN	14
 #define AO_5CYL_ERROR_ODD	15
-
-/* *****************************************************************************
- End of File
- */

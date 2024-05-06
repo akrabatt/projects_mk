@@ -10,6 +10,7 @@
       <itemPath>int_p32mz1024efh100.h</itemPath>
       <itemPath>peripheral_comon_32bit.h</itemPath>
       <itemPath>ramtron_drv.h</itemPath>
+      <itemPath>mops_mups_str.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
