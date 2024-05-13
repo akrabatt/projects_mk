@@ -2,6 +2,7 @@
 #include <sys/attribs.h>    /* contains __ISR() Macros */
 #include "define.h"
 #include "extern.h"
+//#include "global.h"
 
 
 //extern void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned short TMR1_ON);
@@ -33,7 +34,7 @@ void __ISR_AT_VECTOR(_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void) {
 void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void) {
     T2CONbits.TON = 0;
     T2Interrupt_(&usart2);
-//    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+    //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
     PORTGbits.RG13 = LATGbits.LATG13 ^ 1;
     IFS0bits.T2IF = 0;
 }
@@ -63,10 +64,19 @@ void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void) {
 }
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
-    
+
     fun_blink_counter();
+    if (usart1.mb_status.tm_on == 1) {
+        if (!(usart1.mbm_timeout--));
+        usart1.mb_status.tm_on = 0;
+        if (usart1.mb_status.master_start)
+            usart1.mb_status.master_timeout = 1;
+    }
+
     IFS1bits.T9IF = 0;
 }
+
+
 
 
 //TX/RX
@@ -154,6 +164,7 @@ void __ISR_AT_VECTOR(_UART1_TX_VECTOR, IPL1SRS) U1TXInterrupt(void) {
     }
     IFS3bits.U1TXIF = 0;
 }
+
 void __ISR_AT_VECTOR(_UART2_RX_VECTOR, IPL4SRS) U2RXInterrupt(void) {
     IFS4bits.U2RXIF = 0;
     usart2.mb_status.modb_receiving = 1;
@@ -168,7 +179,7 @@ void __ISR_AT_VECTOR(_UART2_RX_VECTOR, IPL4SRS) U2RXInterrupt(void) {
 
 
     IFS4bits.U2RXIF = 0;
-//    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+    //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
 
 }
 
@@ -184,6 +195,7 @@ void __ISR_AT_VECTOR(_UART2_TX_VECTOR, IPL1SRS) U2TXInterrupt(void) {
     }
     IFS4bits.U2TXIF = 0;
 }
+
 void __ISR_AT_VECTOR(_UART3_RX_VECTOR, IPL4SRS) U3RXInterrupt(void) {
     IFS4bits.U3RXIF = 0;
     usart3.mb_status.modb_receiving = 1;
@@ -198,7 +210,7 @@ void __ISR_AT_VECTOR(_UART3_RX_VECTOR, IPL4SRS) U3RXInterrupt(void) {
 
 
     IFS4bits.U3RXIF = 0;
-//    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+    //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
 
 }
 

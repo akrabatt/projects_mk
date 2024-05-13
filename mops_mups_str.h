@@ -33,4 +33,4 @@ typedef struct tag_MOPS {
         };
     };
     unsigned int main_area[num_zone_mops * 13 + 4];
-};
+} MOPS, MOPS_swap;

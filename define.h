@@ -40,6 +40,8 @@ extern "C" {
 #define  ENAB_TX1   PORTDbits.RD1 = 1
 #define  ENAB_RX1   PORTDbits.RD1 = 0 
 
+#define  t9_del_1	timer9_bits.t_del_1		//		:1;		// 12
+
 #define  OUT_SIZE		0x100
 #define  IN_SIZE		0x100
 #define  OUT_SIZE2		0xF0

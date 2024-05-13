@@ -2,7 +2,8 @@
 #include <sys/attribs.h>    /* contains __ISR() Macros */
 #include "define.h"
 #include "extern.h"
-#include "int_p32mz1024efh100.h"
+//#include "int_p32mz1024efh100.h"
+//#include "global.h"
 
 
 extern void DMA1_init(void);
@@ -426,7 +427,7 @@ void UART1_init(unsigned int speed) {
     UARTEN1 = 1; // UART1 enabled
     UTXEN1 = 1;
     IEC3bits.U1RXIE = 0;
-    ENAB_RX1 = receive;
+    ENAB_RX1;
 }
 
 void spi5_init(void) {

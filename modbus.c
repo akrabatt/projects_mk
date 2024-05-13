@@ -10,7 +10,7 @@
 //#include "system_definitions.h"
 #include "define.h"
 #include "extern.h"
-#include "mops_mups_str.h"  
+//#include "mops_mups_str.h"  
 
 
 
@@ -660,50 +660,50 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
         case 0:
         {
             if (usart == &usart1) {
-                UART1_init(speed, 4);
+                UART1_init(speed);
             }
-            if (usart == &usart2) {
-                UART2_init(speed, 4);
-            }
+            //            if (usart == &usart2) {
+            //                UART2_init(speed, 4);
+            //            }
             switch (speed) {
                 case 1:
                 {
-                    mbm_timeout = 240;
+                    usart->mbm_timeout = 240;
                     break;
                 }
                 case 2:
                 {
-                    mbm_timeout = 120;
+                    usart->mbm_timeout = 120;
                     break;
                 }
                 case 3:
                 {
-                    mbm_timeout = 80;
+                    usart->mbm_timeout = 80;
                     break;
                 }
                 case 4:
                 {
-                    mbm_timeout = 40;
+                    usart->mbm_timeout = 40;
                     break;
                 }
                 case 5:
                 {
-                    mbm_timeout = 20;
+                    usart->mbm_timeout = 20;
                     break;
                 }
                 case 6:
                 {
-                    mbm_timeout = 12;
+                    usart->mbm_timeout = 12;
                     break;
                 }
                 case 7:
                 {
-                    mbm_timeout = 5;
+                    usart->mbm_timeout = 5;
                     break;
                 }
                 case 8:
                 {
-                    mbm_timeout = 4;
+                    usart->mbm_timeout = 4;
                     break;
                 }
             }
@@ -722,14 +722,12 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
             usart->out_buffer[0x06] = uchCRCLo;
             usart->out_buffer[0x07] = uchCRCHi;
             usart->number_send = 0x08;
-            if (usart == &usart1) {
-                T4_delay_4 = mbm_timeout;
-                t4_del_4 = 1;
-            }
-            if (usart == &usart2) {
-                T4_delay_5 = mbm_timeout;
-                t4_del_5 = 1;
-            }
+            usart->mbm_timeout = 10;
+            usart->mb_status.tm_on = 1;
+            //            if (usart == &usart2) {
+            //                T4_delay_5 = mbm_timeout;
+            //                t4_del_5 = 1;
+            //            }
             usart->mb_status.master_timeout = 0;
             usart->mb_status.modb_received = 0;
             usart->mb_status.byte_missing = 0;
@@ -798,8 +796,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
 
             memcpy((void *) (dest), (const void *) (usart->in_buffer + 0x03), usart->in_buffer[2]);
             for (cc = 0; cc < quant_03; cc++) {
-                MOPS.main_area[cc + shift_03] = MOPS_swap.main_area[cc + shift_03];
-                asm("swap %0" : "+r"(*(MOPS.main_area + cc + shift_03)));
+                //              MOPS.main_area[cc + shift_03] = swapshort(MOPS_swap.main_area[cc + shift_03]);
             }
             usart->answer_count++;
             usart->mb_status.master_error = 0;
