@@ -510,6 +510,166 @@ void UART2_init(unsigned int speed) {
     ENAB_RX2;
 }
 
+void UART4_init(unsigned int speed) {
+    U4MODE = 0x0000; // UART2 transmitter disabled
+
+    URXISEL4 = 0b00; // Int flag is set when a character is received
+    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
+    PDSEL4 = 0b00; // 8-bit data, no parity
+    STSEL4 = 0; // 1 Stop bit
+
+    IEC5bits.U4RXIE = 0;
+    IEC5bits.U4TXIE = 0;
+
+    switch (speed) {
+        case 1:
+        {
+            U4BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
+            frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+            break;
+        }
+        case 2:
+        {
+            U4BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
+            frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+            break;
+        }
+
+        case 3:
+        {
+            U4BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
+            frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+            break;
+        }
+
+        case 4:
+        {
+            U4BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
+            frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+            break;
+        }
+
+        case 5:
+        {
+            U4BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
+            frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+            break;
+        }
+
+        case 6:
+        {
+            U4BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+
+        case 7:
+        {
+            U4BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+            break;
+        }
+
+        case 8:
+        {
+            U4BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
+            frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+            break;
+        }
+
+        default:
+        {
+            U4BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+    }
+    UARTEN4 = 1; // UART1 enabled
+    UTXEN4 = 1;
+    IEC5bits.U4RXIE = 0;
+    ENAB_RX4;
+}
+
+void UART5_init(unsigned int speed) {
+    U5MODE = 0x0000; // UART2 transmitter disabled
+
+    URXISEL5 = 0b00; // Int flag is set when a character is received
+    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
+    PDSEL5 = 0b00; // 8-bit data, no parity
+    STSEL5 = 0; // 1 Stop bit
+
+    IEC5bits.U5RXIE = 0;
+    IEC5bits.U5TXIE = 0;
+
+    switch (speed) {
+        case 1:
+        {
+            U5BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
+            frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+            break;
+        }
+        case 2:
+        {
+            U5BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
+            frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+            break;
+        }
+
+        case 3:
+        {
+            U5BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
+            frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+            break;
+        }
+
+        case 4:
+        {
+            U5BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
+            frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+            break;
+        }
+
+        case 5:
+        {
+            U5BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
+            frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+            break;
+        }
+
+        case 6:
+        {
+            U5BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+
+        case 7:
+        {
+            U5BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+            break;
+        }
+
+        case 8:
+        {
+            U5BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
+            frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+            break;
+        }
+
+        default:
+        {
+            U5BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+    }
+    UARTEN5 = 1; // UART1 enabled
+    UTXEN5 = 1;
+    IEC5bits.U5RXIE = 0;
+    ENAB_RX5;
+}
+
 void spi5_init(void) {
     unsigned int t_brg;
     unsigned int baudHigh;

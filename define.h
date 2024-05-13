@@ -272,14 +272,27 @@ extern "C" {
     // for UARTx_init
 #define URXISEL1	U1STAbits.URXISEL
 #define URXISEL2	U2STAbits.URXISEL
+#define URXISEL4	U4STAbits.URXISEL
+#define URXISEL5	U5STAbits.URXISEL
+    
 #define PDSEL1		U1MODEbits.PDSEL
 #define STSEL1		U1MODEbits.STSEL
 #define PDSEL2		U2MODEbits.PDSEL
 #define STSEL2		U2MODEbits.STSEL
+#define PDSEL4		U4MODEbits.PDSEL
+#define STSEL4		U4MODEbits.STSEL
+#define PDSEL5		U5MODEbits.PDSEL
+#define STSEL5		U5MODEbits.STSEL
+    
 #define UARTEN1		U1MODEbits.UARTEN
 #define UTXEN1		U1STAbits.UTXEN
 #define UARTEN2		U2MODEbits.UARTEN
 #define UTXEN2		U2STAbits.UTXEN
+#define UARTEN4		U4MODEbits.UARTEN
+#define UTXEN4		U4STAbits.UTXEN
+#define UARTEN5		U5MODEbits.UARTEN
+#define UTXEN5		U5STAbits.UTXEN
+    
 #define  FOSC		9216000					//0x8CA000
 #define  PLL_rate		4
 #define  Fcy			((FOSC*PLL_rate)/4)
