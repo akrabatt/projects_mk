@@ -662,9 +662,9 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
             if (usart == &usart1) {
                 UART1_init(speed);
             }
-            //            if (usart == &usart2) {
-            //                UART2_init(speed, 4);
-            //            }
+            else if (usart == &usart2) {
+                UART2_init(speed, 4);
+            }
             switch (speed) {
                 case 1:
                 {

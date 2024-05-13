@@ -430,6 +430,86 @@ void UART1_init(unsigned int speed) {
     ENAB_RX1;
 }
 
+void UART2_init(unsigned int speed) {
+    U2MODE = 0x0000; // UART2 transmitter disabled
+
+    URXISEL2 = 0b00; // Int flag is set when a character is received
+    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
+    PDSEL2 = 0b00; // 8-bit data, no parity
+    STSEL2 = 0; // 1 Stop bit
+
+    IEC4bits.U2RXIE = 0;
+    IEC4bits.U2TXIE = 0;
+
+    switch (speed) {
+        case 1:
+        {
+            U2BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
+            frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+            break;
+        }
+        case 2:
+        {
+            U2BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
+            frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+            break;
+        }
+
+        case 3:
+        {
+            U2BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
+            frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+            break;
+        }
+
+        case 4:
+        {
+            U2BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
+            frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+            break;
+        }
+
+        case 5:
+        {
+            U2BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
+            frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+            break;
+        }
+
+        case 6:
+        {
+            U2BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+
+        case 7:
+        {
+            U2BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+            break;
+        }
+
+        case 8:
+        {
+            U2BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
+            frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+            break;
+        }
+
+        default:
+        {
+            U2BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
+            frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+            break;
+        }
+    }
+    UARTEN2 = 1; // UART1 enabled
+    UTXEN2 = 1;
+    IEC4bits.U2RXIE = 0;
+    ENAB_RX2;
+}
+
 void spi5_init(void) {
     unsigned int t_brg;
     unsigned int baudHigh;

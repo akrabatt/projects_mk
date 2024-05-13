@@ -269,12 +269,17 @@ extern "C" {
 #define AO_5CYL_ERROR_ODD	15
 
 
-    // for UART1_init
+    // for UARTx_init
 #define URXISEL1	U1STAbits.URXISEL
+#define URXISEL2	U2STAbits.URXISEL
 #define PDSEL1		U1MODEbits.PDSEL
 #define STSEL1		U1MODEbits.STSEL
+#define PDSEL2		U2MODEbits.PDSEL
+#define STSEL2		U2MODEbits.STSEL
 #define UARTEN1		U1MODEbits.UARTEN
 #define UTXEN1		U1STAbits.UTXEN
+#define UARTEN2		U2MODEbits.UARTEN
+#define UTXEN2		U2STAbits.UTXEN
 #define  FOSC		9216000					//0x8CA000
 #define  PLL_rate		4
 #define  Fcy			((FOSC*PLL_rate)/4)
