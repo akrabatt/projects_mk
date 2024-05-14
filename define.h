@@ -38,7 +38,7 @@
 #define  timeout1       55
 #define  frame_delay_1  PBCLK2_/115200*timeout1
 
-    /////////////////		Modbus alowed areas 		//////////////////////////
+/////////////////		Modbus alowed areas 		//////////////////////////
 
 #define  START_READ     2000			// MB_swap 
 #define  END_READ       2078			// 
@@ -85,87 +85,7 @@
 #define  FILT_DISCRET       500
 #define  CYCLE              10
 
-    ////////////////	End Modbus alowed area 	/////////////////////
-
-#define  STROBE		PORTGbits.RG7			
-
-#define  LED_AO		PORTGbits.RG12			
-#define  LED_AO_ON	PORTG = LATG | 0x1000		
-#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		
-
-#define  LED_IGN	PORTGbits.RG13			
-#define  LED_IGN_ON	PORTG = LATG | 0x2000		
-#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		
-
-#define  LED_STOP	PORTEbits.RE4			
-#define  LED_STOP_ON	PORTE = LATE | 0x0010		
-#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		  
-
-    //#define  LED_SYNC	PORTEbits.RE3			
-    //#define  LED_SYNC_ON	PORTE = LATE | 0x0008		
-    //#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		
-
-#define  LED_WIGN	PORTEbits.RE2			
-#define  LED_WIGN_ON	PORTG = LATG | 0x0004		
-#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		
-
-    //#define  LED_8		PORTEbits.RE0			
-    //#define  LED_8_ON	PORTE = LATE | 0x0001		
-    //#define  LED_8_OFF	PORTE = LATE & 0xFFFE		 
-
-#define  LED_7		PORTEbits.RE1			
-#define  LED_7_ON	PORTE = LATE | 0x0002		
-#define  LED_7_OFF	PORTE = LATE & 0xFFFD		
-
-
-#define  LED9		PORTDbits.RD15			
-#define  LED9_ON	PORTD = LATD | 0x8000		
-#define  LED9_OFF	PORTD = LATD & 0x7FFF		    
-
-#define  LED10		PORTAbits.RA2			
-#define  LED10_ON	PORTA = LATA | 0x0004		
-#define  LED10_OFF	PORTA = LATA & 0xFFFB		 
-
-#define  DO_2		PORTAbits.RA3			
-#define  DO_2_ON	PORTA = LATA | 0x0008		
-#define  DO_2_OFF	PORTA = LATA & 0xFFF7		
-
-#define  DO_1		PORTAbits.RA4			
-#define  DO_1_ON	PORTA = LATA | 0x0010		
-#define  DO_1_OFF	PORTA = LATA & 0xFFEF		
-
-#define  IGN_ON		PORTDbits.RD5			
-
-#define  TAP_ON		PORTC = LATC | 0x2000		
-#define  TAP_OFF	PORTC = LATC & 0xDFFF		
-
-#define  IGN_1		PORTDbits.RD9			
-#define  IGN_2		PORTDbits.RD2			
-#define  IGN_3		PORTDbits.RD10			
-#define  IGN_4		PORTDbits.RD3			
-#define  IGN_5		PORTDbits.RD11			
-#define  IGN_6		PORTDbits.RD12			
-#define  IGN_7		PORTDbits.RD0			
-#define  IGN_8		PORTDbits.RD13			
-#define  IGN_9		PORTDbits.RD1			
-#define  IGN_10		PORTDbits.RD4			// �������� ��� ����� 586-�� pin 81
-
-#define  ON_IGN_1       PORTD = LATD | 0x0200		// �������� ��� ����� 586-�� pin 68
-#define  ON_IGN_2       PORTD = LATD | 0x0004		// �������� ��� ����� 586-�� pin 77
-#define  ON_IGN_3       PORTD = LATD | 0x0400		// �������� ��� ����� 586-�� pin 69
-#define  ON_IGN_4       PORTD = LATD | 0x0008		// �������� ��� ����� 586-�� pin 78
-#define  ON_IGN_5       PORTD = LATD | 0x0800		// �������� ��� ����� 586-�� pin 70
-#define  ON_IGN_6       PORTD = LATD | 0x1000		// �������� ��� ����� 586-�� pin 79
-#define  ON_IGN_7       PORTD = LATD | 0x0001		// �������� ��� ����� 586-�� pin 71
-#define  ON_IGN_8       PORTD = LATD | 0x2000		// �������� ��� ����� 586-�� pin 80
-#define  ON_IGN_9       PORTD = LATD | 0x0002		// �������� ��� ����� 586-�� pin 76
-#define  ON_IGN_10      PORTD = LATD | 0x0010		// �������� ��� ����� 586-�� pin 81
-
-#define  IGN_RESET      PORTD = LATD & 0xC1E0		// �������� ��� ����� 586-��
-#define  MAX_CYL_NUM    10				// �������� ��� ����� 586-��
-
-#define  CTRL1      PORTGbits.RG0			// �������� ��� ����� 586-�� pin 88
-#define  CTRL2      PORTGbits.RG1			// �������� ��� ����� 586-�� pin 87
+////////////////	End Modbus alowed area 	/////////////////////
 
 #define  CONF1		PORTCbits.RC2			// �������� ��� ����� 606-�� pin 7 
 #define  CONF2		PORTCbits.RC3			// �������� ��� ����� 606-�� pin 8
@@ -180,8 +100,8 @@
 #define  DI_2		PORTGbits.RG15			// �������� ��� ����� 606-�� pin 1
 #define  DI_3		PORTFbits.RF4 			// �������� ��� ����� 606-�� pin 64
 
-    //  Modbus data define
-    /*    */
+//  Modbus data define
+/*    */
 #define  FLAP_SET	Modbus.CV_set
 #define  FLAP_POS	Modbus.CV_pos
 #define  FLAP_CURR	Modbus.CV_current    
@@ -213,12 +133,12 @@
 #define AO_5CYL_ERROR_ODD	15
 
 
-    // for UARTx_init
+// for UARTx_init
 #define URXISEL1	U1STAbits.URXISEL
 #define URXISEL2	U2STAbits.URXISEL
 #define URXISEL4	U4STAbits.URXISEL
 #define URXISEL5	U5STAbits.URXISEL
-    
+
 #define PDSEL1		U1MODEbits.PDSEL
 #define STSEL1		U1MODEbits.STSEL
 #define PDSEL2		U2MODEbits.PDSEL
@@ -227,7 +147,7 @@
 #define STSEL4		U4MODEbits.STSEL
 #define PDSEL5		U5MODEbits.PDSEL
 #define STSEL5		U5MODEbits.STSEL
-    
+
 #define UARTEN1		U1MODEbits.UARTEN
 #define UTXEN1		U1STAbits.UTXEN
 #define UARTEN2		U2MODEbits.UARTEN
@@ -236,11 +156,10 @@
 #define UTXEN4		U4STAbits.UTXEN
 #define UARTEN5		U5MODEbits.UARTEN
 #define UTXEN5		U5STAbits.UTXEN
-    
+
 #define  FOSC		9216000					//0x8CA000
 #define  PLL_rate		4
 #define  Fcy			((FOSC*PLL_rate)/4)
 #define rx_timeout1			35
 #define  receive	0
 
-    
