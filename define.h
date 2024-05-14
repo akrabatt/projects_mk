@@ -87,18 +87,18 @@
 
 ////////////////	End Modbus alowed area 	/////////////////////
 
-#define  CONF1		PORTCbits.RC2			// �������� ��� ����� 606-�� pin 7 
-#define  CONF2		PORTCbits.RC3			// �������� ��� ����� 606-�� pin 8
-#define  CONF3		PORTCbits.RC4			// �������� ��� ����� 606-�� pin 9
-#define  CONF4		PORTGbits.RG6			// �������� ��� ����� 606-�� pin 10 
-#define  CONF5		PORTEbits.RE5			// �������� ��� ����� 586-�� pin 3
-#define  CONF6		PORTEbits.RE6			// �������� ��� ����� 586-�� pin 4 
-#define  CONF7		PORTEbits.RE7			// �������� ��� ����� 586-�� pin 5
-#define  CONF8		PORTCbits.RC1			// �������� ��� ����� 586-�� pin 6
+#define  CONF1		PORTCbits.RC2			
+#define  CONF2		PORTCbits.RC3			
+#define  CONF3		PORTCbits.RC4			
+#define  CONF4		PORTGbits.RG6			 
+#define  CONF5		PORTEbits.RE5			
+#define  CONF6		PORTEbits.RE6			
+#define  CONF7		PORTEbits.RE7			
+#define  CONF8		PORTCbits.RC1			
 
-#define  DI_1		PORTAbits.RA5 			// �������� ��� ����� 606-�� pin 2
-#define  DI_2		PORTGbits.RG15			// �������� ��� ����� 606-�� pin 1
-#define  DI_3		PORTFbits.RF4 			// �������� ��� ����� 606-�� pin 64
+#define  DI_1		PORTAbits.RA5 			
+#define  DI_2		PORTGbits.RG15			
+#define  DI_3		PORTFbits.RF4 			
 
 //  Modbus data define
 #define CYLINDERS_NUM	        10
