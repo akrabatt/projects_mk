@@ -662,8 +662,14 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
             if (usart == &usart1) {
                 UART1_init(speed);
             }
-            else if (usart == &usart2) {
-                UART2_init(speed, 4);
+            if (usart == &usart2) {
+                UART2_init(speed);
+            }
+            if (usart == &usart4) {
+                UART4_init(speed);
+            }
+            if (usart == &usart5) {
+                UART5_init(speed);
             }
             switch (speed) {
                 case 1:
@@ -725,7 +731,6 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
             usart->mbm_timeout = 10;
             usart->mb_status.tm_on = 1;
             //            if (usart == &usart2) {
-            //                T4_delay_5 = mbm_timeout;
             //                t4_del_5 = 1;
             //            }
             usart->mb_status.master_timeout = 0;

@@ -4,37 +4,31 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+    //буфер пердачи по ком порту для режима dma
     unsigned char __attribute__((coherent)) buf_tx5 [300];
     unsigned char __attribute__((coherent)) buf_tx4 [300];
     unsigned char __attribute__((coherent)) buf_tx3 [300];
     unsigned char __attribute__((coherent)) buf_tx2 [300];
     unsigned char __attribute__((coherent)) buf_tx1 [300];
 
+    //мигалка
     int blink_counter = 0;
 
+    //скорости работы портов
     unsigned int U4_speed;
     unsigned int U5_speed;
     unsigned int U3_speed;
     unsigned int U2_speed;
     unsigned int U1_speed;
 
+    //переменная закрытия приема
     unsigned int frame_delay;
-    
-    unsigned int mbm_timeout;
 
-    unsigned int T9_delay_1;
-
-
-    unsigned int start_ctrl;
-    unsigned int start_pid_reg;
-
-
-    //    unsigned short help_strobe;
+    //строп импульс для вотчдог таймера
     unsigned short help_reset;
+    
+    //флаг то что конфиг загружен
     unsigned short help_load;
-
-    float fpos, fcurr, fpres, resss;
 
     union tag_direct {
 
@@ -195,7 +189,6 @@ extern "C" {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    unsigned short ign_time;
     const unsigned short cyl_order [] = {0, 2, 9, 10, 3, 4, 5, 6, 7, 8, 1};
     //const unsigned short cyl_order [] = {0,3,8,5,4,2,6,7,1};
     //float UOZ;

@@ -38,10 +38,6 @@ int main(void) {
         mbs(&usart2, 1); 
         mbs(&usart1, 1); 
         //    stop_uart_tx();
-
-        if (start_ctrl == 1) {
-            start_ctrl = 0;
-        }
     }
 }
 

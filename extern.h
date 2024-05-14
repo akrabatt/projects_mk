@@ -27,13 +27,10 @@ extern "C" {
     extern unsigned int U4_speed;
     extern unsigned int U5_speed;
 
-    extern unsigned int start_ctrl;
-    extern unsigned int start_pid_reg;
 
     extern unsigned short help_strobe;
     extern unsigned short help_reset;
     extern unsigned short help_load;
-    extern float fpos, fcurr, fpres, resss;
 
     extern union tag_direct {
 
@@ -178,7 +175,7 @@ extern "C" {
     // *****************************************************************************
     // *****************************************************************************
 
-    extern unsigned short ign_time;
+//    extern unsigned short ign_time;
     extern const unsigned short cyl_order [];
     //extern float UOZ;
     extern float koeff_UOZ;
