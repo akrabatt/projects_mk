@@ -1,15 +1,13 @@
 
 #include "define.h"
 
-
-
-
-
+//буфер пердачи по ком порту для режима dma
 extern unsigned char __attribute__((coherent)) buf_tx5 [300];
 extern unsigned char __attribute__((coherent)) buf_tx4 [300];
 extern unsigned char __attribute__((coherent)) buf_tx3 [300];
 extern unsigned char __attribute__((coherent)) buf_tx2 [300];
 extern unsigned char __attribute__((coherent)) buf_tx1 [300];
+
 
 extern float swapfloat(float data);
 extern unsigned long swaplong(unsigned long data);
@@ -17,7 +15,7 @@ extern unsigned short swapshort(unsigned short data);
 
 extern unsigned int frame_delay;
 
-
+//скорость работы портов
 extern unsigned int U1_speed;
 extern unsigned int U2_speed;
 extern unsigned int U3_speed;
@@ -165,12 +163,6 @@ struct tag_usart {
         unsigned : 10; // 18-32
     } mb_status;
 } usart1, usart2, usart3, usart4, usart5;
-
-
-// *****************************************************************************
-// Section: Interface Functions
-// *****************************************************************************
-// *****************************************************************************
 
 extern union tag_Modbus {
 
