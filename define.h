@@ -5,10 +5,6 @@
 //#include "global.h"    /* contains __ISR() Macros */
 //#include "extern.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-#define EXAMPLE_CONSTANT 0
 
 #define num_zone_mops   8
 
