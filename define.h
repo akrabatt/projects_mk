@@ -101,37 +101,7 @@
 #define  DI_3		PORTFbits.RF4 			// �������� ��� ����� 606-�� pin 64
 
 //  Modbus data define
-/*    */
-#define  FLAP_SET	Modbus.CV_set
-#define  FLAP_POS	Modbus.CV_pos
-#define  FLAP_CURR	Modbus.CV_current    
-
-#define  RPM_UOZ_MAX    MB_conf.UOZ_RPM_max
-#define  RPM_UOZ_MIN	MB_conf.UOZ_RPM_min
-
-#define  NOM_UOZ        MB_conf.UOZ_high
-#define  LOW_UOZ        MB_conf.UOZ_low
-#define  CONST_UOZ      MB_conf.constructive_UOZ
-
 #define CYLINDERS_NUM	        10
-#define CANDLES_NUM	        1
-
-#define AO_MISS_IGN_SIGN        1
-#define AO_SAU_COMMAND          2
-#define AO_TOO_LOW_RPM          3
-#define AO_TOO_HIGH_RPM         4
-#define AO_CV_ERROR             5
-#define AO_UNSYNC               6
-#define AO_CYL_BR_LOW           7
-#define AO_CYL_SC_LOW           8
-#define AO_CYL_BR_HIGH          9
-#define AO_START_ERROR          10
-#define AO_CV_CURR_ERROR        11
-#define AO_NO_CHARGE            12
-#define CV_SENSOR_BRAKE         13
-#define AO_5CYL_ERROR_EVEN	14
-#define AO_5CYL_ERROR_ODD	15
-
 
 // for UARTx_init
 #define URXISEL1	U1STAbits.URXISEL
