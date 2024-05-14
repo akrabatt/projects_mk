@@ -12,15 +12,7 @@
 #define CPU_CLK_FREQUENCY  SYS_CLK_FREQUENCY/2  // Fcpu = 200 MHz
 #define PB3_CLK_FREQUENCY SYS_CLK_FREQUENCY/27   // Fpb3 = 2 MHz
 
-#define  PBCLK3_    49766400
 #define  PBCLK2_    49766400
-
-    // LED_LD1 (RG6)
-#define LED_LD1       	LATBbits.LATB6
-#define TRIS_LED_LD1  	TRISBbits.TRISB6
-#define LED_LD1_SET()   LATBSET = _LATB_LATB6_MASK;
-#define LED_LD1_CLR()   LATBCLR = _LATB_LATB6_MASK;
-#define LED_LD1_INV()   LATBINV = _LATB_LATB6_MASK;
 
 #define  DMA_type	0
 #define  INT_type	1
@@ -36,49 +28,26 @@
 #define  ENAB_TX1   PORTDbits.RD1 = 1
 #define  ENAB_RX1   PORTDbits.RD1 = 0 
 
+//?
 #define  t9_del_1	timer9_bits.t_del_1		//		:1;		// 12
 
 #define  OUT_SIZE		0x100
 #define  IN_SIZE		0x100
-#define  OUT_SIZE2		0xF0
 #define  IN_SIZE1		0xF0
-#define  INCAP_VOLUME   380    
 
 #define  timeout1       55
-#define  timeout4       55    
-
-
-    //#define  U1_speed		115200
-    //#define  U4_speed		115200    
 #define  frame_delay_1  PBCLK2_/115200*timeout1
-#define  frame_delay_4  PBCLK2_/115200*timeout4
 
     /////////////////		Modbus alowed areas 		//////////////////////////
 
-#define  START_READ     2000			// MB_swap - ?????????? ?????
+#define  START_READ     2000			// MB_swap 
 #define  END_READ       2078			// 
 
-#define  START_WRITE    2054			// ??????? ??????
+#define  START_WRITE    2054			
 #define  END_WRITE      2078			// 
 
-#define  READ_			((start_reg>=START_READ)&&(last_reg<=END_READ))			// ??????? ?????? ????????? ?????
-#define  WRITE_			((start_reg>=START_WRITE)&&(last_reg<=END_WRITE))		// ??????? ?????? ????????????
-
-#define  START_WORK_READ				800			// ??????? ?????? ??????? ??????
-#define  END_WORK_READ					812			// 
-#define  START_WORK_WRITE				806			// ??????? ?????? ??????? ??????
-#define  END_WORK_WRITE					812			// 
-
-#define  WORK_READ_		((start_reg >= START_WORK_READ) && (last_reg <= END_WORK_READ))	
-#define  WORK_WRITE_    ((start_reg >= START_WORK_WRITE) && (last_reg <= END_WORK_WRITE))
-
-#define  START_CALIBR_READ				1000			// ??????? ?????? ??????? ??????
-#define  END_CALIBR_READ				1034			// 
-#define  START_CALIBR_WRITE				1000			// ??????? ?????? ??????? ??????
-#define  END_CALIBR_WRITE				1034			// 
-
-#define  CALIBR_READ_		((start_reg >= START_CALIBR_READ) && (last_reg <= END_CALIBR_READ))	
-#define  CALIBR_WRITE_		((start_reg >= START_CALIBR_WRITE) && (last_reg <= END_CALIBR_WRITE))
+#define  READ_			((start_reg>=START_READ)&&(last_reg<=END_READ))			
+#define  WRITE_			((start_reg>=START_WRITE)&&(last_reg<=END_WRITE))		
 
 #define  START_CONF_READ				500			// config area - setting of engine parameters
 #define  END_CONF_READ  				696			// 
@@ -107,35 +76,14 @@
 #define  RAMTRON_START              64
 #define  RAMTRON_START_CONFIG		512
 
-#define  COORD_MAX			MB_conf.CV_pos_max
-#define  COORD_MIN			MB_conf.CV_pos_min
-#define  CUR_MAX			MB_conf.CV_curr_max
-#define  CUR_MIN			MB_conf.CV_curr_min
-#define  CUR_SCALE			MB_conf.CV_curr_scale
-
 #define  CUR_CTRL_VAL       10
-    //#define  CUR_CTRL_VAL			MB_conf.CV_check_level  
-
-#define  INT_CLR			0.0  
-#define  INT_MCLR			1.0  
-#define  MREG_FREQ			100    
 
 #define  TMR4CLK	    49776400
-    //#define  TMR4CLK	    24883200
+
 #define  OC_FREQ            3000    
-#define  OC_MAX             TMR4CLK / OC_FREQ -1
-#define  OC_MIN             1500
-#define   FILTER	        20    
-#define	  d_count_size	    4
 
-#define  FILT_CRPM          4
-
-#define  FILT_C             10
-#define  FILT_I             10
 #define  FILT_DISCRET       500
 #define  CYCLE              10
-
-#define  TMAXUOZ            58320                  
 
     ////////////////	End Modbus alowed area 	/////////////////////
 
