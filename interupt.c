@@ -61,12 +61,12 @@ void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void) {
 //TX/RX
 
 void __ISR_AT_VECTOR(_UART5_RX_VECTOR, IPL4SRS) U5RXInterrupt(void) {
-    IFS5bits.U5RXIF = 0;
-    usart5.mb_status.modb_receiving = 1;
-    while (U5STAbits.URXDA) {
-        usart5.in_buffer[usart5.in_buffer_count++] = U5RXREG;
+    IFS5bits.U5RXIF = 0; //снимаем флаг прерывания
+    usart5.mb_status.modb_receiving = 1; //в режиме приема
+    while (U5STAbits.URXDA) { //выборка данных в буфер
+        usart5.in_buffer[usart5.in_buffer_count++] = U5RXREG; //из 5го приемника заполняет структуру приемного буффера
     }
-    if (usart5.in_buffer_count >= IN_SIZE1) {
+    if (usart5.in_buffer_count >= IN_SIZE1) { //защита от переполнения
         usart5.mb_status.modb_received = 1;
         usart5.mb_status.modb_receiving = 0;
     }

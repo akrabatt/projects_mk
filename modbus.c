@@ -752,9 +752,9 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
         }
         case 2:
         {
-            if (!usart->mb_status.master_timeout && !usart->mb_status.modb_received)    //если нет ответа и не сработал таймаут, то выходим
+            if (!usart->mb_status.master_timeout && !usart->mb_status.modb_received) //если нет ответа и не сработал таймаут, то выходим
                 return;
-            if (usart->mb_status.master_timeout) {  //если есть таймаут, инкрем. счетчик ошибок и закрываем все
+            if (usart->mb_status.master_timeout) { //если есть таймаут, инкрем. счетчик ошибок и закрываем все
                 usart->mbm_err++;
                 usart->mbm_status = 0;
                 usart->mb_status.master_start = 0;
@@ -796,8 +796,8 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
                 usart->mb_status.master_start = 0;
                 break;
             }
-            PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));  //проверяем CRC ответ
-            if (uchCRCLo | uchCRCHi) {  //если неправильно
+            PIC_CRC16(usart->in_buffer, (usart->in_buffer_count)); //проверяем CRC ответ
+            if (uchCRCLo | uchCRCHi) { //если неправильно
                 usart->mbm_status = 0;
                 usart->mb_status.crc_error = 1;
                 usart->mbm_err++;
@@ -805,9 +805,9 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
                 break;
             } // wrong crc
 
-            memcpy((void *) (dest), (const void *) (usart->in_buffer + 0x03), usart->in_buffer[2]); 
+            memcpy((void *) (dest), (const void *) (usart->in_buffer + 0x03), usart->in_buffer[2]); //если все нормально, то начинаем
             for (cc = 0; cc < quant_03; cc++) {
-                //              MOPS.main_area[cc + shift_03] = swapshort(MOPS_swap.main_area[cc + shift_03]);
+                //                MOPS.main_area[cc + shift_03] = swapshort(MOPS_swap.main_area[cc + shift_03]);
             }
             usart->answer_count++;
             usart->mb_status.master_error = 0;
