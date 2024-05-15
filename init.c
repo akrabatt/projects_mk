@@ -4,7 +4,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char*) p + 0x40000000L);
 }
 
-// инициализация системы
+// инициализация сиси
 
 #pragma config FMIIEN = OFF             // Ethernet RMII/MII Enable (RMII Enabled)
 #pragma config FETHIO = ON              // Ethernet I/O Pin Select (Default Ethernet I/O)

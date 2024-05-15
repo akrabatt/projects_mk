@@ -1,5 +1,7 @@
 #include "extern.h"
 
+
+//таблица для функции CRC
 const char auchCRCHi[] = {
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
     0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,
@@ -53,12 +55,9 @@ void PIC_CRC16(unsigned char *puchMsg, unsigned short usDataLen) {
         uchCRCLo = uchCRCHi ^ auchCRCHi[uIndex];
         uchCRCHi = auchCRCLo[uIndex];
     }
-
-    //	return ((uchCRCHi * 0x100 )| uchCRCLo); 
-    //	return (uintCRC); 
-    //	return (uchCRCHi, uchCRCLo); 
 }
 
+//16 разрядный
 static const unsigned int wCRCTable [] = {
     0x0000, 0xc0c1, 0xc181, 0x0140, 0xc301, 0x03c0, 0x0280, 0xc241,
     0xc601, 0x06c0, 0x0780, 0xc741, 0x0500, 0xc5c1, 0xc481, 0x0440,
@@ -94,17 +93,9 @@ static const unsigned int wCRCTable [] = {
     0x8201, 0x42c0, 0x4380, 0x8341, 0x4100, 0x81c1, 0x8081, 0x4040
 };
 
-unsigned int MODBUS_CRC16_calculate(unsigned char *nData, unsigned char wLength) {
+//перстановка байтов
 
-    unsigned char nTemp;
-    unsigned int wCRCWord = 0xFFFF;
-    while (wLength--) {
-        nTemp = *nData++ ^ wCRCWord;
-        wCRCWord >>= 8;
-        wCRCWord ^= wCRCTable[nTemp];
-    }
-    return ( wCRCWord);
-}
+//для шорта
 
 unsigned short swapshort(unsigned short data) {
 
@@ -118,6 +109,8 @@ unsigned short swapshort(unsigned short data) {
     sconv.cdata [0] = conv.cdata [1];
     return sconv.sdata;
 }
+
+//для флота
 
 float swapfloat(float data) {
 
@@ -135,6 +128,8 @@ float swapfloat(float data) {
     return sconv.fdata;
 }
 
+//для лонга
+
 unsigned long swaplong(unsigned long data) {
 
     union {
@@ -147,6 +142,8 @@ unsigned long swaplong(unsigned long data) {
     sconv.sdata [0] = conv.sdata [1];
     return sconv.ldata;
 }
+
+//запуск передачи без DMA режим прерываний
 
 void start_tx_usart(struct tag_usart * usart) {
     if (usart == &usart4) {
@@ -193,6 +190,9 @@ void start_tx_usart(struct tag_usart * usart) {
     }
 }
 
+
+//запуск передачи юсарт только с DMA без прерываний по передатчику
+
 void start_tx_usart_dma(struct tag_usart * usart, unsigned short count) {
     if (usart == &usart4) {
         ENAB_TX4;
@@ -235,6 +235,9 @@ void start_tx_usart_dma(struct tag_usart * usart, unsigned short count) {
         IEC3bits.U1TXIE = 0;
     }
 }
+
+
+//остоновка передачи юсарт с прерыванием
 
 void stop_uart_tx(void) {
     if (usart4.mb_status.tx_mode == INT_type) {
@@ -315,6 +318,9 @@ void stop_uart_tx(void) {
     }
 }
 
+
+//остановка передачи без прерываний DMA
+
 void stop_uart_tx_dma(void) {
     if (usart4.mb_status.tx_mode == DMA_type) {
         if ((usart4.mb_status.modb_transmiting == 1)&&(U4STAbits.TRMT)) {
@@ -394,11 +400,16 @@ void stop_uart_tx_dma(void) {
     }
 }
 
+
+//сброс модбаса по приему по COM порту
+
 void close_mb(struct tag_usart * usart) {
     usart->mb_status.modb_received = 0;
     usart->mb_status.modb_receiving = 0;
     usart->in_buffer_count = 0;
 }
+
+//формирование ответа на ошибочное обращение
 
 void answer_illegal(struct tag_usart * usart, unsigned char illegal) {
     usart->out_buffer[0x00] = usart->in_buffer[0];
@@ -410,6 +421,8 @@ void answer_illegal(struct tag_usart * usart, unsigned char illegal) {
     usart->number_send = 5;
 }
 
+//вариант ответа на неправильную функцию
+
 void answer_illegal_func(struct tag_usart * usart) {
     answer_illegal(usart, 0x01);
     if (usart->mb_status.tx_mode == INT_type) {
@@ -419,6 +432,8 @@ void answer_illegal_func(struct tag_usart * usart) {
     }
 }
 
+//вариант ответа на неправильную адресацию
+
 void answer_illegal_data_addr(struct tag_usart * usart) {
     answer_illegal(usart, 0x02);
     if (usart->mb_status.tx_mode == INT_type) {
@@ -427,6 +442,8 @@ void answer_illegal_data_addr(struct tag_usart * usart) {
         start_tx_usart_dma(usart, 5);
     }
 }
+
+//вариант ответа на неправильные данные
 
 void answer_illegal_data_val(struct tag_usart * usart) {
     answer_illegal(usart, 0x03);
@@ -438,6 +455,7 @@ void answer_illegal_data_val(struct tag_usart * usart) {
 }
 
 unsigned short num3;
+//3-я фукнкия модбас slave должна отвечать на mbm_03
 
 void mbs_03(struct tag_usart * _usart, unsigned short * source, unsigned short shift, unsigned short num) {
     num3 = num;
@@ -457,6 +475,8 @@ void mbs_03(struct tag_usart * _usart, unsigned short * source, unsigned short s
         start_tx_usart(_usart);
     }
 }
+
+//16-я функция модбас слэйв, отвечает на mbm_10 записывает данные и кратко отвечает что все ок
 
 void mbs_10(struct tag_usart * _usart, unsigned short * source, unsigned short shift_uni, unsigned short num_uni) {
     //	unsigned int help_store [10];
@@ -523,10 +543,13 @@ unsigned short start_reg;
 unsigned short last_reg;
 unsigned short length_err;
 
+
+//функция которая смотрит какая функция ей прилетела
+
 void mbs_uni(struct tag_usart * usart, unsigned char mbs_addres) {
-    if (usart->mb_status.modb_received) {
-        PIC_CRC16(usart->in_buffer, (usart->in_buffer_count)); // wrong CRC 
-        if (uchCRCLo | uchCRCHi) {
+    if (usart->mb_status.modb_received) { //повторно смотрит приняты ли данные проверка CRC
+        PIC_CRC16(usart->in_buffer, (usart->in_buffer_count)); // расчет CRC 
+        if (uchCRCLo | uchCRCHi) { //логическо или ели оба равны нулю
             close_mb(usart);
             return;
         } // no actions
@@ -538,7 +561,7 @@ void mbs_uni(struct tag_usart * usart, unsigned char mbs_addres) {
 
         last_reg = start_reg + num_reg;
 
-        if (((usart->in_buffer_count - 9) != usart->in_buffer[0x06])&&(usart->in_buffer[1] == 0x10)) // quantity must be equal to
+        if (((usart->in_buffer_count - 9) != usart->in_buffer[0x06])&&(usart->in_buffer[1] == 0x10)) // проверяет длинну
         { // number received bytes - 9 bytes
             length_err = 1;
         } else {
@@ -554,13 +577,13 @@ void mbs_uni(struct tag_usart * usart, unsigned char mbs_addres) {
         switch (length_err) {
             case 1:
             {
-                answer_illegal_data_addr(usart);
+                answer_illegal_data_addr(usart); //неправильный адрес
                 break;
             } // ?????? ??? ????????? ????? ??????? ? ????????? ?????????? ??????
             default:
             {
                 switch (usart->in_buffer[1]) {
-                    case 0x03:
+                    case 0x03: //3-я функция
                     {
                         if (READ_) {
                             mbs_03(usart, MB_swap.buf, (start_reg - START_READ), num_reg);
@@ -582,7 +605,7 @@ void mbs_uni(struct tag_usart * usart, unsigned char mbs_addres) {
                         break;
                     }
 
-                    case 0x10:
+                    case 0x10: //16-я функция
                     {
                         if (WRITE_) {
                             mbs_10(usart, MB_swap.input, (start_reg - START_WRITE), num_reg);
@@ -612,20 +635,25 @@ void mbs_uni(struct tag_usart * usart, unsigned char mbs_addres) {
     close_mb(usart);
 }
 
+//проверяет адрес
+
 void mbs(struct tag_usart * usart, unsigned char mbs_addres) {
-    if (!usart->mb_status.modb_received) {
+    if (!usart->mb_status.modb_received) { //смотри есть ли принятые данные
         return; //return if nothing received
     }
 
-    if (usart->in_buffer[0] == mbs_addres) {
-        mbs_uni(usart, mbs_addres);
+    if (usart->in_buffer[0] == mbs_addres) { //если принято, то смотрит адрес к нем обратились или не к нему
+        mbs_uni(usart, mbs_addres); //вызывает функцию выше, то отвечает
         return;
     } else {
-        close_mb(usart);
+        close_mb(usart); //сбрасывает модбас в 0
         return;
     }
 
 }
+
+
+//3-я фукнция мастер запрос данных
 
 void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift_03, unsigned int quant_03, unsigned int *dest, unsigned int speed) {
 
@@ -693,7 +721,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
             usart->mbm_status = 1;
             break;
         }
-        case 1:
+        case 1: //формирование запроса
         {
             usart->out_buffer[0x00] = mbm_adres;
             usart->out_buffer[0x01] = 0x03;
@@ -724,17 +752,18 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
         }
         case 2:
         {
-            if (!usart->mb_status.master_timeout && !usart->mb_status.modb_received)
+            if (!usart->mb_status.master_timeout && !usart->mb_status.modb_received)    //если нет ответа и не сработал таймаут, то выходим
                 return;
-            if (usart->mb_status.master_timeout) {
+            if (usart->mb_status.master_timeout) {  //если есть таймаут, инкрем. счетчик ошибок и закрываем все
                 usart->mbm_err++;
                 usart->mbm_status = 0;
                 usart->mb_status.master_start = 0;
                 break;
             }
 
-            if (usart->in_buffer[1] == 0x83) // modbus collisions
+            if (usart->in_buffer[1] == 0x83) // ответ на неправильное обращение
             {
+                //смотрит какая коллизия
                 if (usart->in_buffer[2] == 0x01) {
                     usart->mb_status.coll_1 = 1;
                     usart->mbm_err++;
@@ -759,7 +788,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
             }
             //			if (usart->in_buffer_count!=(quant_03*2+5))									//byte missing
             //				{usart->mbm_status=0; usart->mb_status.byte_missing=1; usart->mbm_err++; usart->mb_status.master_start=0; break;}
-            if (usart->in_buffer[0] != usart->out_buffer[0]) // wrong device address
+            if (usart->in_buffer[0] != usart->out_buffer[0]) // если ответил другой модуль
             {
                 usart->mbm_status = 0;
                 usart->mb_status.device_error = 1;
@@ -767,8 +796,8 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
                 usart->mb_status.master_start = 0;
                 break;
             }
-            PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));
-            if (uchCRCLo | uchCRCHi) {
+            PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));  //проверяем CRC ответ
+            if (uchCRCLo | uchCRCHi) {  //если неправильно
                 usart->mbm_status = 0;
                 usart->mb_status.crc_error = 1;
                 usart->mbm_err++;
@@ -776,7 +805,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
                 break;
             } // wrong crc
 
-            memcpy((void *) (dest), (const void *) (usart->in_buffer + 0x03), usart->in_buffer[2]);
+            memcpy((void *) (dest), (const void *) (usart->in_buffer + 0x03), usart->in_buffer[2]); 
             for (cc = 0; cc < quant_03; cc++) {
                 //              MOPS.main_area[cc + shift_03] = swapshort(MOPS_swap.main_area[cc + shift_03]);
             }
