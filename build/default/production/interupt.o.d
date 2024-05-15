@@ -1,4 +1,4 @@
 build/default/production/interupt.o:  \
 interupt.c  \
-define.h  \
-extern.h 
+extern.h  \
+define.h 

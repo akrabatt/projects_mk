@@ -1,14 +1,7 @@
-#include <proc/p32mz1024efh100.h>
-#include <xc.h>
-#include <sys/attribs.h>
-#include "../include/stdio.h"
-#include "../include/string.h"
-#include "define.h"
 #include "extern.h"
 
 extern void uart1_init(void);
 extern void uart4_init(void);
-extern int blink_counter;
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void *p) {
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char *) p + 0x40000000L);
@@ -425,11 +418,6 @@ void conf_check(void) {
     bconf = conf;
     bconf2 = conf2;
 }
-
-unsigned int _1000msec;
-unsigned int _100msec;
-unsigned int _10msec;
-unsigned int _divider;
 
 unsigned int DI1_cnt;
 unsigned int DI2_cnt;

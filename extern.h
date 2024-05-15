@@ -1,5 +1,8 @@
-
 #include "define.h"
+
+extern int blink_counter;
+
+extern void fun_blink_counter(void);
 
 //буфер пердачи по ком порту для режима dma
 extern unsigned char __attribute__((coherent)) buf_tx5 [300];
@@ -8,7 +11,7 @@ extern unsigned char __attribute__((coherent)) buf_tx3 [300];
 extern unsigned char __attribute__((coherent)) buf_tx2 [300];
 extern unsigned char __attribute__((coherent)) buf_tx1 [300];
 
-
+//переменные для свапа
 extern float swapfloat(float data);
 extern unsigned long swaplong(unsigned long data);
 extern unsigned short swapshort(unsigned short data);

@@ -1,25 +1,4 @@
-#include <xc.h>
-#include <sys/attribs.h>    /* contains __ISR() Macros */
-#include "define.h"
 #include "extern.h"
-//#include "global.h"
-
-
-//extern void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned short TMR1_ON);
-extern void T1Interrupt_(struct tag_usart * usart);
-extern void T2Interrupt_(struct tag_usart * usart);
-extern void T5Interrupt_(struct tag_usart * usart);
-extern void T9Interrupt_(struct tag_usart * usart);
-extern void mbs(struct tag_usart * usart, unsigned char mbs_addres, union tag_direct * dir);
-extern void DMA_uni(struct tag_usart * usart, unsigned short cnt, unsigned short on, unsigned short force);
-extern void test_uart_dma(void);
-extern void IC8Int(void);
-extern void IC7_measure(void);
-extern void IC8_measure(void);
-extern void IC3_measure(void);
-extern void IC4_measure(void);
-unsigned short send_dma;
-extern void fun_blink_counter(void);
 
 
 //TIMERS

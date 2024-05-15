@@ -1,14 +1,3 @@
-
-
-#include <proc/p32mz1024efh100.h>
-#include <xc.h>
-#include <sys/attribs.h>
-#include "../include/stdio.h"
-#include "../include/string.h"
-
-//#include "app.h"
-//#include "system_definitions.h"
-#include "define.h"
 #include "extern.h"
 
 
