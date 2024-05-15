@@ -455,8 +455,7 @@ void discret_ctrl(void) {
     }
 }
 
-void fun_blink_counter(void)
-{
+void fun_blink_counter(void) {
     if (++blink_counter >= 10) {
         blink_counter = 0;
         PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
