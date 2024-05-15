@@ -1,6 +1,7 @@
 #include "define.h"
 
 
+
 //буфер пердачи по ком порту для режима dma
 unsigned char __attribute__((coherent)) buf_tx5 [300];
 unsigned char __attribute__((coherent)) buf_tx4 [300];

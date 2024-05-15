@@ -1,11 +1,5 @@
 #include "extern.h"
 
-
-
-extern void getcs_FRAM(unsigned short adress, unsigned char *pstr, unsigned short len);
-extern void putcs_FRAM(unsigned short adress, unsigned char *pstr, unsigned short len);
-extern void DMA1_init(void);
-
 const char auchCRCHi[] = {
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
     0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,
@@ -49,13 +43,8 @@ const char auchCRCLo[] = {
 
 unsigned char uchCRCHi = 0xFF;
 unsigned char uchCRCLo = 0xFF;
-extern unsigned int CRC16_int;
-extern unsigned char CRC16_Hi;
-extern unsigned char CRC16_Lo;
 
-void PIC_CRC16(unsigned char *puchMsg, unsigned short usDataLen)
-//unsigned char PIC_CRC16(unsigned char *puchMsg, unsigned short usDataLen)
-{
+void PIC_CRC16(unsigned char *puchMsg, unsigned short usDataLen) {
     unsigned char uIndex;
     uchCRCHi = 0xFF;
     uchCRCLo = 0xFF;

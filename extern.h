@@ -25,6 +25,18 @@ extern unsigned int U3_speed;
 extern unsigned int U4_speed;
 extern unsigned int U5_speed;
 
+//инициализация DMA
+extern void DMA1_init(void);
+extern void DMA2_init(void);
+extern void DMA3_init(void);
+extern void DMA4_init(void);
+extern void DMA5_init(void);
+
+extern void conf_read(void);
+
+//для ramtrone
+extern void getcs_FRAM(unsigned short adress, unsigned char *pstr, unsigned short len);
+extern void putcs_FRAM(unsigned short adress, unsigned char *pstr, unsigned short len);
 
 extern unsigned short help_strobe;
 extern unsigned short help_reset;

@@ -1,7 +1,5 @@
-#include <xc.h>
-#include <sys/attribs.h>    /* contains __ISR() Macros */
-#include "global.h"
 #include "define.h"
+#include "global.h" 
 
 extern void stop_uart_tx(void);
 extern void stop_uart_tx_dma(void);

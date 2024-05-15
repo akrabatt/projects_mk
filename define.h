@@ -1,9 +1,5 @@
-#include <proc/p32mz1024efh100.h>
 #include <xc.h>
 #include <sys/attribs.h>
-
-//#include "global.h"    /* contains __ISR() Macros */
-//#include "extern.h"
 
 
 #define num_zone_mops   8

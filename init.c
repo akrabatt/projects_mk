@@ -1,24 +1,10 @@
-#include <xc.h>
-#include <sys/attribs.h>    /* contains __ISR() Macros */
-#include "define.h"
 #include "extern.h"
-//#include "int_p32mz1024efh100.h"
-//#include "global.h"
-
-
-extern void DMA1_init(void);
-extern void DMA4_init(void);
-extern void conf_read(void);
-
-extern void DMA2_init(void);
-extern void DMA3_init(void);
-extern void DMA5_init(void);
 
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) {
     return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char*) p + 0x40000000L);
 }
 
-
+// инициализация системы
 
 #pragma config FMIIEN = OFF             // Ethernet RMII/MII Enable (RMII Enabled)
 #pragma config FETHIO = ON              // Ethernet I/O Pin Select (Default Ethernet I/O)
