@@ -779,32 +779,45 @@ void answer_illegal_func(struct tag_usart *usart)
 }
 
 // вариант ответа на неправильную адресацию
-
+// Функция answer_illegal_data_addr управляет формированием ответа на недопустимый запрос (недопустимый адрес данных)
+// и выбором метода передачи этого ответа в зависимости от режима передачи USART (INT_type или DMA_type).
 void answer_illegal_data_addr(struct tag_usart *usart)
 {
+    // Формируем ответ на недопустимый запрос (недопустимый адрес данных с кодом 0x02)
     answer_illegal(usart, 0x02);
+
+    // Проверяем режим передачи USART
     if (usart->mb_status.tx_mode == INT_type)
     {
+        // Если режим передачи - INT_type, запускаем передачу через USART без использования DMA
         start_tx_usart(usart);
     }
     else
     {
-        start_tx_usart_dma(usart, 5);
+        // Если режим передачи - DMA_type, запускаем передачу через USART с использованием DMA
+        start_tx_usart_dma(usart, 5); // Здесь 5 - количество байт для передачи (размер ответа)
     }
 }
 
 // вариант ответа на неправильные данные
-
+// Функция answer_illegal_data_val управляет формированием ответа на недопустимый запрос
+// (недопустимое значение данных) и выбором метода передачи этого ответа в зависимости от
+// режима передачи USART (INT_type или DMA_type).
 void answer_illegal_data_val(struct tag_usart *usart)
 {
+    // Формируем ответ на недопустимый запрос (недопустимое значение данных с кодом 0x03)
     answer_illegal(usart, 0x03);
+
+    // Проверяем режим передачи USART
     if (usart->mb_status.tx_mode == INT_type)
     {
+        // Если режим передачи - INT_type, запускаем передачу через USART без использования DMA
         start_tx_usart(usart);
     }
     else
     {
-        start_tx_usart_dma(usart, 5);
+        // Если режим передачи - DMA_type, запускаем передачу через USART с использованием DMA
+        start_tx_usart_dma(usart, 5); // Здесь 5 - количество байт для передачи (размер ответа)
     }
 }
 
