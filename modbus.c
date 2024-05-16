@@ -157,7 +157,7 @@ unsigned short swapshort(unsigned short data)
 float swapfloat(float data)
 {
     // Объявление объединения (union) для работы с тремя форматами данных: float, unsigned short и unsigned char (байтовый массив)
-    // Здесь объявляется объединение (union), которое позволяет интерпретировать одну и ту же область памяти как три различных типа 
+    // Здесь объявляется объединение (union), которое позволяет интерпретировать одну и ту же область памяти как три различных типа
     // данных (float, unsigned short[2] и unsigned char[4]), что позволяет манипулировать отдельными байтами числа с плавающей запятой.
     union
     {
@@ -169,8 +169,8 @@ float swapfloat(float data)
     conv.fdata = data; // Запись исходного значения типа float в поле fdata объединения conv
 
     // Перестановка байтов:
-    // Здесь происходит фактическая перестановка байтов. Мы присваиваем старшему байту (четвёртому по порядку) 
-    // в sconv младший байт (первый по порядку) первой половины числа с плавающей запятой, и так далее, чтобы 
+    // Здесь происходит фактическая перестановка байтов. Мы присваиваем старшему байту (четвёртому по порядку)
+    // в sconv младший байт (первый по порядку) первой половины числа с плавающей запятой, и так далее, чтобы
     // поменять местами байты в каждой половине числа.
     sconv.cdata[3] = conv.cdata[0]; // Старший байт (четвёртый по порядку) получает младший байт первой половины float
     sconv.cdata[2] = conv.cdata[1]; // Следующий байт (третий по порядку) получает следующий байт первой половины float
@@ -185,119 +185,252 @@ float swapfloat(float data)
 
 unsigned long swaplong(unsigned long data)
 {
-
+    // Объявление объединения (union) для удобства доступа к данным различных типов
     union
     {
-        unsigned long ldata;
-        unsigned short sdata[2];
+        unsigned long ldata;     // Целое число беззнакового 32 бита
+        unsigned short sdata[2]; // Массив из двух беззнаковых коротких целых чисел (16 бит)
     } conv, sconv;
 
+    // Обмен местами байт в переданном числе с помощью встроенной функции _bswapw
     conv.ldata = _bswapw(data);
-    sconv.sdata[1] = conv.sdata[0];
-    sconv.sdata[0] = conv.sdata[1];
+
+    // Перестановка байт между элементами массива sdata в объединении conv
+    sconv.sdata[1] = conv.sdata[0]; // Младший байт идет в старший элемент массива
+    sconv.sdata[0] = conv.sdata[1]; // Старший байт идет в младший элемент массива
+
+    // Возврат числа после перестановки байт
     return sconv.ldata;
 }
 
 // запуск передачи без DMA режим прерываний
 
+// Этот код представляет собой функцию start_tx_usart, которая используется для начала передачи данных
+// через USART (универсальный асинхронный приемопередатчик) на
 void start_tx_usart(struct tag_usart *usart)
 {
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart4)
     {
+        // Если это USART4, отключаем прерывание RX
         IEC5bits.U4RXIE = 0; // disable RX interrupt
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Обнуляем счетчик буфера для передачи
         usart->out_buffer_count = 0;
+
+        // Сбрасываем флаг последнего байта
         usart->mb_status.last_byte = 0;
-        /*		if (usart->port_type==485){}*/
+
+        // Включаем передачу USART4
         ENAB_TX4;
+
+        // Включаем прерывание TX для USART4
         IEC5bits.U4TXIE = 1; // enable TX interrupt
     }
 
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart5)
     {
+        // Если это USART5, отключаем прерывание RX
         IEC5bits.U5RXIE = 0; // disable RX interrupt
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Обнуляем счетчик буфера для передачи
         usart->out_buffer_count = 0;
+
+        // Сбрасываем флаг последнего байта
         usart->mb_status.last_byte = 0;
+
+        // Включаем передачу USART5
         ENAB_TX5;
+
+        // Включаем прерывание TX для USART5
         IEC5bits.U5TXIE = 1; // enable TX interrupt
     }
+
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart3)
     {
+        // Если это USART3, отключаем прерывание RX
         IEC4bits.U3RXIE = 0; // disable RX interrupt
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Обнуляем счетчик буфера для передачи
         usart->out_buffer_count = 0;
+
+        // Сбрасываем флаг последнего байта
         usart->mb_status.last_byte = 0;
+
+        // Включаем передачу USART3
         ENAB_TX3;
+
+        // Включаем прерывание TX для USART3
         IEC4bits.U3TXIE = 1; // enable TX interrupt
     }
+
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart2)
     {
+        // Если это USART2, отключаем прерывание RX
         IEC4bits.U2RXIE = 0; // disable RX interrupt
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Обнуляем счетчик буфера для передачи
         usart->out_buffer_count = 0;
+
+        // Сбрасываем флаг последнего байта
         usart->mb_status.last_byte = 0;
+
+        // Включаем передачу USART2
         ENAB_TX2;
+
+        // Включаем прерывание TX для USART2
         IEC4bits.U2TXIE = 1; // enable TX interrupt
     }
+
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart1)
     {
+        // Если это USART1, отключаем прерывание RX
         IEC3bits.U1RXIE = 0; // disable RX interrupt
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Обнуляем счетчик буфера для передачи
         usart->out_buffer_count = 0;
+
+        // Сбрасываем флаг последнего байта
         usart->mb_status.last_byte = 0;
+
+        // Включаем передачу USART1
         ENAB_TX1;
+
+        // Включаем прерывание TX для USART1
         IEC3bits.U1TXIE = 1; // enable TX interrupt
     }
 }
 
-// запуск передачи юсарт только с DMA без прерываний по передатчику
 
+// запуск передачи юсарт только с DMA без прерываний по передатчику
 void start_tx_usart_dma(struct tag_usart *usart, unsigned short count)
 {
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart4)
     {
+        // Включаем передачу для USART4
         ENAB_TX4;
+
+        // Копируем данные из буфера usart->out_buffer в буфер buf_tx4 через memcpy
         memcpy((void *)(buf_tx4), (const void *)(usart->out_buffer), (count));
+
+        // Отключаем прерывание RX для USART4
         IEC5bits.U4RXIE = 0;
+
+        // Настраиваем DMA для передачи данных через USART4
         DMA_uni(&usart4, count, 1, 1);
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
-        IEC5bits.U4TXIE = 0; // enable TX interrupt
+
+        // Отключаем прерывание TX для USART4
+        IEC5bits.U4TXIE = 0;
     }
+
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart5)
     {
+        // Включаем передачу для USART5
         ENAB_TX5;
+
+        // Копируем данные из буфера usart->out_buffer в буфер buf_tx5 через memcpy
         memcpy((void *)(buf_tx5), (const void *)(usart->out_buffer), (count));
+
+        // Отключаем прерывание RX для USART5
         IEC5bits.U5RXIE = 0;
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Настраиваем DMA для передачи данных через USART5
         DMA_uni(&usart5, count, 1, 1);
+
+        // Отключаем прерывание TX для USART5
         IEC5bits.U5TXIE = 0;
     }
+
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart3)
     {
+        // Включаем передачу для USART3
         ENAB_TX3;
+
+        // Копируем данные из буфера usart->out_buffer в буфер buf_tx3 через memcpy
         memcpy((void *)(buf_tx3), (const void *)(usart->out_buffer), (count));
+
+        // Отключаем прерывание RX для USART3
         IEC4bits.U3RXIE = 0;
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Настраиваем DMA для передачи данных через USART3
         DMA_uni(&usart3, count, 1, 1);
+
+        // Отключаем прерывание TX для USART3
         IEC4bits.U3TXIE = 0;
     }
+
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart2)
     {
+        // Включаем передачу для USART2
         ENAB_TX2;
+
+        // Копируем данные из буфера usart->out_buffer в буфер buf_tx2 через memcpy
         memcpy((void *)(buf_tx2), (const void *)(usart->out_buffer), (count));
+
+        // Отключаем прерывание RX для USART2
         IEC4bits.U2RXIE = 0;
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Настраиваем DMA для передачи данных через USART2
         DMA_uni(&usart2, count, 1, 1);
+
+        // Отключаем прерывание TX для USART2
         IEC4bits.U2TXIE = 0;
     }
+
+    // Проверяем, с каким USART мы работаем
     if (usart == &usart1)
     {
+        // Включаем передачу для USART1
         ENAB_TX1;
+
+        // Копируем данные из буфера usart->out_buffer в буфер buf_tx1 через memcpy
         memcpy((void *)(buf_tx1), (const void *)(usart->out_buffer), (count));
+
+        // Отключаем прерывание RX для USART1
         IEC3bits.U1RXIE = 0;
+
+        // Устанавливаем флаг, что начата передача по MODBUS
         usart->mb_status.modb_transmiting = 1;
+
+        // Настраиваем DMA для передачи данных через USART1
         DMA_uni(&usart1, count, 1, 1);
+
+        // Отключаем прерывание TX для USART1
         IEC3bits.U1TXIE = 0;
     }
 }
