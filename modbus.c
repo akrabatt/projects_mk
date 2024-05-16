@@ -516,17 +516,6 @@ void mbs_10(struct tag_usart * _usart, unsigned short * source, unsigned short s
         for (ii = 0; ii < num_uni; ii++) {
             Modbus.buf [ii + shift_uni] = swapshort(Modbus_sw.buf [ii + shift_uni]);
         }
-        //		if ((MB_work_tmp.SET >= 0.0) && (MB_work_tmp.SET <= 100.0)) {FLAP_SET = MB_work_tmp.SET; }
-        //		else {
-        //			MB_work_tmp.SET = FLAP_SET; 
-        //			MB_work_swap.SET = FLAP_SET; 
-        //            MB_work_swap.buf  [6] = swapshort(MB_work_swap.buf  [6]);
-        //            MB_work_swap.buf  [7] = swapshort(MB_work_swap.buf  [7]);
-        //			answer_illegal_data_val (_usart); 
-        //			return;
-        //			}
-        //		MB_work.cmd1 = MB_work_tmp.cmd1;
-        //		MB_work.cmd2 = MB_work_tmp.cmd2;
     }
 
     // Копируем первые 8 байт из _usart->in_buffer в _usart->out_buffer
