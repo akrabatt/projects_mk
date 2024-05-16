@@ -894,16 +894,11 @@ void mbs_03(struct tag_usart *_usart, unsigned short *source, unsigned short shi
 Если режим DMA (DMA_type), вызывается функция start_tx_usart_dma для запуска передачи данных через DMA с указанием количества байт для отправки.
 Если режим USART (INT_type), вызывается функция start_tx_usart для запуска передачи данных через USART. */
 
-
-
-
-
 // 16-я функция модбас слэйв, отвечает на mbm_10 записывает данные и кратко отвечает что все ок
-// функция mbs_10 обрабатывает запросы на запись нескольких регистров, копирует данные в соответствующие массивы, 
+// функция mbs_10 обрабатывает запросы на запись нескольких регистров, копирует данные в соответствующие массивы,
 // меняет порядок байтов, записывает данные во внешнюю память и отправляет ответный пакет с вычисленным CRC16.
 void mbs_10(struct tag_usart *_usart, unsigned short *source, unsigned short shift_uni, unsigned short num_uni)
 {
-    //	unsigned int help_store [10];
     unsigned short ii, upd;
 
     upd = 0;
@@ -977,111 +972,147 @@ unsigned short last_reg;
 unsigned short length_err;
 
 // функция которая смотрит какая функция ей прилетела
-
+// Итак, функция mbs_uni осуществляет полный цикл обработки запросов Modbus, включая проверку данных,
+// расчет CRC16, проверку длины пакета и количества регистров, а также вызов соответствующих функций для чтения
+// или записи регистров, после чего завершает соединение Modbus.
 void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 {
     if (usart->mb_status.modb_received)
-    {                                                          // повторно смотрит приняты ли данные проверка CRC
-        PIC_CRC16(usart->in_buffer, (usart->in_buffer_count)); // расчет CRC
+    {
+        // Проверка флага modb_received, указывающего на наличие принятых данных Modbus
+        PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));
+        // Вычисление CRC16 для принятых данных
         if (uchCRCLo | uchCRCHi)
-        { // логическо или ели оба равны нулю
+        {
+            // Проверка некорректности CRC16 (неравенство нулю)
             close_mb(usart);
+            // Закрытие соединения Modbus в случае ошибки CRC16
             return;
-        } // no actions
+            // Выход из функции
+        }
 
         start_reg = usart->in_buffer[0x02] * 0x100;
+        // Извлечение стартового регистра (старший байт)
         start_reg += usart->in_buffer[0x03];
+        // Добавление младшего байта к стартовому регистру
         num_reg = usart->in_buffer[0x04] * 0x100;
+        // Извлечение количества регистров (старший байт)
         num_reg += usart->in_buffer[0x05];
-
+        // Добавление младшего байта к количеству регистров
         last_reg = start_reg + num_reg;
+        // Вычисление номера последнего регистра
 
-        if (((usart->in_buffer_count - 9) != usart->in_buffer[0x06]) && (usart->in_buffer[1] == 0x10)) // проверяет длинну
-        {                                                                                              // number received bytes - 9 bytes
+        if (((usart->in_buffer_count - 9) != usart->in_buffer[0x06]) && (usart->in_buffer[1] == 0x10))
+        {
+            // Проверка длины пакета данных и типа функции (0x10 - запись нескольких регистров)
             length_err = 1;
+            // Установка флага ошибки длины пакета
         }
         else
         {
             length_err = 0;
+            // Сброс флага ошибки длины пакета
         }
-        if (((usart->in_buffer_count - 9) != (num_reg * 2)) && (usart->in_buffer[1] == 0x10)) // num reg*2 must be equal to
+
+        if (((usart->in_buffer_count - 9) != (num_reg * 2)) && (usart->in_buffer[1] == 0x10))
         {
+            // Проверка количества регистров в пакете данных
             length_err = 1;
+            // Установка флага ошибки количества регистров
         }
         else
         {
             length_err = 0;
+            // Сброс флага ошибки количества регистров
         }
 
         switch (length_err)
         {
         case 1:
-        {
-            answer_illegal_data_addr(usart); // неправильный адрес
+            // Обработка ошибки длины пакета или количества регистров
+            answer_illegal_data_addr(usart);
+            // Генерация ответа о неправильном адресе
             break;
-        } // ?????? ??? ????????? ????? ??????? ? ????????? ?????????? ??????
+
         default:
-        {
             switch (usart->in_buffer[1])
             {
-            case 0x03: // 3-я функция
-            {
+            case 0x03:
+                // Обработка функции чтения нескольких регистров (0x03)
                 if (READ_)
                 {
                     mbs_03(usart, MB_swap.buf, (start_reg - START_READ), num_reg);
+                    // Выполнение функции чтения с массивом MB_swap.buf
                     break;
-                } // 2000 ... 2078
+                }
                 if (CONF_READ_)
                 {
                     mbs_03(usart, MB_sw_conf.buf, (start_reg - START_CONF_READ), num_reg);
+                    // Выполнение функции чтения с массивом MB_sw_conf.buf
                     break;
-                } // 500 ... 680
+                }
                 if (MODBUS_READ_)
                 {
                     mbs_03(usart, Modbus_sw.buf, (start_reg - START_MODBUS_READ), num_reg);
+                    // Выполнение функции чтения с массивом Modbus_sw.buf
                     break;
-                } // 0 ... 80
+                }
                 if (MB_DIAGN_READ_)
                 {
                     mbs_03(usart, MB_diagn_sw.buf, (start_reg - START_MB_DIAGN_READ), num_reg);
+                    // Выполнение функции чтения с массивом MB_diagn_sw.buf
                     break;
-                } // 200 ... 312
+                }
                 answer_illegal_data_addr(usart);
+                // Генерация ответа о неправильном адресе в случае неизвестной функции
                 break;
-            }
 
-            case 0x10: // 16-я функция
-            {
+            case 0x10:
+                // Обработка функции записи нескольких регистров (0x10)
                 if (WRITE_)
                 {
                     mbs_10(usart, MB_swap.input, (start_reg - START_WRITE), num_reg);
+                    // Выполнение функции записи с массивом MB_swap.input
                     break;
                 }
                 if (CONF_WRITE_)
                 {
                     mbs_10(usart, MB_sw_conf.buf, (start_reg - START_CONF_WRITE), num_reg);
+                    // Выполнение функции записи с массивом MB_sw_conf.buf
                     break;
                 }
                 if (MODBUS_WRITE_)
                 {
                     mbs_10(usart, Modbus_sw.buf, (start_reg - START_MODBUS_WRITE), num_reg);
+                    // Выполнение функции записи с массивом Modbus_sw.buf
                     break;
                 }
                 answer_illegal_data_addr(usart);
+                // Генерация ответа о неправильном адресе в случае неизвестной функции
                 break;
-            }
 
             default:
-            {
+                // Обработка неизвестной функции
                 answer_illegal_func(usart);
+                // Генерация ответа о неправильной функции
                 break;
             }
-            }
-        }
         }
     }
+    // Закрытие соединения Modbus
     close_mb(usart);
 }
+/* Основные шаги, выполняемые функцией mbs_uni:
+
+1. Проверка флага modb_received, который указывает на то, что данные Modbus были приняты.
+2. Расчет и проверка CRC16 для данных, принятых через USART.
+3. Извлечение информации о начальном и конечном регистрах из полученного запроса.
+4. Проверка длины пакета данных и количества регистров.
+5. Обработка ошибок в зависимости от результатов проверок:
+    - Если обнаружена ошибка CRC16, соединение Modbus закрывается.
+    - Если есть ошибки в длине пакета данных или количестве регистров, генерируется ответ о неправильном адресе.
+    - В зависимости от типа запроса (функции Modbus), вызывается соответствующая функция для чтения или записи нескольких регистров.
+6. В конце функции всегда происходит закрытие соединения Modbus, независимо от результатов обработки запроса. */
 
 // проверяет адрес
 
