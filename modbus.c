@@ -586,27 +586,52 @@ void stop_uart_tx(void)
 // выполняя соответствующие действия для каждого из них в зависимости от текущего состояния передачи и обнаруженных ошибок.
 
 // остановка передачи без прерываний DMA
-
 void stop_uart_tx_dma(void)
 {
+    // Проверяем режим передачи (DMA_type) для USART4
     if (usart4.mb_status.tx_mode == DMA_type)
     {
+        // Проверяем условие для остановки передачи
         if ((usart4.mb_status.modb_transmiting == 1) && (U4STAbits.TRMT))
+        // Это условие проверяет, можно ли остановить передачу данных через USART.Конкретные условия включают:
+        // usartX.mb_status.modb_transmiting == 1: Проверяет, что передача MODBUS через DMA была начата.
+        // UxSTAbits.TRMT: Проверяет, что буфер передатчика USART пуст (готов для новой передачи).
         {
+            // Устанавливаем флаг, что передача MODBUS завершена
             usart4.mb_status.modb_transmiting = 0;
+
+            // Останавливаем DMA для передачи данных через USART4
             DMA_uni(&usart4, 1, 0, 0);
+
+            // Сбрасываем флаги приема и передачи MODBUS
             usart4.mb_status.modb_received = 0;
             usart4.mb_status.modb_receiving = 0;
+
+            // Обнуляем счетчик входного буфера
             usart4.in_buffer_count = 0;
+
+            // Сбрасываем флаг прерывания RX для USART4
             IFS5bits.U4RXIF = 0;
+
+            // Включаем прием для USART4
             ENAB_RX4;
+
+            // Включаем прерывание RX для USART4
             IEC5bits.U4RXIE = 1;
         }
+
+        // Проверяем наличие ошибок в USART4 (Overrun Error или Framing Error)
         if (U4STAbits.OERR || U4STAbits.FERR)
+        // Это условие проверяет наличие ошибок (Overrun Error или Framing Error) для каждого USART.
+        // Если обнаружена ошибка, она сбрасывается (OERR = 0).
         {
+            // Сбрасываем ошибку, если она есть
             U4STAbits.OERR = 0;
         }
     }
+
+    // Проверяем режим передачи (DMA_type) для USART5 (аналогично для других USART)
+    // Процесс повторяется для каждого USART (usart5, usart3, usart2, usart1)
 
     if (usart5.mb_status.tx_mode == DMA_type)
     {
@@ -682,13 +707,17 @@ void stop_uart_tx_dma(void)
     }
 }
 
-// сброс модбаса по приему по COM порту
-
+// Эта функция позволяет сбросить состояние протокола MODBUS для конкретного USART, устанавливая соответствующие
+// флаги в 0 и обнуляя счетчик буфера, что полезно при завершении или сбросе процесса передачи или приема данных
+// через USART с применением протокола MODBUS.
 void close_mb(struct tag_usart *usart)
 {
-    usart->mb_status.modb_received = 0;
-    usart->mb_status.modb_receiving = 0;
-    usart->in_buffer_count = 0;
+    // Сбрасываем флаги приема и передачи MODBUS
+    usart->mb_status.modb_received = 0;  // Эта строка устанавливает флаг modb_received в 0, что указывает на то, что передача MODBUS не была завершена.
+    usart->mb_status.modb_receiving = 0; // Эта строка также устанавливает флаг modb_receiving в 0, что указывает на то, что процесс приема MODBUS не активен.
+
+    // Обнуляем счетчик входного буфера
+    usart->in_buffer_count = 0; // Эта строка обнуляет счетчик in_buffer_count, который отслеживает количество байт, находящихся во входном буфере USART.
 }
 
 // формирование ответа на ошибочное обращение
