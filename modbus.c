@@ -320,8 +320,9 @@ void start_tx_usart(struct tag_usart *usart)
     }
 }
 
-
 // запуск передачи юсарт только с DMA без прерываний по передатчику
+// Это объявление функции start_tx_usart_dma, которая принимает указатель usart на структуру
+// tag_usart и количество данных count для передачи через DMA.
 void start_tx_usart_dma(struct tag_usart *usart, unsigned short count)
 {
     // Проверяем, с каким USART мы работаем
@@ -331,12 +332,16 @@ void start_tx_usart_dma(struct tag_usart *usart, unsigned short count)
         ENAB_TX4;
 
         // Копируем данные из буфера usart->out_buffer в буфер buf_tx4 через memcpy
+        // Копирование данных из буфера usart->out_buffer в буфер передачи buf_txX через функцию memcpy. buf_txX
+        // предположительно представляет собой буфер DMA для конкретного USART.
         memcpy((void *)(buf_tx4), (const void *)(usart->out_buffer), (count));
 
         // Отключаем прерывание RX для USART4
         IEC5bits.U4RXIE = 0;
 
         // Настраиваем DMA для передачи данных через USART4
+        // Настройка и запуск DMA для передачи данных через конкретный USART
+        // (X заменяется номером USART) с указанным количеством данных (count).
         DMA_uni(&usart4, count, 1, 1);
 
         // Устанавливаем флаг, что начата передача по MODBUS
@@ -435,102 +440,150 @@ void start_tx_usart_dma(struct tag_usart *usart, unsigned short count)
     }
 }
 
-// остоновка передачи юсарт с прерыванием
+// остановки передачи данных через USART
 
 void stop_uart_tx(void)
 {
     if (usart4.mb_status.tx_mode == INT_type)
     {
-        if ((usart4.mb_status.modb_transmiting == 1) && (U4STAbits.TRMT) && (IEC5bits.U4TXIE == 0))
+        // Проверяем режим передачи (INT_type) для USART4
+        if (usart4.mb_status.tx_mode == INT_type)
         {
-            usart4.mb_status.last_byte = 0;
-            usart4.mb_status.modb_received = 0;
-            usart4.mb_status.modb_receiving = 0;
-            usart4.in_buffer_count = 0;
-            usart4.mb_status.modb_transmiting = 0;
-            IFS5bits.U4RXIF = 0;
-            ENAB_RX4;
-            IEC5bits.U4RXIE = 1; // disable RX interrupt
-        }
-        if (U4STAbits.OERR || U4STAbits.FERR)
-        {
-            U4STAbits.OERR = 0;
-        }
-    }
+            // Проверяем условие для остановки передачи
+            if ((usart4.mb_status.modb_transmiting == 1) && (U4STAbits.TRMT) && (IEC5bits.U4TXIE == 0))
+            // Это условие проверяет, можно ли остановить передачу данных через USART. Конкретные условия включают:
+            // usartX.mb_status.modb_transmiting == 1: Проверяет, что передача MODBUS была начата.
+            // UxSTAbits.TRMT: Проверяет, что буфер передатчика USART пуст (готов для новой передачи).
+            // IECxbits.UXTXIE == 0: Проверяет, что прерывание передачи USART было выключено.
+            {
+                // Сбрасываем флаг последнего байта
+                usart4.mb_status.last_byte = 0;
 
-    if (usart5.mb_status.tx_mode == INT_type)
-    {
-        if ((usart5.mb_status.modb_transmiting == 1) && (U5STAbits.TRMT) && (IEC5bits.U5TXIE == 0))
-        {
-            usart5.mb_status.last_byte = 0;
-            usart5.mb_status.modb_received = 0;
-            usart5.mb_status.modb_receiving = 0;
-            usart5.in_buffer_count = 0;
-            usart5.mb_status.modb_transmiting = 0;
-            IFS5bits.U5RXIF = 0;
-            ENAB_RX5;
-            IEC5bits.U5RXIE = 1; // disable RX interrupt
+                // Сбрасываем флаги приема и передачи MODBUS
+                usart4.mb_status.modb_received = 0;
+                usart4.mb_status.modb_receiving = 0;
+
+                // Обнуляем счетчик входного буфера
+                usart4.in_buffer_count = 0;
+
+                // Устанавливаем флаг, что передача MODBUS завершена
+                usart4.mb_status.modb_transmiting = 0;
+
+                // Сбрасываем флаг прерывания RX для USART4
+                IFS5bits.U4RXIF = 0;
+
+                // Включаем прием для USART4
+                ENAB_RX4;
+
+                // Включаем прерывание RX для USART4
+                IEC5bits.U4RXIE = 1; // disable RX interrupt
+            }
+
+            // Проверяем наличие ошибок в USART4 (Overrun Error или Framing Error)
+            if (U4STAbits.OERR || U4STAbits.FERR)
+            {
+                // Сбрасываем ошибку, если она есть
+                U4STAbits.OERR = 0;
+            }
         }
-        if (U5STAbits.OERR || U5STAbits.FERR)
+
+        // Проверяем режим передачи (INT_type) для USART5
+        if (usart5.mb_status.tx_mode == INT_type)
         {
-            U5STAbits.OERR = 0;
+            // Проверяем условие для остановки передачи
+            if ((usart5.mb_status.modb_transmiting == 1) && (U5STAbits.TRMT) && (IEC5bits.U5TXIE == 0))
+            {
+                // Сбрасываем флаг последнего байта
+                usart5.mb_status.last_byte = 0;
+
+                // Сбрасываем флаги приема и передачи MODBUS
+                usart5.mb_status.modb_received = 0;
+                usart5.mb_status.modb_receiving = 0;
+
+                // Обнуляем счетчик входного буфера
+                usart5.in_buffer_count = 0;
+
+                // Устанавливаем флаг, что передача MODBUS завершена
+                usart5.mb_status.modb_transmiting = 0;
+
+                // Сбрасываем флаг прерывания RX для USART5
+                IFS5bits.U5RXIF = 0;
+
+                // Включаем прием для USART5
+                ENAB_RX5;
+
+                // Включаем прерывание RX для USART5
+                IEC5bits.U5RXIE = 1; // disable RX interrupt
+            }
+
+            // Проверяем наличие ошибок в USART5 (Overrun Error или Framing Error)
+            if (U5STAbits.OERR || U5STAbits.FERR)
+            {
+                // Сбрасываем ошибку, если она есть
+                U5STAbits.OERR = 0;
+            }
         }
-    }
-    if (usart3.mb_status.tx_mode == INT_type)
-    {
-        if ((usart3.mb_status.modb_transmiting == 1) && (U3STAbits.TRMT) && (IEC4bits.U3TXIE == 0))
+
+        // Проверяем режим передачи (INT_type) для USART3 (аналогично для других USART)
+        // Процесс повторяется для каждого USART (usart3, usart2, usart1)
+        if (usart3.mb_status.tx_mode == INT_type)
         {
-            usart3.mb_status.last_byte = 0;
-            usart3.mb_status.modb_received = 0;
-            usart3.mb_status.modb_receiving = 0;
-            usart3.in_buffer_count = 0;
-            usart3.mb_status.modb_transmiting = 0;
-            IFS4bits.U3RXIF = 0;
-            ENAB_RX3;
-            IEC4bits.U3RXIE = 1; // disable RX interrupt
+            if ((usart3.mb_status.modb_transmiting == 1) && (U3STAbits.TRMT) && (IEC4bits.U3TXIE == 0))
+            {
+                usart3.mb_status.last_byte = 0;
+                usart3.mb_status.modb_received = 0;
+                usart3.mb_status.modb_receiving = 0;
+                usart3.in_buffer_count = 0;
+                usart3.mb_status.modb_transmiting = 0;
+                IFS4bits.U3RXIF = 0;
+                ENAB_RX3;
+                IEC4bits.U3RXIE = 1; // disable RX interrupt
+            }
+            if (U3STAbits.OERR || U3STAbits.FERR)
+            {
+                U3STAbits.OERR = 0;
+            }
         }
-        if (U3STAbits.OERR || U3STAbits.FERR)
+        if (usart2.mb_status.tx_mode == INT_type)
         {
-            U3STAbits.OERR = 0;
+            if ((usart2.mb_status.modb_transmiting == 1) && (U2STAbits.TRMT) && (IEC4bits.U2TXIE == 0))
+            {
+                usart2.mb_status.last_byte = 0;
+                usart2.mb_status.modb_received = 0;
+                usart2.mb_status.modb_receiving = 0;
+                usart2.in_buffer_count = 0;
+                usart2.mb_status.modb_transmiting = 0;
+                IFS4bits.U2RXIF = 0;
+                ENAB_RX2;
+                IEC4bits.U2RXIE = 1; // disable RX interrupt
+            }
+            if (U2STAbits.OERR || U2STAbits.FERR)
+            {
+                U2STAbits.OERR = 0;
+            }
         }
-    }
-    if (usart2.mb_status.tx_mode == INT_type)
-    {
-        if ((usart2.mb_status.modb_transmiting == 1) && (U2STAbits.TRMT) && (IEC4bits.U2TXIE == 0))
+        if (usart1.mb_status.tx_mode == INT_type)
         {
-            usart2.mb_status.last_byte = 0;
-            usart2.mb_status.modb_received = 0;
-            usart2.mb_status.modb_receiving = 0;
-            usart2.in_buffer_count = 0;
-            usart2.mb_status.modb_transmiting = 0;
-            IFS4bits.U2RXIF = 0;
-            ENAB_RX2;
-            IEC4bits.U2RXIE = 1; // disable RX interrupt
-        }
-        if (U2STAbits.OERR || U2STAbits.FERR)
-        {
-            U2STAbits.OERR = 0;
-        }
-    }
-    if (usart1.mb_status.tx_mode == INT_type)
-    {
-        if ((usart1.mb_status.modb_transmiting == 1) && (U1STAbits.TRMT) && (IEC3bits.U1TXIE == 0))
-        {
-            usart1.mb_status.last_byte = 0;
-            usart1.mb_status.modb_received = 0;
-            usart1.mb_status.modb_receiving = 0;
-            usart1.in_buffer_count = 0;
-            usart1.mb_status.modb_transmiting = 0;
-            IFS3bits.U1RXIF = 0;
-            ENAB_RX1;
-            IEC3bits.U1RXIE = 1; // disable RX interrupt
-        }
-        if (U1STAbits.OERR || U1STAbits.FERR)
-        {
-            U1STAbits.OERR = 0;
+            if ((usart1.mb_status.modb_transmiting == 1) && (U1STAbits.TRMT) && (IEC3bits.U1TXIE == 0))
+            {
+                usart1.mb_status.last_byte = 0;
+                usart1.mb_status.modb_received = 0;
+                usart1.mb_status.modb_receiving = 0;
+                usart1.in_buffer_count = 0;
+                usart1.mb_status.modb_transmiting = 0;
+                IFS3bits.U1RXIF = 0;
+                ENAB_RX1;
+                IEC3bits.U1RXIE = 1; // disable RX interrupt
+            }
+            if (U1STAbits.OERR || U1STAbits.FERR)
+            {
+                U1STAbits.OERR = 0;
+            }
         }
     }
 }
+// Эта функция выполняет остановку передачи данных через USART, проверяя условия для каждого USART (usartX) и
+// выполняя соответствующие действия для каждого из них в зависимости от текущего состояния передачи и обнаруженных ошибок.
 
 // остановка передачи без прерываний DMA
 
