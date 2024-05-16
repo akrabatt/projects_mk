@@ -484,26 +484,35 @@ void mbs_10(struct tag_usart * _usart, unsigned short * source, unsigned short s
 
     upd = 0;
 
+    // Проверяем, является ли указатель source указателем на массив MB_swap.input
     if (source == MB_swap.input) {
+        // Копируем данные из буфера _usart->in_buffer в MB_swap.input с учетом смещения shift_uni и количества элементов num_uni
         memcpy((void *) (MB_swap.input + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni * 2));
+        // Проходим по элементам исходного массива MB_swap.input, меняем порядок байт с помощью функций swapshort и _bswapw
         for (ii = 0; ii < num_uni; ii++) {
             MB.input [ii + shift_uni] = swapshort(MB_swap.input [ii + shift_uni]);
             MB.input [ii + shift_uni] = _bswapw(MB.input [ii + shift_uni]);
         }
     }
-
+    // Проверяем, является ли указатель source указателем на массив MB_sw_conf.buf
     if (source == MB_sw_conf.buf) {
+        // Копируем данные из буфера _usart->in_buffer в MB_sw_conf.buf с учетом смещения shift_uni и количества элементов num_uni
         memcpy((void *) (MB_sw_conf.buf + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni * 2));
 
+        // Проходим по элементам исходного массива MB_sw_conf.buf, меняем порядок байт с помощью функции swapshort
         for (ii = 0; ii < num_uni; ii++) {
             MB_conf.buf [ii + shift_uni] = swapshort(MB_sw_conf.buf [ii + shift_uni]);
         }
+        // Записываем данные во внешнюю память и выполняем другие действия
         putcs_FRAM(RAMTRON_START_CONFIG, MB_conf.buf, 180);
         getcs_FRAM(RAMTRON_START_CONFIG, MB_conf.buf, 180);
         load_config();
     }
+    // Проверяем, является ли указатель source указателем на массив Modbus_sw.buf
     if (source == Modbus_sw.buf) {
+        // Копируем данные из буфера _usart->in_buffer в Modbus_sw.buf с учетом смещения shift_uni и количества элементов num_uni
         memcpy((void *) (Modbus_sw.buf + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni * 2));
+        // Проходим по элементам исходного массива Modbus_sw.buf, меняем порядок байт с помощью функции swapshort
         for (ii = 0; ii < num_uni; ii++) {
             Modbus.buf [ii + shift_uni] = swapshort(Modbus_sw.buf [ii + shift_uni]);
         }
@@ -520,17 +529,19 @@ void mbs_10(struct tag_usart * _usart, unsigned short * source, unsigned short s
         //		MB_work.cmd2 = MB_work_tmp.cmd2;
     }
 
-
+    // Копируем первые 8 байт из _usart->in_buffer в _usart->out_buffer
     _usart->out_buffer [0x00] = _usart->in_buffer[0x00];
     _usart->out_buffer [0x01] = _usart->in_buffer[0x01];
     _usart->out_buffer [0x02] = _usart->in_buffer[0x02];
     _usart->out_buffer [0x03] = _usart->in_buffer[0x03];
     _usart->out_buffer [0x04] = _usart->in_buffer[0x04];
     _usart->out_buffer [0x05] = _usart->in_buffer[0x05];
+    // Вычисляем CRC16 для первых 6 байт из _usart->out_buffer и записываем его в буфер
     PIC_CRC16(_usart->out_buffer, (0x06));
     _usart->out_buffer [0x06] = uchCRCLo;
     _usart->out_buffer [0x07] = uchCRCHi;
     _usart->number_send = 0x08;
+    // Проверяем режим передачи данных и вызываем соответствующую функцию
     if (_usart->mb_status.tx_mode == DMA_type) {
         start_tx_usart_dma(_usart, _usart->number_send);
     } else {
