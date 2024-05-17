@@ -1203,7 +1203,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
     {
         return;
     }
-    switch (usart->mbm_status) // Ќачало блока switch дл€ обработки различных состо€ний master-устройства
+    switch (usart->mbm_status) // Ќачало блока switch дл€ обработки разлкичных состо€ний master-устройства
     {
     case 0: // —осто€ние 0: инициализаци€
     {
