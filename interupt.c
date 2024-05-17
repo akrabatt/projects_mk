@@ -168,112 +168,109 @@ void __ISR_AT_VECTOR(_UART4_TX_VECTOR, IPL4SRS) U4TXInterrupt(void)
 
 void __ISR_AT_VECTOR(_UART1_RX_VECTOR, IPL4SRS) U1RXInterrupt(void)
 {
-    IFS3bits.U1RXIF = 0;
-    usart1.mb_status.modb_receiving = 1;
-    while (U1STAbits.URXDA)
+    IFS3bits.U1RXIF = 0;                 // Сброс флага прерывания UART1 приемника
+    usart1.mb_status.modb_receiving = 1; // Установка флага приема MODBUS для UART1
+    while (U1STAbits.URXDA)              // Пока в буфере приемника UART1 есть данные
     {
-        usart1.in_buffer[usart1.in_buffer_count++] = U1RXREG;
+        usart1.in_buffer[usart1.in_buffer_count++] = U1RXREG; // Чтение данных из буфера приемника UART1
     }
-    if (usart1.in_buffer_count >= IN_SIZE1)
+    if (usart1.in_buffer_count >= IN_SIZE1) // Если принято максимальное количество байт
     {
-        usart1.mb_status.modb_received = 1;
-        usart1.mb_status.modb_receiving = 0;
+        usart1.mb_status.modb_received = 1;  // Установка флага окончания приема MODBUS для UART1
+        usart1.mb_status.modb_receiving = 0; // Сброс флага приема MODBUS для UART1
     }
-    tmr_1_init(frame_delay_1, 1, 1);
-
-    IFS3bits.U1RXIF = 0;
+    tmr_1_init(frame_delay_1, 1, 1); // Инициализация таймера 1 для задержки
+    IFS3bits.U1RXIF = 0;             // Сброс флага прерывания UART1 приемника
 }
 
 void __ISR_AT_VECTOR(_UART1_TX_VECTOR, IPL1SRS) U1TXInterrupt(void)
 {
-    IFS3bits.U1TXIF = 0;
-    while ((!U1STAbits.UTXBF) && (!usart1.mb_status.last_byte)) // copy if buff  isn't full and byte is not last
+    IFS3bits.U1TXIF = 0;                                        // Сброс флага прерывания UART1 передатчика
+    while ((!U1STAbits.UTXBF) && (!usart1.mb_status.last_byte)) // Пока буфер передатчика UART1 не заполнен и не передан последний байт
     {
-        U1TXREG = usart1.out_buffer[usart1.out_buffer_count++];
-        if (usart1.out_buffer_count >= (usart1.number_send))
+        U1TXREG = usart1.out_buffer[usart1.out_buffer_count++]; // Запись данных из буфера передатчика UART1 в регистр передачи
+        if (usart1.out_buffer_count >= (usart1.number_send))    // Если передано максимальное количество байт
         {
-            usart1.mb_status.last_byte = 1;
-            IEC3bits.U1TXIE = 0;
+            usart1.mb_status.last_byte = 1; // Установка флага последнего байта для UART1
+            IEC3bits.U1TXIE = 0;            // Запрет прерываний от UART1 передатчика
         }
     }
-    IFS3bits.U1TXIF = 0;
+    IFS3bits.U1TXIF = 0; // Сброс флага прерывания UART1 передатчика
 }
 
 void __ISR_AT_VECTOR(_UART2_RX_VECTOR, IPL4SRS) U2RXInterrupt(void)
 {
-    IFS4bits.U2RXIF = 0;
-    usart2.mb_status.modb_receiving = 1;
-    while (U2STAbits.URXDA)
+    IFS4bits.U2RXIF = 0;                 // Сброс флага прерывания UART2 приемника
+    usart2.mb_status.modb_receiving = 1; // Установка флага приема MODBUS для UART2
+    while (U2STAbits.URXDA)              // Пока в приемном буфере UART2 есть данные
     {
-        usart2.in_buffer[usart2.in_buffer_count++] = U2RXREG;
+        usart2.in_buffer[usart2.in_buffer_count++] = U2RXREG; // Запись данных из регистра приема UART2 в буфер приема
     }
-    if (usart2.in_buffer_count >= IN_SIZE1)
+    if (usart2.in_buffer_count >= IN_SIZE1) // Если буфер приема UART2 переполнен
     {
-        usart2.mb_status.modb_received = 1;
-        usart2.mb_status.modb_receiving = 0;
+        usart2.mb_status.modb_received = 1;  // Установка флага приема MODBUS для UART2
+        usart2.mb_status.modb_receiving = 0; // Сброс флага приема MODBUS для UART2
     }
-    tmr_2_init(frame_delay_1, 1, 1);
-
-    IFS4bits.U2RXIF = 0;
-    //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+    tmr_2_init(frame_delay_1, 1, 1); // Инициализация таймера 2
+    IFS4bits.U2RXIF = 0;             // Сброс флага прерывания UART2 приемника
+    //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1; // Управление портом портом E2
 }
 
 void __ISR_AT_VECTOR(_UART2_TX_VECTOR, IPL1SRS) U2TXInterrupt(void)
 {
-    IFS4bits.U2TXIF = 0;
-    while ((!U2STAbits.UTXBF) && (!usart2.mb_status.last_byte)) // copy if buff  isn't full and byte is not last
+    IFS4bits.U2TXIF = 0;                                        // Сброс флага прерывания UART2 передатчика
+    while ((!U2STAbits.UTXBF) && (!usart2.mb_status.last_byte)) // Пока буфер передатчика UART2 не заполнен и байт не последний
     {
-        U2TXREG = usart2.out_buffer[usart2.out_buffer_count++];
-        if (usart2.out_buffer_count >= (usart2.number_send))
+        U2TXREG = usart2.out_buffer[usart2.out_buffer_count++]; // Запись данных из буфера передачи в регистр передачи UART2
+        if (usart2.out_buffer_count >= (usart2.number_send))    // Если достигнут конец данных для передачи
         {
-            usart2.mb_status.last_byte = 1;
-            IEC4bits.U2TXIE = 0;
+            usart2.mb_status.last_byte = 1; // Установка флага последнего байта для UART2
+            IEC4bits.U2TXIE = 0;            // Отключение прерывания передачи для UART2
         }
     }
-    IFS4bits.U2TXIF = 0;
+    IFS4bits.U2TXIF = 0; // Сброс флага прерывания UART2 передатчика
 }
 
 void __ISR_AT_VECTOR(_UART3_RX_VECTOR, IPL4SRS) U3RXInterrupt(void)
 {
-    IFS4bits.U3RXIF = 0;
-    usart3.mb_status.modb_receiving = 1;
-    while (U3STAbits.URXDA)
+    IFS4bits.U3RXIF = 0;                 // Сброс флага прерывания UART3 приемника
+    usart3.mb_status.modb_receiving = 1; // Установка флага приема для UART3
+    while (U3STAbits.URXDA)              // Пока буфер приемника UART3 не пуст
     {
-        usart3.in_buffer[usart3.in_buffer_count++] = U3RXREG;
+        usart3.in_buffer[usart3.in_buffer_count++] = U3RXREG; // Запись данных из регистра приемника UART3 в буфер приема
     }
-    if (usart3.in_buffer_count >= IN_SIZE1)
+    if (usart3.in_buffer_count >= IN_SIZE1) // Если достигнут максимальный размер буфера приема
     {
-        usart3.mb_status.modb_received = 1;
-        usart3.mb_status.modb_receiving = 0;
+        usart3.mb_status.modb_received = 1;  // Установка флага завершения приема для UART3
+        usart3.mb_status.modb_receiving = 0; // Сброс флага приема для UART3
     }
-    tmr_7_init(frame_delay_1, 1, 1);
+    tmr_7_init(frame_delay_1, 1, 1); // Инициализация таймера 7 для задержки между кадрами
 
-    IFS4bits.U3RXIF = 0;
-    //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+    IFS4bits.U3RXIF = 0; // Сброс флага прерывания UART3 приемника
 }
 
 void __ISR_AT_VECTOR(_UART3_TX_VECTOR, IPL1SRS) U3TXInterrupt(void)
 {
-    IFS4bits.U3TXIF = 0;
-    while ((!U3STAbits.UTXBF) && (!usart3.mb_status.last_byte)) // copy if buff  isn't full and byte is not last
+    IFS4bits.U3TXIF = 0;                                        // Сброс флага прерывания UART3 передатчика
+    while ((!U3STAbits.UTXBF) && (!usart3.mb_status.last_byte)) // Пока буфер передатчика UART3 не заполнен и последний байт не отправлен
     {
-        U3TXREG = usart3.out_buffer[usart3.out_buffer_count++];
-        if (usart3.out_buffer_count >= (usart3.number_send))
+        U3TXREG = usart3.out_buffer[usart3.out_buffer_count++]; // Отправка данных из буфера передачи UART3 в регистр передачи
+        if (usart3.out_buffer_count >= (usart3.number_send))    // Если достигнут максимальный размер буфера передачи
         {
-            usart3.mb_status.last_byte = 1;
-            IEC4bits.U3TXIE = 0;
+            usart3.mb_status.last_byte = 1; // Установка флага последнего байта для UART3
+            IEC4bits.U3TXIE = 0;            // Отключение прерывания UART3 передатчика
         }
     }
-    IFS4bits.U3TXIF = 0;
+    IFS4bits.U3TXIF = 0; // Сброс флага прерывания UART3 передатчика
 }
 
 void __ISR_AT_VECTOR(_DMA0_VECTOR, IPL4SRS) __DMA0Interrupt(void)
 {
-    int dmaFlags = DCH0INT & 0xff; // read the interrupt flags
+    int dmaFlags = DCH0INT & 0xff; // Чтение флагов прерывания DMA канала 0
 
-    // perform application specific operations in response to any interrupt flag set
+    // Выполнение прикладных операций в ответ на любой установленный флаг прерывания
 
-    DCH0INTCLR = 0x000000ff; // clear the DMA channel interrupt flags
-    IFS4bits.DMA0IF = 0;     // Be sure to clear the DMA0 interrupt flags
-    // before exiting the service routine.
+    DCH0INTCLR = 0x000000ff; // Сброс флагов прерывания канала DMA 0
+    IFS4bits.DMA0IF = 0;     // Обязательно сбрасываем флаги прерывания DMA0
+    // перед выходом из обработчика прерывания.
 }
