@@ -87,102 +87,120 @@ PIC32MZ1024EFH100. DEVCFG0 определяет настройки, такие как разрешение отладчика 
 
 /*** Ports System Service Configuration ***/
 
-#define SYS_PORT_A_ANSEL 0x0600
-#define SYS_PORT_A_TRIS 0xc6e3
-#define SYS_PORT_A_LAT 0x0
-#define SYS_PORT_A_ODC 0x0
-#define SYS_PORT_A_CNPU 0x0
-#define SYS_PORT_A_CNPD 0x0
-#define SYS_PORT_A_CNEN 0x0
+// Настройки порта A
+#define SYS_PORT_A_ANSEL 0x0600 // Настройка регистра ANSEL для порта A
+#define SYS_PORT_A_TRIS 0xc6e3  // Настройка регистра TRIS для порта A
+#define SYS_PORT_A_LAT 0x0      // Настройка регистра LAT для порта A
+#define SYS_PORT_A_ODC 0x0      // Настройка регистра ODC для порта A
+#define SYS_PORT_A_CNPU 0x0     // Настройка регистра CNPU для порта A
+#define SYS_PORT_A_CNPD 0x0     // Настройка регистра CNPD для порта A
+#define SYS_PORT_A_CNEN 0x0     // Настройка регистра CNEN для порта A
 
-#define SYS_PORT_B_ANSEL 0x8000
-#define SYS_PORT_B_TRIS 0xe6ff
-#define SYS_PORT_B_LAT 0x8000
-#define SYS_PORT_B_ODC 0x0
-#define SYS_PORT_B_CNPU 0x0
-#define SYS_PORT_B_CNPD 0x0
-#define SYS_PORT_B_CNEN 0x0
+// Настройки порта B
+#define SYS_PORT_B_ANSEL 0x8000 // Настройка регистра ANSEL для порта B
+#define SYS_PORT_B_TRIS 0xe6ff  // Настройка регистра TRIS для порта B
+#define SYS_PORT_B_LAT 0x8000   // Настройка регистра LAT для порта B
+#define SYS_PORT_B_ODC 0x0      // Настройка регистра ODC для порта B
+#define SYS_PORT_B_CNPU 0x0     // Настройка регистра CNPU для порта B
+#define SYS_PORT_B_CNPD 0x0     // Настройка регистра CNPD для порта B
+#define SYS_PORT_B_CNEN 0x0     // Настройка регистра CNEN для порта B
 
-#define SYS_PORT_C_ANSEL 0x0
-#define SYS_PORT_C_TRIS 0xb01e
-#define SYS_PORT_C_LAT 0x0
-#define SYS_PORT_C_ODC 0x0
-#define SYS_PORT_C_CNPU 0x0
-#define SYS_PORT_C_CNPD 0x0
-#define SYS_PORT_C_CNEN 0x0
+// Настройки порта C
+#define SYS_PORT_C_ANSEL 0x0   // Настройка регистра ANSEL для порта C
+#define SYS_PORT_C_TRIS 0xb01e // Настройка регистра TRIS для порта C
+#define SYS_PORT_C_LAT 0x0     // Настройка регистра LAT для порта C
+#define SYS_PORT_C_ODC 0x0     // Настройка регистра ODC для порта C
+#define SYS_PORT_C_CNPU 0x0    // Настройка регистра CNPU для порта C
+#define SYS_PORT_C_CNPD 0x0    // Настройка регистра CNPD для порта C
+#define SYS_PORT_C_CNEN 0x0    // Настройка регистра CNEN для порта C
 
-#define SYS_PORT_D_ANSEL 0x0
-#define SYS_PORT_D_TRIS 0x14
-#define SYS_PORT_D_LAT 0x0
-#define SYS_PORT_D_ODC 0x0
-#define SYS_PORT_D_CNPU 0x0
-#define SYS_PORT_D_CNPD 0x0
-#define SYS_PORT_D_CNEN 0x0
+// Настройки порта D
+#define SYS_PORT_D_ANSEL 0x0 // Настройка регистра ANSEL для порта D
+#define SYS_PORT_D_TRIS 0x14 // Настройка регистра TRIS для порта D
+#define SYS_PORT_D_LAT 0x0   // Настройка регистра LAT для порта D
+#define SYS_PORT_D_ODC 0x0   // Настройка регистра ODC для порта D
+#define SYS_PORT_D_CNPU 0x0  // Настройка регистра CNPU для порта D
+#define SYS_PORT_D_CNPD 0x0  // Настройка регистра CNPD для порта D
+#define SYS_PORT_D_CNEN 0x0  // Настройка регистра CNEN для порта D
 
-#define SYS_PORT_E_ANSEL 0x0
-#define SYS_PORT_E_TRIS 0x3e0
-#define SYS_PORT_E_LAT 0x10
-#define SYS_PORT_E_ODC 0x0
-#define SYS_PORT_E_CNPU 0x0
-#define SYS_PORT_E_CNPD 0x0
-#define SYS_PORT_E_CNEN 0x0
+// Настройки порта E
+#define SYS_PORT_E_ANSEL 0x0  // Настройка регистра ANSEL для порта E
+#define SYS_PORT_E_TRIS 0x3e0 // Настройка регистра TRIS для порта E
+#define SYS_PORT_E_LAT 0x10   // Настройка регистра LAT для порта E
+#define SYS_PORT_E_ODC 0x0    // Настройка регистра ODC для порта E
+#define SYS_PORT_E_CNPU 0x0   // Настройка регистра CNPU для порта E
+#define SYS_PORT_E_CNPD 0x0   // Настройка регистра CNPD для порта E
+#define SYS_PORT_E_CNEN 0x0   // Настройка регистра CNEN для порта E
 
-#define SYS_PORT_F_ANSEL 0x0
-#define SYS_PORT_F_TRIS 0x113b
-#define SYS_PORT_F_LAT 0x0
-#define SYS_PORT_F_ODC 0x0
-#define SYS_PORT_F_CNPU 0x0
-#define SYS_PORT_F_CNPD 0x0
-#define SYS_PORT_F_CNEN 0x0
+// Настройки порта F
+#define SYS_PORT_F_ANSEL 0x0   // Настройка регистра ANSEL для порта F
+#define SYS_PORT_F_TRIS 0x113b // Настройка регистра TRIS для порта F
+#define SYS_PORT_F_LAT 0x0     // Настройка регистра LAT для порта F
+#define SYS_PORT_F_ODC 0x0     // Настройка регистра ODC для порта F
+#define SYS_PORT_F_CNPU 0x0    // Настройка регистра CNPU для порта F
+#define SYS_PORT_F_CNPD 0x0    // Настройка регистра CNPD для порта F
+#define SYS_PORT_F_CNEN 0x0    // Настройка регистра CNEN для порта F
 
-#define SYS_PORT_G_ANSEL 0x0
-#define SYS_PORT_G_TRIS 0x8343
-#define SYS_PORT_G_LAT 0x0
-#define SYS_PORT_G_ODC 0x0
-#define SYS_PORT_G_CNPU 0x0
-#define SYS_PORT_G_CNPD 0x0
-#define SYS_PORT_G_CNEN 0x0
+// Настройки порта G
+#define SYS_PORT_G_ANSEL 0x0   // Настройка регистра ANSEL для порта G
+#define SYS_PORT_G_TRIS 0x8343 // Настройка регистра TRIS для порта G
+#define SYS_PORT_G_LAT 0x0     // Настройка регистра LAT для порта G
+#define SYS_PORT_G_ODC 0x0     // Настройка регистра ODC для порта G
+#define SYS_PORT_G_CNPU 0x0    // Настройка регистра CNPU для порта G
+#define SYS_PORT_G_CNPD 0x0    // Настройка регистра CNPD для порта G
+#define SYS_PORT_G_CNEN 0x0    // Настройка регистра CNEN для порта G
 
 void port_init(void)
 {
-    TRISA = SYS_PORT_A_TRIS;
-    ANSELA = SYS_PORT_A_ANSEL;
-    TRISB = SYS_PORT_B_TRIS;
-    ANSELB = SYS_PORT_B_ANSEL;
-    TRISC = SYS_PORT_C_TRIS;
-    ANSELC = SYS_PORT_C_ANSEL;
-    TRISD = SYS_PORT_D_TRIS;
-    ANSELD = 0;
-    LATD = SYS_PORT_D_LAT;
-    TRISE = SYS_PORT_E_TRIS;
-    ANSELE = SYS_PORT_E_ANSEL;
-    TRISF = SYS_PORT_F_TRIS;
-    ANSELF = SYS_PORT_F_ANSEL;
-    TRISG = SYS_PORT_G_TRIS;
-    ANSELG = SYS_PORT_G_ANSEL;
-    //    TRISDbits.TRISD2 = 1;   //77 ножка в режим входа
-    TRISBbits.TRISB15 = 0; // 44 ножка энейбл на выход 3uart
-    //    TRISDbits.TRISD13 = 0; //80 ножка энейбл на выход 2uart
-    TRISDbits.TRISD1 = 0; // 76 ножка энейбл на выход 1uart
+    // Настройка порта A
+    TRISA = SYS_PORT_A_TRIS;   // Установка направления порта A в соответствии с предопределенными значениями
+    ANSELA = SYS_PORT_A_ANSEL; // Настройка аналоговых входов порта A в соответствии с предопределенными значениями
 
-    /*Rx*/
-    U1RXRbits.U1RXR = 0b0000; // U1RX --> RPD2
-    U2RXRbits.U2RXR = 0b0100; // U2RX --> RPD4
-    U3RXRbits.U3RXR = 0b0111; // U3RX --> RPC13
-    U4RXRbits.U4RXR = 0b0010; // U4RX --> RPB14 /назначаем 14-ю ножку порта В на приемник для UART5
-    U5RXRbits.U5RXR = 0b1101; // U5RX --> RPA14
+    // Настройка порта B
+    TRISB = SYS_PORT_B_TRIS;   // Установка направления порта B в соответствии с предопределенными значениями
+    ANSELB = SYS_PORT_B_ANSEL; // Настройка аналоговых входов порта B в соответствии с предопределенными значениями
 
-    SDI5Rbits.SDI5R = 0b0101; // SDI5 --> RPB9 /назначаем как вход последовательных данных
+    // Настройка порта C
+    TRISC = SYS_PORT_C_TRIS;   // Установка направления порта C в соответствии с предопределенными значениями
+    ANSELC = SYS_PORT_C_ANSEL; // Настройка аналоговых входов порта C в соответствии с предопределенными значениями
 
-    RPC14Rbits.RPC14R = 0b1011; // OC3   //генерирует прерывания на сравнении с таймером 4
-    /*Tx*/
-    RPD3Rbits.RPD3R = 0b0001;   // U1TX
-    RPD5Rbits.RPD5R = 0b0010;   // U2TX
-    RPC14Rbits.RPC14R = 0b0001; // U3TX
-    RPF12Rbits.RPF12R = 0b0010; // U4TX
-    RPA15Rbits.RPA15R = 0b0011; // U5TX
+    // Настройка порта D
+    TRISD = SYS_PORT_D_TRIS; // Установка направления порта D в соответствии с предопределенными значениями
+    ANSELD = 0;              // Отключение аналоговых входов порта D
+    LATD = SYS_PORT_D_LAT;   // Установка состояния порта D в соответствии с предопределенными значениями
 
-    RPB10Rbits.RPB10R = 0b1001; // SDO5
+    // Настройка порта E
+    TRISE = SYS_PORT_E_TRIS;   // Установка направления порта E в соответствии с предопределенными значениями
+    ANSELE = SYS_PORT_E_ANSEL; // Настройка аналоговых входов порта E в соответствии с предопределенными значениями
+
+    // Настройка порта F
+    TRISF = SYS_PORT_F_TRIS;   // Установка направления порта F в соответствии с предопределенными значениями
+    ANSELF = SYS_PORT_F_ANSEL; // Настройка аналоговых входов порта F в соответствии с предопределенными значениями
+
+    // Настройка порта G
+    TRISG = SYS_PORT_G_TRIS;   // Установка направления порта G в соответствии с предопределенными значениями
+    ANSELG = SYS_PORT_G_ANSEL; // Настройка аналоговых входов порта G в соответствии с предопределенными значениями
+
+    // Дополнительная настройка некоторых специфических портов и их функций
+    TRISBbits.TRISB15 = 0; // Установка направления порта B, 15-й ножки, в качестве выхода для управления 3-м UART
+    TRISDbits.TRISD1 = 0;  // Установка направления порта D, 1-й ножки, в качестве выхода для управления 1-м UART
+
+    // Назначение функций для приема данных UART на соответствующих портах
+    U1RXRbits.U1RXR = 0b0000; // Подключение приемника UART1 к порту RPD2
+    U2RXRbits.U2RXR = 0b0100; // Подключение приемника UART2 к порту RPD4
+    U3RXRbits.U3RXR = 0b0111; // Подключение приемника UART3 к порту RPC13
+    U4RXRbits.U4RXR = 0b0010; // Подключение приемника UART4 к порту RPB14
+    U5RXRbits.U5RXR = 0b1101; // Подключение приемника UART5 к порту RPA14
+
+    // Назначение функций для передачи данных UART на соответствующих портах
+    RPD3Rbits.RPD3R = 0b0001;   // Подключение передатчика UART1 к порту RPD3
+    RPD5Rbits.RPD5R = 0b0010;   // Подключение передатчика UART2 к порту RPD5
+    RPC14Rbits.RPC14R = 0b0001; // Подключение передатчика UART3 к порту RPC14
+    RPF12Rbits.RPF12R = 0b0010; // Подключение передатчика UART4 к порту RPF12
+    RPA15Rbits.RPA15R = 0b0011; // Подключение передатчика UART5 к порту RPA15
+
+    // Назначение функции SPI для порта B, 10-й ножки
+    RPB10Rbits.RPB10R = 0b1001; // Подключение SPI к порту RPB10
 }
 
 void tmr_1_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
