@@ -804,6 +804,7 @@ void InitializeSystem(void)
     PRECONbits.PFMWS = 2; // Установка времени ожидания для Flash PM (что-то связанное с временем ожидания)
     // PBClk3 set to 8 MHz (assumes SYSCLK = 200 MHz via configuration bits)
     // Unlock Sequence
+    /* процесс разблокировки важных регистров */
     SYSKEY = 0xAA996655;
     SYSKEY = 0x556699AA;
     // Modify PB3DIV
