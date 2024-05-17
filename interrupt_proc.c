@@ -1,464 +1,670 @@
 #include "extern.h"
 
-extern void uart1_init(void);
-extern void uart4_init(void);
+extern void uart1_init(void); // внешнаяя функция
+extern void uart4_init(void); // внешнаяя функция
 
-extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void *p) {
-    return (int) p < 0 ? ((int) p & 0x1fffffffL) : (unsigned int) ((unsigned char *) p + 0x40000000L);
+/* объявление функции _VirtToPhys, которая преобразует виртуальный адрес памяти в физический адрес. */
+extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void *p)
+{
+    return (int)p < 0 ? ((int)p & 0x1fffffffL) : (unsigned int)((unsigned char *)p + 0x40000000L);
 }
+/* Это тело функции _VirtToPhys. Если виртуальный адрес p отрицателен (выходит за пределы знакового диапазона),
+то выполняется побитовое И с маской 0x1fffffffL, чтобы избавиться от старших битов. В противном случае к виртуальному
+адресу добавляется смещение 0x40000000L, которое соответствует базовому адресу физической памяти в адресном пространстве
+MIPS, чтобы получить физический адрес. Функция возвращает физический адрес в виде unsigned int. */
 
-void T1Interrupt_(struct tag_usart *usart) {
-    T1CONbits.TON = 0;
-    IFS0bits.T1IF = 0;
-    if (usart->mb_status.modb_receiving) {
-        usart->mb_status.modb_received = 1;
-        usart->mb_status.modb_receiving = 0;
+/* функции обработки прерываний от таймеров */
+void T1Interrupt_(struct tag_usart *usart)
+{
+    T1CONbits.TON = 0;                   // Выключает таймер 1
+    IFS0bits.T1IF = 0;                   // Сбрасывает флаг прерывания от таймера 1
+    if (usart->mb_status.modb_receiving) // Проверяет, выполняется ли прием данных Modbus
+    {
+        usart->mb_status.modb_received = 1;  // Устанавливает флаг успешного приема данных Modbus
+        usart->mb_status.modb_receiving = 0; // Сбрасывает флаг приема данных Modbus
     }
 }
 
-void T2Interrupt_(struct tag_usart *usart) {
-    T2CONbits.TON = 0;
-    IFS0bits.T2IF = 0;
-    if (usart->mb_status.modb_receiving) {
-        usart->mb_status.modb_received = 1;
-        usart->mb_status.modb_receiving = 0;
+void T2Interrupt_(struct tag_usart *usart)
+{
+    T2CONbits.TON = 0;                   // Выключает таймер 2
+    IFS0bits.T2IF = 0;                   // Сбрасывает флаг прерывания от таймера 2
+    if (usart->mb_status.modb_receiving) // Проверяет, выполняется ли прием данных Modbus
+    {
+        usart->mb_status.modb_received = 1;  // Устанавливает флаг успешного приема данных Modbus
+        usart->mb_status.modb_receiving = 0; // Сбрасывает флаг приема данных Modbus
     }
 }
 
-void T4Interrupt_(struct tag_usart *usart) {
-    T4CONbits.TON = 0;
-    IFS0bits.T4IF = 0;
-    if (usart->mb_status.modb_receiving) {
-        usart->mb_status.modb_received = 1;
-        usart->mb_status.modb_receiving = 0;
+void T4Interrupt_(struct tag_usart *usart)
+{
+    T4CONbits.TON = 0;                   // Выключает таймер 4
+    IFS0bits.T4IF = 0;                   // Сбрасывает флаг прерывания от таймера 4
+    if (usart->mb_status.modb_receiving) // Проверяет, выполняется ли прием данных Modbus
+    {
+        usart->mb_status.modb_received = 1;  // Устанавливает флаг успешного приема данных Modbus
+        usart->mb_status.modb_receiving = 0; // Сбрасывает флаг приема данных Modbus
+    }
+}
+void T5Interrupt_(struct tag_usart *usart)
+{
+    T5CONbits.TON = 0;                   // Выключает таймер 5
+    IFS0bits.T5IF = 0;                   // Сбрасывает флаг прерывания от таймера 5
+    if (usart->mb_status.modb_receiving) // Проверяет, выполняется ли прием данных Modbus
+    {
+        usart->mb_status.modb_received = 1;  // Устанавливает флаг успешного приема данных Modbus
+        usart->mb_status.modb_receiving = 0; // Сбрасывает флаг приема данных Modbus
     }
 }
 
-void T5Interrupt_(struct tag_usart *usart) {
-    T5CONbits.TON = 0;
-    IFS0bits.T5IF = 0;
-    if (usart->mb_status.modb_receiving) {
-        usart->mb_status.modb_received = 1;
-        usart->mb_status.modb_receiving = 0;
+void T6Interrupt_(struct tag_usart *usart)
+{
+    T6CONbits.TON = 0;                   // Выключает таймер 6
+    IFS0bits.T6IF = 0;                   // Сбрасывает флаг прерывания от таймера 6
+    if (usart->mb_status.modb_receiving) // Проверяет, выполняется ли прием данных Modbus
+    {
+        usart->mb_status.modb_received = 1;  // Устанавливает флаг успешного приема данных Modbus
+        usart->mb_status.modb_receiving = 0; // Сбрасывает флаг приема данных Modbus
     }
 }
 
-void T6Interrupt_(struct tag_usart *usart) {
-    T6CONbits.TON = 0;
-    IFS0bits.T6IF = 0;
-    if (usart->mb_status.modb_receiving) {
-        usart->mb_status.modb_received = 1;
-        usart->mb_status.modb_receiving = 0;
+void T7Interrupt_(struct tag_usart *usart)
+{
+    T7CONbits.TON = 0;                   // Выключение таймера T7
+    IFS1bits.T7IF = 0;                   // Сброс флага прерывания от таймера T7
+    if (usart->mb_status.modb_receiving) // Если устанавливается флаг приема Modbus
+    {
+        usart->mb_status.modb_received = 1;  // Установка флага полученных данных Modbus
+        usart->mb_status.modb_receiving = 0; // Сброс флага приема Modbus
     }
 }
 
-void T7Interrupt_(struct tag_usart *usart) {
-    T7CONbits.TON = 0;
-    IFS1bits.T7IF = 0;
-    if (usart->mb_status.modb_receiving) {
-        usart->mb_status.modb_received = 1;
-        usart->mb_status.modb_receiving = 0;
+void T9Interrupt_(struct tag_usart *usart)
+{
+    T9CONbits.TON = 0;                   // Выключение таймера T9
+    IFS1bits.T9IF = 0;                   // Сброс флага прерывания от таймера T9
+    if (usart->mb_status.modb_receiving) // Если устанавливается флаг приема Modbus
+    {
+        usart->mb_status.modb_received = 1;  // Установка флага полученных данных Modbus
+        usart->mb_status.modb_receiving = 0; // Сброс флага приема Modbus
     }
 }
 
-void T9Interrupt_(struct tag_usart *usart) {
-    T9CONbits.TON = 0;
-    IFS1bits.T9IF = 0;
-    if (usart->mb_status.modb_receiving) {
-        usart->mb_status.modb_received = 1;
-        usart->mb_status.modb_receiving = 0;
+/* Эти функции являются обработчиками прерываний от таймеров (T1, T2, T4, T5, T6, T7, T9) в микроконтроллере. Они выполняют следующие задачи:
+
+1. Отключают соответствующий таймер (T1, T2, T4, T5, T6, T7, T9), чтобы прекратить его работу.
+2. Сбрасывают флаг прерывания, указывая на то, что прерывание было обработано.
+3. Если в структуре tag_usart установлен флаг приема Modbus (modb_receiving), функции устанавливают флаг полученных
+    данных Modbus (modb_received) и сбрасывают флаг приема Modbus (modb_receiving).
+Таким образом, эти функции предназначены для обработки прерываний от таймеров и выполнения определенных действий в ответ на срабатывание прерываний. */
+
+/* Функция DMA_uni выполняет инициализацию и управление каналами Direct Memory Access (DMA) для передачи данных через
+различные UART интерфейсы микроконтроллера PIC32MZ. Она предназначена для настройки параметров DMA передачи и запуска
+передачи данных для выбранного UART интерфейса. */
+/* DMA_uni: Эта функция предназначена для более общего использования и позволяет настраивать и использовать DMA каналы для передачи
+данных между любыми двумя областями памяти. Она принимает указатель на структуру tag_usart, который представляет собой конкретное устройство
+USART (например, UART1, UART2 и т. д.), а также другие параметры, такие как количество передаваемых байт, включение канала и принудительное
+включение канала. */
+void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, unsigned short force)
+{
+    if (usart == &usart5) // Если usart является usart5
+    {
+        DCH5SSA = _VirtToPhys(&buf_tx5); // Устанавливаем физический адрес источника для канала DMA 5
+        DCH5DSA = _VirtToPhys(&U5TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART5)
+        DCH5SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
+        DCH5DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
+        DCH5CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
+        DCH5CONbits.CHEN = on;           // Включаем или выключаем канал DMA
+        DCH5ECONbits.CFORCE = force;     // Принудительно запускаем передачу DMA, если необходимо
+    }
+    if (usart == &usart4) // Если usart является usart4
+    {
+        DCH4SSA = _VirtToPhys(&buf_tx4); // Устанавливаем физический адрес источника для канала DMA 4
+        DCH4DSA = _VirtToPhys(&U4TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART4)
+        DCH4SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
+        DCH4DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
+        DCH4CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
+        DCH4CONbits.CHEN = on;           // Включаем или выключаем канал DMA
+        DCH4ECONbits.CFORCE = force;     // Принудительно запускаем передачу DMA, если необходимо
+    }
+    if (usart == &usart3) // Если usart является usart3
+    {
+        DCH3SSA = _VirtToPhys(&buf_tx3); // Устанавливаем физический адрес источника для канала DMA 3
+        DCH3DSA = _VirtToPhys(&U3TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART3)
+        DCH3SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
+        DCH3DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
+        DCH3CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
+        DCH3CONbits.CHEN = on;           // Включаем или выключаем канал DMA
+        DCH3ECONbits.CFORCE = force;     // Принудительно запускаем передачу DMA, если необходимо
+    }
+    if (usart == &usart2) // Если usart является usart2
+    {
+        DCH2SSA = _VirtToPhys(&buf_tx2); // Устанавливаем физический адрес источника для канала DMA 2
+        DCH2DSA = _VirtToPhys(&U2TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART2)
+        DCH2SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
+        DCH2DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
+        DCH2CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
+        DCH2CONbits.CHEN = on;           // Включаем или выключаем канал DMA
+        DCH2ECONbits.CFORCE = force;     // Принудительно запускаем передачу DMA, если необходимо
+    }
+    if (usart == &usart1) // Если usart является usart1
+    {
+        DCH1SSA = _VirtToPhys(&buf_tx1); // Устанавливаем физический адрес источника для канала DMA 1
+        DCH1DSA = _VirtToPhys(&U1TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART1)
+        DCH1SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
+        DCH1DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
+        DCH1CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
+        DCH1CONbits.CHEN = on;           // Включаем или выключаем канал DMA
+        DCH1ECONbits.CFORCE = force;     // Принудительно запускаем передачу DMA, если необходимо
     }
 }
+/* Назначение функции:
+- Инициализация DMA: Функция устанавливает физические адреса источника и назначения для передачи данных.
+- Настройка параметров передачи: Определяет размер данных, которые будут переданы, и параметры передачи по каждому байту.
+- Управление включением/выключением DMA канала: Включает или выключает канал DMA.
+- Принудительный запуск передачи: При необходимости принудительно запускает передачу данных.
 
-void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, unsigned short force) {
-    if (usart == &usart5) {
-        DCH5SSA = _VirtToPhys(&buf_tx5); // transfer source physical address
-        DCH5DSA = _VirtToPhys(&U5TXREG); // transfer destination physical address
-        DCH5SSIZ = cnt; // source size at most 200 bytes
-        DCH5DSIZ = 1; // dst size is 1 byte
-        DCH5CSIZ = 1; // one byte per UART transfer request
-        DCH5CONbits.CHEN = on;
-        DCH5ECONbits.CFORCE = force;
-    }
-    if (usart == &usart4) {
-        DCH4SSA = _VirtToPhys(&buf_tx4); // transfer source physical address
-        DCH4DSA = _VirtToPhys(&U4TXREG); // transfer destination physical address
-        DCH4SSIZ = cnt; // source size at most 200 bytes
-        DCH4DSIZ = 1; // dst size is 1 byte
-        DCH4CSIZ = 1; // one byte per UART transfer request
-        DCH4CONbits.CHEN = on;
-        DCH4ECONbits.CFORCE = force;
-    }
-    if (usart == &usart3) {
-        DCH3SSA = _VirtToPhys(&buf_tx3); // transfer source physical address
-        DCH3DSA = _VirtToPhys(&U3TXREG); // transfer destination physical address
-        DCH3SSIZ = cnt; // source size at most 200 bytes
-        DCH3DSIZ = 1; // dst size is 1 byte
-        DCH3CSIZ = 1; // one byte per UART transfer request
-        DCH3CONbits.CHEN = on;
-        DCH3ECONbits.CFORCE = force;
-    }
-    if (usart == &usart2) {
-        DCH2SSA = _VirtToPhys(&buf_tx2); // transfer source physical address
-        DCH2DSA = _VirtToPhys(&U2TXREG); // transfer destination physical address
-        DCH2SSIZ = cnt; // source size at most 200 bytes
-        DCH2DSIZ = 1; // dst size is 1 byte
-        DCH2CSIZ = 1; // one byte per UART transfer request
-        DCH2CONbits.CHEN = on;
-        DCH2ECONbits.CFORCE = force;
-    }
-    if (usart == &usart1) {
-        DCH1SSA = _VirtToPhys(&buf_tx1); // transfer source physical address
-        DCH1DSA = _VirtToPhys(&U1TXREG); // transfer destination physical address
-        DCH1SSIZ = cnt; // source size at most 200 bytes
-        DCH1DSIZ = 1; // dst size is 1 byte
-        DCH1CSIZ = 1; // one byte per UART transfer request
-        DCH1CONbits.CHEN = on;
-        DCH1ECONbits.CFORCE = force;
-    }
+Итог
+Эта функция DMA_uni используется для инициализации и управления каналами DMA для передачи данных через различные
+UART интерфейсы на микроконтроллере PIC32MZ. Она настраивает параметры DMA передачи, включение/выключение канала и
+принудительный запуск передачи, если это необходимо.*/
+
+/* Функция DMAx_init инициализирует и настраивает канал DMA x для работы с UARTx на микроконтроллере  PIC32MZ.  */
+/* DMA_init: Эти функции предназначены для инициализации конкретных DMA каналов с заранее определенными параметрами, такими как
+источник данных, приемник данных, размер передаваемых данных и другие. Каждая функция DMA_init настраивает определенный DMA канал
+для определенного устройства, например, UART5, UART4, UART3 и т. д. Параметры DMA канала заранее определены в соответствии с
+требованиями каждого устройства. */
+void DMA5_init(void)
+{
+    DMACONSET = 0x00008000;                 // Включить контроллер DMA
+    DCH5CON = 0x2;                          // Отключить канал 5, установить приоритет 2
+    DCH5ECONbits.CHSIRQ = _UART5_TX_VECTOR; // Установить вектор прерывания для передачи UART5
+    DCH5ECONbits.SIRQEN = 1;                // Разрешить прерывание от периферийного устройства
+    DCH5SSA = _VirtToPhys(&buf_tx5);        // Установить физический адрес источника данных для канала DMA 5
+    DCH5DSA = _VirtToPhys(&U5TXREG);        // Установить физический адрес регистра передачи UART5
+    DCH5SSIZ = 38;                          // Установить размер источника данных (максимум 200 байт)
+    DCH5DSIZ = 1;                           // Установить размер назначения (1 байт)
+    DCH5CSIZ = 1;                           // Установить размер ячейки (1 байт на каждый запрос передачи UART)
+    DCH5INTCLR = 0x00ff00ff;                // Очистить события и отключить прерывания для канала DMA 5
+    DCH5CONbits.CHEN = 0;                   // Отключить канал DMA 5
 }
 
-void DMA5_init(void) {
-    DMACONSET = 0x00008000; // enable the DMA controller
-    DCH5CON = 0x2; // channel 1 off, priority 2
-    DCH5ECONbits.CHSIRQ = _UART5_TX_VECTOR;
-    DCH5ECONbits.SIRQEN = 1;
-    DCH5SSA = _VirtToPhys(&buf_tx5); // transfer source physical address
-    DCH5DSA = _VirtToPhys(&U5TXREG); // transfer destination physical address
-    DCH5SSIZ = 38; // source size at most 200 bytes
-    DCH5DSIZ = 1; // dst size is 1 byte
-    DCH5CSIZ = 1; // one byte per UART transfer request
-    DCH5INTCLR = 0x00ff00ff; // DMA1: clear events, disable interrupts
-    // DCH1INTbits.CHSDIF = 0;
-    DCH5CONbits.CHEN = 0;
+void DMA4_init(void)
+{
+    DMACONSET = 0x00008000;                 // Включить контроллер DMA
+    DCH4CON = 0x2;                          // Отключить канал 4, установить приоритет 2
+    DCH4ECONbits.CHSIRQ = _UART4_TX_VECTOR; // Установить вектор прерывания для передачи UART4
+    DCH4ECONbits.SIRQEN = 1;                // Разрешить прерывание от периферийного устройства
+    DCH4SSA = _VirtToPhys(&buf_tx4);        // Установить физический адрес источника данных для канала DMA 4
+    DCH4DSA = _VirtToPhys(&U4TXREG);        // Установить физический адрес регистра передачи UART4
+    DCH4SSIZ = 38;                          // Установить размер источника данных (максимум 200 байт)
+    DCH4DSIZ = 1;                           // Установить размер назначения (1 байт)
+    DCH4CSIZ = 1;                           // Установить размер ячейки (1 байт на каждый запрос передачи UART)
+    DCH4INTCLR = 0x00ff00ff;                // Очистить события и отключить прерывания для канала DMA 4
+    // DCH4INTbits.CHSDIF = 0;       // Не используется, оставлено для ясности
+    DCH4CONbits.CHEN = 0; // Отключить канал DMA 4
 }
 
-void DMA4_init(void) {
-    DMACONSET = 0x00008000; // enable the DMA controller
-    DCH4CON = 0x2; // channel 1 off, priority 2
-    DCH4ECONbits.CHSIRQ = _UART4_TX_VECTOR;
-    DCH4ECONbits.SIRQEN = 1;
-    DCH4SSA = _VirtToPhys(&buf_tx4); // transfer source physical address
-    DCH4DSA = _VirtToPhys(&U4TXREG); // transfer destination physical address
-    DCH4SSIZ = 38; // source size at most 200 bytes
-    DCH4DSIZ = 1; // dst size is 1 byte
-    DCH4CSIZ = 1; // one byte per UART transfer request
-    DCH4INTCLR = 0x00ff00ff; // DMA1: clear events, disable interrupts
-    // DCH4INTbits.CHSDIF = 0;
-    DCH4CONbits.CHEN = 0;
+void DMA3_init(void)
+{
+    DMACONSET = 0x00008000;                 // Включение контроллера DMA
+    DCH3CON = 0x2;                          // Отключение канала 3, установка приоритета 2
+    DCH3ECONbits.CHSIRQ = _UART3_TX_VECTOR; // Установка вектора прерывания для передачи UART3
+    DCH3ECONbits.SIRQEN = 1;                // Разрешение прерывания от периферийного устройства
+    DCH3SSA = _VirtToPhys(&buf_tx3);        // Установка физического адреса источника данных для канала DMA 3
+    DCH3DSA = _VirtToPhys(&U3TXREG);        // Установка физического адреса регистра передачи UART3
+    DCH3SSIZ = 38;                          // Установка размера источника данных (максимум 200 байт)
+    DCH3DSIZ = 1;                           // Установка размера назначения (1 байт)
+    DCH3CSIZ = 1;                           // Установка размера ячейки (1 байт на каждый запрос передачи UART)
+    DCH3INTCLR = 0x00ff00ff;                // Очистка событий и отключение прерываний для канала DMA 3
+    // DCH4INTbits.CHSDIF = 0;       // Не используется, оставлено для ясности
+    DCH3CONbits.CHEN = 0; // Отключение канала DMA 3
 }
 
-void DMA3_init(void) {
-    DMACONSET = 0x00008000; // enable the DMA controller
-    DCH3CON = 0x2; // channel 1 off, priority 2
-    DCH3ECONbits.CHSIRQ = _UART3_TX_VECTOR;
-    DCH3ECONbits.SIRQEN = 1;
-    DCH3SSA = _VirtToPhys(&buf_tx3); // transfer source physical address
-    DCH3DSA = _VirtToPhys(&U3TXREG); // transfer destination physical address
-    DCH3SSIZ = 38; // source size at most 200 bytes
-    DCH3DSIZ = 1; // dst size is 1 byte
-    DCH3CSIZ = 1; // one byte per UART transfer request
-    DCH3INTCLR = 0x00ff00ff; // DMA1: clear events, disable interrupts
-    // DCH4INTbits.CHSDIF = 0;
-    DCH3CONbits.CHEN = 0;
+void DMA2_init(void)
+{
+    DMACONSET = 0x00008000;                 // Включение контроллера DMA
+    DCH2CON = 0x2;                          // Отключение канала 2, установка приоритета 2
+    DCH2ECONbits.CHSIRQ = _UART2_TX_VECTOR; // Установка вектора прерывания для передачи UART2
+    DCH2ECONbits.SIRQEN = 1;                // Разрешение прерывания от периферийного устройства
+    DCH2SSA = _VirtToPhys(&buf_tx2);        // Установка физического адреса источника данных для канала DMA 2
+    DCH2DSA = _VirtToPhys(&U2TXREG);        // Установка физического адреса регистра передачи UART2
+    DCH2SSIZ = 38;                          // Установка размера источника данных (максимум 200 байт)
+    DCH2DSIZ = 1;                           // Установка размера назначения (1 байт)
+    DCH2CSIZ = 1;                           // Установка размера ячейки (1 байт на каждый запрос передачи UART)
+    DCH2INTCLR = 0x00ff00ff;                // Очистка событий и отключение прерываний для канала DMA 2
+    // DCH4INTbits.CHSDIF = 0;       // Не используется, оставлено для ясности
+    DCH2CONbits.CHEN = 0; // Отключение канала DMA 2
 }
 
-void DMA2_init(void) {
-    DMACONSET = 0x00008000; // enable the DMA controller
-    DCH2CON = 0x2; // channel 1 off, priority 2
-    DCH2ECONbits.CHSIRQ = _UART2_TX_VECTOR;
-    DCH2ECONbits.SIRQEN = 1;
-    DCH2SSA = _VirtToPhys(&buf_tx2); // transfer source physical address
-    DCH2DSA = _VirtToPhys(&U2TXREG); // transfer destination physical address
-    DCH2SSIZ = 38; // source size at most 200 bytes
-    DCH2DSIZ = 1; // dst size is 1 byte
-    DCH2CSIZ = 1; // one byte per UART transfer request
-    DCH2INTCLR = 0x00ff00ff; // DMA1: clear events, disable interrupts
-    // DCH4INTbits.CHSDIF = 0;
-    DCH2CONbits.CHEN = 0;
+void DMA1_init(void)
+{
+    DMACONSET = 0x00008000;                 // Включение контроллера DMA
+    DCH1CON = 0x2;                          // Отключение канала 1, установка приоритета 2
+    DCH1ECONbits.CHSIRQ = _UART1_TX_VECTOR; // Установка вектора прерывания для передачи UART1
+    DCH1ECONbits.SIRQEN = 1;                // Разрешение прерывания от периферийного устройства
+    DCH1SSA = _VirtToPhys(&buf_tx1);        // Установка физического адреса источника данных для канала DMA 1
+    DCH1DSA = _VirtToPhys(&U1TXREG);        // Установка физического адреса регистра передачи UART1
+    DCH1SSIZ = 38;                          // Установка размера источника данных (максимум 200 байт)
+    DCH1DSIZ = 1;                           // Установка размера назначения (1 байт)
+    DCH1CSIZ = 1;                           // Установка размера ячейки (1 байт на каждый запрос передачи UART)
+    DCH1INTCLR = 0x00ff00ff;                // Очистка событий и отключение прерываний для канала DMA 1
+    // DCH4INTbits.CHSDIF = 0;       // Не используется, оставлено для ясности
+    DCH1CONbits.CHEN = 0; // Отключение канала DMA 1
+}
+/* Эти функции инициализации DMA (Direct Memory Access) каналов предназначены для настройки и управления передачей данных через периферийные
+устройства (UART в данном случае) без вмешательства центрального процессора. Эти функции не только настраивают параметры DMA каналов,
+но и обеспечивают поддержку асинхронной передачи данных между периферийными устройствами и памятью без непосредственного участия центрального
+процессора, что повышает эффективность работы микроконтроллера. */
+
+/* Функции DMA_init и DMA_uni имеют разные цели и предназначены для разных задач:
+
+DMA_init: Эти функции предназначены для инициализации конкретных DMA каналов с заранее определенными параметрами, такими как источник данных,
+приемник данных, размер передаваемых данных и другие. Каждая функция DMA_init настраивает определенный DMA канал для определенного устройства,
+например, UART5, UART4, UART3 и т. д. Параметры DMA канала заранее определены в соответствии с требованиями каждого устройства.
+
+DMA_uni: Эта функция предназначена для более общего использования и позволяет настраивать и использовать DMA каналы для передачи данных
+между любыми двумя областями памяти. Она принимает указатель на структуру tag_usart, который представляет собой конкретное устройство USART
+(например, UART1, UART2 и т. д.), а также другие параметры, такие как количество передаваемых байт, включение канала и принудительное включение
+канала.
+
+Таким образом, DMA_init используется для инициализации DMA каналов с определенными параметрами для определенных устройств,
+в то время как DMA_uni может быть использована для более гибкой настройки DMA каналов для различных задач и устройств. */
+
+test_uart_dma(void)
+{
+    DMA5_init();             // Инициализация DMA канала для передачи данных через UART5.
+    ENAB_TX5;                // Включение передачи данных через UART5.
+    ENAB_TX5;                // Включение передачи данных через UART5 (дублирование вызова, возможно, ошибка).
+    DCH1CONbits.CHEN = 1;    // Включение DMA канала 1.
+    DCH1ECONbits.CFORCE = 1; // Принудительное включение DMA канала 1 (может быть использовано для немедленного запуска передачи данных).
 }
 
-void DMA1_init(void) {
-    DMACONSET = 0x00008000; // enable the DMA controller
-    DCH1CON = 0x2; // channel 1 off, priority 2
-    DCH1ECONbits.CHSIRQ = _UART1_TX_VECTOR;
-    DCH1ECONbits.SIRQEN = 1;
-    DCH1SSA = _VirtToPhys(&buf_tx1); // transfer source physical address
-    DCH1DSA = _VirtToPhys(&U1TXREG); // transfer destination physical address
-    DCH1SSIZ = 38; // source size at most 200 bytes
-    DCH1DSIZ = 1; // dst size is 1 byte
-    DCH1CSIZ = 1; // one byte per UART transfer request
-    DCH1INTCLR = 0x00ff00ff; // DMA1: clear events, disable interrupts
-    // DCH4INTbits.CHSDIF = 0;
-    DCH1CONbits.CHEN = 0;
-}
+unsigned char conf, bconf;   // Объявление переменных для хранения текущей (conf) и предыдущей (bconf) конфигурации UART4.
+unsigned char conf2, bconf2; // Объявление переменных для хранения текущей (conf2) и предыдущей (bconf2) конфигурации UART5.
 
-void test_uart_dma(void) {
-    DMA5_init();
-    ENAB_TX5;
-    ENAB_TX5;
-    DCH1CONbits.CHEN = 1;
-    DCH1ECONbits.CFORCE = 1;
-}
-
-unsigned char conf, bconf;
-unsigned char conf2, bconf2;
-
-void conf_read(void) {
-    conf2 = 0;
-    conf = 0;
-    if (CONF1) {
-        conf |= 0x01;
-    } else {
-        conf &= 0xFE;
+/* функция conf_read() используется для считывания конфигурации UART портов (UART4 и UART5) и установки
+соответствующих скоростей передачи данных в зависимости от установленных битов конфигурации. В процессе работы
+функция проверяет состояние портов (CONF1 - CONF8) и устанавливает соответствующие биты в переменных conf и conf2.
+Затем она определяет скорость передачи данных для каждого из UART на основе установленной конфигурации и сохраняет
+ее в соответствующих переменных (U4_speed и U5_speed). */
+void conf_read(void)
+{
+    conf2 = 0; // Инициализация переменной для хранения конфигурации UART5.
+    conf = 0;  // Инициализация переменной для хранения конфигурации UART4.
+    // Проверка состояния портов на предмет установленных битов конфигурации и установка соответствующих битов в переменных conf и conf2.
+    if (CONF1) // Проверка состояния порта CONF1.
+    {
+        conf |= 0x01; // Если порт установлен, устанавливается соответствующий бит в переменной conf.
     }
-    if (CONF2) {
-        conf |= 0x02;
-    } else {
-        conf &= 0xFD;
+    else
+    {
+        conf &= 0xFE; // Если порт не установлен, сбрасывается соответствующий бит в переменной conf.
     }
-    if (CONF3) {
+    if (CONF2) // Проверка состояния порта CONF2.
+    {
+        conf |= 0x02; // Если порт установлен, устанавливается соответствующий бит в переменной conf.
+    }
+    else
+    {
+        conf &= 0xFD; // Если порт не установлен, сбрасывается соответствующий бит в переменной conf.
+    }
+    // Аналогичные операции для портов CONF3 и CONF4.
+    if (CONF3)
+    {
         conf |= 0x04;
-    } else {
+    }
+    else
+    {
         conf &= 0xFB;
     }
-    if (CONF4) {
+    if (CONF4)
+    {
         conf |= 0x08;
-    } else {
+    }
+    else
+    {
         conf &= 0xF7;
     }
-    conf &= 0x0F;
-    switch (conf) {
-        case 7:
-        {
-            U4_speed = 115200;
-            break;
-        } // 115200
-        case 6:
-        {
-            U4_speed = 57600;
-            break;
-        } // 57600
-        case 5:
-        {
-            U4_speed = 38400;
-            break;
-        } // 38400
-        case 4:
-        {
-            U4_speed = 19200;
-            break;
-        } // 19200
-        default:
-        {
-            U4_speed = 19200;
-            break;
-        } // 19200
+    conf &= 0x0F; // Очистка старших четырех битов переменной conf.
+    switch (conf)
+    {
+    case 7:
+    {
+        U4_speed = 115200;
+        break;
+    } // 115200
+    case 6:
+    {
+        U4_speed = 57600;
+        break;
+    } // 57600
+    case 5:
+    {
+        U4_speed = 38400;
+        break;
+    } // 38400
+    case 4:
+    {
+        U4_speed = 19200;
+        break;
+    } // 19200
+    default:
+    {
+        U4_speed = 19200;
+        break;
+    } // 19200
     }
 
-    if (CONF5) {
+    if (CONF5)
+    {
         conf2 |= 0x01;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xFE;
     }
-    if (CONF6) {
+    if (CONF6)
+    {
         conf2 |= 0x02;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xFD;
     }
-    if (CONF7) {
+    if (CONF7)
+    {
         conf2 |= 0x04;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xFB;
     }
-    if (CONF8) {
+    if (CONF8)
+    {
         conf2 |= 0x08;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xF7;
     }
     conf2 &= 0x0F;
-    switch (conf2) {
-        case 7:
-        {
-            U5_speed = 115200;
-            break;
-        } // 115200
-        case 6:
-        {
-            U5_speed = 57600;
-            break;
-        } // 57600
-        case 5:
-        {
-            U5_speed = 38400;
-            break;
-        } // 38400
-        case 4:
-        {
-            U5_speed = 19200;
-            break;
-        } // 19200
-        default:
-        {
-            U5_speed = 19200;
-            break;
-        } // 19200
+    switch (conf2)
+    {
+    case 7:
+    {
+        U5_speed = 115200;
+        break;
+    } // 115200
+    case 6:
+    {
+        U5_speed = 57600;
+        break;
+    } // 57600
+    case 5:
+    {
+        U5_speed = 38400;
+        break;
+    } // 38400
+    case 4:
+    {
+        U5_speed = 19200;
+        break;
+    } // 19200
+    default:
+    {
+        U5_speed = 19200;
+        break;
+    } // 19200
     }
     //    U1_speed = 57600;
-    help_reset = 1;
-    bconf = conf;
-    bconf2 = conf2;
+    help_reset = 1; // Установка флага сброса (предположительно для сброса какого-то состояния).
+    bconf = conf;   // Сохранение текущей конфигурации UART4.
+    bconf2 = conf2; // Сохранение текущей конфигурации UART5.
 }
+/*
+1. Объявление переменных conf, bconf, conf2, bconf2, которые будут использоваться для хранения конфигураций и их
+    предыдущих значений.
 
-void conf_check(void) {
-    if (CONF1) {
+2. Устанавливается начальное значение переменных conf и conf2 равное 0.
+
+3. Проверяется состояние пина CONF1. Если он установлен в высокий уровень (1), устанавливается соответствующий бит в переменной conf,
+    в противном случае сбрасывается.
+
+4. Аналогичные шаги выполняются для пинов CONF2, CONF3, CONF4, результаты записываются в переменную conf.
+
+5. После завершения проверки устанавливается маска, чтобы сбросить старшие четыре бита переменной conf.
+
+6. Происходит выбор скорости передачи для UART4 на основе значения переменной conf. В зависимости от значения
+    conf устанавливается одна из возможных скоростей: 115200, 57600, 38400, или 19200.
+
+7. Аналогичные шаги выполняются для пинов CONF5, CONF6, CONF7, CONF8, результаты записываются в переменную conf2.
+
+8. После завершения проверки устанавливается маска, чтобы сбросить старшие четыре бита переменной conf2.
+
+9. Происходит выбор скорости передачи для UART5 на основе значения переменной conf2. Также, как и для UART4,
+    в зависимости от значения conf2 устанавливается одна из возможных скоростей: 115200, 57600, 38400, или 19200.
+
+10. Переменная help_reset устанавливается в 1.
+
+11. Значения conf и conf2 сохраняются в переменных bconf и bconf2 соответственно.
+*/
+
+/* Эта функция conf_check() проверяет состояние входных пинов CONF1 до CONF8 и основываясь на их состоянии,
+определяет конфигурацию устройства. */
+void conf_check(void)
+{
+    if (CONF1)
+    {
         conf |= 0x01;
-    } else {
+    }
+    else
+    {
         conf &= 0xFE;
     }
-    if (CONF2) {
+    if (CONF2)
+    {
         conf |= 0x02;
-    } else {
+    }
+    else
+    {
         conf &= 0xFD;
     }
-    if (CONF3) {
+    if (CONF3)
+    {
         conf |= 0x04;
-    } else {
+    }
+    else
+    {
         conf &= 0xFB;
     }
-    if (CONF4) {
+    if (CONF4)
+    {
         conf |= 0x08;
-    } else {
+    }
+    else
+    {
         conf &= 0xF7;
     }
     conf &= 0x0F;
-    switch (conf) {
-        case 7:
-        {
-            U4_speed = 115200;
-            break;
-        } // 115200
-        case 6:
-        {
-            U4_speed = 57600;
-            break;
-        } // 57600
-        case 5:
-        {
-            U4_speed = 38400;
-            break;
-        } // 38400
-        case 4:
-        {
-            U4_speed = 19200;
-            break;
-        } // 19200
-        default:
-        {
-            U4_speed = 19200;
-            break;
-        } // 19200
+    switch (conf)
+    {
+    case 7:
+    {
+        U4_speed = 115200;
+        break;
+    } // 115200
+    case 6:
+    {
+        U4_speed = 57600;
+        break;
+    } // 57600
+    case 5:
+    {
+        U4_speed = 38400;
+        break;
+    } // 38400
+    case 4:
+    {
+        U4_speed = 19200;
+        break;
+    } // 19200
+    default:
+    {
+        U4_speed = 19200;
+        break;
+    } // 19200
     }
 
-    if (CONF5) {
+    if (CONF5)
+    {
         conf2 |= 0x01;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xFE;
     }
-    if (CONF6) {
+    if (CONF6)
+    {
         conf2 |= 0x02;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xFD;
     }
-    if (CONF7) {
+    if (CONF7)
+    {
         conf2 |= 0x04;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xFB;
     }
-    if (CONF8) {
+    if (CONF8)
+    {
         conf2 |= 0x08;
-    } else {
+    }
+    else
+    {
         conf2 &= 0xF7;
     }
     conf2 &= 0x0F;
-    switch (conf2) {
-        case 7:
-        {
-            U5_speed = 115200;
-            break;
-        } // 115200
-        case 6:
-        {
-            U5_speed = 57600;
-            break;
-        } // 57600
-        case 5:
-        {
-            U5_speed = 38400;
-            break;
-        } // 38400
-        case 4:
-        {
-            U5_speed = 19200;
-            break;
-        } // 19200
-        default:
-        {
-            U5_speed = 19200;
-            break;
-        } // 19200
+    switch (conf2)
+    {
+    case 7:
+    {
+        U5_speed = 115200;
+        break;
+    } // 115200
+    case 6:
+    {
+        U5_speed = 57600;
+        break;
+    } // 57600
+    case 5:
+    {
+        U5_speed = 38400;
+        break;
+    } // 38400
+    case 4:
+    {
+        U5_speed = 19200;
+        break;
+    } // 19200
+    default:
+    {
+        U5_speed = 19200;
+        break;
+    } // 19200
     }
 
-    if (conf2 != bconf2) {
+    if (conf2 != bconf2)
+    {
         uart5_init();
     }
-    if (conf != bconf) {
+    if (conf != bconf)
+    {
         uart4_init();
     }
     bconf = conf;
     bconf2 = conf2;
 }
+/* Проверяется состояние пина CONF1. Если он установлен в высокий уровень (1), устанавливается соответствующий бит в переменной conf,
+    в противном случае сбрасывается.
+Аналогичные шаги выполняются для пинов CONF2 до CONF8, результаты записываются в переменную conf.
+После завершения проверки устанавливается маска, чтобы сбросить старшие четыре бита переменной conf.
+Происходит выбор скорости передачи для UART4 на основе значения переменной conf. В зависимости от значения conf устанавливается
+    одна из возможных скоростей: 115200, 57600, 38400, или 19200.
+Аналогичные шаги выполняются для пинов CONF5 до CONF8, результаты записываются в переменную conf2.
+После завершения проверки устанавливается маска, чтобы сбросить старшие четыре бита переменной conf2.
+Происходит выбор скорости передачи для UART5 на основе значения переменной conf2. Также, как и для UART4, в зависимости от
+    значения conf2 устанавливается одна из возможных скоростей: 115200, 57600, 38400, или 19200.
+Если значение conf2 отличается от предыдущего значения bconf2, вызывается функция uart5_init(), чтобы инициализировать UART5.
+Если значение conf отличается от предыдущего значения bconf, вызывается функция uart4_init(), чтобы инициализировать UART4.
+Значения conf и conf2 сохраняются в переменных bconf и bconf2 соответственно. */
 
 unsigned int DI1_cnt;
 unsigned int DI2_cnt;
 unsigned int DI3_cnt;
-
-void discret_ctrl(void) {
-    if (DINPUT1 != DI_1) {
+/* Эта функция discret_ctrl() предназначена для контроля за дискретными входами (DI1, DI2, DI3) и
+применения фильтрации для снижения влияния помех. */
+void discret_ctrl(void)
+{
+    if (DINPUT1 != DI_1)
+    {
         DI1_cnt += CYCLE;
-        if (DI1_cnt >= FILT_DISCRET) {
+        if (DI1_cnt >= FILT_DISCRET)
+        {
             DINPUT1 = DI_1;
             DI1_cnt = 0;
         }
-    } else {
+    }
+    else
+    {
         DI1_cnt = 0;
     }
 
-    if (DINPUT2 != DI_2) {
+    if (DINPUT2 != DI_2)
+    {
         DI2_cnt += CYCLE;
-        if (DI2_cnt >= FILT_DISCRET) {
+        if (DI2_cnt >= FILT_DISCRET)
+        {
             DINPUT2 = DI_2;
             DI2_cnt = 0;
         }
-    } else {
+    }
+    else
+    {
         DI2_cnt = 0;
     }
 
-    if (DINPUT3 != DI_3) {
+    if (DINPUT3 != DI_3)
+    {
         DI3_cnt += CYCLE;
-        if (DI3_cnt >= FILT_DISCRET) {
+        if (DI3_cnt >= FILT_DISCRET)
+        {
             DINPUT3 = DI_3;
             DI3_cnt = 0;
         }
-    } else {
+    }
+    else
+    {
         DI3_cnt = 0;
     }
 }
+/* Объявляются переменные DI1_cnt, DI2_cnt, и DI3_cnt, которые будут использоваться для отслеживания времени изменения состояния дискретных входов.
+Проверяется состояние дискретного входа DI1 (DINPUT1). Если оно отличается от ожидаемого состояния DI_1, то к переменной DI1_cnt добавляется значение CYCLE.
+Если DI1_cnt становится больше или равным пороговому значению FILT_DISCRET, то состояние входа DINPUT1 устанавливается равным DI_1, и DI1_cnt сбрасывается.
+Аналогичные действия выполняются для дискретных входов DI2 и DI3.
+Если состояние дискретного входа не изменилось, счетчик DI*_cnt сбрасывается в ноль. */
 
-void fun_blink_counter(void) {
-    if (++blink_counter >= 10) {
+
+/* Эта функция fun_blink_counter() отвечает за мигание светодиодом с использованием счетчика blink_counter. */
+void fun_blink_counter(void)
+{
+    if (++blink_counter >= 10)
+    {
         blink_counter = 0;
         PORTEbits.RE0 = LATEbits.LATE0 ^ 1;
     }
 }
-
