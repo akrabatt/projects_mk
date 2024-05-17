@@ -203,6 +203,7 @@ void port_init(void)
     RPB10Rbits.RPB10R = 0b1001; // Подключение SPI к порту RPB10
 }
 
+/* зона инициализации таймеров */
 void tmr_1_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
 {
     T1CONbits.TON = 0;      // Отключение таймера T1 перед началом настройки
@@ -269,458 +270,478 @@ void tmr_7_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TM
     T7CONbits.TON = TMR_ON; // Включение/отключение таймера 7 (1 - включить, 0 - выключить)
 }
 
+/* инициализация модуля сравнения */
 void OC3_init(void)
-{                    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-    OC3CON = 0x0000; // Turn off the OC3 when performing the setup
-    T4CON = 0;
-    OC3R = 100;      // Initialize primary Compare register
-    OC3RS = 3000;    // Initialize secondary Compare register
-    OC3CON = 0x0006; // Configure for PWM mode without Fault pin enabled
-    T4CONbits.TCKPS = 0;
-    PR4 = TMR4CLK / OC_FREQ; // Set period
-    IFS0bits.T4IF = 0;       // Clear the T4 interrupt flag
-    IEC0bits.T4IE = 1;       // Enable T4 interrupt
-    IPC4bits.T4IP = 4;       // Set T4 interrupt priority to 4
-    // T4CONbits.ON = 1;      // Enable Timer4
-    // OC3CONbits.ON = 1;     // Enable OC3//
-}
+{                            // Начало функции инициализации модуля сравнения вывода OC3
+    OC3CON = 0x0000;         // Выключаем модуль сравнения OC3 перед его настройкой
+    T4CON = 0;               // Сбрасываем настройки таймера 4
+    OC3R = 100;              // Инициализируем основной регистр сравнения
+    OC3RS = 3000;            // Инициализируем вторичный регистр сравнения
+    OC3CON = 0x0006;         // Настройка режима ШИМ без использования пина Fault
+    T4CONbits.TCKPS = 0;     // Устанавливаем предделитель таймера 4 на значение 1:1
+    PR4 = TMR4CLK / OC_FREQ; // Устанавливаем период таймера 4
+    IFS0bits.T4IF = 0;       // Сбрасываем флаг прерывания таймера 4
+    IEC0bits.T4IE = 1;       // Разрешаем прерывания от таймера 4
+    IPC4bits.T4IP = 4;       // Устанавливаем приоритет прерывания таймера 4
+    // T4CONbits.ON = 1;      // Включаем таймер 4
+    // OC3CONbits.ON = 1;     // Включаем модуль сравнения OC3
+} // Конец функции инициализации модуля сравнения вывода OC3
+/* Этот код предназначен для инициализации модуля сравнения вывода OC3 (Output Compare 3) на микроконтроллере.
+Он настраивает регистры и конфигурацию модуля сравнения для генерации сигнала ШИМ (Широтно-Импульсной Модуляции) без
+использования пина Fault. Таймер 4 используется в качестве источника сигнала тактирования для генерации ШИМ. После
+инициализации этот модуль готов к использованию для управления ШИМ-сигналом. */
 
+/* зона инициализации юартов */
+// инициализация 5го порта
 void uart5_init(void)
 {
-    U5MODEbits.USIDL = 0;                  /* Continue in Idle mode */
-    U5MODEbits.LPBACK = 0;                 /* Disable LoopBack */
-    U5MODEbits.PDSEL = 0b00;               /* 8-bit data, no parity */
-    U5MODEbits.STSEL = 0;                  /* One Stop bit */
-    U5MODEbits.BRGH = 0;                   /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U5BRG = PBCLK2_ / (U5_speed * 16) - 1; // 1Mbit
-    IFS5bits.U5TXIF = 0;                   /* Clear interrupt flag */
-    IPC45bits.U5TXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC45bits.U5TXIS = 0;                  // sub priority, 0 is Low priority
-    IEC5bits.U5TXIE = 0;                   /* Enable receive interrupts */
-    IFS5bits.U5RXIF = 0;                   /* Clear interrupt flag */
-    IPC45bits.U5RXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC45bits.U5RXIS = 0;                  // sub priority, 0 is Low priority
-    IEC5bits.U5RXIE = 1;                   /* Enable receive interrupts */
-    U5STAbits.UTXEN = 1;                   /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U5STAbits.URXEN = 1;                   /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U5STAbits.UTXISEL = 0b10;              /* 10 =Interrupt is generated and asserted while the transmit buffer is empty*/
-    U5MODEbits.ON = 1;                     /* Enable UART module 1 */
+    U5MODEbits.USIDL = 0;                  // Продолжаем работу UART5 в режиме простоя
+    U5MODEbits.LPBACK = 0;                 // Отключаем режим обратной связи
+    U5MODEbits.PDSEL = 0b00;               // 8-бит данных, без проверки четности
+    U5MODEbits.STSEL = 0;                  // Один стоп-бит
+    U5MODEbits.BRGH = 0;                   // Низкоскоростной режим (если 1, то высокоскоростной)
+    U5BRG = PBCLK2_ / (U5_speed * 16) - 1; // Устанавливаем скорость передачи данных
+    IFS5bits.U5TXIF = 0;                   // Сбрасываем флаг прерывания передачи
+    IPC45bits.U5TXIP = 2;                  // Приоритет прерывания передачи - высокий
+    IPC45bits.U5TXIS = 0;                  // Подприоритет прерывания передачи - низкий
+    IEC5bits.U5TXIE = 0;                   // Разрешаем прерывания при приеме данных
+    IFS5bits.U5RXIF = 0;                   // Сбрасываем флаг прерывания приема
+    IPC45bits.U5RXIP = 2;                  // Приоритет прерывания приема - высокий
+    IPC45bits.U5RXIS = 0;                  // Подприоритет прерывания приема - низкий
+    IEC5bits.U5RXIE = 1;                   // Разрешаем прерывания при приеме данных
+    U5STAbits.UTXEN = 1;                   // Включаем передатчик UART5
+    U5STAbits.URXEN = 1;                   // Включаем приемник UART5
+    U5STAbits.UTXISEL = 0b10;              // Генерируем прерывание, когда буфер передачи пуст
+    U5MODEbits.ON = 1;                     // Включаем модуль UART5
 }
+/* Эта функция инициализирует модуль UART5 с заданными параметрами, включает передающий и приемный режимы,
+а также включает прерывания для передачи и приема данных. */
 
 void uart4_init(void)
 {
-    U4MODEbits.USIDL = 0;                  /* Continue in Idle mode */
-    U4MODEbits.LPBACK = 0;                 /* Disable LoopBack */
-    U4MODEbits.PDSEL = 0b00;               /* 8-bit data, no parity */
-    U4MODEbits.STSEL = 0;                  /* One Stop bit */
-    U4MODEbits.BRGH = 0;                   /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U4BRG = PBCLK2_ / (U5_speed * 16) - 1; // 1Mbit
-    IFS5bits.U4TXIF = 0;                   /* Clear interrupt flag */
-    IPC43bits.U4TXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC43bits.U4TXIS = 0;                  // sub priority, 0 is Low priority
-    IEC5bits.U4TXIE = 0;                   /* Enable receive interrupts */
-    IFS5bits.U4RXIF = 0;                   /* Clear interrupt flag */
-    IPC42bits.U4RXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC42bits.U4RXIS = 0;                  // sub priority, 0 is Low priority
-    IEC5bits.U4RXIE = 1;                   /* Enable receive interrupts */
-    U4STAbits.UTXEN = 1;                   /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U4STAbits.URXEN = 1;                   /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U4STAbits.UTXISEL = 0b10;
-    U4MODEbits.ON = 1;
+    U4MODEbits.USIDL = 0;                  /* Продолжать работу UART4 в режиме простоя */
+    U4MODEbits.LPBACK = 0;                 /* Отключить режим обратной связи */
+    U4MODEbits.PDSEL = 0b00;               /* Установить формат данных: 8 бит, без проверки четности */
+    U4MODEbits.STSEL = 0;                  /* Установить один стоп-бит */
+    U4MODEbits.BRGH = 0;                   /* Выбрать низкоскоростной режим передачи */
+    U4BRG = PBCLK2_ / (U5_speed * 16) - 1; // Настроить скорость передачи данных
+    IFS5bits.U4TXIF = 0;                   /* Сбросить флаг прерывания передачи данных */
+    IPC43bits.U4TXIP = 2;                  /* Установить приоритет прерывания передачи данных */
+    IPC43bits.U4TXIS = 0;                  /* Установить подприоритет прерывания передачи данных */
+    IEC5bits.U4TXIE = 0;                   /* Разрешить прерывания при передаче данных */
+    IFS5bits.U4RXIF = 0;                   /* Сбросить флаг прерывания приема данных */
+    IPC42bits.U4RXIP = 2;                  /* Установить приоритет прерывания приема данных */
+    IPC42bits.U4RXIS = 0;                  /* Установить подприоритет прерывания приема данных */
+    IEC5bits.U4RXIE = 1;                   /* Разрешить прерывания при приеме данных */
+    U4STAbits.UTXEN = 1;                   /* Включить передатчик UART4 */
+    U4STAbits.URXEN = 1;                   /* Включить приемник UART4 */
+    U4STAbits.UTXISEL = 0b10;              /* Установить условие генерации прерывания при передаче данных (пустой буфер) */
+    U4MODEbits.ON = 1;                     /* Включить модуль UART4 */
 }
+/* Эта функция инициализирует модуль UART4 с заданными параметрами, включает передающий и приемный режимы,
+а также включает прерывания для передачи и приема данных. */
 
 void uart3_init(void)
 {
-    U3MODEbits.USIDL = 0;                  /* Continue in Idle mode */
-    U3MODEbits.LPBACK = 0;                 /* Disable LoopBack */
-    U3MODEbits.PDSEL = 0b00;               /* 8-bit data, no parity */
-    U3MODEbits.STSEL = 0;                  /* One Stop bit */
-    U3MODEbits.BRGH = 0;                   /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U3BRG = PBCLK2_ / (U5_speed * 16) - 1; // 1Mbit
-    IFS4bits.U3TXIF = 0;                   /* Clear interrupt flag */
-    IPC39bits.U3TXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC39bits.U3TXIS = 0;                  // sub priority, 0 is Low priority
-    IEC4bits.U3TXIE = 0;                   /* Enable receive interrupts */
-    IFS4bits.U3RXIF = 0;                   /* Clear interrupt flag */
-    IPC39bits.U3RXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC39bits.U3RXIS = 0;                  // sub priority, 0 is Low priority
-    IEC4bits.U3RXIE = 1;                   /* Enable receive interrupts */
-    U3STAbits.UTXEN = 1;                   /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U3STAbits.URXEN = 1;                   /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U3STAbits.UTXISEL = 0b10;
-    U3MODEbits.ON = 1;
+    U3MODEbits.USIDL = 0;                  /* Продолжать работу UART3 в режиме простоя */
+    U3MODEbits.LPBACK = 0;                 /* Отключить режим обратной связи */
+    U3MODEbits.PDSEL = 0b00;               /* Установить формат данных: 8 бит, без проверки четности */
+    U3MODEbits.STSEL = 0;                  /* Установить один стоп-бит */
+    U3MODEbits.BRGH = 0;                   /* Выбрать низкоскоростной режим передачи */
+    U3BRG = PBCLK2_ / (U5_speed * 16) - 1; // Настроить скорость передачи данных
+    IFS4bits.U3TXIF = 0;                   /* Сбросить флаг прерывания передачи данных */
+    IPC39bits.U3TXIP = 2;                  /* Установить приоритет прерывания передачи данных */
+    IPC39bits.U3TXIS = 0;                  /* Установить подприоритет прерывания передачи данных */
+    IEC4bits.U3TXIE = 0;                   /* Разрешить прерывания при передаче данных */
+    IFS4bits.U3RXIF = 0;                   /* Сбросить флаг прерывания приема данных */
+    IPC39bits.U3RXIP = 2;                  /* Установить приоритет прерывания приема данных */
+    IPC39bits.U3RXIS = 0;                  /* Установить подприоритет прерывания приема данных */
+    IEC4bits.U3RXIE = 1;                   /* Разрешить прерывания при приеме данных */
+    U3STAbits.UTXEN = 1;                   /* Включить передатчик UART3 */
+    U3STAbits.URXEN = 1;                   /* Включить приемник UART3 */
+    U3STAbits.UTXISEL = 0b10;              /* Установить условие генерации прерывания при передаче данных (пустой буфер) */
+    U3MODEbits.ON = 1;                     /* Включить модуль UART3 */
 }
-
+/* Эта функция инициализирует модуль UART3 с заданными параметрами, включает передающий и приемный режимы,
+а также включает прерывания для передачи и приема данных. */
 void uart2_init(void)
 {
-    U2MODEbits.USIDL = 0;                  /* Continue in Idle mode */
-    U2MODEbits.LPBACK = 0;                 /* Disable LoopBack */
-    U2MODEbits.PDSEL = 0b00;               /* 8-bit data, no parity */
-    U2MODEbits.STSEL = 0;                  /* One Stop bit */
-    U2MODEbits.BRGH = 0;                   /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U2BRG = PBCLK2_ / (U5_speed * 16) - 1; // 1Mbit
-    IFS4bits.U2TXIF = 0;                   /* Clear interrupt flag */
-    IPC36bits.U2TXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC36bits.U2TXIS = 0;                  // sub priority, 0 is Low priority
-    IEC4bits.U2TXIE = 0;                   /* Enable receive interrupts */
-    IFS4bits.U2RXIF = 0;                   /* Clear interrupt flag */
-    IPC36bits.U2RXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC36bits.U2RXIS = 0;                  // sub priority, 0 is Low priority
-    IEC4bits.U2RXIE = 1;                   /* Enable receive interrupts */
-    U2STAbits.UTXEN = 1;                   /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U2STAbits.URXEN = 1;                   /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U2STAbits.UTXISEL = 0b10;
-    U2MODEbits.ON = 1;
+    U2MODEbits.USIDL = 0;                  /* Продолжить работу UART2 в режиме простоя */
+    U2MODEbits.LPBACK = 0;                 /* Отключить режим обратной связи */
+    U2MODEbits.PDSEL = 0b00;               /* 8-битные данные, без проверки четности */
+    U2MODEbits.STSEL = 0;                  /* Один стоп-бит */
+    U2MODEbits.BRGH = 0;                   /* Режим высокой скорости передачи выключен */
+    U2BRG = PBCLK2_ / (U5_speed * 16) - 1; // Установить скорость передачи данных
+    IFS4bits.U2TXIF = 0;                   /* Сбросить флаг прерывания передачи данных */
+    IPC36bits.U2TXIP = 2;                  /* Установить приоритет прерывания передачи данных */
+    IPC36bits.U2TXIS = 0;                  /* Установить подприоритет прерывания передачи данных */
+    IEC4bits.U2TXIE = 0;                   /* Разрешить прерывания при передаче данных */
+    IFS4bits.U2RXIF = 0;                   /* Сбросить флаг прерывания приема данных */
+    IPC36bits.U2RXIP = 2;                  /* Установить приоритет прерывания приема данных */
+    IPC36bits.U2RXIS = 0;                  /* Установить подприоритет прерывания приема данных */
+    IEC4bits.U2RXIE = 1;                   /* Разрешить прерывания при приеме данных */
+    U2STAbits.UTXEN = 1;                   /* Включить передатчик UART2 */
+    U2STAbits.URXEN = 1;                   /* Включить приемник UART2 */
+    U2STAbits.UTXISEL = 0b10;              /* Установить условие генерации прерывания при передаче данных (пустой буфер) */
+    U2MODEbits.ON = 1;                     /* Включить модуль UART2 */
 }
+/* Эта функция инициализирует модуль UART2 с заданными параметрами, включает передающий и приемный режимы,
+а также включает прерывания для передачи и приема данных. */
 
 void uart1_init(void)
 {
-    U1MODEbits.USIDL = 0;                  /* Continue in Idle mode */
-    U1MODEbits.LPBACK = 0;                 /* Disable LoopBack */
-    U1MODEbits.PDSEL = 0b00;               /* 8-bit data, no parity */
-    U1MODEbits.STSEL = 0;                  /* One Stop bit */
-    U1MODEbits.BRGH = 0;                   /* 1 = High-Speed mode ? 4x baud clock enabled*/
-    U1BRG = PBCLK2_ / (U5_speed * 16) - 1; // 1Mbit
-    IFS3bits.U1TXIF = 0;                   /* Clear interrupt flag */
-    IPC28bits.U1TXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC28bits.U1TXIS = 0;                  // sub priority, 0 is Low priority
-    IEC3bits.U1TXIE = 0;                   /* Enable receive interrupts */
-    IFS3bits.U1RXIF = 0;                   /* Clear interrupt flag */
-    IPC28bits.U1RXIP = 2;                  // 2 (bei 7 geht DISI nicht) is High priority, 0 is Low priority
-    IPC28bits.U1RXIS = 0;                  // sub priority, 0 is Low priority
-    IEC3bits.U1RXIE = 1;                   /* Enable receive interrupts */
-    U1STAbits.UTXEN = 1;                   /* 1 = UARTx transmitter is enabled. UxTX pin is controlled by UARTx (if ON = 1*/
-    U1STAbits.URXEN = 1;                   /* 1 = UARTx receiver is enabled. UxRX pin is controlled by UARTx (if ON = 1) */
-    U1STAbits.UTXISEL = 0b10;
-    U1MODEbits.ON = 1;
+    U1MODEbits.USIDL = 0;                  /* Продолжить работу UART1 в режиме простоя */
+    U1MODEbits.LPBACK = 0;                 /* Отключить режим обратной связи */
+    U1MODEbits.PDSEL = 0b00;               /* 8-битные данные, без проверки четности */
+    U1MODEbits.STSEL = 0;                  /* Один стоп-бит */
+    U1MODEbits.BRGH = 0;                   /* Режим высокой скорости передачи выключен */
+    U1BRG = PBCLK2_ / (U5_speed * 16) - 1; // Установить скорость передачи данных
+    IFS3bits.U1TXIF = 0;                   /* Сбросить флаг прерывания передачи данных */
+    IPC28bits.U1TXIP = 2;                  /* Установить приоритет прерывания передачи данных */
+    IPC28bits.U1TXIS = 0;                  /* Установить подприоритет прерывания передачи данных */
+    IEC3bits.U1TXIE = 0;                   /* Разрешить прерывания при передаче данных */
+    IFS3bits.U1RXIF = 0;                   /* Сбросить флаг прерывания приема данных */
+    IPC28bits.U1RXIP = 2;                  /* Установить приоритет прерывания приема данных */
+    IPC28bits.U1RXIS = 0;                  /* Установить подприоритет прерывания приема данных */
+    IEC3bits.U1RXIE = 1;                   /* Разрешить прерывания при приеме данных */
+    U1STAbits.UTXEN = 1;                   /* Включить передатчик UART1 */
+    U1STAbits.URXEN = 1;                   /* Включить приемник UART1 */
+    U1STAbits.UTXISEL = 0b10;              /* Установить условие генерации прерывания при передаче данных (пустой буфер) */
+    U1MODEbits.ON = 1;                     /* Включить модуль UART1 */
 }
+/* Эта функция инициализирует модуль UART2 с заданными параметрами, включает передающий и приемный режимы,
+а также включает прерывания для передачи и приема данных. */
 
 void UART1_init(unsigned int speed)
 {
-    U1MODE = 0x0000; // UART1 transmitter disabled
+    U1MODE = 0x0000; // Отключение передатчика UART1
 
-    URXISEL1 = 0b00; // Int flag is set when a character is received
-    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
-    PDSEL1 = 0b00; // 8-bit data, no parity
-    STSEL1 = 0;    // 1 Stop bit
+    URXISEL1 = 0b00; // Флаг прерывания устанавливается при приеме символа
+    //	UTXISEL_1=0;				// Флаг прерывания устанавливается при передаче символа и буфер пуст
+    PDSEL1 = 0b00; // Данные 8 бит, без контроля четности
+    STSEL1 = 0;    // Один стоповый бит
 
-    IEC3bits.U1RXIE = 0;
-    IEC3bits.U1TXIE = 0;
+    IEC3bits.U1RXIE = 0; // Отключение прерывания приемника UART1
+    IEC3bits.U1TXIE = 0; // Отключение прерывания передатчика UART1
 
     switch (speed)
     {
     case 1:
     {
-        U1BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
-        frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 1200 - 1;            // Установка скорости передачи 1200 бод
+        frame_delay = Fcy / 8 / 1200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
     case 2:
     {
-        U1BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
-        frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 2400 - 1;            // Установка скорости передачи 2400 бод
+        frame_delay = Fcy / 8 / 2400 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 3:
     {
-        U1BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
-        frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 4800 - 1;            // Установка скорости передачи 4800 бод
+        frame_delay = Fcy / 8 / 4800 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 4:
     {
-        U1BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
-        frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 9600 - 1;            // Установка скорости передачи 9600 бод
+        frame_delay = Fcy / 8 / 9600 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 5:
     {
-        U1BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
-        frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 19200 - 1;            // Установка скорости передачи 19200 бод
+        frame_delay = Fcy / 8 / 19200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 6:
     {
-        U1BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 38400 - 1;            // Установка скорости передачи 38400 бод
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 7:
     {
-        U1BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 57600 - 1;            // Установка скорости передачи 57600 бод
+        frame_delay = Fcy / 8 / 57600 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 8:
     {
-        U1BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
-        frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 115200 - 1;            // Установка скорости передачи 115200 бод
+        frame_delay = Fcy / 8 / 115200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     default:
     {
-        U1BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U1BRG = ((Fcy) / 16) / 38400 - 1;            // Установка скорости передачи 38400 бод по умолчанию
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
     }
-    UARTEN1 = 1; // UART1 enabled
-    UTXEN1 = 1;
-    IEC3bits.U1RXIE = 0;
-    ENAB_RX1;
+    UARTEN1 = 1;         // Включение UART1
+    UTXEN1 = 1;          // Включение передатчика UART1
+    IEC3bits.U1RXIE = 0; // Отключение прерывания приемника UART1
+    ENAB_RX1;            // Включение приемника UART1
 }
+/* Выбранный фрагмент кода инициализирует модуль UART1 с заданными параметрами, включает передающий и приемный режимы, а
+также включает прерывания для передачи и приема данных. */
 
 void UART2_init(unsigned int speed)
 {
-    U2MODE = 0x0000; // UART2 transmitter disabled
+    U2MODE = 0x0000; // Отключение передатчика UART2
 
-    URXISEL2 = 0b00; // Int flag is set when a character is received
-    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
-    PDSEL2 = 0b00; // 8-bit data, no parity
-    STSEL2 = 0;    // 1 Stop bit
+    URXISEL2 = 0b00; // Флаг прерывания устанавливается при приеме символа
+    //	UTXISEL_1=0;				// Флаг прерывания устанавливается при передаче символа и буфер пуст
+    PDSEL2 = 0b00; // Данные 8 бит, без контроля четности
+    STSEL2 = 0;    // Один стоповый бит
 
-    IEC4bits.U2RXIE = 0;
-    IEC4bits.U2TXIE = 0;
+    IEC4bits.U2RXIE = 0; // Отключение прерывания приемника UART2
+    IEC4bits.U2TXIE = 0; // Отключение прерывания передатчика UART2
 
     switch (speed)
     {
     case 1:
     {
-        U2BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
-        frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 1200 - 1;            // Установка скорости передачи 1200 бод
+        frame_delay = Fcy / 8 / 1200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
     case 2:
     {
-        U2BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
-        frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 2400 - 1;            // Установка скорости передачи 2400 бод
+        frame_delay = Fcy / 8 / 2400 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 3:
     {
-        U2BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
-        frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 4800 - 1;            // Установка скорости передачи 4800 бод
+        frame_delay = Fcy / 8 / 4800 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 4:
     {
-        U2BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
-        frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 9600 - 1;            // Установка скорости передачи 9600 бод
+        frame_delay = Fcy / 8 / 9600 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 5:
     {
-        U2BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
-        frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 19200 - 1;            // Установка скорости передачи 19200 бод
+        frame_delay = Fcy / 8 / 19200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 6:
     {
-        U2BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 38400 - 1;            // Установка скорости передачи 38400 бод
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 7:
     {
-        U2BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 57600 - 1;            // Установка скорости передачи 57600 бод
+        frame_delay = Fcy / 8 / 57600 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 8:
     {
-        U2BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
-        frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 115200 - 1;            // Установка скорости передачи 115200 бод
+        frame_delay = Fcy / 8 / 115200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     default:
     {
-        U2BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U2BRG = ((Fcy) / 16) / 38400 - 1;            // Установка скорости передачи 38400 бод по умолчанию
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
     }
-    UARTEN2 = 1; // UART1 enabled
-    UTXEN2 = 1;
-    IEC4bits.U2RXIE = 0;
-    ENAB_RX2;
+    UARTEN2 = 1;         // Включение UART2
+    UTXEN2 = 1;          // Включение передатчика UART2
+    IEC4bits.U2RXIE = 0; // Отключ
+    ENAB_RX2;            // Включение приемника UART2
 }
+/* Выбранный фрагмент кода инициализирует модуль UART1 с заданными параметрами, включает передающий и приемный режимы, а
+также включает прерывания для передачи и приема данных. */
 
 void UART4_init(unsigned int speed)
 {
-    U4MODE = 0x0000; // UART2 transmitter disabled
+    U4MODE = 0x0000; // Отключение передатчика UART2
 
-    URXISEL4 = 0b00; // Int flag is set when a character is received
-    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
-    PDSEL4 = 0b00; // 8-bit data, no parity
-    STSEL4 = 0;    // 1 Stop bit
+    URXISEL4 = 0b00; // Флаг прерывания устанавливается при приеме символа
+    //	UTXISEL_1=0;				// Флаг прерывания устанавливается при передаче символа, и буфер пуст
+    PDSEL4 = 0b00; // Данные 8 бит, без проверки четности
+    STSEL4 = 0;    // 1 стоп-бит
 
-    IEC5bits.U4RXIE = 0;
-    IEC5bits.U4TXIE = 0;
+    IEC5bits.U4RXIE = 0; // Запрещение прерывания при приеме
+    IEC5bits.U4TXIE = 0; // Запрещение прерывания при передаче
 
     switch (speed)
     {
     case 1:
     {
-        U4BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
-        frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 1200 - 1;            // Расчет скорости передачи для 1200 бод
+        frame_delay = Fcy / 8 / 1200 * rx_timeout1; // Вычисление времени межкадровой паузы для 1200 бод
         break;
     }
     case 2:
     {
-        U4BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
-        frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 2400 - 1;            // Расчет скорости передачи для 2400 бод
+        frame_delay = Fcy / 8 / 2400 * rx_timeout1; // Вычисление времени межкадровой паузы для 2400 бод
         break;
     }
 
     case 3:
     {
-        U4BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
-        frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 4800 - 1;            // Расчет скорости передачи для 4800 бод
+        frame_delay = Fcy / 8 / 4800 * rx_timeout1; // Вычисление времени межкадровой паузы для 4800 бод
         break;
     }
 
     case 4:
     {
-        U4BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
-        frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 9600 - 1;            // Расчет скорости передачи для 9600 бод
+        frame_delay = Fcy / 8 / 9600 * rx_timeout1; // Вычисление времени межкадровой паузы для 9600 бод
         break;
     }
 
     case 5:
     {
-        U4BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
-        frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 19200 - 1;            // Расчет скорости передачи для 19200 бод
+        frame_delay = Fcy / 8 / 19200 * rx_timeout1; // Вычисление времени межкадровой паузы для 19200 бод
         break;
     }
 
     case 6:
     {
-        U4BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 38400 - 1;            // Расчет скорости передачи для 38400 бод
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Вычисление времени межкадровой паузы для 38400 бод
         break;
     }
 
     case 7:
     {
-        U4BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 57600 - 1;            // Расчет скорости передачи для 57600 бод
+        frame_delay = Fcy / 8 / 57600 * rx_timeout1; // Вычисление времени межкадровой паузы для 57600 бод
         break;
     }
 
     case 8:
     {
-        U4BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
-        frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 115200 - 1;            // Расчет скорости передачи для 115200 бод
+        frame_delay = Fcy / 8 / 115200 * rx_timeout1; // Вычисление времени межкадровой паузы для 115200 бод
         break;
     }
 
     default:
     {
-        U4BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U4BRG = ((Fcy) / 16) / 38400 - 1;            // Расчет скорости передачи для 38400 бод по умолчанию
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Вычисление времени межкадровой паузы для 38400 бод по умолчанию
         break;
     }
     }
-    UARTEN4 = 1; // UART1 enabled
-    UTXEN4 = 1;
-    IEC5bits.U4RXIE = 0;
-    ENAB_RX4;
+    UARTEN4 = 1;         // Включение UART1
+    UTXEN4 = 1;          // Включение передатчика UART4
+    IEC5bits.U4RXIE = 0; // Запрещение прерывания при приеме
+    ENAB_RX4;            // Включение приемника UART4
 }
 
 void UART5_init(unsigned int speed)
 {
-    U5MODE = 0x0000; // UART2 transmitter disabled
+    U5MODE = 0x0000; // Отключение передатчика UART5
 
-    URXISEL5 = 0b00; // Int flag is set when a character is received
-    //	UTXISEL_1=0;				//Int flag is set when a char is transfering and buff is empty
-    PDSEL5 = 0b00; // 8-bit data, no parity
-    STSEL5 = 0;    // 1 Stop bit
+    URXISEL5 = 0b00; // Установка флага прерывания при приеме символа
+    // UTXISEL_1=0; // Флаг прерывания устанавливается при передаче символа и буфер пустой (не используется в данном коде)
+    PDSEL5 = 0b00; // Установка формата передачи: 8 бит данных, без контроля четности
+    STSEL5 = 0;    // Установка количества стоповых битов: 1 стоповый бит
 
-    IEC5bits.U5RXIE = 0;
-    IEC5bits.U5TXIE = 0;
+    IEC5bits.U5RXIE = 0; // Запрещение прерывания при приеме
+    IEC5bits.U5TXIE = 0; // Запрещение прерывания при передаче
 
     switch (speed)
     {
     case 1:
     {
-        U5BRG = ((Fcy) / 16) / 1200 - 1; // 1200 bod
-        frame_delay = Fcy / 8 / 1200 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 1200 - 1;            // Установка значения делителя для скорости 1200 бод
+        frame_delay = Fcy / 8 / 1200 * rx_timeout1; // Вычисление задержки кадра для скорости 1200 бод
         break;
     }
     case 2:
     {
-        U5BRG = ((Fcy) / 16) / 2400 - 1; // 2400 bod
-        frame_delay = Fcy / 8 / 2400 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 2400 - 1;            // Установка значения делителя для скорости 2400 бод
+        frame_delay = Fcy / 8 / 2400 * rx_timeout1; // Вычисление задержки кадра для скорости 2400 бод
         break;
     }
 
     case 3:
     {
-        U5BRG = ((Fcy) / 16) / 4800 - 1; // 4800 bod
-        frame_delay = Fcy / 8 / 4800 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 4800 - 1;            // Установка значения делителя для скорости 4800 бод
+        frame_delay = Fcy / 8 / 4800 * rx_timeout1; // Вычисление задержки кадра для скорости 4800 бод
         break;
     }
 
     case 4:
     {
-        U5BRG = ((Fcy) / 16) / 9600 - 1; // 9600 bod
-        frame_delay = Fcy / 8 / 9600 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 9600 - 1;            // Установка значения делителя для скорости 9600 бод
+        frame_delay = Fcy / 8 / 9600 * rx_timeout1; // Вычисление задержки кадра для скорости 9600 бод
         break;
     }
 
     case 5:
     {
-        U5BRG = ((Fcy) / 16) / 19200 - 1; // 19200 bod
-        frame_delay = Fcy / 8 / 19200 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 19200 - 1;            // Установка значения делителя для скорости 19200 бод
+        frame_delay = Fcy / 8 / 19200 * rx_timeout1; // Вычисление задержки кадра для скорости 19200 бод
         break;
     }
 
     case 6:
     {
-        U5BRG = ((Fcy) / 16) / 38400 - 1; // 38400 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 38400 - 1;            // Установка значения делителя для скорости 38400 бод
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Вычисление задержки кадра для скорости 38400 бод
         break;
     }
 
     case 7:
     {
-        U5BRG = ((Fcy) / 16) / 57600 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 57600 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 57600 - 1;            // Установка значения делителя для скорости 57600 бод
+        frame_delay = Fcy / 8 / 57600 * rx_timeout1; // Вычисление задержки кадра для скорости 57600 бод
         break;
     }
 
     case 8:
     {
-        U5BRG = ((Fcy) / 16) / 115200 - 1; // 115200 bod
-        frame_delay = Fcy / 8 / 115200 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 115200 - 1;            // Установка значения делителя для скорости 115200 бод
+        frame_delay = Fcy / 8 / 115200 * rx_timeout1; // Вычисление задержки кадра для скорости 115200 бод
         break;
     }
 
     default:
     {
-        U5BRG = ((Fcy) / 16) / 38400 - 1; // 57600 bod
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1;
+        U5BRG = ((Fcy) / 16) / 38400 - 1;            // Установка значения делителя для скорости 38400 бод по уммолчанию
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Вычисление задержки кадра для скорости 38400 бод
         break;
     }
     }
-    UARTEN5 = 1; // UART1 enabled
-    UTXEN5 = 1;
-    IEC5bits.U5RXIE = 0;
-    ENAB_RX5;
+    UARTEN5 = 1;         // Включение UART5
+    UTXEN5 = 1;          // Разрешение передачи через UART5
+    IEC5bits.U5RXIE = 0; // Запрещение прерывания при приеме через UART5
+    ENAB_RX5;            // Включение приемника UART5
 }
 
 void spi5_init(void)
