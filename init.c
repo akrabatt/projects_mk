@@ -205,68 +205,68 @@ void port_init(void)
 
 void tmr_1_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
 {
-    T1CONbits.TON = 0;
-    TMR1 = 0x0000;
-    PR1 = T_delay; //
-    IEC0bits.T1IE = TMR_IE;
-    IPC1bits.T1IP = 0b10; // priority = 2
-    T1CONbits.TCKPS = 0;  // T1 prescaler 1:8
-    T1CONbits.TON = TMR_ON;
+    T1CONbits.TON = 0;      // Отключение таймера T1 перед началом настройки
+    TMR1 = 0x0000;          // Установка начального значения таймера T1 в 0
+    PR1 = T_delay;          // Установка значения предварительной загрузки для сравнения с таймером T1
+    IEC0bits.T1IE = TMR_IE; // Установка бита разрешения прерывания таймера T1 в соответствии с переданным значением
+    IPC1bits.T1IP = 0b10;   // Установка приоритета прерывания таймера T1 в 2
+    T1CONbits.TCKPS = 0;    // Установка предделителя таймера T1 на значение 1:1
+    T1CONbits.TON = TMR_ON; // Включение таймера T1 в соответствии с переданным значением
 }
 
 void tmr_2_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
 {
-    T2CONbits.TON = 0;
-    TMR2 = 0x0000;
-    PR2 = T_delay; //
-    IEC0bits.T2IE = TMR_IE;
-    IPC2bits.T2IP = 0b10; // priority = 2
-    T2CONbits.TCKPS = 0;  // T1 prescaler 1:8
-    T2CONbits.TON = TMR_ON;
+    T2CONbits.TON = 0;      // Отключение таймера T2 перед началом настройки
+    TMR2 = 0x0000;          // Установка начального значения таймера T2 в 0
+    PR2 = T_delay;          // Установка значения предварительной загрузки для сравнения с таймером T2
+    IEC0bits.T2IE = TMR_IE; // Установка бита разрешения прерывания таймера T2 в соответствии с переданным значением
+    IPC2bits.T2IP = 0b10;   // Установка приоритета прерывания таймера T2 в 2
+    T2CONbits.TCKPS = 0;    // Установка предделителя таймера T2 на значение 1:1
+    T2CONbits.TON = TMR_ON; // Включение таймера T2 в соответствии с переданным значением
 }
 
 void tmr_5_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
 {
-    T5CONbits.TON = 0;
-    TMR5 = 0x0000;
-    PR5 = T_delay; //
-    IEC0bits.T5IE = TMR_IE;
-    IPC6bits.T5IP = 0b10; // priority = 2
-    T5CONbits.TCKPS = 0;  // T1 prescaler 1:8
-    T5CONbits.TON = TMR_ON;
+    T5CONbits.TON = 0;      // Отключение таймера T5 перед началом настройки
+    TMR5 = 0x0000;          // Установка начального значения таймера T5 в 0
+    PR5 = T_delay;          // Установка значения предварительной загрузки для сравнения с таймером T5
+    IEC0bits.T5IE = TMR_IE; // Установка бита разрешения прерывания таймера T5 в соответствии с переданным значением
+    IPC6bits.T5IP = 0b10;   // Установка приоритета прерывания таймера T5 в 2
+    T5CONbits.TCKPS = 0;    // Установка предделителя таймера T5 на значение 1:1
+    T5CONbits.TON = TMR_ON; // Включение таймера T5 в соответствии с переданным значением
 }
 
 void tmr_9_init(unsigned short T9_delay, unsigned short TMR9_IE, unsigned short TMR9_ON)
 {
-    T9CONbits.TON = 0;
-    TMR9 = 0x0000;
-    PR9 = T9_delay; //
-    IEC1bits.T9IE = TMR9_IE;
-    IPC10bits.T9IP = 0b10;  // priority = 2
-    T9CONbits.TCKPS = 0b11; // T1 prescaler 1:8
-    T9CONbits.TON = TMR9_ON;
+    T9CONbits.TON = 0;       // Отключение таймера T9 перед началом настройки
+    TMR9 = 0x0000;           // Установка начального значения таймера T9 в 0
+    PR9 = T9_delay;          // Установка значения предварительной загрузки для сравнения с таймером T9
+    IEC1bits.T9IE = TMR9_IE; // Установка бита разрешения прерывания таймера T9 в соответствии с переданным значением
+    IPC10bits.T9IP = 0b10;   // Установка приоритета прерывания таймера T9 в 2
+    T9CONbits.TCKPS = 0b11;  // Установка предделителя таймера T9 на значение 1:256
+    T9CONbits.TON = TMR9_ON; // Включение таймера T9 в соответствии с переданным значением
 }
 
 void tmr_6_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
 {
-    T6CONbits.TON = 0;
-    TMR6 = 0x0000;
-    PR6 = T_delay; //
-    IEC0bits.T6IE = TMR_IE;
-    IPC7bits.T6IP = 0b10; // priority = 2
-    T6CONbits.TCKPS = 0;  // T1 prescaler 1:8
-    T6CONbits.TON = TMR_ON;
+    T6CONbits.TON = 0;      // Отключение таймера T6 перед началом настройки
+    TMR6 = 0x0000;          // Установка начального значения таймера T6 в 0
+    PR6 = T_delay;          // Установка значения предварительной загрузки для сравнения с таймером T6
+    IEC0bits.T6IE = TMR_IE; // Установка бита разрешения прерывания таймера T6 в соответствии с переданным значением
+    IPC7bits.T6IP = 0b10;   // Установка приоритета прерывания таймера T6 в 2
+    T6CONbits.TCKPS = 0;    // Установка предделителя таймера T6 на значение 1:1
+    T6CONbits.TON = TMR_ON; // Включение таймера T6 в соответствии с переданным значением
 }
 
 void tmr_7_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
 {
-    T7CONbits.TON = 0;
-    TMR7 = 0x0000;
-    PR7 = T_delay; //
-    IEC1bits.T7IE = TMR_IE;
-    IPC8bits.T7IP = 0b10; // priority = 2
-    T7CONbits.TCKPS = 0;  // T1 prescaler 1:8
-    T7CONbits.TON = TMR_ON;
+    T7CONbits.TON = 0;      // Отключение таймера 7 перед настройкой (0 - выключен, 1 - включен)
+    TMR7 = 0x0000;          // Сброс счетчика таймера 7 (установка счетчика в 0)
+    PR7 = T_delay;          // Установка значения периода таймера 7 (значение, при котором счетчик сбрасывается и генерируется прерывание)
+    IEC1bits.T7IE = TMR_IE; // Включение/отключение прерывания от таймера 7 (1 - включить, 0 - выключить)
+    IPC8bits.T7IP = 0b10;   // Установка приоритета прерывания от таймера 7 (значение приоритета)
+    T7CONbits.TCKPS = 0;    // Установка предделителя таймера 7 (0 - без предделителя, 1-7 - деление на соответствующее значение)
+    T7CONbits.TON = TMR_ON; // Включение/отключение таймера 7 (1 - включить, 0 - выключить)
 }
 
 void OC3_init(void)
