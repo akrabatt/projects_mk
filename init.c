@@ -744,41 +744,53 @@ void UART5_init(unsigned int speed)
     ENAB_RX5;            // Включение приемника UART5
 }
 
+/* Функции типа UARTx_init служат для инициализации модулей UART (Universal Asynchronous Receiver/Transmitter) с определенной скоростью передачи данных.
+Каждая функция принимает один аргумент speed, который определяет скорость передачи данных в бодах.
+Внутри функции происходит настройка параметров UART, таких как режим передачи данных (например, 8-битные данные без проверки на четность),
+количество стоп-битов, выбор прерывания при приеме данных, и другие параметры.
+После этого происходит выбор скорости передачи данных. В зависимости от выбранной скорости, вычисляется значение регистра BRG,
+который определяет делитель частоты для достижения желаемой скорости передачи.
+Наконец, включается модуль UART, разрешается передача данных и прием через UART, и, при необходимости, включается прерывание при приеме данных.
+Таким образом, функции UARTx_init позволяют настроить и включить модуль UART для работы с определенной скоростью передачи данных. */
+
 void spi5_init(void)
 {
-    unsigned int t_brg;
-    unsigned int baudHigh;
-    unsigned int baudLow;
-    unsigned int errorHigh;
-    unsigned int errorLow;
-    unsigned int baudRate;
+    unsigned int t_brg;     // Переменная для хранения значения BRG (Baud Rate Generator)
+    unsigned int baudHigh;  // Переменная для хранения вычисленной высокой скорости передачи данных
+    unsigned int baudLow;   // Переменная для хранения вычисленной низкой скорости передачи данных
+    unsigned int errorHigh; // Переменная для хранения ошибки высокой скорости передачи данных
+    unsigned int errorLow;  // Переменная для хранения ошибки низкой скорости передачи данных
+    unsigned int baudRate;  // Желаемая скорость передачи данных
 
-    baudRate = 8294400;
+    baudRate = 8294400; // Установка желаемой скорости передачи данных
 
-    SPI5CONbits.ON = 0;
-    SPI5CONbits.MSTEN = 1;
-    SPI5CONbits.MSSEN = 0;
-    SPI5CONbits.SIDL = 0;
-    SPI5CONbits.CKP = 0;
-    SPI5CONbits.CKE = 1;
-    SPI5CONbits.SMP = 0;
-    SPI5CONbits.MODE16 = 0;
-    SPI5CONbits.MODE32 = 0;
-    SPI5CONbits.FRMEN = 0;
-    SPI5CON2bits.AUDEN = 0;
-    SPI5CONbits.ENHBUF = 1;
-    t_brg = (((PBCLK2_ / baudRate) / 2) - 1);
-    baudHigh = PBCLK2_ / (2 * (t_brg + 1));
-    baudLow = PBCLK2_ / (2 * (t_brg + 2));
-    errorHigh = baudHigh - baudRate;
-    errorLow = baudRate - baudLow;
-    if (errorHigh > errorLow)
+    SPI5CONbits.ON = 0;                       // Выключение модуля SPI
+    SPI5CONbits.MSTEN = 1;                    // Установка в режим мастера
+    SPI5CONbits.MSSEN = 0;                    // Отключение SS (Slave Select)
+    SPI5CONbits.SIDL = 0;                     // Продолжение работы в режиме Idle
+    SPI5CONbits.CKP = 0;                      // Выбор фронта для синхронизации (Idle to Active)
+    SPI5CONbits.CKE = 1;                      // Фронт данных: прочтение на фронте
+    SPI5CONbits.SMP = 0;                      // Программное управление выбором фазы
+    SPI5CONbits.MODE16 = 0;                   // Режим 16 бит выключен
+    SPI5CONbits.MODE32 = 0;                   // Режим 32 бит выключен
+    SPI5CONbits.FRMEN = 0;                    // Режим кадра выключен
+    SPI5CON2bits.AUDEN = 0;                   // Аудио режим выключен
+    SPI5CONbits.ENHBUF = 1;                   // Расширенный буфер включен
+    t_brg = (((PBCLK2_ / baudRate) / 2) - 1); // Рассчитываем BRG
+    baudHigh = PBCLK2_ / (2 * (t_brg + 1));   // Рассчитываем высокую скорость передачи данных
+    baudLow = PBCLK2_ / (2 * (t_brg + 2));    // Рассчитываем низкую скорость передачи данных
+    errorHigh = baudHigh - baudRate;          // Вычисляем ошибку для высокой скорости
+    errorLow = baudRate - baudLow;            // Вычисляем ошибку для низкой скорости
+    if (errorHigh > errorLow)                 // Сравниваем ошибки
     {
-        t_brg++;
+        t_brg++; // Корректируем BRG, если ошибка высокой скорости больше
     }
-    SPI5BRG = t_brg;
-    SPI5CONbits.ON = 1;
+    SPI5BRG = t_brg;    // Устанавливаем BRG
+    SPI5CONbits.ON = 1; // Включаем модуль SPI
 }
+/* Эта функция spi5_init() используется для инициализации модуля SPI5 микроконтроллера. В ней производится настройка
+различных параметров передачи данных, таких как режим работы (мастер или рабочий), выбор фронта для синхронизации, режим
+работы буфера данных, скорость передачи данных (через BRG), а также включение самого модуля SPI5. */
 
 void InitializeSystem(void)
 {
@@ -787,60 +799,60 @@ void InitializeSystem(void)
     // No wait setting required for main data RAM
 
     // Prefetch-cache: Enable prefetch for PFM (any PFM instructions or data)
-    PRECONbits.PREFEN = 3; // предварительная выборка данных загружать их в кэш
+    PRECONbits.PREFEN = 3; // Включение предварительной выборки для PFM (загрузка любых инструкций или данных PFM в кэш)
     // Flash PM Wait States: MZ Flash runs at 2 wait states @ 200 MHz
-    PRECONbits.PFMWS = 2; // чето со временем связанно
+    PRECONbits.PFMWS = 2; // Установка времени ожидания для Flash PM (что-то связанное с временем ожидания)
     // PBClk3 set to 8 MHz (assumes SYSCLK = 200 MHz via configuration bits)
     // Unlock Sequence
     SYSKEY = 0xAA996655;
     SYSKEY = 0x556699AA;
     // Modify PB3DIV
-    PB2DIVbits.PBDIV = 3; // PBCLK = SYSCLK/8 = 24883200 Hz)
+    PB2DIVbits.PBDIV = 3; // Установка делителя для PBCLK (частота SYSCLK/8 = 24883200 Гц)
     CFGCONbits.OCACLK = 1;
-    PB3DIVbits.PBDIV = 3; // PBCLK3 = SYSCLK/25 (= 200/25 = 8 MHz)
+    PB3DIVbits.PBDIV = 3; // Установка делителя для PBCLK3 (частота SYSCLK/25 = 8 МГц)
     // Lock sequence
     SYSKEY = 0x33333333;
 
-    port_init();
-    spi5_init();
-    help_load = 1;
-    conf_read();
+    port_init();   // Инициализация портов
+    spi5_init();   // Инициализация SPI5
+    help_load = 1; // Загрузка справочной информации
+    conf_read();   // Чтение конфигурации
 
-    tmr_1_init(100, 0, 0);
-    tmr_2_init(100, 0, 0);
-    tmr_5_init(100, 0, 0);
-    tmr_6_init(100, 0, 0);
-    tmr_7_init(100, 0, 0);
-    tmr_9_init(65000, 1, 1);
-    OC3_init();
-    uart5_init();
-    uart4_init();
-    uart3_init();
-    uart2_init();
-    uart1_init();
-    DMA5_init();
-    DMA4_init();
-    DMA3_init();
-    DMA2_init();
-    DMA1_init();
+    tmr_1_init(100, 0, 0);   // Инициализация таймера 1
+    tmr_2_init(100, 0, 0);   // Инициализация таймера 2
+    tmr_5_init(100, 0, 0);   // Инициализация таймера 5
+    tmr_6_init(100, 0, 0);   // Инициализация таймера 6
+    tmr_7_init(100, 0, 0);   // Инициализация таймера 7
+    tmr_9_init(65000, 1, 1); // Инициализация таймера 9
+    OC3_init();              // Инициализация выхода сравнения OC3
+    uart5_init();            // Инициализация UART5
+    uart4_init();            // Инициализация UART4
+    uart3_init();            // Инициализация UART3
+    uart2_init();            // Инициализация UART2
+    uart1_init();            // Инициализация UART1
+    DMA5_init();             // Инициализация DMA5
+    DMA4_init();             // Инициализация DMA4
+    DMA3_init();             // Инициализация DMA3
+    DMA2_init();             // Инициализация DMA2
+    DMA1_init();             // Инициализация DMA1
 
     /* Assign PIC32MZ shadow register sets to specific CPU IPLs */
     PRISS = 0x76543210;
 
     /* Set Interrupt Controller for multi-vector mode */
-    INTCONSET = _INTCON_MVEC_MASK; //
+    INTCONSET = _INTCON_MVEC_MASK; // Установка контроллера прерываний в многовекторный режим
 
     /* Enable Interrupt Exceptions */
-    // set the CP0 status IE bit high to turn on interrupts globally
+    // Установите бит IE CP0 status высоко, чтобы глобально включить прерывания
     __builtin_enable_interrupts();
 
     /* Enable the peripheral */
-    /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
-    T2CONbits.TON = 1;
-    T1CONbits.TON = 1;
-    T4CONbits.ON = 1; // Enable Timer 4
-    T5CONbits.ON = 1; // Enable Timer 5
-    T2CONbits.ON = 1;
-    OC3CONbits.ON = 1; // Enable OC3//
+    /* Включить периферию */
+    T2CONbits.TON = 1; // Включение таймера 2
+    T1CONbits.TON = 1; // Включение таймера 1
+    T4CONbits.ON = 1;  // Включение таймера 4
+    T5CONbits.ON = 1;  // Включение таймера 5
+    T2CONbits.ON = 1;  // Включение таймера 2
+    OC3CONbits.ON = 1; // Включение OC3
     //    ADCCON3bits.GSWTRG = 1;
 }
