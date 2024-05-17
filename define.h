@@ -29,100 +29,111 @@
 #define IN_SIZE 0x100  // Определение размера входного буфера как 256 байт (0x100 в шестнадцатеричной системе)
 #define IN_SIZE1 0xF0  // Определение размера входного буфера 1 как 240 байт (0xF0 в шестнадцатеричной системе)
 
-#define timeout1 55
-#define frame_delay_1 PBCLK2_ / 115200 * timeout1
+#define timeout1 55                               // Определение времени ожидания (тайм-аута) как 55
+#define frame_delay_1 PBCLK2_ / 115200 * timeout1 // Определение задержки кадра 1 как деления PBCLK2_ на 115200, умноженное на timeout1
 
 /////////////////		Modbus alowed areas 		//////////////////////////
 
-#define START_READ 2000 // MB_swap
-#define END_READ 2078   //
+#define START_READ 2000 // Начальный адрес для чтения в Modbus (MB_swap)
+#define END_READ 2078   // Конечный адрес для чтения в Modbus
 
-#define START_WRITE 2054
-#define END_WRITE 2078 //
+#define START_WRITE 2054 // Начальный адрес для записи в Modbus
+#define END_WRITE 2078   // Конечный адрес для записи в Modbus
 
+// Проверка, находится ли запрашиваемый диапазон адресов для чтения в пределах допустимого диапазона
 #define READ_ ((start_reg >= START_READ) && (last_reg <= END_READ))
+// Проверка, находится ли запрашиваемый диапазон адресов для записи в пределах допустимого диапазона
 #define WRITE_ ((start_reg >= START_WRITE) && (last_reg <= END_WRITE))
 
-#define START_CONF_READ 500  // config area - setting of engine parameters
-#define END_CONF_READ 696    //
-#define START_CONF_WRITE 500 //
-#define END_CONF_WRITE 696   //
+#define START_CONF_READ 500 // Начальный адрес для чтения конфигурации - настройки параметров двигателя
+#define END_CONF_READ 696   // Конечный адрес для чтения конфигурации
 
+#define START_CONF_WRITE 500 // Начальный адрес для записи конфигурации
+#define END_CONF_WRITE 696   // Конечный адрес для записи конфигурации
+
+// Проверка, находится ли запрашиваемый диапазон адресов для чтения конфигурации в пределах допустимого диапазона
 #define CONF_READ_ ((start_reg >= START_CONF_READ) && (last_reg <= END_CONF_READ))
+// Проверка, находится ли запрашиваемый диапазон адресов для записи конфигурации в пределах допустимого диапазона
 #define CONF_WRITE_ ((start_reg >= START_CONF_WRITE) && (last_reg <= END_CONF_WRITE))
 
-#define START_MODBUS_READ 0  // working area of engine control and statuses
-#define END_MODBUS_READ 82   //
-#define START_MODBUS_WRITE 0 //
-#define END_MODBUS_WRITE 12  //
+#define START_MODBUS_READ 0 // Начальный адрес для чтения рабочей области управления двигателем и статусов
+#define END_MODBUS_READ 82  // Конечный адрес для чтения рабочей области
 
+#define START_MODBUS_WRITE 0 // Начальный адрес для записи рабочей области
+#define END_MODBUS_WRITE 12  // Конечный адрес для записи рабочей области
+
+// Проверка, находится ли запрашиваемый диапазон адресов для чтения рабочей области в пределах допустимого диапазона
 #define MODBUS_READ_ ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))
+// Проверка, находится ли запрашиваемый диапазон адресов для записи рабочей области в пределах допустимого диапазона
 #define MODBUS_WRITE_ ((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
 
-#define START_MB_DIAGN_READ 200  // config area - setting of engine parameters
-#define END_MB_DIAGN_READ 312    //
-#define START_MB_DIAGN_WRITE 200 //
-#define END_MB_DIAGN_WRITE 312   //
+#define START_MB_DIAGN_READ 200 // Начальный адрес для чтения диагностики Modbus
+#define END_MB_DIAGN_READ 312   // Конечный адрес для чтения диагностики Modbus
 
+#define START_MB_DIAGN_WRITE 200 // Начальный адрес для записи диагностики Modbus
+#define END_MB_DIAGN_WRITE 312   // Конечный адрес для записи диагностики Modbus
+
+// Проверка, находится ли запрашиваемый диапазон адресов для чтения диагностики Modbus в пределах допустимого диапазона
 #define MB_DIAGN_READ_ ((start_reg >= START_MB_DIAGN_READ) && (last_reg <= END_MB_DIAGN_READ))
+// Проверка, находится ли запрашиваемый диапазон адресов для записи диагностики Modbus в пределах допустимого диапазона
 #define MB_DIAGN_WRITE_ ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))
 
-#define RAMTRON_START 64
-#define RAMTRON_START_CONFIG 512
+#define RAMTRON_START 64         // Начальный адрес для работы с EEPROM
+#define RAMTRON_START_CONFIG 512 // Начальный адрес для работы с конфигурацией EEPROM
 
-#define CUR_CTRL_VAL 10
+#define CUR_CTRL_VAL 10 // Управляющее значение тока
 
-#define TMR4CLK 49776400
+#define TMR4CLK 49776400 // Частота тактирования таймера 4
 
-#define OC_FREQ 3000
+#define OC_FREQ 3000 // Частота для Output Compare
 
-#define FILT_DISCRET 500
-#define CYCLE 10
+#define FILT_DISCRET 500 // Дискрет фильтрации
+#define CYCLE 10         // Цикл
 
 ////////////////	End Modbus alowed area 	/////////////////////
 
-#define CONF1 PORTCbits.RC2
-#define CONF2 PORTCbits.RC3
-#define CONF3 PORTCbits.RC4
-#define CONF4 PORTGbits.RG6
-#define CONF5 PORTEbits.RE5
-#define CONF6 PORTEbits.RE6
-#define CONF7 PORTEbits.RE7
-#define CONF8 PORTCbits.RC1
+#define CONF1 PORTCbits.RC2 // Порт для конфигурации 1
+#define CONF2 PORTCbits.RC3 // Порт для конфигурации 2
+#define CONF3 PORTCbits.RC4 // Порт для конфигурации 3
+#define CONF4 PORTGbits.RG6 // Порт для конфигурации 4
+#define CONF5 PORTEbits.RE5 // Порт для конфигурации 5
+#define CONF6 PORTEbits.RE6 // Порт для конфигурации 6
+#define CONF7 PORTEbits.RE7 // Порт для конфигурации 7
+#define CONF8 PORTCbits.RC1 // Порт для конфигурации 8
 
-#define DI_1 PORTAbits.RA5
-#define DI_2 PORTGbits.RG15
-#define DI_3 PORTFbits.RF4
+#define DI_1 PORTAbits.RA5  // Порт для цифрового входа 1
+#define DI_2 PORTGbits.RG15 // Порт для цифрового входа 2
+#define DI_3 PORTFbits.RF4  // Порт для цифрового входа 3
 
-//  Modbus data define
-#define CYLINDERS_NUM 10
+//  Определение данных Modbus
+#define CYLINDERS_NUM 10 // Количество цилиндров
 
-// for UARTx_init
-#define URXISEL1 U1STAbits.URXISEL
-#define URXISEL2 U2STAbits.URXISEL
-#define URXISEL4 U4STAbits.URXISEL
-#define URXISEL5 U5STAbits.URXISEL
+// для функции UARTx_init
+#define URXISEL1 U1STAbits.URXISEL // Настройка выбора прерывания для приема UART1
+#define URXISEL2 U2STAbits.URXISEL // Настройка выбора прерывания для приема UART2
+#define URXISEL4 U4STAbits.URXISEL // Настройка выбора прерывания для приема UART4
+#define URXISEL5 U5STAbits.URXISEL // Настройка выбора прерывания для приема UART5
 
-#define PDSEL1 U1MODEbits.PDSEL
-#define STSEL1 U1MODEbits.STSEL
-#define PDSEL2 U2MODEbits.PDSEL
-#define STSEL2 U2MODEbits.STSEL
-#define PDSEL4 U4MODEbits.PDSEL
-#define STSEL4 U4MODEbits.STSEL
-#define PDSEL5 U5MODEbits.PDSEL
-#define STSEL5 U5MODEbits.STSEL
+#define PDSEL1 U1MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART1
+#define STSEL1 U1MODEbits.STSEL // Настройка количества стоповых битов для UART1
+#define PDSEL2 U2MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART2
+#define STSEL2 U2MODEbits.STSEL // Настройка количества стоповых битов для UART2
+#define PDSEL4 U4MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART4
+#define STSEL4 U4MODEbits.STSEL // Настройка количества стоповых битов для UART4
+#define PDSEL5 U5MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART5
+#define STSEL5 U5MODEbits.STSEL // Настройка количества стоповых битов для UART5
 
-#define UARTEN1 U1MODEbits.UARTEN
-#define UTXEN1 U1STAbits.UTXEN
-#define UARTEN2 U2MODEbits.UARTEN
-#define UTXEN2 U2STAbits.UTXEN
-#define UARTEN4 U4MODEbits.UARTEN
-#define UTXEN4 U4STAbits.UTXEN
-#define UARTEN5 U5MODEbits.UARTEN
-#define UTXEN5 U5STAbits.UTXEN
+#define UARTEN1 U1MODEbits.UARTEN // Бит включения UART1
+#define UTXEN1 U1STAbits.UTXEN    // Бит разрешения передачи UART1
+#define UARTEN2 U2MODEbits.UARTEN // Бит включения UART2
+#define UTXEN2 U2STAbits.UTXEN    // Бит разрешения передачи UART2
+#define UARTEN4 U4MODEbits.UARTEN // Бит включения UART4
+#define UTXEN4 U4STAbits.UTXEN    // Бит разрешения передачи UART4
+#define UARTEN5 U5MODEbits.UARTEN // Бит включения UART5
+#define UTXEN5 U5STAbits.UTXEN    // Бит разрешения передачи UART5
 
-#define FOSC 9216000 // 0x8CA000
-#define PLL_rate 4
-#define Fcy ((FOSC * PLL_rate) / 4)
-#define rx_timeout1 35
-#define receive 0
+#define FOSC 9216000                // Частота внешнего кварцевого резонатора
+#define PLL_rate 4                  // Множитель PLL
+#define Fcy ((FOSC * PLL_rate) / 4) // Частота работы CPU (Fcy = FOSC * PLL_rate / 4)
+#define rx_timeout1 35              // Время ожидания приема
+#define receive 0                   // Переменная для приема
