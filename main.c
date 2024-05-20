@@ -37,7 +37,7 @@ int main(void) {
         mbs(&usart1, 1); 
         stop_uart_tx_dma();
         //    stop_uart_tx();
-        Modbus.Modbus_data.cyl_mask = 10;
+        Modbus.Modbus_data.cyl_mask = 20;
         Modbus_sw.Modbus_data.cyl_mask = swapshort(Modbus.Modbus_data.cyl_mask);
     }
 }

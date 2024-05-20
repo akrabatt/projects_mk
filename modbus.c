@@ -51,6 +51,7 @@ unsigned char uchCRCLo = 0xFF; // младшего байта
 // эта функция реализует расчет CRC16 для переданного массива данных puchMsg, длинной usDataLen
 // Внутри цикла вычисляются новые значения uchCRCLo и uchCRCHi на основе текущего байта
 // сообщения и значений из таблицы auchCRCHi и auchCRCLo.
+
 void PIC_CRC16(unsigned char *puchMsg, unsigned short usDataLen)
 {
     unsigned char uIndex; // переменная будет использоваться для индексации в таблицах CRC
@@ -142,12 +143,14 @@ static const unsigned int wCRCTable[] = {
 // принятым на другой платформе или устройстве.
 // unsigned short swapshort(unsigned short data): Это объявление функции swapshort, которая принимает беззнаковое короткое целое число
 // (unsigned short) в качестве аргумента и возвращает также беззнаковое короткое целое число после перестановки байтов.
+
 unsigned short swapshort(unsigned short data)
 {
     // Объявление объединения (union) для работы с двумя форматами данных: short и char (байтовый массив)
     // union {...} conv, sconv;: Здесь объявляется объединение (union), позволяющее интерпретировать одну и ту же
     // область памяти как два различных типа данных (unsigned short и unsigned char[2]), что позволяет нам
     // манипулировать отдельными байтами числа.
+
     union
     {
         unsigned short sdata;   // 16-битное беззнаковое целое число (исходный формат)
@@ -167,6 +170,7 @@ unsigned short swapshort(unsigned short data)
 // Функция swapshort предназначена для перестановки байтов 16-битного беззнакового целого числа. Это полезно в ситуациях,
 // когда нужно преобразовать данные между различными форматами байтового порядка, например, между little-endian и big-endian.
 // Вот как работает эта функция:
+
 /* Функция swapshort используется для конвертации порядка байтов в 16-битном беззнаковом целочисленном значении. Это часто
 необходимо при обмене данными между системами с разным порядком байтов (например, между устройствами с архитектурой little-endian и big-endian)
 для обеспечения корректной интерпретации данных. */
@@ -176,6 +180,7 @@ float swapfloat(float data)
     // Объявление объединения (union) для работы с тремя форматами данных: float, unsigned short и unsigned char (байтовый массив)
     // Здесь объявляется объединение (union), которое позволяет интерпретировать одну и ту же область памяти как три различных типа
     // данных (float, unsigned short[2] и unsigned char[4]), что позволяет манипулировать отдельными байтами числа с плавающей запятой.
+
     union
     {
         float fdata;             // 32-битное число с плавающей запятой (исходный формат)
@@ -203,6 +208,7 @@ float swapfloat(float data)
 unsigned long swaplong(unsigned long data)
 {
     // Объявление объединения (union) для удобства доступа к данным различных типов
+
     union
     {
         unsigned long ldata;     // Целое число беззнакового 32 бита
@@ -224,6 +230,7 @@ unsigned long swaplong(unsigned long data)
 // запуск передачи без DMA режим прерываний
 // Этот код представляет собой функцию start_tx_usart, которая используется для начала передачи данных
 // через USART (универсальный асинхронный приемопередатчик) на
+
 void start_tx_usart(struct tag_usart *usart)
 {
     // Проверяем, с каким USART мы работаем
@@ -342,6 +349,7 @@ void start_tx_usart(struct tag_usart *usart)
 // запуск передачи юсарт только с DMA без прерываний по передатчику
 // Это объявление функции start_tx_usart_dma, которая принимает указатель usart на структуру
 // tag_usart и количество данных count для передачи через DMA.
+
 void start_tx_usart_dma(struct tag_usart *usart, unsigned short count)
 {
     // Проверяем, с каким USART мы работаем
@@ -607,6 +615,7 @@ void stop_uart_tx(void)
 // выполняя соответствующие действия для каждого из них в зависимости от текущего состояния передачи и обнаруженных ошибок.
 
 // остановка передачи без прерываний DMA
+
 /* Эта функция предназначена для остановки передачи данных через USART с использованием режима DMA (Direct Memory Access)
 без использования прерываний. Она проверяет текущий режим передачи для каждого USART и, если режим установлен как DMA_type,
 то функция останавливает передачу данных через DMA для соответствующего USART. */
@@ -734,6 +743,7 @@ void stop_uart_tx_dma(void)
 // Эта функция позволяет сбросить состояние протокола MODBUS для конкретного USART, устанавливая соответствующие
 // флаги в 0 и обнуляя счетчик буфера, что полезно при завершении или сбросе процесса передачи или приема данных
 // через USART с применением протокола MODBUS.
+
 void close_mb(struct tag_usart *usart)
 {
     // Сбрасываем флаги приема и передачи MODBUS
@@ -748,16 +758,17 @@ void close_mb(struct tag_usart *usart)
 // Эта функция answer_illegal формирует ответ на недопустимый запрос протокола MODBUS,
 // включая первые два байта из входного запроса, устанавливая старший бит во втором байте для обозначения ошибки,
 // добавляя недопустимый код запроса и вычисляя CRC16 для данных ответа, чтобы обеспечить его целостность при передаче
+
 void answer_illegal(struct tag_usart *usart, unsigned char illegal)
 {
     // Копируем первые два байта из входного буфера в выходной буфер
     usart->out_buffer[0x00] = usart->in_buffer[0]; // Здесь копируется первый байт из входного буфера (usart->in_buffer[0]) в
-                                                   // первый байт выходного буфера (usart->out_buffer[0x00]).
+    // первый байт выходного буфера (usart->out_buffer[0x00]).
 
     usart->out_buffer[0x01] = usart->in_buffer[1] | 0x80; // Здесь копируется второй байт из входного буфера (usart->in_buffer[1])
-                                                          // во второй байт выходного буфера (usart->out_buffer[0x01]), причем копируемое
-                                                          // значение OR'ится с 0x80, чтобы установить старший бит (бит 7) в единицу, что указывает на
-                                                          // ошибку (недопустимый запрос).
+    // во второй байт выходного буфера (usart->out_buffer[0x01]), причем копируемое
+    // значение OR'ится с 0x80, чтобы установить старший бит (бит 7) в единицу, что указывает на
+    // ошибку (недопустимый запрос).
 
     // Записываем недопустимый код запроса в третий байт выходного буфера
     usart->out_buffer[0x02] = illegal; // Здесь записывается переданный недопустимый код запроса (illegal) в третий байт выходного буфера.
@@ -767,15 +778,15 @@ void answer_illegal(struct tag_usart *usart, unsigned char illegal)
 
     // Записываем младший байт CRC16 в четвертый байт выходного буфера
     usart->out_buffer[0x03] = uchCRCLo; // Здесь вычисляется контрольная сумма CRC16 для первых трех байтов выходного буфера (usart->out_buffer)
-                                        // с использованием функции PIC_CRC16.
+    // с использованием функции PIC_CRC16.
 
     // Записываем старший байт CRC16 в пятый байт выходного буфера
     usart->out_buffer[0x04] = uchCRCHi; // Здесь записывается младший байт CRC16 (uchCRCLo) в четвертый байт выходного буфера.
 
     // Устанавливаем количество байт для отправки (размер ответа)
     usart->number_send = 5; // Здесь устанавливается количество байт для отправки (usart->number_send), которое равно 5, так как формируется ответ
-                            //  из 5 байтов (2 байта из входного буфера + 1 байт недопустимого
-                            //  кода запроса + 2 байта CRC16).
+    //  из 5 байтов (2 байта из входного буфера + 1 байт недопустимого
+    //  кода запроса + 2 байта CRC16).
 }
 /* Эта функция позволяет сформировать ответ о недопустимом запросе в соответствии с протоколом MODBUS,
 включая в него необходимые байты данных и CRC16. */
@@ -783,11 +794,12 @@ void answer_illegal(struct tag_usart *usart, unsigned char illegal)
 // вариант ответа на неправильную функцию
 // Функция answer_illegal_func управляет формированием ответа на недопустимый запрос и выбором метода
 // передачи этого ответа в зависимости от режима передачи USART (INT_type или DMA_type).
+
 void answer_illegal_func(struct tag_usart *usart)
 {
     // Формируем ответ на недопустимый запрос (недопустимая функция с кодом 0x01)
     answer_illegal(usart, 0x01); // Здесь вызывается функция answer_illegal для формирования ответа на недопустимый запрос.
-                                 //  Передается указатель usart на структуру tag_usart и код недопустимой функции (в данном случае 0x01).
+    //  Передается указатель usart на структуру tag_usart и код недопустимой функции (в данном случае 0x01).
 
     // Проверяем режим передачи USART
     if (usart->mb_status.tx_mode == INT_type) // Здесь происходит проверка режима передачи USART (tx_mode).
@@ -807,6 +819,7 @@ void answer_illegal_func(struct tag_usart *usart)
 // вариант ответа на неправильную адресацию
 // Функция answer_illegal_data_addr управляет формированием ответа на недопустимый запрос (недопустимый адрес данных)
 // и выбором метода передачи этого ответа в зависимости от режима передачи USART (INT_type или DMA_type).
+
 void answer_illegal_data_addr(struct tag_usart *usart)
 {
     // Формируем ответ на недопустимый запрос (недопустимый адрес данных с кодом 0x02)
@@ -829,6 +842,7 @@ void answer_illegal_data_addr(struct tag_usart *usart)
 // Функция answer_illegal_data_val управляет формированием ответа на недопустимый запрос
 // (недопустимое значение данных) и выбором метода передачи этого ответа в зависимости от
 // режима передачи USART (INT_type или DMA_type).
+
 void answer_illegal_data_val(struct tag_usart *usart)
 {
     // Формируем ответ на недопустимый запрос (недопустимое значение данных с кодом 0x03)
@@ -852,6 +866,7 @@ unsigned short num3;
 // контрольную сумму CRC16. После формирования пакета функция запускает передачу данных либо через DMA,
 // либо через USART, в зависимости от текущего режима передачи, указанного в структуре _usart->mb_status.
 // 3-я фукнкия модбас slave должна отвечать на mbm_03
+
 void mbs_03(struct tag_usart *_usart, unsigned short *source, unsigned short shift, unsigned short num)
 {
     num3 = num; // Инициализация переменной num3 значением аргумента num
@@ -923,6 +938,7 @@ void mbs_03(struct tag_usart *_usart, unsigned short *source, unsigned short shi
 // 16-я функция модбас слэйв, отвечает на mbm_10 записывает данные и кратко отвечает что все ок
 // функция mbs_10 обрабатывает запросы на запись нескольких регистров, копирует данные в соответствующие массивы,
 // меняет порядок байтов, записывает данные во внешнюю память и отправляет ответный пакет с вычисленным CRC16.
+
 void mbs_10(struct tag_usart *_usart, unsigned short *source, unsigned short shift_uni, unsigned short num_uni)
 {
     unsigned short ii;
@@ -999,6 +1015,7 @@ unsigned short length_err;
 // Итак, функция mbs_uni осуществляет полный цикл обработки запросов Modbus, включая проверку данных,
 // расчет CRC16, проверку длины пакета и количества регистров, а также вызов соответствующих функций для чтения
 // или записи регистров, после чего завершает соединение Modbus.
+
 void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 {
     if (usart->mb_status.modb_received)
@@ -1143,6 +1160,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 
 // проверяет адрес
 // Функция mbs реализует простую логику обработки принятых данных в протоколе Modbus.
+
 /* Эта функция mbs является обработчиком запросов в протоколе Modbus. Ее основное назначение -
 проверять принятые данные Modbus и, если они соответствуют ожидаемому адресу Modbus, передавать
 управление функции mbs_uni для дальнейшей обработки запроса. Если адрес не совпадает, соединение
@@ -1192,6 +1210,7 @@ void mbs(struct tag_usart *usart, unsigned char mbs_addres)
 Итак, функция mbs является основной точкой входа для обработки принятых данных Modbus. Она анализирует принятые данные, определяет адрес и осуществляет соответствующие действия в зависимости от адреса запроса. */
 
 // 3-я фукнция мастер запрос данных
+
 /* Эта функция mbm_03 служит для выполнения операции чтения нескольких регистров устройства по протоколу Modbus.
 Она обеспечивает инициализацию передачи данных, формирование запроса, отправку запроса по USART, прием ответа, а
 также обработку полученных данных и ошибок. */
@@ -1230,7 +1249,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
             usart->mbm_timeout = 240; // Установка таймаута в 240
             break;
         }
-        // и так далее для всех вариантов скорости
+            // и так далее для всех вариантов скорости
         case 2:
         {
             usart->mbm_timeout = 120;
@@ -1288,7 +1307,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
         // Инкремент счетчика ошибок
         usart->mb_status.master_timeout = 0; // Сброс флага master_timeout
         usart->mb_status.modb_received = 0;  // Сброс флага modb_received
-                                             // И так далее для всех флагов и переменных
+        // И так далее для всех флагов и переменных
         usart->mb_status.byte_missing = 0;
         usart->mb_status.crc_error = 0;
         usart->mb_status.device_error = 0;
@@ -1381,6 +1400,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
     }
     }
 }
+
 /* Эта функция mbm_03 выполняет чтение нескольких регистров по протоколу Modbus. Вот пошаговый комментарий:
 
 Объявление функции с параметрами: указатель на структуру tag_usart, адрес Modbus, смещение, количество регистров,
@@ -1402,3 +1422,188 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
 Состояние по умолчанию: Сброс состояний и флагов при неожиданном состоянии.
 
 Эта функция обеспечивает обмен данными с устройствами по протоколу Modbus, осуществляя чтение нескольких регистров и обработку ответов. */
+
+// 16 функция
+
+void mbm_16(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift_16, unsigned int quant_16, unsigned int *values, unsigned int speed)
+{
+    unsigned int cc;
+    if (!usart->mb_status.master_start)
+    {           // Проверяем, начат ли процесс master
+        return; // Если не начат, выходим из функции
+    }
+
+    switch (usart->mbm_status)
+    { // Проверяем текущее состояние master-устройства
+    case 0:
+    { // Состояние 0: инициализация
+        // Инициализация UART в зависимости от того, какой usart используется
+        if (usart == &usart1)
+        {
+            UART1_init(speed); // Инициализация UART1 с указанной скоростью
+        }
+        if (usart == &usart2)
+        {
+            UART2_init(speed); // Инициализация UART2 с указанной скоростью
+        }
+        if (usart == &usart4)
+        {
+            UART4_init(speed); // Инициализация UART4 с указанной скоростью
+        }
+        if (usart == &usart5)
+        {
+            UART5_init(speed); // Инициализация UART5 с указанной скоростью
+        }
+
+        // Установка таймаута в зависимости от скорости
+        switch (speed)
+        {
+        case 1:
+            usart->mbm_timeout = 240;
+            break; // Скорость 1, таймаут 240
+        case 2:
+            usart->mbm_timeout = 120;
+            break; // Скорость 2, таймаут 120
+        case 3:
+            usart->mbm_timeout = 80;
+            break; // Скорость 3, таймаут 80
+        case 4:
+            usart->mbm_timeout = 40;
+            break; // Скорость 4, таймаут 40
+        case 5:
+            usart->mbm_timeout = 20;
+            break; // Скорость 5, таймаут 20
+        case 6:
+            usart->mbm_timeout = 12;
+            break; // Скорость 6, таймаут 12
+        case 7:
+            usart->mbm_timeout = 5;
+            break; // Скорость 7, таймаут 5
+        case 8:
+            usart->mbm_timeout = 4;
+            break; // Скорость 8, таймаут 4
+        }
+
+        usart->mbm_status = 1; // Переход в состояние 1
+        break;
+    }
+    case 1:
+    { // Состояние 1: формирование запроса
+        // Формирование заголовка запроса Modbus
+        usart->out_buffer[0] = mbm_adres;              // Адрес slave-устройства
+        usart->out_buffer[1] = 0x10;                   // Код функции 16
+        usart->out_buffer[2] = (shift_16 >> 8) & 0xFF; // Старший байт адреса
+        usart->out_buffer[3] = shift_16 & 0xFF;        // Младший байт адреса
+        usart->out_buffer[4] = (quant_16 >> 8) & 0xFF; // Старший байт количества регистров
+        usart->out_buffer[5] = quant_16 & 0xFF;        // Младший байт количества регистров
+        usart->out_buffer[6] = quant_16 * 2;           // Количество байт данных
+
+        // Заполнение данных для записи
+        for (cc = 0; cc < quant_16; cc++)
+        {
+            usart->out_buffer[7 + cc * 2] = (values[cc] >> 8) & 0xFF; // Старший байт значения регистра
+            usart->out_buffer[8 + cc * 2] = values[cc] & 0xFF;        // Младший байт значения регистра
+        }
+
+        // Вычисление и добавление CRC16
+        PIC_CRC16(usart->out_buffer, 7 + quant_16 * 2);
+        usart->out_buffer[7 + quant_16 * 2] = uchCRCLo; // Младший байт CRC
+        usart->out_buffer[8 + quant_16 * 2] = uchCRCHi; // Старший байт CRC
+        usart->number_send = 9 + quant_16 * 2;          // Установка числа отправляемых байт
+
+        usart->mbm_timeout = 10;             // Установка таймаута
+        usart->mb_status.tm_on = 1;          // Включение таймера
+        usart->mb_status.master_timeout = 0; // Сброс флага таймаута master
+        usart->mb_status.modb_received = 0;  // Сброс флага приема данных
+        usart->mb_status.byte_missing = 0;   // Сброс флага отсутствующих байт
+        usart->mb_status.crc_error = 0;      // Сброс флага ошибки CRC
+        usart->mb_status.device_error = 0;   // Сброс флага ошибки устройства
+        usart->mb_status.coll_1 = 0;         // Сброс флага первой коллизии
+        usart->mb_status.coll_2 = 0;         // Сброс флага второй коллизии
+        usart->mb_status.coll_3 = 0;         // Сброс флага третьей коллизии
+
+        start_tx_usart(usart); // Начало передачи данных через USART
+        usart->mbm_status = 2; // Переход в состояние 2
+        break;
+    }
+    case 2:
+    { // Состояние 2: ожидание ответа и обработка результата
+        if (!usart->mb_status.master_timeout && !usart->mb_status.modb_received)
+        {
+            // Если нет ответа и не сработал таймаут, выходим
+            return;
+        }
+        if (usart->mb_status.master_timeout)
+        {                                      // Если произошел таймаут
+            usart->mbm_err++;                  // Увеличение счетчика ошибок
+            usart->mbm_status = 0;             // Сброс состояния master
+            usart->mb_status.master_start = 0; // Сброс флага master_start
+            break;
+        }
+
+        if (usart->in_buffer[1] == 0x90)
+        { // Если получен ответ об ошибке
+            if (usart->in_buffer[2] == 0x01)
+            {
+                usart->mb_status.coll_1 = 1; // Установка флага первой коллизии
+            }
+            else if (usart->in_buffer[2] == 0x02)
+            {
+                usart->mb_status.coll_2 = 1; // Установка флага второй коллизии
+            }
+            else if (usart->in_buffer[2] == 0x03)
+            {
+                usart->mb_status.coll_3 = 1; // Установка флага третьей коллизии
+            }
+            usart->mbm_err++;                  // Увеличение счетчика ошибок
+            usart->mb_status.master_start = 0; // Сброс флага master_start
+            usart->mbm_status = 0;             // Сброс состояния master
+            break;
+        }
+
+        if (usart->in_buffer[0] != usart->out_buffer[0])
+        {                                      // Проверка соответствия адреса
+            usart->mbm_status = 0;             // Сброс состояния master
+            usart->mb_status.device_error = 1; // Установка флага ошибки устройства
+            usart->mbm_err++;                  // Увеличение счетчика ошибок
+            usart->mb_status.master_start = 0; // Сброс флага master_start
+            break;
+        }
+
+        PIC_CRC16(usart->in_buffer, usart->in_buffer_count); // Вычисление CRC16 для принятого ответа
+        if (uchCRCLo | uchCRCHi)
+        {                                      // Если ошибка CRC
+            usart->mbm_status = 0;             // Сброс состояния master
+            usart->mb_status.crc_error = 1;    // Установка флага ошибки CRC
+            usart->mbm_err++;                  // Увеличение счетчика ошибок
+            usart->mb_status.master_start = 0; // Сброс флага master_start
+            break;
+        }
+
+        // Обработка успешного ответа
+        memcpy((void *)(dest), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // Копирование данных в целевой массив
+        for (cc = 0; cc < quant_16; cc++)
+        {
+            // Дальнейшая обработка данных (например, обновление внутреннего состояния устройства)
+        }
+        usart->answer_count++;             // Увеличение счетчика успешных ответов
+        usart->mb_status.master_error = 0; // Сброс флага ошибки master
+        usart->mb_status.master_start = 0; // Сброс флага master_start
+        usart->mbm_status = 0;             // Сброс состояния master
+        break;
+    }
+    default:
+    {                                      // Состояние по умолчанию
+        usart->mb_status.master_start = 0; // Сброс флага master_start
+        usart->mbm_status = 0;             // Сброс состояния master
+        break;
+    }
+    }
+}
+
+// Эта функция реализует логику Modbus Master для функции 16 (Preset Multiple Registers). Она проходит через несколько состояний:
+//
+// 1.Инициализация UART и установка таймаутов.
+// 2.Формирование запроса на запись регистров и отправка его через USART.
+// 3.Ожидание ответа и обработка результата, включая проверку ошибок (таймаут, ошибки CRC, коллизии).
+// В случае успешного выполнения происходит копирование данных в целевой массив и обновление счетчиков.
