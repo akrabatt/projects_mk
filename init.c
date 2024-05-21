@@ -226,6 +226,20 @@ void tmr_2_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TM
     T2CONbits.TON = TMR_ON; // Включение таймера T2 в соответствии с переданным значением
 }
 
+//инициализируем 4-й таймер для модбаса и мигалки
+void tmr_4_init(void)
+{
+    T4CON = 0x0000;       // Останавливаем таймер и очищаем настройки
+    T4CONbits.TCKPS = 2;  // Предделитель 1:64
+    PR4 = 6249;           // Период таймера (100 Гц)
+    TMR4 = 0x0000;        // Сбрасываем счётчик таймера
+    IPC4bits.T4IP = 4;    // Устанавливаем приоритет прерывания
+    IFS0bits.T4IF = 0;    // Сбрасываем флаг прерывания
+    IEC0bits.T4IE = 1;    // Разрешаем прерывание от таймера 4
+    T4CONbits.TON = 1;    // Включаем таймер
+}
+
+
 void tmr_5_init(unsigned short T_delay, unsigned short TMR_IE, unsigned short TMR_ON)
 {
     T5CONbits.TON = 0;      // Отключение таймера T5 перед началом настройки
@@ -821,6 +835,7 @@ void InitializeSystem(void)
 
     tmr_1_init(100, 0, 0);   // Инициализация таймера 1
     tmr_2_init(100, 0, 0);   // Инициализация таймера 2
+    tmr_4_init();
     tmr_5_init(100, 0, 0);   // Инициализация таймера 5
     tmr_6_init(100, 0, 0);   // Инициализация таймера 6
     tmr_7_init(100, 0, 0);   // Инициализация таймера 7

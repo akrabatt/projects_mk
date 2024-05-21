@@ -32,6 +32,8 @@ extern void DMA3_init(void);
 extern void DMA4_init(void);
 extern void DMA5_init(void);
 
+//extern void mbm_timeout_control(struct tag_usart *usart);
+
 extern void conf_read(void);
 
 // для ramtrone
@@ -161,7 +163,7 @@ struct tag_usart
     unsigned short mbm_status_05;       // Статус MODBUS 05.
     unsigned short repeat_05;           // Повтор MODBUS 05.
     unsigned short repeat_05_;          // Другой повтор MODBUS 05.
-    unsigned short mbm_timeout;         // Тайм-аут MODBUS.
+    unsigned short mbm_timeout_counter;         // Тайм-аут MODBUS.
     unsigned short answer_count;        //
 
     struct tag_mb_statusBITS
@@ -184,7 +186,7 @@ struct tag_usart
         unsigned coll_3 : 1;           // Коллизия 3
         unsigned tx_start : 1;         // Начало передачи
         unsigned master_start : 1;     // Начало мастера
-        unsigned master_timeout : 1;   // Тайм-аут мастера
+        unsigned master_timeout_flag : 1;   // Тайм-аут мастера
         unsigned tm_on : 1;            // Включение таймера
         unsigned device_error : 1;     // Ошибка устройства
         unsigned crc_error : 1;        // Ошибка CRC

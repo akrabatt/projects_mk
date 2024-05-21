@@ -1,5 +1,7 @@
 #include "extern.h"
 
+extern void mbm_timeout_control(struct tag_usart *usart);
+
 // TIMERS
 /* Объявление функции прерывания. Она ассоциируется с прерыванием от таймера 1 (_TIMER_1_VECTOR) и
     устанавливает приоритет прерывания на уровень 4. */
@@ -31,6 +33,10 @@ void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)
 void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)
 {
     T4CONbits.TON = 0;
+    mbm_timeout_control(&usart5);
+    mbm_timeout_control(&usart4);
+    mbm_timeout_control(&usart2);
+    mbm_timeout_control(&usart1);
     IFS0bits.T4IF = 0;
 }
 
@@ -68,8 +74,8 @@ void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
     // Проверка, включен ли режим таймаута передачи по Modbus (tm_on)
     if (usart1.mb_status.tm_on == 1)
     {
-        // Если установлен флаг таймаута передачи (mbm_timeout == 0), уменьшаем значение
-        if (!(usart1.mbm_timeout--))
+        // Если установлен флаг таймаута передачи (mbm_timeout_counter == 0), уменьшаем значение
+        if (!(usart1.mbm_timeout_counter--))
             ; // Ничего не делаем, пропускаем блок кода
 
         // Сброс флага таймаута передачи
@@ -77,7 +83,7 @@ void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
 
         // Если установлен флаг начала мастер-передачи, устанавливаем флаг таймаута мастера
         if (usart1.mb_status.master_start)
-            usart1.mb_status.master_timeout = 1;
+            usart1.mb_status.master_timeout_flag = 1;
     }
 
     // Сброс флага прерывания от таймера 9
