@@ -70,19 +70,19 @@ union tag_direct
 
                 struct
                 {
-                    unsigned break_sin1 : 1;      // Состояние DBSKT sin1 ch1: 0 - ОК, 1 - НЕОК
-                    unsigned break_cos1 : 1;      // Состояние DBSKT cos1 ch1: 0 - ОК, 1 - НЕОК
-                    unsigned break_sin2 : 1;      // Состояние DBSKT sin2 ch2: 0 - ОК, 1 - НЕОК
-                    unsigned break_cos2 : 1;      // Состояние DBSKT cos2 ch1: 0 - ОК, 1 - НЕОК
-                    unsigned break_sens1 : 1;     // Состояние датчика DBSKT ch1: 0 - ОК, 1 - НЕОК
-                    unsigned break_sens2 : 1;     // Состояние датчика DBSKT ch2: 0 - ОК, 1 - НЕОК
-                    unsigned coil_1_res_high : 1; // Сопротивление катушки 1: 0 - ОК, 1 - слишком высокое сопротивление
-                    unsigned coil_1_res_low : 1;  // Сопротивление катушки 1: 0 - ОК, 1 - слишком низкое сопротивление
-                    unsigned coil_2_res_high : 1; // Сопротивление катушки 2: 0 - ОК, 1 - слишком высокое сопротивление
-                    unsigned coil_2_res_low : 1;  // Сопротивление катушки 2: 0 - ОК, 1 - слишком низкое сопротивление
-                    unsigned I_1_fault : 1;       // Ошибка аналогового выхода 1: 0 - ОК, 1 - ошибка
-                    unsigned I_2_fault : 1;       // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
-                    unsigned I_in_fault : 1;      // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
+                    unsigned bit_1 : 1;      // Состояние DBSKT sin1 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_2 : 1;      // Состояние DBSKT cos1 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_3 : 1;      // Состояние DBSKT sin2 ch2: 0 - ОК, 1 - НЕОК
+                    unsigned bit_4 : 1;      // Состояние DBSKT cos2 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_5 : 1;     // Состояние датчика DBSKT ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_6 : 1;     // Состояние датчика DBSKT ch2: 0 - ОК, 1 - НЕОК
+                    unsigned bit_7 : 1; // Сопротивление катушки 1: 0 - ОК, 1 - слишком высокое сопротивление
+                    unsigned bit_8 : 1;  // Сопротивление катушки 1: 0 - ОК, 1 - слишком низкое сопротивление
+                    unsigned bit_9 : 1; // Сопротивление катушки 2: 0 - ОК, 1 - слишком высокое сопротивление
+                    unsigned bit_10 : 1;  // Сопротивление катушки 2: 0 - ОК, 1 - слишком низкое сопротивление
+                    unsigned bit_11 : 1;       // Ошибка аналогового выхода 1: 0 - ОК, 1 - ошибка
+                    unsigned bit_12 : 1;       // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
+                    unsigned bit_13 : 1;      // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
                     unsigned : 19;                // Резервные биты
                 };
             };
@@ -169,7 +169,7 @@ struct tag_usart
         unsigned coll_3 : 1;           // Коллизия 3
         unsigned tx_start : 1;         // Начало передачи
         unsigned master_start : 1;     // Начало мастера
-        unsigned master_timeout : 1;   // Тайм-аут мастера
+        unsigned master_timeout : 1;   // счетчик тайм-аута
         unsigned tm_on : 1;            // Включение таймера
         unsigned device_error : 1;     // Ошибка устройства
         unsigned crc_error : 1;        // Ошибка CRC
@@ -420,13 +420,13 @@ typedef struct tag_MOPS
             // Внутренние статусы зон MOPS
             struct
             {
-                unsigned int info[3];                    // Информация о зонах
-                unsigned int status[num_zone_mops];      // Состояние каждой зоны
-                unsigned int hold_status[num_zone_mops]; // Временное состояние каждой зоны
-                unsigned int current[num_zone_mops + 1]; // Текущее состояние каждой зоны
+                unsigned short info[3];                    // Информация о зонах
+                unsigned short status[num_zone_mops];      // Состояние каждой зоны
+                unsigned short hold_status[num_zone_mops]; // запомненное состояние каждой зоны
+                unsigned short current[num_zone_mops + 1]; // Текущее состояние каждой зоны
             };
             // Чтение внутренних статусов зон MOPS
-            unsigned int read[num_zone_mops * 3 + 4]; // Чтение информации о состоянии зон MOPS
+            unsigned short read[num_zone_mops * 3 + 4]; // Чтение информации о состоянии зон MOPS
         };
 
         union
@@ -434,23 +434,23 @@ typedef struct tag_MOPS
             // Команды для зон MOPS
             struct
             {
-                unsigned int command[num_zone_mops]; // Команда для каждой зоны
-                unsigned int type[num_zone_mops];    // Тип каждой зоны
-                unsigned int limit1[num_zone_mops];  // Предел 1 для каждой зоны
-                unsigned int limit2[num_zone_mops];  // Предел 2 для каждой зоны
-                unsigned int limit3[num_zone_mops];  // Предел 3 для каждой зоны
-                unsigned int limit4[num_zone_mops];  // Предел 4 для каждой зоны
-                unsigned int timer1[num_zone_mops];  // Таймер 1 для каждой зоны
-                unsigned int timer2[num_zone_mops];  // Таймер 2 для каждой зоны
-                unsigned int timer3[num_zone_mops];  // Таймер 3 для каждой зоны
-                unsigned int timer4[num_zone_mops];  // Таймер 4 для каждой зоны
+                unsigned short command[num_zone_mops]; // Команда для каждой зоны
+                unsigned short type[num_zone_mops];    // Тип каждой зоны
+                unsigned short limit1[num_zone_mops];  // Предел 1 для каждой зоны
+                unsigned short limit2[num_zone_mops];  // Предел 2 для каждой зоны
+                unsigned short limit3[num_zone_mops];  // Предел 3 для каждой зоны
+                unsigned short limit4[num_zone_mops];  // Предел 4 для каждой зоны
+                unsigned short timer1[num_zone_mops];  // Таймер 1 для каждой зоны
+                unsigned short timer2[num_zone_mops];  // Таймер 2 для каждой зоны
+                unsigned short timer3[num_zone_mops];  // Таймер 3 для каждой зоны
+                unsigned short timer4[num_zone_mops];  // Таймер 4 для каждой зоны
             };
             // Запись команд для зон MOPS
-            unsigned int write[num_zone_mops * 10]; // Запись команд для зон MOPS
+            unsigned short write[num_zone_mops * 10]; // Запись команд для зон MOPS
         };
     };
     // Область памяти для хранения информации о зонах MOPS
-    unsigned int main_area[num_zone_mops * 13 + 4];
+    unsigned short main_area[num_zone_mops * 13 + 4];
 } MOPS, MOPS_swap; // Псевдонимы для удобства использования
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
