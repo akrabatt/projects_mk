@@ -91,6 +91,11 @@ void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)
 /**
  * @brief Прерывание от таймера 5.
  *
+ * Эта функция обрабатывает прерывание от таймера 5. Она отключает таймер, вызывает функцию обработки прерывания
+ * для USART5 и сбрасывает флаг прерывания.
+ *
+ * @param void
+ * @return void
  */
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)
 {
@@ -105,7 +110,8 @@ void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)
  */
 void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
 {
-    T6CONbits.TON = 0;
+    // T6CONbits.TON = 0;
+    
     IFS0bits.T6IF = 0;
 }
 
