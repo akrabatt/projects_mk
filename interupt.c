@@ -50,6 +50,15 @@ void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)
     IFS0bits.T2IF = 0;
 }
 
+// void __ISR_AT_VECTOR(_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)
+// {
+//     T3CONbits.TON = 0;
+//     T3Interrupt_(&usart3);
+//     //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+//     PORTGbits.RG13 = LATGbits.LATG13 ^ 1;
+//     IFS0bits.T2IF = 0;
+// }
+
 /* таймер 4 */
 void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)
 {
