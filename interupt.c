@@ -81,10 +81,6 @@ void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)
 {
     T4CONbits.TON = 0;
     T4Interrupt_(&usart4);
-    // mbm_timeout_control(&usart5);
-    // mbm_timeout_control(&usart4);
-    // mbm_timeout_control(&usart2);
-    // mbm_timeout_control(&usart1);
     IFS0bits.T4IF = 0;
 }
 
@@ -111,7 +107,10 @@ void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)
 void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
 {
     // T6CONbits.TON = 0;
-    // PORTEbits.RE4 = LATEbits.LATE4 ^ 1;
+    mbm_timeout_control(&usart5);
+    mbm_timeout_control(&usart4);
+    mbm_timeout_control(&usart2);
+    mbm_timeout_control(&usart1);
     LED3_TOGGLE;
     IFS0bits.T6IF = 0;
 }

@@ -147,3 +147,5 @@
 #define LED3_OFF PORTE &= 0xfffb;
 #define LED3_ON PORTE |= 0x0004;
 #define LED3_TOGGLE PORTE = LATE ^ 0x0004;
+
+#define TICK 5 //системный тик

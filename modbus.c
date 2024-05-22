@@ -784,7 +784,7 @@ void mbm_timeout_control(struct tag_usart *usart)
 {
     if (usart->mb_status.tm_on)
     {
-        if (--usart->mbm_timeout_counter)
+        if (usart->mbm_timeout_counter - TICK)
         {
             usart->mb_status.tm_on = 0;
             usart->mb_status.master_timeout_flag = 1;
@@ -1259,7 +1259,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
     if (!usart->mb_status.master_start) // Если флаг master_start не установлен, функция завершает выполнение
     {
         return;
-    }
+    }   
     switch (usart->mbm_status) // Начало блока switch для обработки разлкичных состояний master-устройства
     {
     case 0: // Состояние 0: инициализация
