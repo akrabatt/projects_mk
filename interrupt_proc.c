@@ -68,6 +68,18 @@ void T2Interrupt_(struct tag_usart *usart)
     }
 }
 
+/**
+ * @brief Обработчик прерывания от таймера 3.
+ *
+ * Функция выполняет обработку прерывания от таймера 3. Выключает таймер 3 и сбрасывает флаг
+ * прерывания. Если в структуре usart установлен флаг modb_receiving, что указывает на выполнение
+ * приема данных Modbus, функция устанавливает флаг успешного приема данных modb_received в 1 и сбрасывает
+ * флаг modb_receiving.
+ *
+ * @param usart Указатель на структуру tag_usart, содержащую информацию о USART.
+ *
+ * @return void
+ */
 void T3Interrupt_(struct tag_usart *usart)
 {
     T3CONbits.TON = 0;                   // Выключает таймер 3
@@ -79,6 +91,18 @@ void T3Interrupt_(struct tag_usart *usart)
     }
 }
 
+/**
+ * @brief Обработчик прерывания от таймера 4.
+ *
+ * Функция выполняет обработку прерывания от таймера 4. Выключает таймер 4 и сбрасывает флаг
+ * прерывания. Если в структуре usart установлен флаг modb_receiving, что указывает на выполнение
+ * приема данных Modbus, функция устанавливает флаг успешного приема данных modb_received в 1 и сбрасывает
+ * флаг modb_receiving.
+ *
+ * @param usart Указатель на структуру tag_usart, содержащую информацию о USART.
+ *
+ * @return void
+ */
 void T4Interrupt_(struct tag_usart *usart)
 {
     T4CONbits.TON = 0;                   // Выключает таймер 4
@@ -89,6 +113,19 @@ void T4Interrupt_(struct tag_usart *usart)
         usart->mb_status.modb_receiving = 0; // Сбрасывает флаг приема данных Modbus
     }
 }
+
+/**
+ * @brief Обработчик прерывания от таймера 5.
+ *
+ * Функция выполняет обработку прерывания от таймера 5. Выключает таймер 5 и сбрасывает флаг
+ * прерывания. Если в структуре usart установлен флаг modb_receiving, что указывает на выполнение
+ * приема данных Modbus, функция устанавливает флаг успешного приема данных modb_received в 1 и сбрасывает
+ * флаг modb_receiving.
+ *
+ * @param usart Указатель на структуру tag_usart, содержащую информацию о USART.
+ *
+ * @return void
+ */
 void T5Interrupt_(struct tag_usart *usart)
 {
     T5CONbits.TON = 0;                   // Выключает таймер 5
@@ -100,6 +137,18 @@ void T5Interrupt_(struct tag_usart *usart)
     }
 }
 
+/**
+ * @brief Обработчик прерывания от таймера 6.
+ *
+ * Функция выполняет обработку прерывания от таймера 6. Выключает таймер 6 и сбрасывает флаг
+ * прерывания. Если в структуре usart установлен флаг modb_receiving, что указывает на выполнение
+ * приема данных Modbus, функция устанавливает флаг успешного приема данных modb_received в 1 и сбрасывает
+ * флаг modb_receiving.
+ *
+ * @param usart Указатель на структуру tag_usart, содержащую информацию о USART.
+ *
+ * @return void
+ */
 void T6Interrupt_(struct tag_usart *usart)
 {
     T6CONbits.TON = 0;                   // Выключает таймер 6
@@ -111,6 +160,18 @@ void T6Interrupt_(struct tag_usart *usart)
     }
 }
 
+/**
+ * @brief Обработчик прерывания от таймера 7.
+ *
+ * Функция выполняет обработку прерывания от таймера 7. Выключает таймер 7 и сбрасывает флаг
+ * прерывания. Если в структуре usart установлен флаг modb_receiving, что указывает на выполнение
+ * приема данных Modbus, функция устанавливает флаг успешного приема данных modb_received в 1 и сбрасывает
+ * флаг modb_receiving.
+ *
+ * @param usart Указатель на структуру tag_usart, содержащую информацию о USART.
+ *
+ * @return void
+ */
 void T7Interrupt_(struct tag_usart *usart)
 {
     T7CONbits.TON = 0;                   // Выключение таймера T7
@@ -122,6 +183,18 @@ void T7Interrupt_(struct tag_usart *usart)
     }
 }
 
+/**
+ * @brief Обработчик прерывания от таймера 9.
+ *
+ * Эта функция выполняет обработку прерывания от таймера 9. Она выключает таймер 9 и сбрасывает флаг
+ * прерывания от таймера 9. Если в структуре usart установлен флаг modb_receiving, что указывает на
+ * выполнение приема данных Modbus, функция устанавливает флаг успешного приема данных modb_received в 1 и
+ * сбрасывает флаг modb_receiving.
+ *
+ * @param usart Указатель на структуру tag_usart, содержащую информацию о USART.
+ *
+ * @return void
+ */
 void T9Interrupt_(struct tag_usart *usart)
 {
     T9CONbits.TON = 0;                   // Выключение таймера T9
