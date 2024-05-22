@@ -50,14 +50,13 @@ void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)
     IFS0bits.T2IF = 0;
 }
 
-// void __ISR_AT_VECTOR(_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)
-// {
-//     T3CONbits.TON = 0;
-//     T3Interrupt_(&usart3);
-//     //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
-//     PORTGbits.RG13 = LATGbits.LATG13 ^ 1;
-//     IFS0bits.T2IF = 0;
-// }
+void __ISR_AT_VECTOR(_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)
+{
+    T3CONbits.TON = 0;
+    T3Interrupt_(&usart3);
+    PORTGbits.RG14 = LATGbits.LATG14 ^ 1;
+    IFS0bits.T3IF = 0;
+}
 
 /* таймер 4 */
 void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)
@@ -90,8 +89,6 @@ void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
 void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void)
 {
     T7CONbits.TON = 0;
-    T4Interrupt_(&usart3);
-    PORTGbits.RG14 = LATGbits.LATG14 ^ 1;
     IFS1bits.T7IF = 0;
 }
 
@@ -280,7 +277,7 @@ void __ISR_AT_VECTOR(_UART3_RX_VECTOR, IPL4SRS) U3RXInterrupt(void)
         usart3.mb_status.modb_received = 1;  // Установка флага завершения приема для UART3
         usart3.mb_status.modb_receiving = 0; // Сброс флага приема для UART3
     }
-    tmr_7_init(frame_delay_1, 1, 1); // Инициализация таймера 7 для задержки между кадрами
+    tmr_3_init(frame_delay_1, 1, 1); // Инициализация таймера 7 для задержки между кадрами
 
     IFS4bits.U3RXIF = 0; // Сброс флага прерывания UART3 приемника
 }
