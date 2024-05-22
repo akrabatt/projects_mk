@@ -39,6 +39,8 @@ int main(void) {
         //    stop_uart_tx();
         Modbus.Modbus_data.cyl_mask = 50;
         Modbus_sw.Modbus_data.cyl_mask = swapshort(Modbus.Modbus_data.cyl_mask);
+//        LED3_TOGGLE;
+
     }
 }
 

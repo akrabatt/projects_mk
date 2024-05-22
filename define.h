@@ -137,3 +137,13 @@
 #define Fcy ((FOSC * PLL_rate) / 4) // Частота работы CPU (Fcy = FOSC * PLL_rate / 4)
 #define rx_timeout1 35              // Время ожидания приема
 #define receive 0                   // Переменная для приема
+
+// leds
+//  #define LED3_ON     PORTEbits.RE2 = 1;
+//  #define LED3_OFF     PORTEbits.RE2 = 0;
+//  #define LED3_TOGGLE         PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
+
+// leds
+#define LED3_OFF PORTE &= 0xfffb;
+#define LED3_ON PORTE |= 0x0004;
+#define LED3_TOGGLE PORTE = LATE ^ 0x0004;
