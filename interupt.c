@@ -45,11 +45,21 @@ void __ISR_AT_VECTOR(_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)
 {
     T2CONbits.TON = 0;
     T2Interrupt_(&usart2);
-    //    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
     PORTGbits.RG13 = LATGbits.LATG13 ^ 1;
     IFS0bits.T2IF = 0;
 }
 
+/**
+ * @brief Прерывание от таймера 3.
+ *
+ * Эта функция представляет собой обработчик прерывания от таймера 3. Вначале она отключает
+ * таймер 3, затем вызывает внешнюю функцию T3Interrupt_, передавая указатель на структуру usart3.
+ * Далее происходит инверсия состояния вывода RG14 порта G. Затем сбрасывается флаг прерывания
+ * от таймера 3.
+ *
+ * @param void
+ * @return void
+ */
 void __ISR_AT_VECTOR(_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)
 {
     T3CONbits.TON = 0;
@@ -58,18 +68,30 @@ void __ISR_AT_VECTOR(_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)
     IFS0bits.T3IF = 0;
 }
 
-/* таймер 4 */
+/**
+ * @brief Прерывание от таймера 4.
+ *
+ * Эта функция обрабатывает прерывание от таймера 4. Она отключает таймер, вызывает функцию обработки прерывания
+ * для USART4 и сбрасывает флаг прерывания.
+ *
+ * @param void
+ * @return void
+ */
 void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)
 {
     T4CONbits.TON = 0;
-    mbm_timeout_control(&usart5);
-    mbm_timeout_control(&usart4);
-    mbm_timeout_control(&usart2);
-    mbm_timeout_control(&usart1);
+    T6Interrupt_(&usart4);
+    // mbm_timeout_control(&usart5);
+    // mbm_timeout_control(&usart4);
+    // mbm_timeout_control(&usart2);
+    // mbm_timeout_control(&usart1);
     IFS0bits.T4IF = 0;
 }
 
-/* таймер 5 - юсарт 5 */
+/**
+ * @brief Прерывание от таймера 5.
+ *
+ */
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)
 {
     T5CONbits.TON = 0;
@@ -77,15 +99,20 @@ void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)
     IFS0bits.T5IF = 0;
 }
 
-/* таймер 6 - юсарт 6 */
+/**
+ * @brief Прерывание от таймера 6.
+ *
+ */
 void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
 {
     T6CONbits.TON = 0;
-    T6Interrupt_(&usart4);
     IFS0bits.T6IF = 0;
 }
 
-/* таймер 7 - юсарт 3 */
+/**
+ * @brief Прерывание от таймера 7.
+ *
+ */
 void __ISR_AT_VECTOR(_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void)
 {
     T7CONbits.TON = 0;
@@ -180,7 +207,7 @@ void __ISR_AT_VECTOR(_UART4_RX_VECTOR, IPL4SRS) U4RXInterrupt(void)
         usart4.mb_status.modb_received = 1;  // Установка флага получения MODBUS по UART4
         usart4.mb_status.modb_receiving = 0; // Сброс флага приема MODBUS по UART4
     }
-    tmr_6_init(frame_delay_1, 1, 1); // Инициализация таймера 6 для задержки между кадрами
+    tmr_4_init(frame_delay_1, 1, 1); // Инициализация таймера 6 для задержки между кадрами
     IFS5bits.U4RXIF = 0;             // Сброс флага прерывания UART4 приемника
 }
 
