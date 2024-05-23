@@ -1252,14 +1252,14 @@ void mbs(struct tag_usart *usart, unsigned char mbs_addres)
 /* Эта функция mbm_03 служит для выполнения операции чтения нескольких регистров устройства по протоколу Modbus.
 Она обеспечивает инициализацию передачи данных, формирование запроса, отправку запроса по USART, прием ответа, а
 также обработку полученных данных и ошибок. */
-void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift_03, unsigned int quant_03, unsigned int *dest, unsigned int speed)
+void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned short speed)
 {
 
     unsigned int cc;                    // Объявление переменной cc типа unsigned int для использования в цикле
     if (!usart->mb_status.master_start) // Если флаг master_start не установлен, функция завершает выполнение
     {
         return;
-    }   
+    }
     switch (usart->mbm_status) // Начало блока switch для обработки разлкичных состояний master-устройства
     {
     case 0: // Состояние 0: инициализация
@@ -1421,7 +1421,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned int shift
         memcpy((void *)(dest), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
         for (cc = 0; cc < quant_03; cc++)
         {
-            //                MOPS.main_area[cc + shift_03] = swapshort(MOPS_swap.main_area[cc + shift_03]);
+            MOPS.main_area[cc + shift_03] = swapshort(MOPS_swap.main_area[cc + shift_03]);
         }
         // Обновляем счетчик ответов и сбрасываем флаги ошибок
         usart->answer_count++;             // Увеличиваем счетчик ответов
