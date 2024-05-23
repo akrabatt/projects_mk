@@ -400,3 +400,49 @@ union tag_MB_conf
 extern unsigned short DINPUT1;
 extern unsigned short DINPUT2;
 extern unsigned short DINPUT3;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+extern union tag_MOPS
+{
+
+    struct
+    {
+
+        union
+        {
+            // Внутренние статусы зон MOPS
+            struct
+            {
+                unsigned short info[3];                    // Информация о зонах
+                unsigned short status[num_zone_mops];      // Состояние каждой зоны
+                unsigned short hold_status[num_zone_mops]; // запомненное состояние каждой зоны
+                unsigned short current[num_zone_mops + 1]; // Текущее состояние каждой зоны
+            };
+            // Чтение внутренних статусов зон MOPS
+            unsigned short read[num_zone_mops * 3 + 4]; // Чтение информации о состоянии зон MOPS
+        };
+
+        union
+        {
+            // Команды для зон MOPS
+            struct
+            {
+                unsigned short command[num_zone_mops]; // Команда для каждой зоны
+                unsigned short type[num_zone_mops];    // Тип каждой зоны
+                unsigned short limit1[num_zone_mops];  // Предел 1 для каждой зоны
+                unsigned short limit2[num_zone_mops];  // Предел 2 для каждой зоны
+                unsigned short limit3[num_zone_mops];  // Предел 3 для каждой зоны
+                unsigned short limit4[num_zone_mops];  // Предел 4 для каждой зоны
+                unsigned short timer1[num_zone_mops];  // Таймер 1 для каждой зоны
+                unsigned short timer2[num_zone_mops];  // Таймер 2 для каждой зоны
+                unsigned short timer3[num_zone_mops];  // Таймер 3 для каждой зоны
+                unsigned short timer4[num_zone_mops];  // Таймер 4 для каждой зоны
+            };
+            // Запись команд для зон MOPS
+            unsigned short write[num_zone_mops * 10]; // Запись команд для зон MOPS
+        };
+    };
+    // Область памяти для хранения информации о зонах MOPS
+    unsigned short main_area[num_zone_mops * 13 + 4];
+} MOPS, MOPS_swap; // Псевдонимы для удобства использования
