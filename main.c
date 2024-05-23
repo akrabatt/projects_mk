@@ -9,8 +9,7 @@ extern void InitializeSystem(void);                                 // инициализ
 extern unsigned short swapshort(unsigned short data);               // свап
 
 /* объ€вл€ем экземпл€р объединение дл€ ћќѕ—а */
-MOPS_swap MOPS_1_swap_init; // в это объединенине будут записыватьс€ данные дл€ того чтоб их просвапить
-MOPS MOPS_1_init;           // в это объединени€ будут записыватьс€ данные после свапа
+union tag_MOPS MOPS_arr[10]; // создадим массив структур
 
 int main(void)
 {
@@ -37,7 +36,7 @@ int main(void)
     {
 
         // mbs(&usart5, 1); // вызов modbus slave usart5 по 5му порту с 1-м адрессом
-        mbm_03(&usart1, 1, 0, 28, &MOPS_1_init, 8);
+        mbm_03(&usart1, 1, 0, 28, &MOPS_arr[0], 8);
         mbs(&usart4, 1);
         mbs(&usart3, 1);
         mbs(&usart2, 1);

@@ -1252,11 +1252,13 @@ void mbs(struct tag_usart *usart, unsigned char mbs_addres)
 /* Эта функция mbm_03 служит для выполнения операции чтения нескольких регистров устройства по протоколу Modbus.
 Она обеспечивает инициализацию передачи данных, формирование запроса, отправку запроса по USART, прием ответа, а
 также обработку полученных данных и ошибок. */
-void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *desttest, unsigned short speed)
+void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned short speed)
 {
 
-    unsigned int cc;                    // Объявление переменной cc типа unsigned int для использования в цикле
-    if (!usart->mb_status.master_start) // Если флаг master_start не установлен, функция завершает выполнение
+    unsigned int cc;                      // Объявление переменной cc типа unsigned int для использования в цикле
+    unsigned short lockal_buff_swap[109]; // локальный буффер для данных которые надо просвапитьы
+    unsigned short lockal_buff[109];      // локальный буффер для просвапленных данных
+    if (!usart->mb_status.master_start)   // Если флаг master_start не установлен, функция завершает выполнение
     {
         return;
     }
@@ -1418,11 +1420,13 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         } // wrong crc
 
         // Копируем данные в целевой массив и выполняем необходимые действия
-        memcpy((void *)(dest), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
+        memcpy((void *)(lockal_buff_swap), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
         for (cc = 0; cc < quant_03; cc++)
         {
-            MOPS.main_area[cc + shift_03] = swapshort(MOPS_swap.main_area[cc + shift_03]);
+            lockal_buff[cc + shift_03] = swapshort(lockal_buff_swap[cc + shift_03]);
         }
+        memcpy((void *)(dest), (const void *)(lockal_buff), lockal_buff[2]); // если все нормально, то начинаем
+
         // Обновляем счетчик ответов и сбрасываем флаги ошибок
         usart->answer_count++;             // Увеличиваем счетчик ответов
         usart->mb_status.master_error = 0; // Сброс флага ошибки master-устройства
