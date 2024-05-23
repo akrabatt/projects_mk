@@ -1,420 +1,448 @@
-
 #include "define.h"
 
+extern int blink_counter; // внешнняя переменная для счетчика миганий
 
-/* Provide C++ Compatibility */
-#ifdef __cplusplus
-extern "C" {
-#endif
+extern void fun_blink_counter(void);
 
+// буфер пердачи по ком порту для режима dma
+extern unsigned char __attribute__((coherent)) buf_tx5[300];
+extern unsigned char __attribute__((coherent)) buf_tx4[300];
+extern unsigned char __attribute__((coherent)) buf_tx3[300];
+extern unsigned char __attribute__((coherent)) buf_tx2[300];
+extern unsigned char __attribute__((coherent)) buf_tx1[300];
 
-    extern unsigned char __attribute__((coherent)) buf_tx5 [300];
-    extern unsigned char __attribute__((coherent)) buf_tx4 [300];
-    extern unsigned char __attribute__((coherent)) buf_tx3 [300];
-    extern unsigned char __attribute__((coherent)) buf_tx2 [300];
-    extern unsigned char __attribute__((coherent)) buf_tx1 [300];
+// внешнии функции для свапа
+extern float swapfloat(float data);
+extern unsigned long swaplong(unsigned long data);
+extern unsigned short swapshort(unsigned short data);
 
-    extern float swapfloat(float data);
-    extern unsigned long swaplong(unsigned long data);
-    extern unsigned short swapshort(unsigned short data);
+extern unsigned int frame_delay;
 
+// скорость работы портов
+extern unsigned int U1_speed;
+extern unsigned int U2_speed;
+extern unsigned int U3_speed;
+extern unsigned int U4_speed;
+extern unsigned int U5_speed;
 
-    extern unsigned int U1_speed;
-    extern unsigned int U2_speed;
-    extern unsigned int U3_speed;
-    extern unsigned int U4_speed;
-    extern unsigned int U5_speed;
+extern volatile unsigned int SECOND; // переменная для таймера 6, отсчитывает 1 секунду
 
-    extern unsigned int start_ctrl;
-    extern unsigned int start_pid_reg;
+// инициализация DMA
+extern void DMA1_init(void);
+extern void DMA2_init(void);
+extern void DMA3_init(void);
+extern void DMA4_init(void);
+extern void DMA5_init(void);
 
-    extern unsigned short help_strobe;
-    extern unsigned short help_reset;
-    extern unsigned short help_load;
-    extern float fpos, fcurr, fpres, resss;
+// extern void mbm_timeout_control(struct tag_usart *usart);
 
-    extern union tag_direct {
+extern void conf_read(void);
 
-        struct {
+// для ramtrone
+extern void getcs_FRAM(unsigned short adress, unsigned char *pstr, unsigned short len);
+extern void putcs_FRAM(unsigned short adress, unsigned char *pstr, unsigned short len);
 
-            union {
+extern unsigned short help_strobe;
+extern unsigned short help_reset;
+extern unsigned short help_load;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+extern union tag_direct
+{
+    struct
+    {
+        union
+        {
+            struct
+            {
+                unsigned short sensor1; // данные канала 1
+                unsigned short sensor2; // данные канала 2
+                unsigned short sensor3; // данные канала 3
+                unsigned short sensor4; // данные канала 4
+                unsigned short sensor5; // данные канала 5
+                unsigned short sensor6; // данные канала 6
+                unsigned short sensor7; // данные канала 7
+                unsigned short sensor8; // данные канала 8
+                float angle_1;          // угол 1
+                float angle_2;          // угол 2
+                float angle_3;          // угол 3
+                float angle_4;          // угол 4
+                float angle_5;          // угол 5
+                float angle_6;          // угол 6
+                float angle_7;          // угол 7
+                float angle_8;          // угол 8
+                float angle_9;          // угол 9
+                float angle_10;         // угол 10
+                float angle_11;         // угол 11
+                float angle_12;         // угол 12
+                unsigned long par1;     // параметр 1
+                unsigned long par2;     // параметр 2
+                unsigned long par3;     // параметр 3
+                unsigned long par4;     // параметр 4
+                unsigned long par5;     // параметр 5
+                unsigned long par6;     // параметр 6
+                unsigned long par7;     // параметр 7
+                unsigned long par8;     // параметр 8
+                unsigned long par9;     // параметр 9
+                unsigned long par10;    // параметр 10
 
-                struct {
-                    unsigned short sensor1; // data channel 1
-                    unsigned short sensor2; // data channel 2
-                    unsigned short sensor3; // data channel 3
-                    unsigned short sensor4; // data channel 4
-                    unsigned short sensor5; // data channel 5
-                    unsigned short sensor6; // data channel 6
-                    unsigned short sensor7; //  7
-                    unsigned short sensor8; //  8
-                    float angle_1; //  9
-                    float angle_2; //  11
-                    float angle_3; //  13
-                    float angle_4; //  15
-                    float angle_5; //  17
-                    float angle_6; //  19
-                    float angle_7; //  21
-                    float angle_8; //  23
-                    float angle_9; //  25
-                    float angle_10; //  27
-                    float angle_11; //  29
-                    float angle_12; //  31
-                    unsigned long par1; //  33
-                    unsigned long par2; //  35
-                    unsigned long par3; //  37
-                    unsigned long par4; //  39
-                    unsigned long par5; //  41
-                    unsigned long par6; //  43
-                    unsigned long par7; //  45
-                    unsigned long par8; //  47
-                    unsigned long par9; //  49
-                    unsigned long par10; //  51
-
-                    struct {
-                        unsigned break_sin1 : 1; // Status DBSKT sin1 ch1: 0 - OK, 1 - NOK 
-                        unsigned break_cos1 : 1; // Status DBSKT sos1 ch1: 0 - OK, 1 - NOK 
-                        unsigned break_sin2 : 1; // Status DBSKT sin2 ch2: 0 - OK, 1 - NOK 
-                        unsigned break_cos2 : 1; // Status DBSKT cos2 ch1: 0 - OK, 1 - NOK 
-                        unsigned break_sens1 : 1; // Status DBSKT sensor ch1: 0 - OK, 1 - NOK 
-                        unsigned break_sens2 : 1; // Status DBSKT sensor ch2: 0 - OK, 1 - NOK 
-                        unsigned coil_1_res_high : 1; // Coil 1 resistance: 0 - OK, 1 - too high resistance 
-                        unsigned coil_1_res_low : 1; // Coil 1 resistance: 0 - OK, 1 - too low resistance
-                        unsigned coil_2_res_high : 1; // Coil 2 resistance: 0 - OK, 1 - too high resistance 
-                        unsigned coil_2_res_low : 1; // Coil 2 resistance: 0 - OK, 1 - too low resistance
-                        unsigned I_1_fault : 1; // analog out 1 fault: 0 - OK, 1 - fault
-                        unsigned I_2_fault : 1; // analog out 2 fault: 0 - OK, 1 - fault
-                        unsigned I_in_fault : 1; // analog out 2 fault: 0 - OK, 1 - fault
-                        unsigned : 19;
-
-                    };
+                struct
+                {
+                    unsigned bit_1 : 1;  // Состояние DBSKT sin1 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_2 : 1;  // Состояние DBSKT cos1 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_3 : 1;  // Состояние DBSKT sin2 ch2: 0 - ОК, 1 - НЕОК
+                    unsigned bit_4 : 1;  // Состояние DBSKT cos2 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_5 : 1;  // Состояние датчика DBSKT ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_6 : 1;  // Состояние датчика DBSKT ch2: 0 - ОК, 1 - НЕОК
+                    unsigned bit_7 : 1;  // Сопротивление катушки 1: 0 - ОК, 1 - слишком высокое сопротивление
+                    unsigned bit_8 : 1;  // Сопротивление катушки 1: 0 - ОК, 1 - слишком низкое сопротивление
+                    unsigned bit_9 : 1;  // Сопротивление катушки 2: 0 - ОК, 1 - слишком высокое сопротивление
+                    unsigned bit_10 : 1; // Сопротивление катушки 2: 0 - ОК, 1 - слишком низкое сопротивление
+                    unsigned bit_11 : 1; // Ошибка аналогового выхода 1: 0 - ОК, 1 - ошибка
+                    unsigned bit_12 : 1; // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
+                    unsigned bit_13 : 1; // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
+                    unsigned : 19;       // Резервные биты
                 };
-                unsigned short output [54];
             };
+            unsigned short output[54]; // массив для выходных данных
+        };
 
-            union {
+        union
+        {
+            struct
+            {
+                float fl_1;              // число с плавающей запятой 1
+                float fl_2;              // число с плавающей запятой 2
+                float fl_3;              // число с плавающей запятой 3
+                float fl_4;              // число с плавающей запятой 4
+                float fl_5;              // число с плавающей запятой 5
+                float fl_6;              // число с плавающей запятой 6
+                float fl_7;              // число с плавающей запятой 7
+                unsigned short command1; // команда 1
+                unsigned short command2; // команда 2
+                unsigned short command3; // команда 3
+                unsigned short command4; // команда 4
+                unsigned short command5; // команда 5
+                unsigned short command6; // команда 6
+                unsigned short command7; // команда 7
+                unsigned short command8; // команда 8
 
-                struct {
-                    float fl_1; //  55
-                    float fl_2; //  57
-                    float fl_3; //  59
-                    float fl_4; //  61
-                    float fl_5; //  63
-                    float fl_6; //  65
-                    float fl_7; //  67              
-                    unsigned short command1; //  69
-                    unsigned short command2; //  70
-                    unsigned short command3; //  71
-                    unsigned short command4; //  72
-                    unsigned short command5; //  73
-                    unsigned short command6; //  74
-                    unsigned short command7; //  75
-                    unsigned short command8; //  76
-
-                    struct {
-                        unsigned command_On : 1; //  Command ON! "Semicrone" unit
-                        unsigned command_Off : 1; //  Command OFF! "Semicrone" unit
-                        unsigned command_Istab_On : 1; // Comman ON current stabilization function
-                        unsigned command_Integ_ON : 1; // Comman ON I-unit into the PI-regulator (current current stabilization function)
-                        unsigned : 28; // Last 12 bits = byte for value of Kp regulator (current current stabilization function)
-                    };
+                struct
+                {
+                    unsigned command_On : 1;       // Команда ВКЛ! для блока "Semicrone"
+                    unsigned command_Off : 1;      // Команда ВЫКЛ! для блока "Semicrone"
+                    unsigned command_Istab_On : 1; // Команда ВКЛ! для функции стабилизации тока
+                    unsigned command_Integ_ON : 1; // Команда ВКЛ! для включения I-блока в PI-регулятор (функция стабилизации тока)
+                    unsigned : 28;                 // Последние 12 бит = байт для значения регулятора Kp (функция стабилизации тока)
                 };
-                unsigned short input [24];
             };
+            unsigned short input[24]; // массив для входных данных
         };
-        unsigned short buf [78];
-    } MB, MB_swap, calibr, calibr_swap; // ???????? ?????? 2000 - 2078 (READ / WRITE)
+    };
+    unsigned short buf[78];         // буфер
+} MB, MB_swap, calibr, calibr_swap; // структуры для модбаса, чтение - 2000 ... 2078, запись - 0 ... 8
+/* Эта структура представляет собой объединение (union) данных, которые могут быть использованы для обмена данными через протокол Modbus.
+Она содержит различные поля для данных с датчиков (sensor1 - sensor8), углов (angle_1 - angle_12), параметров (par1 - par10), а также команд
+(command1 - command8). Кроме того, она содержит битовую структуру (tag_mb_statusBITS), представляющую различные статусы и команды для управления
+блоками. */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+struct tag_usart
+{
+    unsigned char out_buffer[OUT_SIZE]; // Массив буфера для исходящих данных (отправляемые данные).
+    unsigned char in_buffer[IN_SIZE];   // Массив буфера для входящих данных (принимаемые данные).
+    unsigned short out_buffer_count;    // Счетчик числа байт в буфере исходящих данных.
+    unsigned short in_buffer_count;     // Счетчик числа байт в буфере входящих данных.
+    unsigned short in_buffer_count2;    // Дополнительный счетчик числа байт в буфере входящих данных (второй счетчик).
+    unsigned short number_send;         // Количество байт для отправки.
+    unsigned short port_type;           // Тип порта.
+    unsigned short mbm_status;          // Статус MODBUS.
+    unsigned short mbm_err;             // Ошибка MODBUS.
+    unsigned short hl_err;              // Ошибка высокого уровня.
+    unsigned short mbm_status_hl;       // Статус MODBUS высокого уровня.
+    unsigned short mbm_status_05;       // Статус MODBUS 05.
+    unsigned short repeat_05;           // Повтор MODBUS 05.
+    unsigned short repeat_05_;          // Другой повтор MODBUS 05.
+    unsigned short mbm_timeout_counter; // Тайм-аут MODBUS.
+    unsigned short answer_count;        //
 
-    extern struct tag_usart {
-        unsigned char out_buffer[OUT_SIZE];
-        unsigned char in_buffer[IN_SIZE];
-        unsigned short out_buffer_count;
-        unsigned short in_buffer_count;
-        unsigned short in_buffer_count2;
-        unsigned short number_send;
-        unsigned short port_type;
-        unsigned short mbm_status;
-        unsigned short mbm_err;
-        unsigned short hl_err;
-        unsigned short mbm_status_hl;
-        unsigned short mbm_status_05;
-        unsigned short repeat_05;
-        unsigned short repeat_05_;
+    struct tag_mb_statusBITS
+    {
+        unsigned modb_mode : 1;           // 1 бит для режима MODBUS
+        unsigned term_mode : 1;           // 1 бит для режима терминала
+        unsigned modb_received : 1;       // Флаг получения MODBUS
+        unsigned modb_transmited : 1;     // Флаг передачи MODBUS
+        unsigned modb_receiving : 1;      // Флаг приема MODBUS
+        unsigned modb_transmiting : 1;    // Флаг отправки MODBUS
+        unsigned tx_mode : 1;             // Режим передачи (USART TX mode)
+        unsigned tx_data_rdy : 1;         // Готовность данных к передаче
+        unsigned master_error : 1;        // Ошибка мастера
+        unsigned bussy1 : 1;              // Резервное поле
+        unsigned bussy2 : 1;              // Резервное поле
+        unsigned last_byte : 1;           // Флаг последнего байта
+        unsigned byte_missing : 1;        // Отсутствие байта
+        unsigned coll_1 : 1;              // Коллизия 1
+        unsigned coll_2 : 1;              // Коллизия 2
+        unsigned coll_3 : 1;              // Коллизия 3
+        unsigned tx_start : 1;            // Начало передачи
+        unsigned master_start : 1;        // Начало мастера
+        unsigned master_timeout_flag : 1; // Тайм-аут мастера
+        unsigned tm_on : 1;               // Включение таймера
+        unsigned device_error : 1;        // Ошибка устройства
+        unsigned crc_error : 1;           // Ошибка CRC
+        unsigned : 10;                    // Резервные биты (19-32)
+    } mb_status;
+} usart1, usart2, usart3, usart4, usart5;
+/* Эта структура tag_usart служит для управления и мониторинга передачи данных через интерфейс USART, а также для управления операциями,
+связанными с протоколом MODBUS. Она используется для хранения и обработки исходящих и входящих данных, контроля состояния передачи данных,
+отслеживания ошибок и управления различными аспектами обмена данными.
+Конкретные поля и битовые структуры внутри этой структуры обеспечивают различные функции, такие как контроль состояния передачи данных (например,
+счетчики буфера, статусы MODBUS), отслеживание ошибок (ошибки MODBUS, ошибки высокого уровня) и управление режимами передачи данных (например, режимы
+MODBUS и терминала). Таким образом, эта структура играет ключевую роль в организации и контроле обмена данными через USART, а также в обеспечении
+надежной и эффективной работы протокола MODBUS в системе. */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+extern union tag_Modbus
+{
+    // Вложенная структура для хранения различных параметров Modbus
+    struct
+    {
+        // Вложенное объединение для хранения битовых флагов
+        union
+        {
+            // Вложенная структура для управления битовыми флагами
+            struct
+            {
+                unsigned flap_On : 1;           // Флаг открытия заслонки
+                unsigned start : 1;             // Флаг старта двигателя
+                unsigned ignit_allow : 1;       // Разрешение на зажигание
+                unsigned CV_dir_ctrl : 1;       // Управление направлением клапана топлива
+                unsigned PWM_dir_ctrl : 1;      // Управление направлением ШИМ
+                unsigned ign_ctrl : 1;          // Управление зажиганием
+                unsigned unlock : 1;            // Флаг разблокировки
+                unsigned AO : 1;                // Флаг аналогового выхода
+                unsigned clr_err_cnt : 1;       // Очистка счетчика ошибок
+                unsigned stop : 1;              // Флаг остановки
+                unsigned press_mode_int : 1;    // Внутренний режим давления
+                unsigned press_mode_analog : 1; // Аналоговый режим давления
+                unsigned deep_on : 1;           // Флаг глубокого режима
+                unsigned NO : 1;                // Зарезервированный бит
+                unsigned stop_pid_on : 1;       // Включение PID при остановке
+                unsigned stop_pid_off : 1;      // Отключение PID при остановке
+                unsigned forced_pid_on : 1;     // Принудительное включение PID
+                unsigned forced_pid_off : 1;    // Принудительное отключение PID
+                unsigned : 14;                  // Зарезервированные биты
+            } bits;                             // Конец вложенной структуры bits
 
-        struct tag_mb_statusBITS {
-            unsigned modb_mode : 1; // 1
-            unsigned term_mode : 1; // 2
-            unsigned modb_received : 1; // 3
-            unsigned modb_transmited : 1; // 4
-            unsigned modb_receiving : 1; // 5
-            unsigned modb_transmiting : 1; // 6
-            unsigned tx_mode : 1; // 7		//DMA <-> INT
-            unsigned tx_data_rdy : 1; // 8
-            unsigned master_error : 1; // 9
-            unsigned bussy1 : 1; // 10
-            unsigned bussy2 : 1; // 11
-            unsigned last_byte : 1; // 12
-            unsigned byte_missing : 1; // 13
-            unsigned coll_1 : 1; // 14
-            unsigned coll_2 : 1; // 15
-            unsigned coll_3 : 1; // 16
-            unsigned tx_start : 1; // 17
-            unsigned : 15; // 18-32
-        } mb_status;
-    } usart1, usart2, usart3, usart4, usart5;
+            unsigned long cmd1; // Команда 1 (4 байта)
+        }; // Конец вложенного объединения
 
-    extern struct tag_ch {
-        unsigned short teeth; // ?????????? ?????
-        unsigned short filter; // ??????? ?????????? (?????????? ? ????????)
-        float reductor; // ??????????? ????????
-        unsigned short ready; // ??????? ?????????? ? ????????? - ??????? ????????? ? ??????
-        unsigned short activ; // ?????? ????? 4 ????????? ? ?????? ????????? -  ????? ??????? ?????????? ???????
-        unsigned short rotary; // ?????? ?????????? ????????? ????? ??? (????*??????????+3)
-        unsigned short passive; // ??????? ???????????? ? ?????? - ????? ? ??????? ????????
-        unsigned short wait; // ??????? ???????????? ? ??????
-        unsigned short ring_count; // ????????? ?????????? ??????
-        float fast_delta;
-        float fast_delta_b;
-        float fast_delta_bb;
-        float delta;
-        float fast; // ?????????? ??????? ? ??????
-        float rps; // ??????? ? ??????? ? ??????
-        float rpm; // ??????? ? ?????? ? ??????
-        unsigned long period; // ?????? ?????????? ????????? ? ??????
-        float bfast; // ?????????? ??????? ? ?????? ?????
-        float brps; // ??????? ? ??????? ? ?????? ?????
-        float brpm; // ??????? ? ?????? ? ?????? ?????
-        unsigned long bperiod; // ?????? ?????????? ????????? ? ?????? ?????
-        float bbfast; // ?????????? ??????? ? ?????? ?????? ?????
-        float bbrps; // ??????? ? ??????? ? ?????? ?????? ?????
-        float bbrpm; // ??????? ? ?????? ? ?????? ?????? ?????
-        unsigned long bbperiod; // ?????? ?????????? ????????? ? ?????? ?????? ?????
-        float angle; // ??????? ? ?????? ? ?????? ?????? ?????
-        float bangle; // ??????? ? ?????? ? ?????? ?????? ?????
-        float bbangle; // ??????? ? ?????? ? ?????? ?????? ?????
-        //	unsigned short count;
-    } ch_1, ch_2; // ????????? ?????? ??????? 
-    // *****************************************************************************
-    // Section: Interface Functions
-    // *****************************************************************************
-    // *****************************************************************************
+        unsigned short num_check_cyl; // Номер проверяемого цилиндра
+        unsigned short cyl_mask;      // Маска цилиндра
+        float RPM_set;                // Установка оборотов двигателя
+        float CV_dir_set;             // Установка направления клапана топлива
+        float work_status;            // Статус работы БУД
+        float RPM11;                  // Обороты, измеренные через синхро 11-зубчатый канал
+        float RPM40;                  // Обороты, измеренные через обороты 40-зубчатый канал
+        float CV_set;                 // Установка клапана топлива
+        float CV_pos;                 // Фактическое положение клапана топлива
+        float CV_current;             // Фактический ток клапана
+        float actual_UOZ;             // Фактический угол зажигания
+        unsigned short AO_reason;     // Причина аналогового выхода
+        unsigned short AO_cyl_num;    // Номер цилиндра для аналогового выхода
+        unsigned short ADC_CV_pos;    // АЦП клапана топлива
+        unsigned short ADC_CV_curr;   // АЦП тока клапана
+        unsigned short pulses_11;     // Импульсы синхро 11
+        unsigned short pulses_40;     // Импульсы синхро 40
+        float err_rpm;                // Ошибка оборотов
 
-    extern unsigned short ign_time;
-    extern const unsigned short cyl_order [];
-    //extern float UOZ;
-    extern float koeff_UOZ;
-    extern unsigned short cyl_num;
-    extern unsigned short sync_pulse;
-    extern unsigned short sync_counter_11;
-    extern unsigned short sync_counter_40;
-    extern unsigned short counter_11;
-    extern unsigned short counter_40;
-    extern unsigned short start_ign_distrib;
-    extern unsigned short sync_status;
-    extern unsigned short success_sync_counter;
-    extern unsigned short pulse_started;
-    extern unsigned short pulse_started1;
-    extern unsigned short pulse_started2;
-    extern unsigned long ign_timer8;
-    extern unsigned long ign_timer7;
-    extern unsigned long temp_timer;
-    extern unsigned long discharge_capt [10];
-    extern unsigned short ign_stat_odd;
-    extern unsigned short ign_stat_even;
-    extern unsigned short ign_stat1;
-    extern unsigned short ign_stat2;
-    extern unsigned short ign_stat3;
-    extern unsigned short ign_stat4;
-    extern unsigned short ign_alowed;
-    extern unsigned short uoz_etap;
-    extern unsigned int work_status;
+        // Вложенное объединение для хранения дополнительных статусов
+        union
+        {
+            // Вложенная структура для управления дополнительными статусами
+            struct
+            {
+                unsigned CV_locked : 1;        // Заблокирован клапан топлива
+                unsigned press_via_analog : 1; // Управление давлением через аналог
+                unsigned CV_magnet_brake : 1;  // Магнитный тормоз клапана
+                unsigned CV_sensor_err : 1;    // Ошибка датчика клапана
+                unsigned deep_mode : 1;        // Глубокий режим
+                unsigned Protect_unswitch : 1; // Защита от непреднамеренного выключения
+                unsigned DI1_ctrl : 1;         // Управление DI1
+                unsigned CONTROL1 : 1;         // Контроль 1
+                unsigned CONTROL2 : 1;         // Контроль 2
+                unsigned CONTROL3 : 1;         // Контроль 3
+                unsigned CONTROL4 : 1;         // Контроль 4
+                unsigned s12 : 1;              // Зарезервированный бит
+                unsigned deep_is_on : 1;       // Глубокий режим включен
+                unsigned stop_pid : 1;         // Остановить PID
+                unsigned miss_sync : 1;        // Пропущен синхро
+                unsigned miss_rpm : 1;         // Пропущена ошибка RPM
+                unsigned forced_pid : 1;       // Принудительный PID
+                unsigned : 15;                 // Зарезервированные биты
+            } status_bits;                     // Конец вложенной структуры status_bits
 
-    extern unsigned int rpm_count;
-    extern unsigned int total_err_count1;
-    extern unsigned int total_err_count2;
-    extern unsigned int delay_before_start;
+            unsigned long statuses; // Статусы (4 байта)
+        }; // Конец вложенного объединения
 
+        float ign_err_num1; // Ошибка зажигания №1
+        float ign_err_num2; // Ошибка зажигания №2
+    } Modbus_data;          // Конец структуры Modbus_data
+    unsigned short buf[82]; // Буфер данных (164 байта)
 
-    extern float middle_buf40 [FILT_CRPM * 40];
-    extern float middle_buf11 [FILT_CRPM * 11];
-    extern float middle_11;
-    extern float hold_current;
-    extern unsigned short middle_count40;
-    extern unsigned short middle_count11;
-    extern unsigned short lock11;
+} Modbus, Modbus_sw; // Конец объединения tag_Modbus, а также объявление двух переменных: Modbus и Modbus_sw
 
-    extern unsigned short AO_ignit_error;
-    extern unsigned short AO_ignit_br_low;
-    extern unsigned short AO_ignit_sc_low;
-    extern unsigned short AO_ignit_br_high;
-    extern unsigned short unsync_error;
-    extern unsigned short CV_regul_on;
-    extern unsigned short charge_fail;
-    extern unsigned int CV_blok_regul;
+// MB_READ_ MB_WRITE_ 0 ... 80 - адресация для чтения и записи данных Modbus
+/* Это объединение tag_Modbus используется для хранения различных параметров и статусов Modbus, а также для работы с буфером данных.
+Внутри структуры содержатся различные поля для хранения информации о состоянии системы, управлении процессами и передаче данных. Каждое поле
+имеет свой тип данных и свою семантику использования. Буфер данных используется для хранения информации, которая может быть передана по протоколу
+Modbus. */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+extern union tag_MB_diag
+{
+    // Вложенная структура для хранения диагностических данных
+    struct
+    {
+        unsigned short break_low[10];  // Счетчик событий обрыва низковольтного провода для каждого из 10 цилиндров
+        unsigned short short_low[10];  // Счетчик событий короткого замыкания низковольтного провода для каждого из 10 цилиндров
+        unsigned short break_high[10]; // Счетчик событий обрыва высоковольтного провода для каждого из 10 цилиндров
+        float discharge_hold[10];      // Мгновенное время разряда, зафиксированное для 10 цилиндров
+        float discharge_middle[10];    // Среднее время разряда для 10 цилиндров
+    } data_struct;                     // Конец вложенной структуры data_struct
 
-    extern union tag_Modbus {
+    // Массив слов для хранения диагностических данных
+    unsigned short buf[70]; // Массив буфера данных
+} MB_diag, MB_diag_sw;      // Экземпляры объединения
+/* Это объединение tag_MB_diag также определяет структуру для хранения диагностических данных системы. Вложенная структура
+data_struct содержит различные диагностические параметры для каждого из 10 цилиндров двигателя. Кроме того, массив buf используется
+для хранения этих параметров в виде массива слов. Объединение позволяет эффективно использовать память, обеспечивая доступ к диагностическим
+данным как структуре и как массиву одновременно. */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+extern union tag_diag
+{
+    // Вложенная структура для хранения диагностических данных
+    struct
+    {
+        unsigned short break_low[CYLINDERS_NUM];  // Счетчик событий обрыва низковольтного провода для каждого из 10 цилиндров
+        unsigned short short_low[CYLINDERS_NUM];  // Счетчик событий короткого замыкания низковольтного провода для каждого из 10 цилиндров
+        unsigned short break_high[CYLINDERS_NUM]; // Счетчик событий обрыва высоковольтного провода для каждого из 10 цилиндров
+        float discharge_hold[CYLINDERS_NUM];      // Мгновенное время разряда, зафиксированное для 10 цилиндров
+        float charge_hold[CYLINDERS_NUM];         // Среднее время разряда для 10 цилиндров
+    } data_struct;                                // Конец вложенной структуры data_struct
 
-        struct {
+    // Массив слов для хранения диагностических данных
+    unsigned short buf[112]; // Массив буфера данных
+} MB_diagn, MB_diagn_sw;     // Экземпляры объединения
+/* Это объединение tag_diag определяет структуру для хранения диагностических данных системы. Вложенная структура data_struct содержит
+различные диагностические параметры для каждого из 10 цилиндров двигателя. Кроме того, массив buf используется для хранения этих
+параметров в виде массива слов. Объединение позволяет эффективно использовать память, обеспечивая доступ к диагностическим данным как
+структуре и как массиву одновременно. */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+union tag_MB_conf
+{
+    // Вложенная структура для хранения конфигурационных параметров
+    struct
+    {
+        float max_RPM;                      // Максимальная скорость вращения двигателя для аварийной остановки
+        float min_RPM;                      // Минимальная скорость вращения двигателя для аварийной остановки
+        float UOZ_high;                     // Номинальная скорость вращения двигателя для УОЗ
+        float UOZ_low;                      // Низкая скорость вращения двигателя для УОЗ
+        float UOZ_global_shift;             // Основное корректировочное значение УОЗ для всех цилиндров
+        float UOZ_RPM_max;                  // Скорость двигателя, при которой УОЗ становится UOZ_high
+        float UOZ_RPM_min;                  // Скорость двигателя, при которой УОЗ становится UOZ_low
+        float discharge_sc_low;             // Время разряда для обнаружения низкого напряжения на проводе SC
+        float discharge_br_high;            // Время разряда для обнаружения высокого напряжения на проводе высокого напряжения
+        float constructive_UOZ;             // Конструктивный угол точки синхронизации и точки зажигания (18 градусов)
+        float CV_start_val;                 // Начальное значение открытия клапана при запуске двигателя
+        float CV_start_spd;                 // Скорость открытия клапана до начального значения
+        float CV_open_spd;                  // Скорость открытия клапана при запуске двигателя до РМП ПИД
+        float PID_spd;                      // РМП, при которых начинается работа ПИ-регулятора двигателя
+        float Ignit_spd;                    // РМП, при которых возможен запуск зажигания
+        float CV_pos_min;                   // Минимальный код АЦП клапана
+        float CV_pos_max;                   // Максимальный код АЦП клапана
+        float CV_curr_min;                  // Минимальный код АЦП тока клапана
+        float CV_curr_max;                  // Максимальный код АЦП тока клапана
+        float CV_curr_scale;                // Масштабирование тока клапана между минимальными и максимальными кодами
+        float CV_KP;                        // Пропорциональный коэффициент ПИ-регулятора клапана
+        float CV_KD;                        // Дифференциальный коэффициент ПИ-регулятора клапана
+        float CV_KI;                        // Интегральный коэффициент ПИ-регулятора клапана
+        float NUM_ERR_AO;                   // Резерв
+        float KP_mpid;                      // Резерв
+        float KI_mpid;                      // Резерв
+        float KD_mpid;                      // Резерв
+        float Timer_to_PID;                 // Резерв
+        float PID_deadband;                 // Резерв
+        float KP_res_limit;                 // Резерв
+        float CV_check_level;               // Резерв
+        float UOZ_shift_ind[CYLINDERS_NUM]; // Массив сдвига УОЗ для каждого цилиндра
+    } data_struct;                          // Конец вложенной структуры data_struct
 
-            union {
+    // Массив слов для хранения конфигурационных данных
+    unsigned short buf[90]; // Массив буфера данных
+} MB_conf, MB_sw_conf;      // Экземпляры объединения
+/* Это объединение tag_MB_conf определяет структуру для хранения различных конфигурационных параметров системы. Оно содержит
+вложенную структуру data_struct, которая описывает каждый конфигурационный параметр. Кроме того, массив buf используется для
+хранения этих параметров в виде массива слов. Объединение позволяет эффективно использовать память, обеспечивая доступ к конфигурационным
+данным как структуре и как массиву одновременно. */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                struct {
-                    unsigned flap_On : 1; // 1
-                    unsigned start : 1; // 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-                    unsigned ignit_allow : 1; // 4 Comman ON current stabilization function
-                    unsigned CV_dir_ctrl : 1; // 8 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-                    unsigned PWM_dir_ctrl : 1; // 16 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ 
-                    unsigned ign_ctrl : 1; // 32 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
-                    unsigned unlock : 1; // 64 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned AO : 1; // 128 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned clr_err_cnt : 1; // 256 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned stop : 1; // 512 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
-                    unsigned press_mode_int : 1; // 1024 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned press_mode_analog : 1; // 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned deep_on : 1; // 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned NO : 1; // 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned stop_pid_on : 1; // 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ				
-                    unsigned stop_pid_off : 1; // 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ	
-                    unsigned forced_pid_on : 1; // 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ				
-                    unsigned forced_pid_off : 1; // 131072 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned : 14; // Last 8 bits = byte for value of Kp regulator (current current stabilization function)
-                };
-                unsigned long cmd1; // 1
+extern unsigned short DINPUT1;
+extern unsigned short DINPUT2;
+extern unsigned short DINPUT3;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+extern union tag_MOPS
+{
+
+    struct
+    {
+
+        union
+        {
+            // Внутренние статусы зон MOPS
+            struct
+            {
+                unsigned short info[3];                    // Информация о зонах
+                unsigned short status[num_zone_mops];      // Состояние каждой зоны
+                unsigned short hold_status[num_zone_mops]; // запомненное состояние каждой зоны
+                unsigned short current[num_zone_mops + 1]; // Текущее состояние каждой зоны
             };
-            unsigned short num_check_cyl; //3	
-            unsigned short cyl_mask; //4
-            float RPM_set; //5      setting the ngine speed
-            float CV_dir_set; //7      setting the ngine speed
-            float work_status; //9      status BUD
-            float RPM11; //11      rpm, measured via sinchro 11-teeth-channel
-            float RPM40; //13      rpm, measured via rpm 40-teeth-channel
-            float CV_set; //15      fuel valve setting
-            float CV_pos; //17      actual fuel valve position
-            float CV_current; //19      actual valve currrent
-            float actual_UOZ; //21      ignition angle
-            unsigned short AO_reason; //23
-            unsigned short AO_cyl_num; //24
-            unsigned short ADC_CV_pos; //25
-            unsigned short ADC_CV_curr; //26
-            unsigned short pulses_11; //27      
-            unsigned short pulses_40; //28	пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-            float err_rpm; //29
+            // Чтение внутренних статусов зон MOPS
+            unsigned short read[num_zone_mops * 3 + 4]; // Чтение информации о состоянии зон MOPS
+        };
 
-            union {
-
-                struct {
-                    unsigned CV_locked : 1; // 1 "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅ
-                    unsigned press_via_analog : 1; // 2 1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ; 0 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned CV_magnet_brake : 1; // 4 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-                    unsigned CV_sensor_err : 1; // 8 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-                    unsigned deep_mode : 1; // 16 Command ON 
-                    unsigned Protect_unswitch : 1; // 32 Command ON 
-                    unsigned DI1_ctrl : 1; // 64 Command ON 
-                    unsigned CONTROL1 : 1; // 128 
-                    unsigned CONTROL2 : 1; // 256 
-                    unsigned CONTROL3 : 1; // 512 
-                    unsigned CONTROL4 : 1; // 1024 
-                    unsigned s12 : 1; // 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned deep_is_on : 1; // 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned stop_pid : 1; // 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned miss_sync : 1; // 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-                    unsigned miss_rpm : 1; // 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ	
-                    unsigned forced_pid : 1; // 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-                    unsigned : 15; // Last 16 bits = byte for value of Kp regulator (current current stabilization function)
-                };
-                unsigned long statuses; // 31
+        union
+        {
+            // Команды для зон MOPS
+            struct
+            {
+                unsigned short command[num_zone_mops]; // Команда для каждой зоны
+                unsigned short type[num_zone_mops];    // Тип каждой зоны
+                unsigned short limit1[num_zone_mops];  // Предел 1 для каждой зоны
+                unsigned short limit2[num_zone_mops];  // Предел 2 для каждой зоны
+                unsigned short limit3[num_zone_mops];  // Предел 3 для каждой зоны
+                unsigned short limit4[num_zone_mops];  // Предел 4 для каждой зоны
+                unsigned short timer1[num_zone_mops];  // Таймер 1 для каждой зоны
+                unsigned short timer2[num_zone_mops];  // Таймер 2 для каждой зоны
+                unsigned short timer3[num_zone_mops];  // Таймер 3 для каждой зоны
+                unsigned short timer4[num_zone_mops];  // Таймер 4 для каждой зоны
             };
-            float ign_err_num1; // 33  
-            float ign_err_num2; // 35 
-
+            // Запись команд для зон MOPS
+            unsigned short write[num_zone_mops * 10]; // Запись команд для зон MOPS
         };
-        unsigned short buf [82]; // MB_READ_ MB_WRITE_  0 ... 80
-    } Modbus, Modbus_sw;
-
-    extern union tag_MB_diag {
-
-        struct {
-            unsigned short break_low [10]; //      event counter of break low voltage wire for every of 10 cylinders
-            unsigned short short_low [10]; //      event counter of short circuit low voltage wire for every of 10 cylinders
-            unsigned short break_high [10]; //      event counter of break high voltage wire for every of 10 cylinders
-            float discharge_hold [10]; //  -   momental discharge time captured for 10 cylinders
-            float discharge_middle [10]; //  -   middle discharge time capture for 10 cylinders
-        };
-        unsigned short buf [70];
-    } MB_diag, MB_diag_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270 
-
-    extern union tag_diag {
-
-        struct {
-            unsigned short break_low [CYLINDERS_NUM]; //      event counter of break low voltage wire for every of 10 cylinders
-            unsigned short short_low [CYLINDERS_NUM]; //      event counter of short circuit low voltage wire for every of 10 cylinders
-            unsigned short break_high [CYLINDERS_NUM]; //      event counter of break high voltage wire for every of 10 cylinders
-            float discharge_hold [CYLINDERS_NUM]; //  -   momental discharge time captured for 10 cylinders
-            float charge_hold [CYLINDERS_NUM]; //  -   middle discharge time capture for 10 cylinders
-        };
-        unsigned short buf [112];
-    } MB_diagn, MB_diagn_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-
-    extern unsigned short dir_sc_low [CYLINDERS_NUM];
-    extern unsigned short dir_br_low [CYLINDERS_NUM];
-    extern unsigned short dir_br_high [CYLINDERS_NUM];
-    extern unsigned short bit_sc_low;
-    extern unsigned short bit_br_low;
-    extern unsigned short bit_br_high;
-
-    extern union tag_MB_conf {
-
-        struct {
-            float max_RPM; //1     max speed of engine RPM for emergecy stop
-            float min_RPM; //3     min speed of engine RPM for emergecy stop
-            float UOZ_high; //5     UOZ nominal speed of engine
-            float UOZ_low; //7     UOZ low speed of engine
-            float UOZ_global_shift; //9     main UOZ correction for all cylinders
-            float UOZ_RPM_max; //11    enginae speed when UOZ bekomes UOZ_high
-            float UOZ_RPM_min; //13    enginae speed when UOZ bekomes UOZ_low
-            float discharge_sc_low; //15    discharge time for detection SC low voltage wire
-            float discharge_br_high; //17    discharge time for detection break high voltage wire
-            float constructive_UOZ; //19    constructive angle sinchro point and ignition point (18 degreece)
-            float CV_start_val; //21    start value of valve opening during the engine start     
-            float CV_start_spd; //23    speed of valve opening to start value     
-            float CV_open_spd; //25    speed of valve opening during the engine start to PID RPM     
-            float PID_spd; //27    RPM when starts the engine PI regulator
-            float Ignit_spd; //29    RPM when ignition start is possible
-            float CV_pos_min; //31    min valve adc code
-            float CV_pos_max; //33    max valve adc code
-            float CV_curr_min; //35    min valve current adc code
-            float CV_curr_max; //37    max valve current adc code
-            float CV_curr_scale; //39    valve current scale between min and max codes
-            float CV_KP; //41    
-            float CV_KD; //43
-            float CV_KI; //45        
-            float NUM_ERR_AO; //47    reserve
-            float KP_mpid; //49    reserve
-            float KI_mpid; //51    reserve
-            float KD_mpid; //53    reserve
-            float Timer_to_PID; //55    reserve
-            float PID_deadband; //57    reserve
-            float KP_res_limit; //59    reserve
-            float CV_check_level; //61    reserve
-            float UOZ_shift_ind [CYLINDERS_NUM]; //63 - 82    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅпїЅпїЅпїЅ
-        };
-        //    unsigned short buf [168];
-        unsigned short buf [90];
-    } MB_conf, MB_sw_conf;
-
-
-
-    extern unsigned short DINPUT1;
-    extern unsigned short DINPUT2;
-    extern unsigned short DINPUT3;
-
-
-#ifdef __cplusplus
-}
-#endif
-
-
-
-/* *****************************************************************************
- End of File
- */
+    };
+    // Область памяти для хранения информации о зонах MOPS
+    unsigned short main_area[num_zone_mops * 13 + 4];
+} MOPS, MOPS_swap; // Псевдонимы для удобства использования

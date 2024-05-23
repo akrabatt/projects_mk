@@ -7,8 +7,6 @@
       <itemPath>define.h</itemPath>
       <itemPath>extern.h</itemPath>
       <itemPath>global.h</itemPath>
-      <itemPath>int_p32mz1024efh100.h</itemPath>
-      <itemPath>peripheral_comon_32bit.h</itemPath>
       <itemPath>ramtron_drv.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -18,17 +16,12 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>control.c</itemPath>
       <itemPath>interrupt_proc.c</itemPath>
       <itemPath>interupt.c</itemPath>
       <itemPath>ramtron_drv.c</itemPath>
       <itemPath>init.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>modbus.c</itemPath>
-      <itemPath>IC_measure.c</itemPath>
-      <itemPath>Ignition.c</itemPath>
-      <itemPath>OC_pid.c</itemPath>
-      <itemPath>motor_control.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

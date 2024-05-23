@@ -1,27 +1,27 @@
-#include <xc.h>
-#include <sys/attribs.h>    /* contains __ISR() Macros */
-//#include "extern.h"
-#include "global.h"
 #include "define.h"
+#include "global.h"
 
-extern void stop_uart_tx(void);
-extern void stop_uart_tx_dma(void);
-extern void mbs(struct tag_usart * usart, unsigned char mbs_addres);
-extern void close_mb(struct tag_usart * usart);
-extern void pid_control(float Kp, float Kd, float Ki);
-//extern void load_mem (void);
-extern void load_config(void);
-//extern void measure (void);
-//extern void pid (void);
-//extern void regulator (float Kp, float Kd, float Ki);
-extern void InitializeSystem(void);
+extern void stop_uart_tx(void);                                     // стоп юсарт
+extern void stop_uart_tx_dma(void);                                 // стоп юсарт дма
+extern void mbs(struct tag_usart *usart, unsigned char mbs_addres); // модбас слэйв
+extern void close_mb(struct tag_usart *usart);                      // закрываем модбас
+extern void InitializeSystem(void);                                 // инициализация системы
+extern unsigned short swapshort(unsigned short data);               // свап
 
-int main(void) {
-    InitializeSystem();
+/* объявляем экземпляр объединение для МОПСа */
+MOPS_swap MOPS_1_swap_init; // в это объединенине будут записываться данные для того чтоб их просвапить
+MOPS MOPS_1_init;           // в это объединения будут записываться данные после свапа
+
+int main(void)
+{
+    InitializeSystem(); // инициализируем систему
 
     help_reset = 1;
-    ENAB_RX5; //направление прередачи порта А на прием    == PORTFbits.RF2 = 0	
+    ENAB_RX5; // направление прередачи порта А на прием    == PORTFbits.RF2 = 0
     ENAB_RX4; // тоже самое но для другого интерфейса
+    ENAB_RX3; // тоже самое но для другого интерфейса
+    ENAB_RX2; // тоже самое но для другого интерфейса
+    ENAB_RX1; // тоже самое но для другого интерфейса
 
     /* режим работы usart  по ДМА */
     usart5.mb_status.tx_mode = DMA_type;
@@ -32,23 +32,20 @@ int main(void) {
     /* режим работы по прерываниям */
     // usart1.mb_status.tx_mode = INT_type;
     // usart4.mb_status.tx_mode = INT_type;
-    // load_config ();
 
-    while (1) {
+    while (1)
+    {
 
-        mbs(&usart5, 1); // вызов modbus slave usart5 по 5му порту с 1-м адрессом 
+        // mbs(&usart5, 1); // вызов modbus slave usart5 по 5му порту с 1-м адрессом
+        mbm_03(&usart1, 1, 0, 28, &MOPS_1_init, 8);
+        mbs(&usart4, 1);
+        mbs(&usart3, 1);
+        mbs(&usart2, 1);
+        mbs(&usart1, 1);
         stop_uart_tx_dma();
-        mbs(&usart4, 1); //  4
         //    stop_uart_tx();
-        PORTGbits.RG7 = help_strobe & help_reset; //мигалка и лампочка вотчдог
-
-        if (start_ctrl == 1) {
-            start_ctrl = 0;
-            main_control();
-        }
-        LED_8 = help_strobe & help_reset;
+        Modbus.Modbus_data.cyl_mask = 50;
+        Modbus_sw.Modbus_data.cyl_mask = swapshort(Modbus.Modbus_data.cyl_mask);
+        //        LED3_TOGGLE;
     }
-
 }
-
-
