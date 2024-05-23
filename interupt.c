@@ -107,11 +107,15 @@ void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)
 void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
 {
     // T6CONbits.TON = 0;
+    if ((--SECOND) == 0) // если переменная(200)-1 секунда равна нулю
+    {
+        SECOND = 200; // обнуляем
+        LED3_TOGGLE;  // переключаем светодиод
+    }
     mbm_timeout_control(&usart5);
     mbm_timeout_control(&usart4);
     mbm_timeout_control(&usart2);
     mbm_timeout_control(&usart1);
-    LED3_TOGGLE;
     IFS0bits.T6IF = 0;
 }
 

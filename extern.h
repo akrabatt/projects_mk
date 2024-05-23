@@ -25,6 +25,8 @@ extern unsigned int U3_speed;
 extern unsigned int U4_speed;
 extern unsigned int U5_speed;
 
+extern volatile unsigned int SECOND; // переменная для таймера 6, отсчитывает 1 секунду
+
 // инициализация DMA
 extern void DMA1_init(void);
 extern void DMA2_init(void);
@@ -32,7 +34,7 @@ extern void DMA3_init(void);
 extern void DMA4_init(void);
 extern void DMA5_init(void);
 
-//extern void mbm_timeout_control(struct tag_usart *usart);
+// extern void mbm_timeout_control(struct tag_usart *usart);
 
 extern void conf_read(void);
 
@@ -87,20 +89,20 @@ extern union tag_direct
 
                 struct
                 {
-                    unsigned bit_1 : 1;      // Состояние DBSKT sin1 ch1: 0 - ОК, 1 - НЕОК
-                    unsigned bit_2 : 1;      // Состояние DBSKT cos1 ch1: 0 - ОК, 1 - НЕОК
-                    unsigned bit_3 : 1;      // Состояние DBSKT sin2 ch2: 0 - ОК, 1 - НЕОК
-                    unsigned bit_4 : 1;      // Состояние DBSKT cos2 ch1: 0 - ОК, 1 - НЕОК
-                    unsigned bit_5 : 1;     // Состояние датчика DBSKT ch1: 0 - ОК, 1 - НЕОК
-                    unsigned bit_6 : 1;     // Состояние датчика DBSKT ch2: 0 - ОК, 1 - НЕОК
-                    unsigned bit_7 : 1; // Сопротивление катушки 1: 0 - ОК, 1 - слишком высокое сопротивление
+                    unsigned bit_1 : 1;  // Состояние DBSKT sin1 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_2 : 1;  // Состояние DBSKT cos1 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_3 : 1;  // Состояние DBSKT sin2 ch2: 0 - ОК, 1 - НЕОК
+                    unsigned bit_4 : 1;  // Состояние DBSKT cos2 ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_5 : 1;  // Состояние датчика DBSKT ch1: 0 - ОК, 1 - НЕОК
+                    unsigned bit_6 : 1;  // Состояние датчика DBSKT ch2: 0 - ОК, 1 - НЕОК
+                    unsigned bit_7 : 1;  // Сопротивление катушки 1: 0 - ОК, 1 - слишком высокое сопротивление
                     unsigned bit_8 : 1;  // Сопротивление катушки 1: 0 - ОК, 1 - слишком низкое сопротивление
-                    unsigned bit_9 : 1; // Сопротивление катушки 2: 0 - ОК, 1 - слишком высокое сопротивление
-                    unsigned bit_10 : 1;  // Сопротивление катушки 2: 0 - ОК, 1 - слишком низкое сопротивление
-                    unsigned bit_11 : 1;       // Ошибка аналогового выхода 1: 0 - ОК, 1 - ошибка
-                    unsigned bit_12 : 1;       // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
-                    unsigned bit_13 : 1;      // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
-                    unsigned : 19;                // Резервные биты
+                    unsigned bit_9 : 1;  // Сопротивление катушки 2: 0 - ОК, 1 - слишком высокое сопротивление
+                    unsigned bit_10 : 1; // Сопротивление катушки 2: 0 - ОК, 1 - слишком низкое сопротивление
+                    unsigned bit_11 : 1; // Ошибка аналогового выхода 1: 0 - ОК, 1 - ошибка
+                    unsigned bit_12 : 1; // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
+                    unsigned bit_13 : 1; // Ошибка аналогового выхода 2: 0 - ОК, 1 - ошибка
+                    unsigned : 19;       // Резервные биты
                 };
             };
             unsigned short output[54]; // массив для выходных данных
@@ -163,34 +165,34 @@ struct tag_usart
     unsigned short mbm_status_05;       // Статус MODBUS 05.
     unsigned short repeat_05;           // Повтор MODBUS 05.
     unsigned short repeat_05_;          // Другой повтор MODBUS 05.
-    unsigned short mbm_timeout_counter;         // Тайм-аут MODBUS.
+    unsigned short mbm_timeout_counter; // Тайм-аут MODBUS.
     unsigned short answer_count;        //
 
     struct tag_mb_statusBITS
     {
-        unsigned modb_mode : 1;        // 1 бит для режима MODBUS
-        unsigned term_mode : 1;        // 1 бит для режима терминала
-        unsigned modb_received : 1;    // Флаг получения MODBUS
-        unsigned modb_transmited : 1;  // Флаг передачи MODBUS
-        unsigned modb_receiving : 1;   // Флаг приема MODBUS
-        unsigned modb_transmiting : 1; // Флаг отправки MODBUS
-        unsigned tx_mode : 1;          // Режим передачи (USART TX mode)
-        unsigned tx_data_rdy : 1;      // Готовность данных к передаче
-        unsigned master_error : 1;     // Ошибка мастера
-        unsigned bussy1 : 1;           // Резервное поле
-        unsigned bussy2 : 1;           // Резервное поле
-        unsigned last_byte : 1;        // Флаг последнего байта
-        unsigned byte_missing : 1;     // Отсутствие байта
-        unsigned coll_1 : 1;           // Коллизия 1
-        unsigned coll_2 : 1;           // Коллизия 2
-        unsigned coll_3 : 1;           // Коллизия 3
-        unsigned tx_start : 1;         // Начало передачи
-        unsigned master_start : 1;     // Начало мастера
-        unsigned master_timeout_flag : 1;   // Тайм-аут мастера
-        unsigned tm_on : 1;            // Включение таймера
-        unsigned device_error : 1;     // Ошибка устройства
-        unsigned crc_error : 1;        // Ошибка CRC
-        unsigned : 10;                 // Резервные биты (19-32)
+        unsigned modb_mode : 1;           // 1 бит для режима MODBUS
+        unsigned term_mode : 1;           // 1 бит для режима терминала
+        unsigned modb_received : 1;       // Флаг получения MODBUS
+        unsigned modb_transmited : 1;     // Флаг передачи MODBUS
+        unsigned modb_receiving : 1;      // Флаг приема MODBUS
+        unsigned modb_transmiting : 1;    // Флаг отправки MODBUS
+        unsigned tx_mode : 1;             // Режим передачи (USART TX mode)
+        unsigned tx_data_rdy : 1;         // Готовность данных к передаче
+        unsigned master_error : 1;        // Ошибка мастера
+        unsigned bussy1 : 1;              // Резервное поле
+        unsigned bussy2 : 1;              // Резервное поле
+        unsigned last_byte : 1;           // Флаг последнего байта
+        unsigned byte_missing : 1;        // Отсутствие байта
+        unsigned coll_1 : 1;              // Коллизия 1
+        unsigned coll_2 : 1;              // Коллизия 2
+        unsigned coll_3 : 1;              // Коллизия 3
+        unsigned tx_start : 1;            // Начало передачи
+        unsigned master_start : 1;        // Начало мастера
+        unsigned master_timeout_flag : 1; // Тайм-аут мастера
+        unsigned tm_on : 1;               // Включение таймера
+        unsigned device_error : 1;        // Ошибка устройства
+        unsigned crc_error : 1;           // Ошибка CRC
+        unsigned : 10;                    // Резервные биты (19-32)
     } mb_status;
 } usart1, usart2, usart3, usart4, usart5;
 /* Эта структура tag_usart служит для управления и мониторинга передачи данных через интерфейс USART, а также для управления операциями,

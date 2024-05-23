@@ -17,6 +17,8 @@ unsigned int U3_speed;
 unsigned int U2_speed;
 unsigned int U1_speed;
 
+volatile unsigned int SECOND = 200;  //переменная для таймера 6, отсчитывает 1 секунду
+
 // Задержка между кадрами
 unsigned int frame_delay;
 

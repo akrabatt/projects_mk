@@ -143,9 +143,9 @@
 //  #define LED3_OFF     PORTEbits.RE2 = 0;
 //  #define LED3_TOGGLE         PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
 
-// leds
+// индикационный светодиод
 #define LED3_OFF PORTE &= 0xfffb;
 #define LED3_ON PORTE |= 0x0004;
 #define LED3_TOGGLE PORTE = LATE ^ 0x0004;
 
-#define TICK 5 //системный тик
+#define TICK 5 // системный тик 5 миллисекунд для таймера 6
