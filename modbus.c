@@ -1252,7 +1252,7 @@ void mbs(struct tag_usart *usart, unsigned char mbs_addres)
 /* Эта функция mbm_03 служит для выполнения операции чтения нескольких регистров устройства по протоколу Modbus.
 Она обеспечивает инициализацию передачи данных, формирование запроса, отправку запроса по USART, прием ответа, а
 также обработку полученных данных и ошибок. */
-void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned short speed)
+void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *desttest, unsigned short speed)
 {
 
     unsigned int cc;                    // Объявление переменной cc типа unsigned int для использования в цикле
