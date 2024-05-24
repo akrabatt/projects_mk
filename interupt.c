@@ -112,12 +112,12 @@ void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
         SECOND = 200; // обнуляем
         LED3_TOGGLE;  // переключаем светодиод
         /* ставим флаг модбас мастера */
-        usart1.mb_status.master_timeout_flag = 1;
+        usart1.mb_status.master_start = 1;
     }
-//    mbm_timeout_control(&usart5);
-//    mbm_timeout_control(&usart4);
-//    mbm_timeout_control(&usart2);
-//    mbm_timeout_control(&usart1);
+    //    mbm_timeout_control(&usart5);
+    //    mbm_timeout_control(&usart4);
+    //    mbm_timeout_control(&usart2);
+    //    mbm_timeout_control(&usart1);
     IFS0bits.T6IF = 0;
 }
 

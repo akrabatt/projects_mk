@@ -8,7 +8,7 @@ extern void close_mb(struct tag_usart *usart);                      // закрываем
 extern void InitializeSystem(void);                                 // инициализация системы
 extern unsigned short swapshort(unsigned short data);               // свап
 
-/* объявляем экземпляр объединение для МОПСа */
+/* объявляем массив экземпляров объединение для МОПСа */
 union tag_MOPS MOPS_arr[10]; // создадим массив структур
 
 int main(void)
