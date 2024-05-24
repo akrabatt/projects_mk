@@ -35,8 +35,7 @@ int main(void)
     while (1)
     {
 
-        // mbs(&usart5, 1); // вызов modbus slave usart5 по 5му порту с 1-м адрессом
-        mbm_03(&usart1, 1, 0, 28, &MOPS_arr[0], 8);
+        mbm_03(&usart1, 1, 0, 28, &MOPS_arr[0], 8); // мастер запрос
         mbs(&usart4, 1);
         mbs(&usart3, 1);
         mbs(&usart2, 1);
