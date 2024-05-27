@@ -640,57 +640,38 @@ void UART1_init(unsigned int speed)
 
     switch (speed)
     {
+
     case 1:
     {
-        U1BRG = ((Fcy) / 16) / 1200 - 1;            // Установка скорости передачи 1200 бод
-        frame_delay = Fcy / 8 / 1200 * rx_timeout1; // Рассчет задержки между фреймами
+        U1BRG = PBCLK2_ / (9600 * 16) - 1;          // Установка скорости передачи 9600 бод
+        frame_delay = Fcy / 8 / 9600 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
+
     case 2:
     {
-        U1BRG = ((Fcy) / 16) / 2400 - 1;            // Установка скорости передачи 2400 бод
-        frame_delay = Fcy / 8 / 2400 * rx_timeout1; // Рассчет задержки между фреймами
+        U1BRG = PBCLK2_ / (19200 * 16) - 1;          // Установка скорости передачи 19200 бод
+        frame_delay = Fcy / 8 / 19200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 3:
     {
-        U1BRG = ((Fcy) / 16) / 4800 - 1;            // Установка скорости передачи 4800 бод
-        frame_delay = Fcy / 8 / 4800 * rx_timeout1; // Рассчет задержки между фреймами
+        U1BRG = PBCLK2_ / (38400 * 16) - 1;          // Установка скорости передачи 38400 бод
+        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 4:
     {
-        U1BRG = PBCLK2_ / (9600 * 16) - 1;           // Установка скорости передачи 9600 бод
-        frame_delay = Fcy / 8 / 9600 * rx_timeout1; // Рассчет задержки между фреймами
+        U1BRG = PBCLK2_ / (57600 * 16) - 1;          // Установка скорости передачи 57600 бод
+        frame_delay = Fcy / 8 / 57600 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
 
     case 5:
     {
-        U1BRG = PBCLK2_ / (19200 * 16) - 1;            // Установка скорости передачи 19200 бод
-        frame_delay = Fcy / 8 / 19200 * rx_timeout1; // Рассчет задержки между фреймами
-        break;
-    }
-
-    case 6:
-    {
-        U1BRG = PBCLK2_ / (38400 * 16) - 1;            // Установка скорости передачи 38400 бод
-        frame_delay = Fcy / 8 / 38400 * rx_timeout1; // Рассчет задержки между фреймами
-        break;
-    }
-
-    case 7:
-    {
-        U1BRG = PBCLK2_ / (57600 * 16) - 1;            // Установка скорости передачи 57600 бод
-        frame_delay = Fcy / 8 / 57600 * rx_timeout1; // Рассчет задержки между фреймами
-        break;
-    }
-
-    case 8:
-    {
-        U1BRG = PBCLK2_ / (115200 * 16) - 1;            // Установка скорости передачи 115200 бод
+        U1BRG = PBCLK2_ / (115200 * 16) - 1;          // Установка скорости передачи 115200 бод
         frame_delay = Fcy / 8 / 115200 * rx_timeout1; // Рассчет задержки между фреймами
         break;
     }
@@ -1081,12 +1062,12 @@ void InitializeSystem(void)
     uart3_init();            // Инициализация UART3
     uart2_init();            // Инициализация UART2
     // uart1_init();            // Инициализация UART1
-    UART1_init(8);
-    DMA5_init();             // Инициализация DMA5
-    DMA4_init();             // Инициализация DMA4
-    DMA3_init();             // Инициализация DMA3
-    DMA2_init();             // Инициализация DMA2
-    DMA1_init();             // Инициализация DMA1
+    UART1_init(5);
+    DMA5_init(); // Инициализация DMA5
+    DMA4_init(); // Инициализация DMA4
+    DMA3_init(); // Инициализация DMA3
+    DMA2_init(); // Инициализация DMA2
+    DMA1_init(); // Инициализация DMA1
 
     /* Assign PIC32MZ shadow register sets to specific CPU IPLs */
     PRISS = 0x76543210;
