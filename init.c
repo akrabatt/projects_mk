@@ -913,7 +913,7 @@ void UART5_init(unsigned int speed)
     case 1:
     {
         U5BRG = ((Fcy) / 16) / 1200 - 1;            // Установка значения делителя для скорости 1200 бод
-        frame_delay = Fcy / 8 / 1200 * rx_timeout1; // Вычисление задержки кадра для скорости 1200 бод
+        frame_delay = Fcy / 8 / 1200 * rx_timeout1; // Вычисление   задержки кадра для скорости 1200 бод
         break;
     }
     case 2:
