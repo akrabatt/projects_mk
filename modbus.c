@@ -1341,9 +1341,9 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         PIC_CRC16(usart->out_buffer, 0x06); // Вычисление CRC16 для запроса
         usart->out_buffer[0x06] = uchCRCLo;
         usart->out_buffer[0x07] = uchCRCHi;
-        usart->number_send = 0x08;  // Установка числа отправляемых байт
-                                    //            usart->mbm_timeout_counter = 10; // Установка счетчика таймера
-        usart->mb_status.tm_on = 1; // Установка флага TM_ON
+        usart->number_send = 0x08;        // Установка числа отправляемых байт
+        usart->mbm_timeout_counter = 100; // Установка счетчика таймера
+        usart->mb_status.tm_on = 1;       // Установка флага TM_ON
         // Инкремент счетчика ошибок
         usart->mb_status.master_timeout_flag = 0; // Сброс
         usart->mb_status.modb_received = 0;       // Сброс флага modb_received
@@ -1440,8 +1440,8 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
     }
     default: // Состояние по умолчанию: сброс состояния
     {
-        usart->mb_status.master_start = 0; // Сброс флага master_start
         usart->mbm_status = 0;             // Сброс состояния master-устройства
+        usart->mb_status.master_start = 0; // Сброс флага master_start
         break;
     }
     }

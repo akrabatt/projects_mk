@@ -117,10 +117,10 @@ void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
         usart4.mb_status.master_start = 1;
         usart5.mb_status.master_start = 1;
     }
-    //    mbm_timeout_control(&usart5);
-    //    mbm_timeout_control(&usart4);
-    //    mbm_timeout_control(&usart2);
-    //    mbm_timeout_control(&usart1);
+        mbm_timeout_control(&usart5);
+        mbm_timeout_control(&usart4);
+        mbm_timeout_control(&usart2);
+        mbm_timeout_control(&usart1);
     IFS0bits.T6IF = 0;
 }
 
