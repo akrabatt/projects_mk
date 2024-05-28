@@ -706,11 +706,11 @@ void conf_check(void)
 
     if (conf2 != bconf2)
     {
-        uart5_init();
+        // uart5_init();
     }
     if (conf != bconf)
     {
-        uart4_init();
+        // uart4_init();
     }
     bconf = conf;
     bconf2 = conf2;

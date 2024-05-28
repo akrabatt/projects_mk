@@ -110,9 +110,12 @@ void __ISR_AT_VECTOR(_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)
     if ((--SECOND) == 0) // если переменная(200)-1 секунда равна нулю
     {
         SECOND = 200; // обнуляем
-        LED3_TOGGLE;  // переключаем светодиод
+        // LED3_TOGGLE;  // переключаем светодиод
         /* ставим флаг модбас мастера */
         usart1.mb_status.master_start = 1;
+        usart2.mb_status.master_start = 1;
+        usart4.mb_status.master_start = 1;
+        usart5.mb_status.master_start = 1;
     }
     //    mbm_timeout_control(&usart5);
     //    mbm_timeout_control(&usart4);

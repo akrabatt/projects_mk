@@ -1355,7 +1355,11 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         usart->mb_status.coll_2 = 0;
         usart->mb_status.coll_3 = 0;
         start_tx_usart_dma(usart, 8); // Начало передачи данных через USART
-        usart->mbm_status = 2; // Установка состояния master-устройства в 2
+        usart->mbm_status = 2;        // Установка состояния master-устройства в 2
+        if (usart == &usart2)
+        {
+            LED3_TOGGLE;
+        }
         break;
     }
     case 2: // Состояние 2: ожидание ответа и обработка результата
