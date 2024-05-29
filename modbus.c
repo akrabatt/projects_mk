@@ -1282,52 +1282,7 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         {
             UART5_init(speed); // Инициализация UART5 с указанной скоростью
         }
-        switch (speed) // Переключатель в зависимости от скорости
-        {
-        case 1: // Скорость 1
-        {
-            usart->mbm_timeout_counter = 240; // Установка таймаута в 240
-            break;
-        }
-            // и так далее для всех вариантов скорости
-        case 2:
-        {
-            usart->mbm_timeout_counter = 120;
-            break;
-        }
-        case 3:
-        {
-            usart->mbm_timeout_counter = 80;
-            break;
-        }
-        case 4:
-        {
-            usart->mbm_timeout_counter = 40;
-            break;
-        }
-        case 5:
-        {
-            usart->mbm_timeout_counter = 20;
-            break;
-        }
-        case 6:
-        {
-            usart->mbm_timeout_counter = 12;
-            break;
-        }
-        case 7:
-        {
-            usart->mbm_timeout_counter = 5;
-            break;
-        }
-        case 8:
-        {
-            usart->mbm_timeout_counter = 4;
-            break;
-        }
-        }
-        usart->mbm_status = 1; // Установка состояния master-устройства в 1
-        break;
+        usart->mbm_timeout_counter = 500; // Установка таймаута в 500
     }
     case 1: // формирование запроса
     {
