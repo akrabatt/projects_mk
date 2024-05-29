@@ -39,10 +39,7 @@ int main(void)
         mbm_03(&usart2, 2, 0, 28, &MOPS_arr[1], 5); // мастер запрос
         mbm_03(&usart4, 4, 0, 28, &MOPS_arr[2], 5); // мастер запрос
         mbm_03(&usart5, 5, 0, 28, &MOPS_arr[3], 5); // мастер запрос
-        // mbs(&usart4, 1);
-    //    mbs(&usart3, 1);
-        // mbs(&usart2, 1);
-        // mbs(&usart1, 1);
+        mbs(&usart3, 1);
         stop_uart_tx_dma();
         //    stop_uart_tx();
         Modbus.Modbus_data.cyl_mask = 50;
