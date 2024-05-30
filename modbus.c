@@ -1144,7 +1144,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
                 }
                 if (READ_MOPS)
                 {
-                    mbs_03(usart, MOPS_arr, (start_reg - START_READ), num_reg);
+                    mbs_03(usart, MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
                 }
                 
                 answer_illegal_data_addr(usart);

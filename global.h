@@ -460,3 +460,7 @@ typedef union tag_MOPS
 unsigned short DINPUT1;
 unsigned short DINPUT2;
 unsigned short DINPUT3;
+
+
+/* объявляем массив экземпляров объединение для МОПСа */
+union tag_MOPS MOPS_arr[10]; // создадим массив структур
