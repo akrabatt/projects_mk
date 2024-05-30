@@ -1142,6 +1142,11 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
                     // Выполнение функции чтения с массивом MB_diagn_sw.buf
                     break;
                 }
+                if (READ_MOPS)
+                {
+                    mbs_03(usart, MOPS_arr, (start_reg - START_READ), num_reg);
+                }
+                
                 answer_illegal_data_addr(usart);
                 // Генерация ответа о неправильном адресе в случае неизвестной функции
                 break;

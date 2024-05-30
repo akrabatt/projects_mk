@@ -45,6 +45,11 @@
 // Проверка, находится ли запрашиваемый диапазон адресов для записи в пределах допустимого диапазона
 #define WRITE_ ((start_reg >= START_WRITE) && (last_reg <= END_WRITE))
 
+#define START_READ_MOPS 1000 // начальный адрес для чтения модбас мопса
+#define END_READ_MOPS 2090   // конечный адрес для чтения модбас мопсов
+
+#define READ_MOPS ((start_reg >= START_READ_MOPS) && (last_reg <= END_READ_MOPS))   
+
 #define START_CONF_READ 500 // Начальный адрес для чтения конфигурации - настройки параметров двигателя
 #define END_CONF_READ 696   // Конечный адрес для чтения конфигурации
 
