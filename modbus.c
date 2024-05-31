@@ -1053,7 +1053,7 @@ unsigned short length_err;
 // Итак, функция mbs_uni осуществляет полный цикл обработки запросов Modbus, включая проверку данных,
 // расчет CRC16, проверку длины пакета и количества регистров, а также вызов соответствующих функций для чтения
 // или записи регистров, после чего завершает соединение Modbus.
-
+short buf_[100];
 void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 {
     if (usart->mb_status.modb_received)
@@ -1117,6 +1117,11 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
             switch (usart->in_buffer[1])
             {
             case 0x03:
+                if (READ_MOPS)
+                {
+                    mbs_03(usart, MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
+                    break;
+                }
                 // Обработка функции чтения нескольких регистров (0x03)
                 if (READ_)
                 {
@@ -1136,16 +1141,12 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
                     // Выполнение функции чтения с массивом Modbus_sw.buf
                     break;
                 }
-                if (MB_DIAGN_READ_)
-                {
-                    mbs_03(usart, MB_diagn_sw.buf, (start_reg - START_MB_DIAGN_READ), num_reg);
-                    // Выполнение функции чтения с массивом MB_diagn_sw.buf
-                    break;
-                }
-                if (READ_MOPS)
-                {
-                    mbs_03(usart, MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
-                }
+                // if (MB_DIAGN_READ_)
+                // {
+                //     mbs_03(usart, MB_diagn_sw.buf, (start_reg - START_MB_DIAGN_READ), num_reg);
+                //     // Выполнение функции чтения с массивом MB_diagn_sw.buf
+                //     break;
+                // }
                 
                 answer_illegal_data_addr(usart);
                 // Генерация ответа о неправильном адресе в случае неизвестной функции
