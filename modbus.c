@@ -1586,7 +1586,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
         //         {
         //             lockal_buff[cc + shift_03] = swapshort(lockal_buff_swap[cc + shift_03]);
         //         }
-        //         memcpy((void *)(dest), (const void *)(lockal_buff), lockal_buff[2]); // если все нормально, то начинаем
+        //         memgit cpy((void *)(dest), (const void *)(lockal_buff), lockal_buff[2]); // если все нормально, то начинаем
 
         usart->answer_count++;
         usart->mb_status.master_error = 0;
