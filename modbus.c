@@ -1,4 +1,7 @@
 #include "extern.h"
+#include <stdio.h>
+#include <xc.h>
+#include <string.h>
 
 // таблица для функции CRC, эта используется для хранения старшего байта
 const char auchCRCHi[] = { // Содержит предвычисленные значения старшего байта (Hi) для каждого возможного значения входного байта (0-255).
@@ -1005,8 +1008,8 @@ void mbs_10(struct tag_usart *_usart, unsigned short *source, unsigned short shi
             MB_conf.buf[ii + shift_uni] = swapshort(MB_sw_conf.buf[ii + shift_uni]);
         }
         // Записываем данные во внешнюю память и выполняем другие действия
-        putcs_FRAM(RAMTRON_START_CONFIG, MB_conf.buf, 180);
-        getcs_FRAM(RAMTRON_START_CONFIG, MB_conf.buf, 180);
+        putcs_FRAM(RAMTRON_START_CONFIG,(unsigned char *) MB_conf.buf, 180);
+        getcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) MB_conf.buf, 180);
         load_config();
     }
     // Проверяем, является ли указатель source указателем на массив Modbus_sw.buf
@@ -1119,7 +1122,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
             case 0x03:
                 if (READ_MOPS)
                 {
-                    mbs_03(usart, MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
+                    mbs_03(usart,(unsigned short *) MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
                     break;
                 }
                 // Обработка функции чтения нескольких регистров (0x03)
@@ -1288,7 +1291,8 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         {
             UART5_init(speed); // Инициализация UART5 с указанной скоростью
         }
-        usart->mbm_timeout_counter = 500; // Установка таймаута в 500
+//        usart->mbm_timeout_counter = 500; // Установка таймаута в 500
+        usart->mbm_timeout_counter = 1000; // Установка таймаута в 500
     }
     case 1: // формирование запроса
     {
@@ -1303,7 +1307,7 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         usart->out_buffer[0x06] = uchCRCLo;
         usart->out_buffer[0x07] = uchCRCHi;
         usart->number_send = 0x08;        // Установка числа отправляемых байт
-        usart->mbm_timeout_counter = 100; // Установка счетчика таймера
+//        usart->mbm_timeout_counter = 100; // Установка счетчика таймера
         usart->mb_status.tm_on = 1;       // Установка флага TM_ON
         // Инкремент счетчика ошибок
         usart->mb_status.master_timeout_flag = 0; // Сброс
@@ -1385,6 +1389,7 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         } // wrong crc
 
         // Копируем данные в целевой массив и выполняем необходимые действия
+        usart -> in_buffer[4] = 4;
         memcpy((void *)(lockal_buff_swap), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
         for (cc = 0; cc < quant_03; cc++)
         {

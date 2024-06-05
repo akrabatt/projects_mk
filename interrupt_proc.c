@@ -223,7 +223,7 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
     if (usart == &usart5) // Если usart является usart5
     {
         DCH5SSA = _VirtToPhys(&buf_tx5); // Устанавливаем физический адрес источника для канала DMA 5
-        DCH5DSA = _VirtToPhys(&U5TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART5)
+        DCH5DSA = _VirtToPhys((const void*)&U5TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART5)
         DCH5SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
         DCH5DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
         DCH5CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
@@ -233,7 +233,7 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
     if (usart == &usart4) // Если usart является usart4
     {
         DCH4SSA = _VirtToPhys(&buf_tx4); // Устанавливаем физический адрес источника для канала DMA 4
-        DCH4DSA = _VirtToPhys(&U4TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART4)
+        DCH4DSA = _VirtToPhys((const void*)&U4TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART4)
         DCH4SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
         DCH4DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
         DCH4CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
@@ -243,7 +243,7 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
     if (usart == &usart3) // Если usart является usart3
     {
         DCH3SSA = _VirtToPhys(&buf_tx3); // Устанавливаем физический адрес источника для канала DMA 3
-        DCH3DSA = _VirtToPhys(&U3TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART3)
+        DCH3DSA = _VirtToPhys((const void*)&U3TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART3)
         DCH3SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
         DCH3DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
         DCH3CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
@@ -253,7 +253,7 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
     if (usart == &usart2) // Если usart является usart2
     {
         DCH2SSA = _VirtToPhys(&buf_tx2); // Устанавливаем физический адрес источника для канала DMA 2
-        DCH2DSA = _VirtToPhys(&U2TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART2)
+        DCH2DSA = _VirtToPhys((const void*)&U2TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART2)
         DCH2SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
         DCH2DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
         DCH2CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
@@ -263,7 +263,7 @@ void DMA_uni(struct tag_usart *usart, unsigned short cnt, unsigned short on, uns
     if (usart == &usart1) // Если usart является usart1
     {
         DCH1SSA = _VirtToPhys(&buf_tx1); // Устанавливаем физический адрес источника для канала DMA 1
-        DCH1DSA = _VirtToPhys(&U1TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART1)
+        DCH1DSA = _VirtToPhys((const void*)&U1TXREG); // Устанавливаем физический адрес назначения (регистр передачи UART1)
         DCH1SSIZ = cnt;                  // Устанавливаем размер источника (количество байтов для передачи)
         DCH1DSIZ = 1;                    // Устанавливаем размер назначения (1 байт)
         DCH1CSIZ = 1;                    // Устанавливаем размер ячейки (1 байт на каждый запрос передачи UART)
@@ -297,7 +297,7 @@ void DMA5_init(void)
     DCH5ECONbits.CHSIRQ = _UART5_TX_VECTOR; // Установить вектор прерывания для передачи UART5
     DCH5ECONbits.SIRQEN = 1;                // Разрешить прерывание от периферийного устройства
     DCH5SSA = _VirtToPhys(&buf_tx5);        // Установить физический адрес источника данных для канала DMA 5
-    DCH5DSA = _VirtToPhys(&U5TXREG);        // Установить физический адрес регистра передачи UART5
+    DCH5DSA = _VirtToPhys((const void*)&U5TXREG);        // Установить физический адрес регистра передачи UART5
     DCH5SSIZ = 38;                          // Установить размер источника данных (максимум 200 байт)
     DCH5DSIZ = 1;                           // Установить размер назначения (1 байт)
     DCH5CSIZ = 1;                           // Установить размер ячейки (1 байт на каждый запрос передачи UART)
@@ -312,7 +312,7 @@ void DMA4_init(void)
     DCH4ECONbits.CHSIRQ = _UART4_TX_VECTOR; // Установить вектор прерывания для передачи UART4
     DCH4ECONbits.SIRQEN = 1;                // Разрешить прерывание от периферийного устройства
     DCH4SSA = _VirtToPhys(&buf_tx4);        // Установить физический адрес источника данных для канала DMA 4
-    DCH4DSA = _VirtToPhys(&U4TXREG);        // Установить физический адрес регистра передачи UART4
+    DCH4DSA = _VirtToPhys((const void*)&U4TXREG);        // Установить физический адрес регистра передачи UART4
     DCH4SSIZ = 38;                          // Установить размер источника данных (максимум 200 байт)
     DCH4DSIZ = 1;                           // Установить размер назначения (1 байт)
     DCH4CSIZ = 1;                           // Установить размер ячейки (1 байт на каждый запрос передачи UART)
@@ -328,7 +328,7 @@ void DMA3_init(void)
     DCH3ECONbits.CHSIRQ = _UART3_TX_VECTOR; // Установка вектора прерывания для передачи UART3
     DCH3ECONbits.SIRQEN = 1;                // Разрешение прерывания от периферийного устройства
     DCH3SSA = _VirtToPhys(&buf_tx3);        // Установка физического адреса источника данных для канала DMA 3
-    DCH3DSA = _VirtToPhys(&U3TXREG);        // Установка физического адреса регистра передачи UART3
+    DCH3DSA = _VirtToPhys((const void*)&U3TXREG);        // Установка физического адреса регистра передачи UART3
     DCH3SSIZ = 38;                          // Установка размера источника данных (максимум 200 байт)
     DCH3DSIZ = 1;                           // Установка размера назначения (1 байт)
     DCH3CSIZ = 1;                           // Установка размера ячейки (1 байт на каждый запрос передачи UART)
@@ -344,7 +344,7 @@ void DMA2_init(void)
     DCH2ECONbits.CHSIRQ = _UART2_TX_VECTOR; // Установка вектора прерывания для передачи UART2
     DCH2ECONbits.SIRQEN = 1;                // Разрешение прерывания от периферийного устройства
     DCH2SSA = _VirtToPhys(&buf_tx2);        // Установка физического адреса источника данных для канала DMA 2
-    DCH2DSA = _VirtToPhys(&U2TXREG);        // Установка физического адреса регистра передачи UART2
+    DCH2DSA = _VirtToPhys((const void*)&U2TXREG);        // Установка физического адреса регистра передачи UART2
     DCH2SSIZ = 38;                          // Установка размера источника данных (максимум 200 байт)
     DCH2DSIZ = 1;                           // Установка размера назначения (1 байт)
     DCH2CSIZ = 1;                           // Установка размера ячейки (1 байт на каждый запрос передачи UART)
@@ -360,7 +360,7 @@ void DMA1_init(void)
     DCH1ECONbits.CHSIRQ = _UART1_TX_VECTOR; // Установка вектора прерывания для передачи UART1
     DCH1ECONbits.SIRQEN = 1;                // Разрешение прерывания от периферийного устройства
     DCH1SSA = _VirtToPhys(&buf_tx1);        // Установка физического адреса источника данных для канала DMA 1
-    DCH1DSA = _VirtToPhys(&U1TXREG);        // Установка физического адреса регистра передачи UART1
+    DCH1DSA = _VirtToPhys((const void*)&U1TXREG);        // Установка физического адреса регистра передачи UART1
     DCH1SSIZ = 38;                          // Установка размера источника данных (максимум 200 байт)
     DCH1DSIZ = 1;                           // Установка размера назначения (1 байт)
     DCH1CSIZ = 1;                           // Установка размера ячейки (1 байт на каждый запрос передачи UART)
