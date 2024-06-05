@@ -192,7 +192,8 @@ extern struct tag_usart
         unsigned tm_on : 1;               // Включение таймера
         unsigned device_error : 1;        // Ошибка устройства
         unsigned crc_error : 1;           // Ошибка CRC
-        unsigned : 10;                    // Резервные биты (19-32)
+        unsigned mbm_data_rdy : 1;        // модбас рэди
+        unsigned : 9;                     // Резервные биты (19-32)
     } mb_status;
 } usart1, usart2, usart3, usart4, usart5;
 /* Эта структура tag_usart служит для управления и мониторинга передачи данных через интерфейс USART, а также для управления операциями,

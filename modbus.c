@@ -1008,8 +1008,8 @@ void mbs_10(struct tag_usart *_usart, unsigned short *source, unsigned short shi
             MB_conf.buf[ii + shift_uni] = swapshort(MB_sw_conf.buf[ii + shift_uni]);
         }
         // Записываем данные во внешнюю память и выполняем другие действия
-        putcs_FRAM(RAMTRON_START_CONFIG,(unsigned char *) MB_conf.buf, 180);
-        getcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) MB_conf.buf, 180);
+        putcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *)MB_conf.buf, 180);
+        getcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *)MB_conf.buf, 180);
         load_config();
     }
     // Проверяем, является ли указатель source указателем на массив Modbus_sw.buf
@@ -1122,7 +1122,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
             case 0x03:
                 if (READ_MOPS)
                 {
-                    mbs_03(usart,(unsigned short *) MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
+                    mbs_03(usart, (unsigned short *)MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
                     break;
                 }
                 // Обработка функции чтения нескольких регистров (0x03)
@@ -1150,7 +1150,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
                 //     // Выполнение функции чтения с массивом MB_diagn_sw.buf
                 //     break;
                 // }
-                
+
                 answer_illegal_data_addr(usart);
                 // Генерация ответа о неправильном адресе в случае неизвестной функции
                 break;
@@ -1261,19 +1261,169 @@ void mbs(struct tag_usart *usart, unsigned char mbs_addres)
 /* Эта функция mbm_03 служит для выполнения операции чтения нескольких регистров устройства по протоколу Modbus.
 Она обеспечивает инициализацию передачи данных, формирование запроса, отправку запроса по USART, прием ответа, а
 также обработку полученных данных и ошибок. */
-void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned short speed)
+// void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned short speed)
+// {
+
+//     unsigned int cc;                      // Объявление переменной cc типа unsigned int для использования в цикле
+//     unsigned short lockal_buff_swap[109]; // локальный буффер для данных которые надо просвапитьы
+//     unsigned short lockal_buff[109];      // локальный буффер для просвапленных данных
+//     if (!usart->mb_status.master_start)   // Если флаг master_start не установлен, функция завершает выполнение
+//     {
+//         return;
+//     }
+//     switch (usart->mbm_status) // Начало блока switch для обработки разлкичных состояний master-устройства
+//     {
+//     case 0: // Состояние 0: инициализация
+//     {
+//         if (usart == &usart1) // Если usart указывает на usart1
+//         {
+//             UART1_init(speed); // Инициализация UART1 с указанной скоростью
+//         }
+//         if (usart == &usart2) // Если usart указывает на usart2
+//         {
+//             UART2_init(speed); // Инициализация UART2 с указанной скоростью
+//         }
+//         if (usart == &usart4) // Если usart указывает на usart4
+//         {
+//             UART4_init(speed); // Инициализация UART4 с указанной скоростью
+//         }
+//         if (usart == &usart5) // Если usart указывает на usart5
+//         {
+//             UART5_init(speed); // Инициализация UART5 с указанной скоростью
+//         }
+// //        usart->mbm_timeout_counter = 500; // Установка таймаута в 500
+//         usart->mbm_timeout_counter = 1000; // Установка таймаута в 500
+//     }
+//     case 1: // формирование запроса
+//     {
+//         // Формирование заголовка запроса Modbus
+//         usart->out_buffer[0x00] = mbm_adres;
+//         usart->out_buffer[0x01] = 0x03;
+//         usart->out_buffer[0x03] = shift_03 & 0x00FF;
+//         usart->out_buffer[0x02] = (shift_03 >> 8) & 0x00FF;
+//         usart->out_buffer[0x05] = quant_03 & 0x00FF;
+//         usart->out_buffer[0x04] = (quant_03 >> 8) & 0x00FF;
+//         PIC_CRC16(usart->out_buffer, 0x06); // Вычисление CRC16 для запроса
+//         usart->out_buffer[0x06] = uchCRCLo;
+//         usart->out_buffer[0x07] = uchCRCHi;
+//         usart->number_send = 0x08;        // Установка числа отправляемых байт
+// //        usart->mbm_timeout_counter = 100; // Установка счетчика таймера
+//         usart->mb_status.tm_on = 1;       // Установка флага TM_ON
+//         // Инкремент счетчика ошибок
+//         usart->mb_status.master_timeout_flag = 0; // Сброс
+//         usart->mb_status.modb_received = 0;       // Сброс флага modb_received
+//         // И так далее для всех флагов и переменных
+//         usart->mb_status.byte_missing = 0;
+//         usart->mb_status.crc_error = 0;
+//         usart->mb_status.device_error = 0;
+//         usart->mb_status.coll_1 = 0;
+//         usart->mb_status.coll_2 = 0;
+//         usart->mb_status.coll_3 = 0;
+//         start_tx_usart_dma(usart, 8); // Начало передачи данных через USART
+//         usart->mbm_status = 2;        // Установка состояния master-устройства в 2
+//         if (usart == &usart2)
+//         {
+//             LED3_TOGGLE;
+//         }
+//         break;
+//     }
+//     case 2: // Состояние 2: ожидание ответа и обработка результата
+//     {
+//         if (!usart->mb_status.master_timeout_flag && !usart->mb_status.modb_received) // если нет ответа и не сработал таймаут, то выходим
+//             return;
+//         if (usart->mb_status.master_timeout_flag) // Если есть таймаут, инкрементируем счетчик ошибок и закрываем все
+//         {                                         // если есть таймаут, инкрем. счетчик ошибок и закрываем все
+//             usart->mbm_err++;                     // Увеличиваем счетчик ошибок
+//             usart->mbm_status = 0;                // Сброс состояния master-устройства
+//             usart->mb_status.master_start = 0;    // Сброс флага master_start
+//             break;
+//         }
+
+//         if (usart->in_buffer[1] == 0x83) // Если получен ответ о неправильном обращении
+//         {
+//             // Проверяем, на какую коллизию указывает ответ
+//             if (usart->in_buffer[2] == 0x01)
+//             {
+//                 usart->mb_status.coll_1 = 1;       // Устанавливаем флаг коллизии 1
+//                 usart->mbm_err++;                  // Увеличиваем счетчик ошибок
+//                 usart->mb_status.master_start = 0; // Сброс флага master_start
+//                 usart->mbm_status = 0;             // Сброс состояния master-устройства
+//                 break;
+//             }
+//             if (usart->in_buffer[2] == 0x02)
+//             {
+//                 usart->mb_status.coll_2 = 1;       // Устанавливаем флаг коллизии 1
+//                 usart->mbm_err++;                  // Увеличиваем счетчик ошибок
+//                 usart->mb_status.master_start = 0; // Сброс флага master_start
+//                 usart->mbm_status = 0;             // Сброс состояния master-устройства
+//                 break;
+//             }
+//             if (usart->in_buffer[2] == 0x03)
+//             {
+//                 usart->mb_status.coll_3 = 1;       // Устанавливаем флаг коллизии 1
+//                 usart->mbm_err++;                  // Увеличиваем счетчик ошибок
+//                 usart->mb_status.master_start = 0; // Сброс флага master_start
+//                 usart->mbm_status = 0;             // Сброс состояния master-устройства
+//                 break;
+//             }
+//         }
+//         //			if (usart->in_buffer_count!=(quant_03*2+5))									//byte missing
+//         //				{usart->mbm_status=0; usart->mb_status.byte_missing=1; usart->mbm_err++; usart->mb_status.master_start=0; break;}
+//         if (usart->in_buffer[0] != usart->out_buffer[0]) // Проверяем соответствие принятого адреса ожидаемому адресу
+//         {
+//             usart->mbm_status = 0;             // Сброс состояния master-устройства
+//             usart->mb_status.device_error = 1; // Установка флага ошибки устройства
+//             usart->mbm_err++;                  // Увеличиваем счетчик ошибок
+//             usart->mb_status.master_start = 0; // Сброс флага master_start
+//             break;
+//         }
+//         // проверяем CRC ответ
+//         PIC_CRC16(usart->in_buffer, (usart->in_buffer_count)); // // Вычисляем CRC16 для принятых данных
+//         if (uchCRCLo | uchCRCHi)                               // Если CRC неверен
+//         {
+//             usart->mbm_status = 0;             // Сброс состояния master-устройства
+//             usart->mb_status.crc_error = 1;    // Установка флага ошибки CRC
+//             usart->mbm_err++;                  // Увеличиваем счетчик ошибок
+//             usart->mb_status.master_start = 0; // Сброс флага master_start
+//             break;
+//         } // wrong crc
+
+//         // Копируем данные в целевой массив и выполняем необходимые действия
+//         usart -> in_buffer[4] = 4;
+//         memcpy((void *)(lockal_buff_swap), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
+//         for (cc = 0; cc < quant_03; cc++)
+//         {
+//             lockal_buff[cc + shift_03] = swapshort(lockal_buff_swap[cc + shift_03]);
+//         }
+//         memcpy((void *)(dest), (const void *)(lockal_buff), lockal_buff[2]); // если все нормально, то начинаем
+
+//         // Обновляем счетчик ответов и сбрасываем флаги ошибок
+//         usart->answer_count++;             // Увеличиваем счетчик ответов
+//         usart->mb_status.master_error = 0; // Сброс флага ошибки master-устройства
+//         usart->mb_status.master_start = 0; // Сброс флага master_start
+//         usart->mbm_status = 0;             // Сброс состояния master-устройства
+//         break;
+//     }
+//     default: // Состояние по умолчанию: сброс состояния
+//     {
+//         usart->mbm_status = 0;             // Сброс состояния master-устройства
+//         usart->mb_status.master_start = 0; // Сброс флага master_start
+//         break;
+//     }
+//     }
+// }
+
+void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned long speed)
 {
 
-    unsigned int cc;                      // Объявление переменной cc типа unsigned int для использования в цикле
-    unsigned short lockal_buff_swap[109]; // локальный буффер для данных которые надо просвапитьы
-    unsigned short lockal_buff[109];      // локальный буффер для просвапленных данных
-    if (!usart->mb_status.master_start)   // Если флаг master_start не установлен, функция завершает выполнение
-    {
+    unsigned short cc;
+    unsigned short buff_[130];
+    unsigned short buff_sw[130];
+    if (!usart->mb_status.master_start)
         return;
-    }
-    switch (usart->mbm_status) // Начало блока switch для обработки разлкичных состояний master-устройства
+    switch (usart->mbm_status)
     {
-    case 0: // Состояние 0: инициализация
+    case 0:
     {
         if (usart == &usart1) // Если usart указывает на usart1
         {
@@ -1291,123 +1441,163 @@ void mbm_03(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
         {
             UART5_init(speed); // Инициализация UART5 с указанной скоростью
         }
-//        usart->mbm_timeout_counter = 500; // Установка таймаута в 500
-        usart->mbm_timeout_counter = 1000; // Установка таймаута в 500
-    }
-    case 1: // формирование запроса
-    {
-        // Формирование заголовка запроса Modbus
+        switch (speed)
+        {
+        case 1200:
+        {
+            usart->mbm_timeout_counter = 1100;
+            break;
+        }
+        case 2400:
+        {
+            usart->mbm_timeout_counter = 1100;
+            break;
+        }
+        case 4800:
+        {
+            usart->mbm_timeout_counter = 660;
+            break;
+        }
+        case 9600:
+        {
+            usart->mbm_timeout_counter = 660;
+            break;
+        }
+        case 19200:
+        {
+            usart->mbm_timeout_counter = 660;
+            break;
+        }
+        case 38400:
+        {
+            usart->mbm_timeout_counter = 300;
+            break;
+        }
+        case 57600:
+        {
+            usart->mbm_timeout_counter = 500;
+            break;
+        }
+        case 115200:
+        {
+            usart->mbm_timeout_counter = 500;
+            break;
+        }
+        }
+
         usart->out_buffer[0x00] = mbm_adres;
         usart->out_buffer[0x01] = 0x03;
         usart->out_buffer[0x03] = shift_03 & 0x00FF;
         usart->out_buffer[0x02] = (shift_03 >> 8) & 0x00FF;
         usart->out_buffer[0x05] = quant_03 & 0x00FF;
         usart->out_buffer[0x04] = (quant_03 >> 8) & 0x00FF;
-        PIC_CRC16(usart->out_buffer, 0x06); // Вычисление CRC16 для запроса
+        PIC_CRC16(usart->out_buffer, 0x06);
         usart->out_buffer[0x06] = uchCRCLo;
         usart->out_buffer[0x07] = uchCRCHi;
-        usart->number_send = 0x08;        // Установка числа отправляемых байт
-//        usart->mbm_timeout_counter = 100; // Установка счетчика таймера
-        usart->mb_status.tm_on = 1;       // Установка флага TM_ON
-        // Инкремент счетчика ошибок
-        usart->mb_status.master_timeout_flag = 0; // Сброс
-        usart->mb_status.modb_received = 0;       // Сброс флага modb_received
-        // И так далее для всех флагов и переменных
+        usart->number_send = 0x08;
+
+        usart->mb_status.tm_on = 1;
+        usart->mb_status.master_timeout_flag = 0;
+        usart->mb_status.mbm_data_rdy = 0;
+        usart->mb_status.modb_received = 0;
+        usart->mb_status.modb_receiving = 0;
         usart->mb_status.byte_missing = 0;
         usart->mb_status.crc_error = 0;
         usart->mb_status.device_error = 0;
         usart->mb_status.coll_1 = 0;
         usart->mb_status.coll_2 = 0;
         usart->mb_status.coll_3 = 0;
-        start_tx_usart_dma(usart, 8); // Начало передачи данных через USART
-        usart->mbm_status = 2;        // Установка состояния master-устройства в 2
-        if (usart == &usart2)
-        {
-            LED3_TOGGLE;
-        }
+        start_tx_usart_dma(usart, 8);
+        usart->mbm_status = 1;
         break;
     }
-    case 2: // Состояние 2: ожидание ответа и обработка результата
+
+    case 1:
     {
-        if (!usart->mb_status.master_timeout_flag && !usart->mb_status.modb_received) // если нет ответа и не сработал таймаут, то выходим
-            return;
-        if (usart->mb_status.master_timeout_flag) // Если есть таймаут, инкрементируем счетчик ошибок и закрываем все
-        {                                         // если есть таймаут, инкрем. счетчик ошибок и закрываем все
-            usart->mbm_err++;                     // Увеличиваем счетчик ошибок
-            usart->mbm_status = 0;                // Сброс состояния master-устройства
-            usart->mb_status.master_start = 0;    // Сброс флага master_start
+        if (usart->mb_status.master_timeout_flag)
+        {
+            usart->mbm_err++;
+            usart->mbm_status = 0;
+            usart->mb_status.master_start = 0;
             break;
         }
-
-        if (usart->in_buffer[1] == 0x83) // Если получен ответ о неправильном обращении
+        if (!usart->mb_status.modb_received)
+            return;
+        Modbus.buf[9]++;
+        usart->mb_status.tm_on = 0;
+        usart->mbm_timeout_counter = 0;
+        if (usart->in_buffer[1] == 0x83) // modbus collisions
         {
-            // Проверяем, на какую коллизию указывает ответ
             if (usart->in_buffer[2] == 0x01)
             {
-                usart->mb_status.coll_1 = 1;       // Устанавливаем флаг коллизии 1
-                usart->mbm_err++;                  // Увеличиваем счетчик ошибок
-                usart->mb_status.master_start = 0; // Сброс флага master_start
-                usart->mbm_status = 0;             // Сброс состояния master-устройства
+                usart->mb_status.coll_1 = 1;
+                usart->mbm_err++;
+                usart->mb_status.master_start = 0;
+                usart->mbm_status = 0;
                 break;
             }
             if (usart->in_buffer[2] == 0x02)
             {
-                usart->mb_status.coll_2 = 1;       // Устанавливаем флаг коллизии 1
-                usart->mbm_err++;                  // Увеличиваем счетчик ошибок
-                usart->mb_status.master_start = 0; // Сброс флага master_start
-                usart->mbm_status = 0;             // Сброс состояния master-устройства
+                usart->mb_status.coll_2 = 1;
+                usart->mbm_err++;
+                usart->mb_status.master_start = 0;
+                usart->mbm_status = 0;
                 break;
             }
             if (usart->in_buffer[2] == 0x03)
             {
-                usart->mb_status.coll_3 = 1;       // Устанавливаем флаг коллизии 1
-                usart->mbm_err++;                  // Увеличиваем счетчик ошибок
-                usart->mb_status.master_start = 0; // Сброс флага master_start
-                usart->mbm_status = 0;             // Сброс состояния master-устройства
+                usart->mb_status.coll_3 = 1;
+                usart->mbm_err++;
+                usart->mb_status.master_start = 0;
+                usart->mbm_status = 0;
                 break;
             }
         }
         //			if (usart->in_buffer_count!=(quant_03*2+5))									//byte missing
         //				{usart->mbm_status=0; usart->mb_status.byte_missing=1; usart->mbm_err++; usart->mb_status.master_start=0; break;}
-        if (usart->in_buffer[0] != usart->out_buffer[0]) // Проверяем соответствие принятого адреса ожидаемому адресу
+        if (usart->in_buffer[0] != usart->out_buffer[0]) // wrong device address
         {
-            usart->mbm_status = 0;             // Сброс состояния master-устройства
-            usart->mb_status.device_error = 1; // Установка флага ошибки устройства
-            usart->mbm_err++;                  // Увеличиваем счетчик ошибок
-            usart->mb_status.master_start = 0; // Сброс флага master_start
+            usart->mbm_status = 0;
+            usart->mb_status.device_error = 1;
+            usart->mbm_err++;
+            usart->mb_status.master_start = 0;
             break;
         }
-        // проверяем CRC ответ
-        PIC_CRC16(usart->in_buffer, (usart->in_buffer_count)); // // Вычисляем CRC16 для принятых данных
-        if (uchCRCLo | uchCRCHi)                               // Если CRC неверен
+        PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));
+        if (uchCRCLo | uchCRCHi)
         {
-            usart->mbm_status = 0;             // Сброс состояния master-устройства
-            usart->mb_status.crc_error = 1;    // Установка флага ошибки CRC
-            usart->mbm_err++;                  // Увеличиваем счетчик ошибок
-            usart->mb_status.master_start = 0; // Сброс флага master_start
+            usart->mbm_status = 0;
+            usart->mb_status.crc_error = 1;
+            usart->mbm_err++;
+            usart->mb_status.master_start = 0;
             break;
         } // wrong crc
 
-        // Копируем данные в целевой массив и выполняем необходимые действия
-        usart -> in_buffer[4] = 4;
-        memcpy((void *)(lockal_buff_swap), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
+        memcpy((void *)(buff_sw), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]);
         for (cc = 0; cc < quant_03; cc++)
         {
-            lockal_buff[cc + shift_03] = swapshort(lockal_buff_swap[cc + shift_03]);
+            //				MUPS.main_area[cc+shift_03 - 200] = MUPS_swap.main_area[cc+shift_03 - 200];
+            buff_[cc] = swapshort(buff_sw[cc]);
+            usart->mb_status.mbm_data_rdy = 1;
         }
-        memcpy((void *)(dest), (const void *)(lockal_buff), lockal_buff[2]); // если все нормально, то начинаем
+        memcpy((void *)(dest), (const void *)(buff_), usart->in_buffer[2]);
+        //         memcpy((void *)(lockal_buff_swap), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
+        //         for (cc = 0; cc < quant_03; cc++)
+        //         {
+        //             lockal_buff[cc + shift_03] = swapshort(lockal_buff_swap[cc + shift_03]);
+        //         }
+        //         memcpy((void *)(dest), (const void *)(lockal_buff), lockal_buff[2]); // если все нормально, то начинаем
 
-        // Обновляем счетчик ответов и сбрасываем флаги ошибок
-        usart->answer_count++;             // Увеличиваем счетчик ответов
-        usart->mb_status.master_error = 0; // Сброс флага ошибки master-устройства
-        usart->mb_status.master_start = 0; // Сброс флага master_start
-        usart->mbm_status = 0;             // Сброс состояния master-устройства
+        usart->answer_count++;
+        usart->mb_status.master_error = 0;
+        usart->mb_status.master_start = 0;
+        usart->mbm_status = 0;
         break;
     }
-    default: // Состояние по умолчанию: сброс состояния
+    default:
     {
-        usart->mbm_status = 0;             // Сброс состояния master-устройства
-        usart->mb_status.master_start = 0; // Сброс флага master_start
+        usart->mb_status.master_start = 0;
+        usart->mbm_status = 0;
         break;
     }
     }
