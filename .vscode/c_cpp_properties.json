@@ -3,7 +3,8 @@
     {
       "name": "windows-gcc-x86",
       "includePath": [
-        "${workspaceFolder}/**"
+        "${workspaceFolder}/**",
+        "\"C:\\\\Users\\\\usr\\\\YandexDisk\\\\projeckts_cpp\\\\tstsql\\\\lib_sqlite3\""
       ],
       "compilerPath": "C:/MinGW/bin/gcc.exe",
       "cStandard": "${default}",

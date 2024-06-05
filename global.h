@@ -115,48 +115,48 @@ union tag_direct{
  
  struct tag_usart
 {
-    unsigned char out_buffer[OUT_SIZE]; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ).
-    unsigned char in_buffer[IN_SIZE];   // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ).
-    unsigned short out_buffer_count;    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-    unsigned short in_buffer_count;     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-    unsigned short in_buffer_count2;    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
-    unsigned short number_send;         // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
-    unsigned short port_type;           // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
-    unsigned short mbm_status;          // пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS.
-    unsigned short mbm_err;             // пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS.
-    unsigned short mbm_err16;           // пїЅпїЅпїЅпїЅпїЅпїЅ 16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-    unsigned short mbm_status_hl;       // пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-    unsigned short mbm_status16;        // пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
-    unsigned short repeat_05;           // пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 05.
-    unsigned short repeat_05_;          // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 05.
-    unsigned short mbm_timeout_counter; // пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS. //
+    unsigned char out_buffer[OUT_SIZE]; // Массив буфера для исходящих данных (отправляемые данные).
+    unsigned char in_buffer[IN_SIZE];   // Массив буфера для входящих данных (принимаемые данные).
+    unsigned short out_buffer_count;    // Счетчик числа байт в буфере исходящих данных.
+    unsigned short in_buffer_count;     // Счетчик числа байт в буфере входящих данных.
+    unsigned short in_buffer_count2;    // Дополнительный счетчик числа байт в буфере входящих данных (второй счетчик).
+    unsigned short number_send;         // Количество байт для отправки.
+    unsigned short port_type;           // Тип порта.
+    unsigned short mbm_status;          // Статус MODBUS.
+    unsigned short mbm_err;             // Ошибка MODBUS.
+    unsigned short mbm_err16;           // Ошибка 16 функции
+    unsigned short mbm_status_hl;       // Статус MODBUS высокого уровня.
+    unsigned short mbm_status16;        // Статус MODBUS 16 функция.
+    unsigned short repeat_05;           // Повтор MODBUS 05.
+    unsigned short repeat_05_;          // Другой повтор MODBUS 05.
+    unsigned short mbm_timeout_counter; // Тайм-аут счетчик MODBUS. //
     unsigned short answer_count;        //
 
     struct tag_mb_statusBITS
     {
-        unsigned modb_mode : 1;        // 1 пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-        unsigned term_mode : 1;        // 1 пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        unsigned modb_received : 1;    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-        unsigned modb_transmited : 1;  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-        unsigned modb_receiving : 1;   // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-        unsigned modb_transmiting : 1; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-        unsigned tx_mode : 1;          // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (USART TX mode)
-        unsigned mbm_data_rdy : 1;      // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        unsigned master_error : 1;     // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        unsigned bussy1 : 1;           // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-        unsigned bussy2 : 1;           // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-        unsigned last_byte : 1;        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-        unsigned byte_missing : 1;     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-        unsigned coll_1 : 1;           // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
-        unsigned coll_2 : 1;           // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2
-        unsigned coll_3 : 1;           // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-        unsigned start16 : 1;         // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        unsigned master_start : 1;     // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        unsigned master_timeout_flag : 1;   // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ
-        unsigned tm_on : 1;            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        unsigned device_error : 1;     // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        unsigned crc_error : 1;        // пїЅпїЅпїЅпїЅпїЅпїЅ CRC
-        unsigned : 10;                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (19-32)
+        unsigned modb_mode : 1;        // 1 бит для режима MODBUS
+        unsigned term_mode : 1;        // 1 бит для режима терминала
+        unsigned modb_received : 1;    // Флаг получения MODBUS
+        unsigned modb_transmited : 1;  // Флаг передачи MODBUS
+        unsigned modb_receiving : 1;   // Флаг приема MODBUS
+        unsigned modb_transmiting : 1; // Флаг отправки MODBUS
+        unsigned tx_mode : 1;          // Режим передачи (USART TX mode)
+        unsigned mbm_data_rdy : 1;      // Готовность данных к передаче
+        unsigned master_error : 1;     // Ошибка мастера
+        unsigned bussy1 : 1;           // Резервное поле
+        unsigned bussy2 : 1;           // Резервное поле
+        unsigned last_byte : 1;        // Флаг последнего байта
+        unsigned byte_missing : 1;     // Отсутствие байта
+        unsigned coll_1 : 1;           // Коллизия 1
+        unsigned coll_2 : 1;           // Коллизия 2
+        unsigned coll_3 : 1;           // Коллизия 3
+        unsigned start16 : 1;         // Начало передачи
+        unsigned master_start : 1;     // Начало мастера
+        unsigned master_timeout_flag : 1;   // флаг ошибки тайм-аута
+        unsigned tm_on : 1;            // Включение таймера
+        unsigned device_error : 1;     // Ошибка устройства
+        unsigned crc_error : 1;        // Ошибка CRC
+        unsigned : 10;                 // Резервные биты (19-32)
     } mb_status;
 } usart1, usart2, usart3, usart4, usart5;
 
@@ -164,22 +164,22 @@ union tag_mops{
 	struct  {
 		union {
 			struct {
-				unsigned short info[3];					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-				unsigned short status [num_zones];		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned short hold_status [num_zones];	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned short current [num_zones+1];		// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+				unsigned short info[3];					// идентификационная область: тип прибора, версия прошивки, версия платы
+				unsigned short status [num_zones];		// статусы зон
+				unsigned short hold_status [num_zones];	// запомненные статусы зон
+				unsigned short current [num_zones+1];		// токи зон
 				};
-			unsigned short read [num_zones*3+4];			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+			unsigned short read [num_zones*3+4];			// область чтения
 			};
 		union {
 			struct {
-				unsigned short command [num_zones];		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned short type [num_zones];			// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ
-				unsigned short limit1 [num_zones];		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned short limit2 [num_zones];		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned short limit3 [num_zones];		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned short limit4 [num_zones];		// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned short timer1 [num_zones];		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+				unsigned short command [num_zones];		// команды зон
+				unsigned short type [num_zones];			// типы зон: обычная, пожарная с ПЗ и без ПЗ
+				unsigned short limit1 [num_zones];		// пороги обыв - норма для всех зон
+				unsigned short limit2 [num_zones];		// пороги норма - внимание для всех зон
+				unsigned short limit3 [num_zones];		// пороги внимание - пожар для всех зон
+				unsigned short limit4 [num_zones];		// пороги пожар - КЗ для всех зон
+				unsigned short timer1 [num_zones];		// настраиваемые таймера всех зон
 				unsigned short timer2 [num_zones];
 				unsigned short timer3 [num_zones];
 				unsigned short timer4 [num_zones];
@@ -196,9 +196,9 @@ union tag_mops{
     
  struct tag_ch 
 {
-	unsigned short teeth;					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-	unsigned short filter;					// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-	float reductor;						// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	unsigned short teeth;					// количество зубов
+	unsigned short filter;					// глубина фильтрации
+	float reductor;						// коэффициент редукции
 	unsigned short ready;					// ??????? ?????????? ? ????????? - ??????? ????????? ? ??????
 	unsigned short activ;					// ?????? ????? 4 ????????? ? ?????? ????????? -  ????? ??????? ?????????? ???????
 	unsigned short rotary;					// ?????? ?????????? ????????? ????? ??? (????*??????????+3)
@@ -285,23 +285,23 @@ union tag_Modbus {
         union {
 			struct {
 				unsigned flap_On  :1;			// 1
-				unsigned start  :1;			// 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+				unsigned start  :1;			// 2 команда пуск
 				unsigned ignit_allow :1;		// 4 Comman ON current stabilization function
-				unsigned CV_dir_ctrl :1;		// 8 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				unsigned PWM_dir_ctrl :1;		// 16 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ 
-				unsigned ign_ctrl :1;			// 32 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
-				unsigned unlock :1;			// 64 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				unsigned AO :1;				// 128 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				unsigned clr_err_cnt :1;		// 256 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-				unsigned stop :1;			// 512 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
-				unsigned press_mode_int :1;		// 1024 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				unsigned press_mode_analog :1;		// 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				unsigned deep_on :1;			// 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				unsigned NO :1;				// 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-				unsigned stop_pid_on :1;		// 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ				
-				unsigned stop_pid_off :1;		// 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ	
-				unsigned forced_pid_on :1;		// 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ				
-				unsigned forced_pid_off :1;		// 131072 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				unsigned CV_dir_ctrl :1;		// 8 режим прямого управления ТРК
+				unsigned PWM_dir_ctrl :1;		// 16 режим прямого управления ШИМ 
+				unsigned ign_ctrl :1;			// 32 режим проверки зажигания 
+				unsigned unlock :1;			// 64 деблокировка
+				unsigned AO :1;				// 128 команда аварийного останова
+				unsigned clr_err_cnt :1;		// 256 очистка счетчиков ошибок
+				unsigned stop :1;			// 512 команда стоп - выход из диагностических режимов 
+				unsigned press_mode_int :1;		// 1024 давление по интерфейсу
+				unsigned press_mode_analog :1;		// 2048 давление по аналогу
+				unsigned deep_on :1;			// 4096 глубокое запаздывание
+				unsigned NO :1;				// 8192 нормальный останов
+				unsigned stop_pid_on :1;		// 16384 приостановка пид-регулятора				
+				unsigned stop_pid_off :1;		// 32768 включение пид-регулятора	
+				unsigned forced_pid_on :1;		// 65536 включение форсированного пид-регулятора				
+				unsigned forced_pid_off :1;		// 131072 выключение форсированного пид-регулятора
 				unsigned             :14;		// Last 8 bits = byte for value of Kp regulator (current current stabilization function)
 				};
 			unsigned long cmd1;						// 1
@@ -321,15 +321,15 @@ union tag_Modbus {
 	unsigned short AO_cyl_num;      //24
         unsigned short ADC_CV_pos;      //25
         unsigned short ADC_CV_curr;     //26
-        unsigned short pulses_11;       //27    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-	unsigned short pulses_40;	//28	пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        unsigned short pulses_11;       //27    количество импульсов по каналу синхронизации на момент синхронизации
+	unsigned short pulses_40;	//28	количество импульсов по каналу оборотов на один оборот по каналу синхронизации
         float err_rpm;                  //29
         union {
 		struct {
-			unsigned CV_locked :1;				// 1 "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅ
-			unsigned press_via_analog :1;			// 2 1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ; 0 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned CV_magnet_brake :1;			// 4 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-			unsigned CV_sensor_err :1;			// 8 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+			unsigned CV_locked :1;				// 1 "закусывание" ТРК
+			unsigned press_via_analog :1;			// 2 1 - работа по аналоговому сигналу; 0 - работа по интерфейсу
+			unsigned CV_magnet_brake :1;			// 4 обрыв электромагнита ТРК
+			unsigned CV_sensor_err :1;			// 8 недостоверность датчика положения ТРК
 			unsigned deep_mode :1;				// 16 Command ON 
 			unsigned Protect_unswitch :1;			// 32 Command ON 
 			unsigned DI1_ctrl :1;				// 64 Command ON 
@@ -337,12 +337,12 @@ union tag_Modbus {
 			unsigned CONTROL2 :1;				// 256 
 			unsigned CONTROL3 :1;				// 512 
 			unsigned CONTROL4 :1;				// 1024 
-			unsigned s12 :1;		// 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned deep_is_on :1;		// 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned stop_pid :1;		// 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned miss_sync :1;		// 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned miss_rpm :1;		// 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ	
-			unsigned forced_pid :1;		// 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+			unsigned s12 :1;		// 2048 давление по аналогу
+			unsigned deep_is_on :1;		// 4096 глубокое запаздывание
+			unsigned stop_pid :1;		// 8192 отключен пид-регулятор
+			unsigned miss_sync :1;		// 16384 пропуски канала синхронизации
+			unsigned miss_rpm :1;		// 32768 пропуски канала оборотов	
+			unsigned forced_pid :1;		// 65536 включен форсированный ПИД
 			unsigned             :15;	// Last 16 bits = byte for value of Kp regulator (current current stabilization function)
 			};
 		unsigned long statuses;			// 31
@@ -417,7 +417,7 @@ union tag_MB_conf {
         float PID_deadband;         //57    reserve
 	float KP_res_limit ;	    //59    reserve
 	float CV_check_level ;	    //61    reserve
-	float UOZ_shift_ind [CYLINDERS_NUM];	    //63 - 82    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅпїЅпїЅпїЅ
+	float UOZ_shift_ind [CYLINDERS_NUM];	    //63 - 82    индивидуальные подстройки  углов
         };
 //    unsigned short buf [168];
     unsigned short buf [90];    

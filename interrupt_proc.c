@@ -70,51 +70,51 @@ void DMA_uni ( struct tag_usart * usart, unsigned short cnt, unsigned short on, 
 {
     if (usart == &usart1)
         {
-        DCH1SSA = _VirtToPhys(&buf_tx1);      // transfer source physical address
-        DCH1DSA = _VirtToPhys((const void*) &U1TXREG);   // transfer destination physical address
-        DCH1SSIZ = cnt;                       // source size at most 200 bytes
-        DCH1DSIZ = 1;                        // dst size is 1 byte
-        DCH1CSIZ = 1;                       // one byte per UART transfer request
+        DCH1SSA = _VirtToPhys(&buf_tx1);                    // transfer source physical address
+        DCH1DSA = _VirtToPhys((const void*) &U1TXREG);      // transfer destination physical address
+        DCH1SSIZ = cnt;                                     // source size at most 200 bytes
+        DCH1DSIZ = 1;                                       // dst size is 1 byte
+        DCH1CSIZ = 1;                                       // one byte per UART transfer request
         DCH1CONbits.CHEN = on;
         DCH1ECONbits.CFORCE = force;
         }        
     if (usart == &usart2)
         {
-        DCH2SSA = _VirtToPhys(&buf_tx2);      // transfer source physical address
-        DCH2DSA = _VirtToPhys((const void*) &U2TXREG);   // transfer destination physical address
-        DCH2SSIZ = cnt;                       // source size at most 200 bytes
-        DCH2DSIZ = 1;                        // dst size is 1 byte
-        DCH2CSIZ = 1;                       // one byte per UART transfer request
+        DCH2SSA = _VirtToPhys(&buf_tx2);                    // transfer source physical address
+        DCH2DSA = _VirtToPhys((const void*) &U2TXREG);      // transfer destination physical address
+        DCH2SSIZ = cnt;                                     // source size at most 200 bytes
+        DCH2DSIZ = 1;                                       // dst size is 1 byte
+        DCH2CSIZ = 1;                                       // one byte per UART transfer request
         DCH2CONbits.CHEN = on;
         DCH2ECONbits.CFORCE = force;
         }    
     if (usart == &usart3)
         {
-        DCH3SSA = _VirtToPhys(&buf_tx3);      // transfer source physical address
-        DCH3DSA = _VirtToPhys((const void*) &U3TXREG);   // transfer destination physical address
-        DCH3SSIZ = cnt;                       // source size at most 200 bytes
-        DCH3DSIZ = 1;                        // dst size is 1 byte
-        DCH3CSIZ = 1;                       // one byte per UART transfer request
+        DCH3SSA = _VirtToPhys(&buf_tx3);                    // transfer source physical address
+        DCH3DSA = _VirtToPhys((const void*) &U3TXREG);      // transfer destination physical address
+        DCH3SSIZ = cnt;                                     // source size at most 200 bytes
+        DCH3DSIZ = 1;                                       // dst size is 1 byte
+        DCH3CSIZ = 1;                                       // one byte per UART transfer request
         DCH3CONbits.CHEN = on;
         DCH3ECONbits.CFORCE = force;
         }    
     if (usart == &usart4)
         {
-        DCH4SSA = _VirtToPhys(&buf_tx4);      // transfer source physical address
-        DCH4DSA = _VirtToPhys((const void*) &U4TXREG);   // transfer destination physical address
-        DCH4SSIZ = cnt;                       // source size at most 200 bytes
-        DCH4DSIZ = 1;                        // dst size is 1 byte
-        DCH4CSIZ = 1;                       // one byte per UART transfer request
+        DCH4SSA = _VirtToPhys(&buf_tx4);                    // transfer source physical address
+        DCH4DSA = _VirtToPhys((const void*) &U4TXREG);      // transfer destination physical address
+        DCH4SSIZ = cnt;                                     // source size at most 200 bytes
+        DCH4DSIZ = 1;                                       // dst size is 1 byte
+        DCH4CSIZ = 1;                                       // one byte per UART transfer request
         DCH4CONbits.CHEN = on;
         DCH4ECONbits.CFORCE = force;
         }
     if (usart == &usart5)
         {
-        DCH5SSA = _VirtToPhys(&buf_tx5 );      // transfer source physical address
-        DCH5DSA = _VirtToPhys((const void*) &U5TXREG);   // transfer destination physical address
-        DCH5SSIZ = cnt;                       // source size at most 200 bytes
-        DCH5DSIZ = 1;                        // dst size is 1 byte
-        DCH5CSIZ = 1;                       // one byte per UART transfer request
+        DCH5SSA = _VirtToPhys(&buf_tx5 );                   // transfer source physical address
+        DCH5DSA = _VirtToPhys((const void*) &U5TXREG);      // transfer destination physical address
+        DCH5SSIZ = cnt;                                     // source size at most 200 bytes
+        DCH5DSIZ = 1;                                       // dst size is 1 byte
+        DCH5CSIZ = 1;                                       // one byte per UART transfer request
         DCH5CONbits.CHEN = on;
         DCH5ECONbits.CFORCE = force;
         }
@@ -172,6 +172,7 @@ void DMA4_init (void)
 {
 DMACONSET=0x00008000;               // enable the DMA controller
 DCH4CON=0x2;                       // channel 1 off, priority 2
+
 DCH4ECONbits.CHSIRQ = _UART4_TX_VECTOR;
 DCH4ECONbits.SIRQEN = 1;
 DCH4SSA = _VirtToPhys(&buf_tx4);      // transfer source physical address
@@ -301,7 +302,7 @@ void discret_ctrl (void)
         }
     else { DI2_cnt = 0;}
  }
-
+unsigned short master_start_del;
 void counters (void)
 {
     if (_divider >= 10)
@@ -320,9 +321,9 @@ void counters (void)
         Modbus.buf [7] = usart5.in_buffer_count;
         Modbus.buf [8] = usart5.mb_status.modb_received;     
         
-        Modbus.buf [10] = MOPS_arr[1].status[4];
-        Modbus.buf [11] = MOPS_arr[1].status[5];      
-        Modbus.buf [12] = MOPS_arr[1].status[6];      
+        Modbus.buf [10] = MOPS_arr[1].status[0];
+        Modbus.buf [11] = MOPS_arr[1].status[1];      
+        Modbus.buf [12] = MOPS_arr[1].status[2];      
         
         Modbus_sw.buf [0] = swapshort (Modbus.buf [0]);
         Modbus_sw.buf [1] = swapshort (Modbus.buf [1]);
@@ -343,10 +344,11 @@ void counters (void)
         if (_100msec >= 3) {
             _100msec = 0; 
             help_strobe  ^= 1; 
-            usart5.mb_status.master_start = 1;
+          if (master_start_del == 1) {usart5.mb_status.master_start = 1;}
             }   
 
         if (_1000msec >= 100) {
+            master_start_del = 1;
             _1000msec = 0;  
             conf_check ();
 
