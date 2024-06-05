@@ -1,167 +1,273 @@
+/* ************************************************************************** */
+/***************************************************************** */
+#include <proc/p32mz1024efh100.h>
 #include <xc.h>
 #include <sys/attribs.h>
 
-#define num_zone_mops 8 // Определение макроса для числа зонных операций (MOPs), установленное на 8
+//#include "global.h"    /* contains __ISR() Macros */
+//#include "extern.h"
 
-#define SYS_CLK_FREQUENCY (199065600ull)         // Частота системной шины (Fsys), установленная на 200 МГц
-#define CPU_CLK_FREQUENCY SYS_CLK_FREQUENCY / 2  // Частота CPU (Fcpu), половина частоты системной шины
-#define PB3_CLK_FREQUENCY SYS_CLK_FREQUENCY / 27 // Частота шины периферийных устройств (Fpb3), частота системной шины деленная на 27 (2 МГц)
+#ifdef __cplusplus
+extern "C" {
+#endif
+#define EXAMPLE_CONSTANT 0
 
-#define PBCLK2_ 49766400 // Определение макроса для частоты шины периферийных устройств PBCLK2_, установленной на 49 766 400 Гц
 
-#define DMA_type 0 // Определение макроса DMA_type с значением 0, представляющим тип DMA
-#define INT_type 1 // Определение макроса INT_type с значением 1, представляющим тип прерывания
+#define SYS_CLK_FREQUENCY  (199065600ull)       // Fsys = 200 MHz
+#define CPU_CLK_FREQUENCY  SYS_CLK_FREQUENCY/2  // Fcpu = 200 MHz
+#define PB3_CLK_FREQUENCY SYS_CLK_FREQUENCY/27   // Fpb3 = 2 MHz
 
-#define ENAB_TX5 PORTFbits.RF2 = 1  // Включение передачи для UART5 путем установки порта RF2 в 1
-#define ENAB_RX5 PORTFbits.RF2 = 0  // Включение приема для UART5 путем установки порта RF2 в 0
-#define ENAB_TX4 PORTBbits.RB12 = 1 // Включение передачи для UART4 путем установки порта RB12 в 1
-#define ENAB_RX4 PORTBbits.RB12 = 0 // Включение приема для UART4 путем установки порта RB12 в 0
-#define ENAB_TX3 PORTBbits.RB15 = 1 // Включение передачи для UART3 путем установки порта RB15 в 1
-#define ENAB_RX3 PORTBbits.RB15 = 0 // Включение приема для UART3 путем установки порта RB15 в 0
-#define ENAB_TX2 PORTDbits.RD13 = 1 // Включение передачи для UART2 путем установки порта RD13 в 1
-#define ENAB_RX2 PORTDbits.RD13 = 0 // Включение приема для UART2 путем установки порта RD13 в 0
-#define ENAB_TX1 PORTDbits.RD1 = 1  // Включение передачи для UART1 путем установки порта RD1 в 1
-#define ENAB_RX1 PORTDbits.RD1 = 0  // Включение приема для UART1 путем установки порта RD1 в 0
+#define  PBCLK3_		49766400
+#define  PBCLK2_		49766400
+    
+// LED_LD1 (RG6)
+#define LED_LD1       	LATBbits.LATB6
+#define TRIS_LED_LD1  	TRISBbits.TRISB6
+#define LED_LD1_SET()   LATBSET = _LATB_LATB6_MASK;
+#define LED_LD1_CLR()   LATBCLR = _LATB_LATB6_MASK;
+#define LED_LD1_INV()   LATBINV = _LATB_LATB6_MASK;
 
-#define t9_del_1 timer9_bits.t_del_1 // Определение псевдонима t9_del_1 для бита t_del_1 в структуре timer9_bits
+#define  DMA_type	0
+#define  INT_type	1
 
-#define OUT_SIZE 0x100 // Определение размера выходного буфера как 256 байт (0x100 в шестнадцатеричной системе)
-#define IN_SIZE 0x100  // Определение размера входного буфера как 256 байт (0x100 в шестнадцатеричной системе)
-#define IN_SIZE1 0xF0  // Определение размера входного буфера 1 как 240 байт (0xF0 в шестнадцатеричной системе)
+#define  ENAB_TX5		PORTFbits.RF2 = 1	
+#define  ENAB_RX5		PORTFbits.RF2 = 0	
+#define  ENAB_TX4		PORTBbits.RB12 = 1
+#define  ENAB_RX4		PORTBbits.RB12 = 0 
 
-#define timeout1 55                               // Определение времени ожидания (тайм-аута) как 55
-#define frame_delay_1 PBCLK2_ / 115200 * timeout1 // Определение задержки кадра 1 как деления PBCLK2_ на 115200, умноженное на timeout1
-
+#define  OUT_SIZE		0x100
+#define  IN_SIZE		0x100
+#define  OUT_SIZE2		0xF0
+#define  IN_SIZE1		0xF0
+#define  INCAP_VOLUME	380    
+    
+#define  timeout1       55
+#define  timeout4       55    
+#define  TICK           1 
+#define  num_zones      8    
+    
+ 
+#define  frame_delay_1          PBCLK2_/115200*timeout1
+#define  frame_delay_4          PBCLK2_/115200*timeout4
+    
 /////////////////		Modbus alowed areas 		//////////////////////////
 
-#define START_READ 2000 // Начальный адрес для чтения в Modbus (MB_swap)
-#define END_READ 2078   // Конечный адрес для чтения в Modbus
+#define  START_READ					2000			// отладочгая область чтение
+#define  END_READ					2078			// 
 
-#define START_WRITE 2054 // Начальный адрес для записи в Modbus
-#define END_WRITE 2078   // Конечный адрес для записи в Modbus
+#define  START_WRITE				2054			// отладочгая область запись
+#define  END_WRITE					2078			// 
 
-// Проверка, находится ли запрашиваемый диапазон адресов для чтения в пределах допустимого диапазона
-#define READ_ ((start_reg >= START_READ) && (last_reg <= END_READ))
-// Проверка, находится ли запрашиваемый диапазон адресов для записи в пределах допустимого диапазона
-#define WRITE_ ((start_reg >= START_WRITE) && (last_reg <= END_WRITE))
+#define  READ_			((start_reg>=START_READ)&&(last_reg<=END_READ))			// ??????? ?????? ????????? ?????
+#define  WRITE_			((start_reg>=START_WRITE)&&(last_reg<=END_WRITE))		// ??????? ?????? ????????????
 
+#define  START_WORK_READ				800			// ??????? ?????? ??????? ??????
+#define  END_WORK_READ					812			// 
+#define  START_WORK_WRITE				806			// ??????? ?????? ??????? ??????
+#define  END_WORK_WRITE					812			// 
 
+#define  WORK_READ_		((start_reg >= START_WORK_READ) && (last_reg <= END_WORK_READ))	
+#define  WORK_WRITE_		((start_reg >= START_WORK_WRITE) && (last_reg <= END_WORK_WRITE))
 
-#define START_READ_MOPS 3000 // Начальный адрес для чтения в Modbus (MB_swap)
-#define END_READ_MOPS 4090   // Конечный адрес для чтения в Modbus
+#define  START_CALIBR_READ				1000			// ??????? ?????? ??????? ??????
+#define  END_CALIBR_READ				1034			// 
+#define  START_CALIBR_WRITE				1000			// ??????? ?????? ??????? ??????
+#define  END_CALIBR_WRITE				1034			// 
 
+#define  CALIBR_READ_		((start_reg >= START_CALIBR_READ) && (last_reg <= END_CALIBR_READ))	
+#define  CALIBR_WRITE_		((start_reg >= START_CALIBR_WRITE) && (last_reg <= END_CALIBR_WRITE))
 
-// Проверка, находится ли запрашиваемый диапазон адресов для чтения в пределах допустимого диапазона
-#define READ_MOPS ((start_reg >= START_READ_MOPS) && (last_reg <= END_READ_MOPS))
+#define  START_CONF_READ				500			// config area - setting of engine parameters
+#define  END_CONF_READ  				696			// 
+#define  START_CONF_WRITE				500			//
+#define  END_CONF_WRITE					696			// 
 
+#define  CONF_READ_             ((start_reg >= START_CONF_READ) && (last_reg <= END_CONF_READ))	
+#define  CONF_WRITE_            ((start_reg >= START_CONF_WRITE) && (last_reg <= END_CONF_WRITE))
 
+#define  START_MODBUS_READ				0			// working area of engine control and statuses
+#define  END_MODBUS_READ  				82			// 
+#define  START_MODBUS_WRITE				0			//
+#define  END_MODBUS_WRITE				12			// 
 
-// #define START_READ_MOPS 3000 // начальный адрес для чтения модбас мопса
-// #define END_READ_MOPS 3200   // конечный адрес для чтения модбас мопсов
+#define  MODBUS_READ_           ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))	
+#define  MODBUS_WRITE_		((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
+    
+#define  START_MB_DIAGN_READ				200			// config area - setting of engine parameters
+#define  END_MB_DIAGN_READ  				312			// 
+#define  START_MB_DIAGN_WRITE				200			//
+#define  END_MB_DIAGN_WRITE				312			// 
 
-// #define READ_MOPS ((start_reg >= START_READ_MOPS) && (last_reg <= END_READ_MOPS))   
+#define  MB_DIAGN_READ_           ((start_reg >= START_MB_DIAGN_READ) && (last_reg <= END_MB_DIAGN_READ))	
+#define  MB_DIAGN_WRITE_          ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))    
+    
+#define  RAMTRON_START              	64
+#define  RAMTRON_START_CONFIG		512
+    
+#define  COORD_MAX			MB_conf.CV_pos_max
+#define  COORD_MIN			MB_conf.CV_pos_min
+#define  CUR_MAX			MB_conf.CV_curr_max
+#define  CUR_MIN			MB_conf.CV_curr_min
+#define  CUR_SCALE			MB_conf.CV_curr_scale
 
-#define START_CONF_READ 500 // Начальный адрес для чтения конфигурации - настройки параметров двигателя
-#define END_CONF_READ 696   // Конечный адрес для чтения конфигурации
+#define  CUR_CTRL_VAL			10
+//#define  CUR_CTRL_VAL			MB_conf.CV_check_level  
 
-#define START_CONF_WRITE 500 // Начальный адрес для записи конфигурации
-#define END_CONF_WRITE 696   // Конечный адрес для записи конфигурации
+#define  INT_CLR			0.0  
+#define  INT_MCLR			1.0  
+#define  MREG_FREQ			100    
+    
+#define  TMR4CLK	    49776400
+//#define  TMR4CLK	    24883200
+#define  OC_FREQ            3000    
+#define  OC_MAX             TMR4CLK / OC_FREQ -1
+#define  OC_MIN             1500
+#define   FILTER	    20    
+#define	  d_count_size	    4
+    
+#define  FILT_CRPM          4
+    
+#define  FILT_C             10
+#define  FILT_I             10
+#define  FILT_DISCRET       500
+#define  CYCLE              10
+    
+#define  TMAXUOZ            58320                  
+    
+    ////////////////	End Modbus alowed area 	/////////////////////
 
-// Проверка, находится ли запрашиваемый диапазон адресов для чтения конфигурации в пределах допустимого диапазона
-#define CONF_READ_ ((start_reg >= START_CONF_READ) && (last_reg <= END_CONF_READ))
-// Проверка, находится ли запрашиваемый диапазон адресов для записи конфигурации в пределах допустимого диапазона
-#define CONF_WRITE_ ((start_reg >= START_CONF_WRITE) && (last_reg <= END_CONF_WRITE))
+#define  STROBE		PORTGbits.RG7			// изменено для платы 586-хх
+    
+#define  LED_AO		PORTGbits.RG12			// изменено для платы 586-хх pin 96
+#define  LED_AO_ON	PORTG = LATG | 0x1000		// изменено для платы 586-хх
+#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		// изменено для платы 586-хх
+    
+#define  LED_IGN	PORTGbits.RG13			// изменено для платы 586-хх pin 97
+#define  LED_IGN_ON	PORTG = LATG | 0x2000		// изменено для платы 586-хх
+#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		// изменено для платы 586-хх
+     
+#define  LED_STOP	PORTEbits.RE4			// изменено для платы 586-хх pin 100
+#define  LED_STOP_ON	PORTE = LATE | 0x0010		// изменено для платы 586-хх
+#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		// изменено для платы 586-хх    
 
-#define START_MODBUS_READ 0 // Начальный адрес для чтения рабочей области управления двигателем и статусов
-#define END_MODBUS_READ 82  // Конечный адрес для чтения рабочей области
+#define  LED_SYNC	PORTEbits.RE3			// изменено для платы 586-хх pin 99
+#define  LED_SYNC_ON	PORTE = LATE | 0x0008		// изменено для платы 586-хх
+#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		// изменено для платы 586-хх    
 
-#define START_MODBUS_WRITE 0 // Начальный адрес для записи рабочей области
-#define END_MODBUS_WRITE 12  // Конечный адрес для записи рабочей области
+#define  LED_WIGN	PORTEbits.RE2			// изменено для платы 586-хх pin 98
+#define  LED_WIGN_ON	PORTG = LATG | 0x0004		// изменено для платы 586-хх   
+#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		// изменено для платы 586-хх   
 
-// Проверка, находится ли запрашиваемый диапазон адресов для чтения рабочей области в пределах допустимого диапазона
-#define MODBUS_READ_ ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))
-// Проверка, находится ли запрашиваемый диапазон адресов для записи рабочей области в пределах допустимого диапазона
-#define MODBUS_WRITE_ ((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
+#define  LED_8		PORTEbits.RE0			// изменено для платы 586-хх pin 91
+#define  LED_8_ON	PORTE = LATE | 0x0001		// изменено для платы 586-хх
+#define  LED_8_OFF	PORTE = LATE & 0xFFFE		// изменено для платы 586-хх        
+ 
+#define  LED_7		PORTEbits.RE1			// изменено для платы 586-хх pin 94
+#define  LED_7_ON	PORTE = LATE | 0x0002		// изменено для платы 586-хх   
+#define  LED_7_OFF	PORTE = LATE & 0xFFFD		// изменено для платы 586-хх   
+    
+    
+#define  LED9		PORTDbits.RD15			// изменено для платы 586-хх pin 48
+#define  LED9_ON	PORTD = LATD | 0x8000		// изменено для платы 586-хх   
+#define  LED9_OFF	PORTD = LATD & 0x7FFF		// изменено для платы 586-хх       
+    
+#define  LED10		PORTAbits.RA2			// изменено для платы 586-хх pin 59
+#define  LED10_ON	PORTA = LATA | 0x0004		// изменено для платы 586-хх   
+#define  LED10_OFF	PORTA = LATA & 0xFFFB		// изменено для платы 586-хх       
 
-#define START_MB_DIAGN_READ 200 // Начальный адрес для чтения диагностики Modbus
-#define END_MB_DIAGN_READ 312   // Конечный адрес для чтения диагностики Modbus
+#define  DO_2		PORTAbits.RA3			// изменено для платы 606-хх pin 60
+#define  DO_2_ON	PORTA = LATA | 0x0008		// изменено для платы 606-хх   
+#define  DO_2_OFF	PORTA = LATA & 0xFFF7		// изменено для платы 606-хх       
 
-#define START_MB_DIAGN_WRITE 200 // Начальный адрес для записи диагностики Modbus
-#define END_MB_DIAGN_WRITE 312   // Конечный адрес для записи диагностики Modbus
+#define  DO_1		PORTAbits.RA4			// изменено для платы 606-хх pin 61
+#define  DO_1_ON	PORTA = LATA | 0x0010		// изменено для платы 606-хх   
+#define  DO_1_OFF	PORTA = LATA & 0xFFEF		// изменено для платы 606-хх   
 
-// Проверка, находится ли запрашиваемый диапазон адресов для чтения диагностики Modbus в пределах допустимого диапазона
-#define MB_DIAGN_READ_ ((start_reg >= START_MB_DIAGN_READ) && (last_reg <= END_MB_DIAGN_READ))
-// Проверка, находится ли запрашиваемый диапазон адресов для записи диагностики Modbus в пределах допустимого диапазона
-#define MB_DIAGN_WRITE_ ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))
+#define  IGN_ON		PORTDbits.RD5			// изменено для платы 606-хх pin 82
 
-#define RAMTRON_START 64         // Начальный адрес для работы с EEPROM
-#define RAMTRON_START_CONFIG 512 // Начальный адрес для работы с конфигурацией EEPROM
+#define  TAP_ON		PORTC = LATC | 0x2000		// изменено для платы 586-хх pin 72
+#define  TAP_OFF	PORTC = LATC & 0xDFFF		// изменено для платы 586-хх pin 72
 
-#define CUR_CTRL_VAL 10 // Управляющее значение тока
+#define  IGN_1		PORTDbits.RD9			// изменено для платы 586-хх pin 68
+#define  IGN_2		PORTDbits.RD2			// изменено для платы 586-хх pin 77
+#define  IGN_3		PORTDbits.RD10			// изменено для платы 586-хх pin 69
+#define  IGN_4		PORTDbits.RD3			// изменено для платы 586-хх pin 78
+#define  IGN_5		PORTDbits.RD11			// изменено для платы 586-хх pin 70
+#define  IGN_6		PORTDbits.RD12			// изменено для платы 586-хх pin 79
+#define  IGN_7		PORTDbits.RD0			// изменено для платы 586-хх pin 71
+#define  IGN_8		PORTDbits.RD13			// изменено для платы 586-хх pin 80
+#define  IGN_9		PORTDbits.RD1			// изменено для платы 586-хх pin 76
+#define  IGN_10		PORTDbits.RD4			// изменено для платы 586-хх pin 81
 
-#define TMR4CLK 49776400 // Частота тактирования таймера 4
+#define  ON_IGN_1       PORTD = LATD | 0x0200		// изменено для платы 586-хх pin 68
+#define  ON_IGN_2       PORTD = LATD | 0x0004		// изменено для платы 586-хх pin 77
+#define  ON_IGN_3       PORTD = LATD | 0x0400		// изменено для платы 586-хх pin 69
+#define  ON_IGN_4       PORTD = LATD | 0x0008		// изменено для платы 586-хх pin 78
+#define  ON_IGN_5       PORTD = LATD | 0x0800		// изменено для платы 586-хх pin 70
+#define  ON_IGN_6       PORTD = LATD | 0x1000		// изменено для платы 586-хх pin 79
+#define  ON_IGN_7       PORTD = LATD | 0x0001		// изменено для платы 586-хх pin 71
+#define  ON_IGN_8       PORTD = LATD | 0x2000		// изменено для платы 586-хх pin 80
+#define  ON_IGN_9       PORTD = LATD | 0x0002		// изменено для платы 586-хх pin 76
+#define  ON_IGN_10      PORTD = LATD | 0x0010		// изменено для платы 586-хх pin 81
+    
+#define  IGN_RESET      PORTD = LATD & 0xC1E0		// изменено для платы 586-хх
+#define  MAX_CYL_NUM    10				// изменено для платы 586-хх
 
-#define OC_FREQ 3000 // Частота для Output Compare
+#define  CTRL1      PORTGbits.RG0			// изменено для платы 586-хх pin 88
+#define  CTRL2      PORTGbits.RG1			// изменено для платы 586-хх pin 87
 
-#define FILT_DISCRET 500 // Дискрет фильтрации
-#define CYCLE 10         // Цикл
+#define  CONF1		PORTCbits.RC2			// изменено для платы 606-хх pin 7 
+#define  CONF2		PORTCbits.RC3			// изменено для платы 606-хх pin 8
+#define  CONF3		PORTCbits.RC4			// изменено для платы 606-хх pin 9
+#define  CONF4		PORTGbits.RG6			// изменено для платы 606-хх pin 10 
+#define  CONF5		PORTEbits.RE5			// изменено для платы 586-хх pin 3
+#define  CONF6		PORTEbits.RE6			// изменено для платы 586-хх pin 4 
+#define  CONF7		PORTEbits.RE7			// изменено для платы 586-хх pin 5
+#define  CONF8		PORTCbits.RC1			// изменено для платы 586-хх pin 6
 
-////////////////	End Modbus alowed area 	/////////////////////
+#define  DI_1		PORTAbits.RA5 			// изменено для платы 606-хх pin 2
+#define  DI_2		PORTGbits.RG15			// изменено для платы 606-хх pin 1
+    
+//  Modbus data define
+/*    */
+#define  FLAP_SET	Modbus.CV_set
+#define  FLAP_POS	Modbus.CV_pos
+#define  FLAP_CURR	Modbus.CV_current    
 
-#define CONF1 PORTCbits.RC2 // Порт для конфигурации 1
-#define CONF2 PORTCbits.RC3 // Порт для конфигурации 2
-#define CONF3 PORTCbits.RC4 // Порт для конфигурации 3
-#define CONF4 PORTGbits.RG6 // Порт для конфигурации 4
-#define CONF5 PORTEbits.RE5 // Порт для конфигурации 5
-#define CONF6 PORTEbits.RE6 // Порт для конфигурации 6
-#define CONF7 PORTEbits.RE7 // Порт для конфигурации 7
-#define CONF8 PORTCbits.RC1 // Порт для конфигурации 8
+#define  RPM_UOZ_MAX    MB_conf.UOZ_RPM_max
+#define  RPM_UOZ_MIN	MB_conf.UOZ_RPM_min
 
-#define DI_1 PORTAbits.RA5  // Порт для цифрового входа 1
-#define DI_2 PORTGbits.RG15 // Порт для цифрового входа 2
-#define DI_3 PORTFbits.RF4  // Порт для цифрового входа 3
+#define  NOM_UOZ        MB_conf.UOZ_high
+#define  LOW_UOZ        MB_conf.UOZ_low
+#define  CONST_UOZ      MB_conf.constructive_UOZ
+    
+#define CYLINDERS_NUM	        10
+#define CANDLES_NUM	        1
 
-//  Определение данных Modbus
-#define CYLINDERS_NUM 10 // Количество цилиндров
+#define AO_MISS_IGN_SIGN        1
+#define AO_SAU_COMMAND          2
+#define AO_TOO_LOW_RPM          3
+#define AO_TOO_HIGH_RPM         4
+#define AO_CV_ERROR             5
+#define AO_UNSYNC               6
+#define AO_CYL_BR_LOW           7
+#define AO_CYL_SC_LOW           8
+#define AO_CYL_BR_HIGH          9
+#define AO_START_ERROR          10
+#define AO_CV_CURR_ERROR        11
+#define AO_NO_CHARGE            12
+#define CV_SENSOR_BRAKE         13
+#define AO_5CYL_ERROR_EVEN	14
+#define AO_5CYL_ERROR_ODD	15
 
-// для функции UARTx_init
-#define URXISEL1 U1STAbits.URXISEL // Настройка выбора прерывания для приема UART1
-#define URXISEL2 U2STAbits.URXISEL // Настройка выбора прерывания для приема UART2
-#define URXISEL4 U4STAbits.URXISEL // Настройка выбора прерывания для приема UART4
-#define URXISEL5 U5STAbits.URXISEL // Настройка выбора прерывания для приема UART5
-
-#define PDSEL1 U1MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART1
-#define STSEL1 U1MODEbits.STSEL // Настройка количества стоповых битов для UART1
-#define PDSEL2 U2MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART2
-#define STSEL2 U2MODEbits.STSEL // Настройка количества стоповых битов для UART2
-#define PDSEL4 U4MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART4
-#define STSEL4 U4MODEbits.STSEL // Настройка количества стоповых битов для UART4
-#define PDSEL5 U5MODEbits.PDSEL // Настройка количества битов данных и бита четности для UART5
-#define STSEL5 U5MODEbits.STSEL // Настройка количества стоповых битов для UART5
-
-#define UARTEN1 U1MODEbits.UARTEN // Бит включения UART1
-#define UTXEN1 U1STAbits.UTXEN    // Бит разрешения передачи UART1
-#define UARTEN2 U2MODEbits.UARTEN // Бит включения UART2
-#define UTXEN2 U2STAbits.UTXEN    // Бит разрешения передачи UART2
-#define UARTEN4 U4MODEbits.UARTEN // Бит включения UART4
-#define UTXEN4 U4STAbits.UTXEN    // Бит разрешения передачи UART4
-#define UARTEN5 U5MODEbits.UARTEN // Бит включения UART5
-#define UTXEN5 U5STAbits.UTXEN    // Бит разрешения передачи UART5
-
-#define FOSC 9216000                // Частота внешнего кварцевого резонатора
-#define PLL_rate 4                  // Множитель PLL
-#define Fcy ((FOSC * PLL_rate) / 4) // Частота работы CPU (Fcy = FOSC * PLL_rate / 4)
-#define rx_timeout1 35              // Время ожидания приема
-#define receive 0                   // Переменная для приема
-
-// leds
-//  #define LED3_ON     PORTEbits.RE2 = 1;
-//  #define LED3_OFF     PORTEbits.RE2 = 0;
-//  #define LED3_TOGGLE         PORTEbits.RE2 = LATEbits.LATE2 ^ 1;
-
-// индикационный светодиод
-#define LED3_OFF PORTE &= 0xfffb;
-#define LED3_ON PORTE |= 0x0004;
-#define LED3_TOGGLE PORTE = LATE ^ 0x0004;
-
-#define TICK 5 // системный тик 5 миллисекунд для таймера 6
+    
+    
+ 
+    
+    
+    
+    
+    
+/* *****************************************************************************
+ End of File
+ */

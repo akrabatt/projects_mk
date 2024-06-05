@@ -456,7 +456,7 @@ void load_config (void)
 {
     unsigned short iii;
 //	getcs_FRAM(RAMTRON_START_CONFIG, MB_conf.buf, 392);
-	getcs_FRAM(RAMTRON_START_CONFIG,(unsigned char *) MB_conf.buf, 180);    
+	getcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) MB_conf.buf, 180);    
 //	for (iii=0; iii<196; iii++) {		MB_sw_conf.buf  [iii] = swapshort(MB_conf.buf  [iii]);		}
     for (iii=0; iii<90; iii++) {		MB_sw_conf.buf  [iii] = swapshort(MB_conf.buf  [iii]);		}
 }

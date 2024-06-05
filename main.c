@@ -1,50 +1,64 @@
-#include "define.h"
+/*
+** main.c
+/** INCLUDES ******************************************************************/
+
+#include <xc.h>
+#include <sys/attribs.h> /* contains __ISR() Macros */
+// #include "extern.h"
 #include "global.h"
+#include "define.h"
 
-extern void stop_uart_tx(void);                                     // стоп юсарт
-extern void stop_uart_tx_dma(void);                                 // стоп юсарт дма
-extern void mbs(struct tag_usart *usart, unsigned char mbs_addres); // модбас слэйв
-extern void close_mb(struct tag_usart *usart);                      // закрываем модбас
-extern void InitializeSystem(void);                                 // инициализация системы
-extern unsigned short swapshort(unsigned short data);               // свап
+extern void stop_uart_tx(void);
+extern void stop_uart_tx_dma(void);
+extern void mbs(struct tag_usart *usart, unsigned char mbs_addres);
+extern void close_mb(struct tag_usart *usart);
+extern void pid_control(float Kp, float Kd, float Ki);
+// extern void load_mem (void);
+extern void load_config(void);
+extern void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned long speed);
+// extern void pid (void);
+// extern void regulator (float Kp, float Kd, float Ki);
 
+/** VARIABLES *****************************************************************/
+
+/** LOCAL MACROS **************************************************************/
+
+extern void InitializeSystem(void);
+
+/** LOCAL PROTOTYPES ********************************************************/
+
+// void InitializeSystem(void);            // Initialize hardware and global variables
+
+/** main() ********************************************************************/
 
 int main(void)
 {
-    InitializeSystem(); // инициализируем систему
+    InitializeSystem();
 
     help_reset = 1;
-    ENAB_RX5; // направление прередачи порта А на прием    == PORTFbits.RF2 = 0
-    ENAB_RX4; // тоже самое но для другого интерфейса
-    ENAB_RX3; // тоже самое но для другого интерфейса
-    ENAB_RX2; // тоже самое но для другого интерфейса
-    ENAB_RX1; // тоже самое но для другого интерфейса
-
-    /* режим работы usart  по ДМА */
+    ENAB_RX5;
+    ENAB_RX4;
+    //    TAP_ON = 1;
+    //    close_mb ( &usart1);
     usart5.mb_status.tx_mode = DMA_type;
     usart4.mb_status.tx_mode = DMA_type;
-    usart3.mb_status.tx_mode = DMA_type;
-    usart2.mb_status.tx_mode = DMA_type;
-    usart1.mb_status.tx_mode = DMA_type;
-    /* режим работы по прерываниям */
-    // usart1.mb_status.tx_mode = INT_type;
-    // usart4.mb_status.tx_mode = INT_type;
+    //    usart1.mb_status.tx_mode = INT_type;
+    //    usart4.mb_status.tx_mode = INT_type;
 
+    //    load_config ();
+    //    IC1CONbits.ON = 1;
+    //    IC6CONbits.ON = 1;
+    //    load_config ();
     while (1)
-    {
 
-        mbm_03(&usart1, 1, 0, 28, &MOPS_arr[0], 115200); // мастер запрос
-//        mbm_03(&usart2, 2, 0, 28, &MOPS_arr[1], 5); // мастер запрос
-//        mbm_03(&usart4, 4, 0, 28, &MOPS_arr[2], 5); // мастер запрос
-//        mbm_03(&usart5, 5, 0, 28, &MOPS_arr[3], 5); // мастер запрос
-        mbs(&usart3, 1);
+    {
+        mbs(&usart4, 1); // порт  1
         stop_uart_tx_dma();
+        //    mbs (&usart4, 1);				//  4
+        mbm_03(&usart5, 1, 0, 28, (unsigned short *)&MOPS_arr[1], 115200);
         //    stop_uart_tx();
-        Modbus.Modbus_data.cyl_mask = 50;
-        Modbus_sw.Modbus_data.cyl_mask = swapshort(Modbus.Modbus_data.cyl_mask);
-        //        LED3_TOGGLE;
-//        MOPS_arr[0].info[0] = swapshort(22);
-//        MOPS_arr[1].info[0] = swapshort(111);
-//        MOPS_arr[8].info[0] = swapshort(88);
+        PORTGbits.RG7 = help_strobe;
+
+        LED_8 = help_strobe;
     }
 }
