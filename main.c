@@ -45,7 +45,7 @@ int main(void)
     //    usart1.mb_status.tx_mode = INT_type;
     //    usart4.mb_status.tx_mode = INT_type;
 
-    //    load_config ();
+    //    load_config (); 
     //    IC1CONbits.ON = 1;
     //    IC6CONbits.ON = 1;
     //    load_config ();
