@@ -25,7 +25,6 @@ extern unsigned long U5_speed;
 
 
 extern unsigned short help_strobe;
-extern unsigned short help_reset;
 extern unsigned short help_load;
 extern float fpos, fcurr, fpres, resss;
 

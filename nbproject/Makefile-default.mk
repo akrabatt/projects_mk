@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c init.c interupt.c modbus.c interrupt_proc.c ramtron_drv.c Control.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c init.c interupt.c modbus.c interrupt_proc.c ramtron_drv.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/init.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/Control.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/interupt.o.d ${OBJECTDIR}/modbus.o.d ${OBJECTDIR}/interrupt_proc.o.d ${OBJECTDIR}/ramtron_drv.o.d ${OBJECTDIR}/Control.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/init.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/ramtron_drv.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/interupt.o.d ${OBJECTDIR}/modbus.o.d ${OBJECTDIR}/interrupt_proc.o.d ${OBJECTDIR}/ramtron_drv.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/init.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/ramtron_drv.o ${OBJECTDIR}/Control.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/init.o ${OBJECTDIR}/interupt.o ${OBJECTDIR}/modbus.o ${OBJECTDIR}/interrupt_proc.o ${OBJECTDIR}/ramtron_drv.o
 
 # Source Files
-SOURCEFILES=main.c init.c interupt.c modbus.c interrupt_proc.c ramtron_drv.c Control.c
+SOURCEFILES=main.c init.c interupt.c modbus.c interrupt_proc.c ramtron_drv.c
 
 
 
@@ -149,13 +149,6 @@ ${OBJECTDIR}/ramtron_drv.o: ramtron_drv.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/ramtron_drv.o.d" -o ${OBJECTDIR}/ramtron_drv.o ramtron_drv.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/ramtron_drv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/Control.o: Control.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/Control.o.d 
-	@${RM} ${OBJECTDIR}/Control.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/Control.o.d" -o ${OBJECTDIR}/Control.o Control.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
-	@${FIXDEPS} "${OBJECTDIR}/Control.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -198,13 +191,6 @@ ${OBJECTDIR}/ramtron_drv.o: ramtron_drv.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/ramtron_drv.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/ramtron_drv.o.d" -o ${OBJECTDIR}/ramtron_drv.o ramtron_drv.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
 	@${FIXDEPS} "${OBJECTDIR}/ramtron_drv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/Control.o: Control.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/Control.o.d 
-	@${RM} ${OBJECTDIR}/Control.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/Control.o.d" -o ${OBJECTDIR}/Control.o Control.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
-	@${FIXDEPS} "${OBJECTDIR}/Control.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 endif
 

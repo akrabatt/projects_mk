@@ -23,7 +23,6 @@ unsigned short U5_speed;
 
 
 unsigned short help_strobe;
-unsigned short help_reset;
 unsigned short help_load;
 
 float fpos, fcurr, fpres, resss; 

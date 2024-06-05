@@ -239,7 +239,6 @@ void conf_read (void)
         default: { U5_speed = 19200; break;}                     //19200
    }
 //    U1_speed = 57600; 
-    help_reset = 1;
     bconf = conf;
     bconf2 = conf2;    
 }
