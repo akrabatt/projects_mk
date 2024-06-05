@@ -33,15 +33,15 @@ int main(void)
     while (1)
     {
 
+        mbs(&usart3, 1);
+        stop_uart_tx_dma();
         mbm_03(&usart1, 1, 0, 28, &MOPS_arr[0], 115200); // мастер запрос
 //        mbm_03(&usart2, 2, 0, 28, &MOPS_arr[1], 5); // мастер запрос
 //        mbm_03(&usart4, 4, 0, 28, &MOPS_arr[2], 5); // мастер запрос
 //        mbm_03(&usart5, 5, 0, 28, &MOPS_arr[3], 5); // мастер запрос
-        mbs(&usart3, 1);
-        stop_uart_tx_dma();
         //    stop_uart_tx();
-        Modbus.Modbus_data.cyl_mask = 50;
-        Modbus_sw.Modbus_data.cyl_mask = swapshort(Modbus.Modbus_data.cyl_mask);
+//        Modbus.Modbus_data.cyl_mask = 50;
+//        Modbus_sw.Modbus_data.cyl_mask = swapshort(Modbus.Modbus_data.cyl_mask);
         //        LED3_TOGGLE;
 //        MOPS_arr[0].info[0] = swapshort(22);
 //        MOPS_arr[1].info[0] = swapshort(111);
