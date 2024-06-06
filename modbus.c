@@ -504,7 +504,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 			{
 				if (READ_MOPS)
 				{
-					mbs_03(usart, MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
+					mbs_03(usart, (unsigned short *)MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
 					break;
 				}
 				if (READ_)
@@ -771,7 +771,8 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 		for (cc = 0; cc < quant_03; cc++)
 		{
 			//				MUPS.main_area[cc+shift_03 - 200] = MUPS_swap.main_area[cc+shift_03 - 200];
-			buff_[cc] = swapshort(buff_sw[cc]);
+//			buff_[cc] = swapshort(buff_sw[cc]);
+			buff_[cc] = buff_sw[cc];
 			usart->mb_status.mbm_data_rdy = 1;
 		}
 		memcpy((void *)(dest), (const void *)(buff_), usart->in_buffer[2]);

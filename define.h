@@ -53,7 +53,7 @@ extern "C"
 
 // 
 #define START_READ_MOPS 3000
-#define END_READ_MOPS 4500
+#define END_READ_MOPS 4090
 
 #define START_WRITE_MOPS 3000
 #define END_WRITE_MOPS 4090
