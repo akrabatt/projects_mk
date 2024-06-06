@@ -63,7 +63,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #pragma config FDMTEN = OFF          // Deadman Timer Enable (Deadman Timer is disabled)
 
 // DEVCFG0
-#pragma config DEBUG = OFF            // Background Debugger Enable (Debugger is disabled)
+#pragma config DEBUG = ON            // Background Debugger Enable (Debugger is disabled)
 #pragma config JTAGEN = OFF           // JTAG Enable (JTAG Disabled)
 #pragma config ICESEL = ICS_PGx2      // ICE/ICD Comm Channel Select (Communicate on PGEC2/PGED2)
 #pragma config TRCEN = ON             // Trace Enable (Trace features in the CPU are enabled)
