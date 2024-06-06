@@ -51,6 +51,17 @@ extern "C"
 
     /////////////////		Modbus alowed areas 		//////////////////////////
 
+// 
+#define START_READ_MOPS 3000
+#define END_READ_MOPS 4500
+
+#define START_WRITE_MOPS 3000
+#define END_WRITE_MOPS 4090
+
+#define READ_MOPS ((start_reg >= START_READ_MOPS) && (last_reg <= END_READ_MOPS))    // 
+#define WRITE_MOPS ((start_reg >= START_WRITE_MOPS) && (last_reg <= END_WRITE_MOPS)) // 
+// 
+
 #define START_READ 2000 // ���������� ������� ������
 #define END_READ 2078   //
 

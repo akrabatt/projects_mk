@@ -171,24 +171,24 @@ extern "C"
 			{
 				struct
 				{
-					unsigned short info[3];				   // ����������������� �������: ��� �������, ������ ��������, ������ �����
-					unsigned short status[num_zones];	   // ������� ���
-					unsigned short hold_status[num_zones]; // ����������� ������� ���
-					unsigned short current[num_zones + 1]; // ���� ���
+					unsigned short info[3];				   
+					unsigned short status[num_zones];	   
+					unsigned short hold_status[num_zones]; 
+					unsigned short current[num_zones + 1]; 
 				};
-				unsigned short read[num_zones * 3 + 4]; // ������� ������
+				unsigned short read[num_zones * 3 + 4]; 
 			};
 			union
 			{
 				struct
 				{
-					unsigned short command[num_zones]; // ������� ���
-					unsigned short type[num_zones];	   // ���� ���: �������, �������� � �� � ��� ��
-					unsigned short limit1[num_zones];  // ������ ���� - ����� ��� ���� ���
-					unsigned short limit2[num_zones];  // ������ ����� - �������� ��� ���� ���
-					unsigned short limit3[num_zones];  // ������ �������� - ����� ��� ���� ���
-					unsigned short limit4[num_zones];  // ������ ����� - �� ��� ���� ���
-					unsigned short timer1[num_zones];  // ������������� ������� ���� ���
+					unsigned short command[num_zones]; 
+					unsigned short type[num_zones];	   
+					unsigned short limit1[num_zones];  
+					unsigned short limit2[num_zones];  
+					unsigned short limit3[num_zones];  
+					unsigned short limit4[num_zones];  
+					unsigned short timer1[num_zones];  
 					unsigned short timer2[num_zones];
 					unsigned short timer3[num_zones];
 					unsigned short timer4[num_zones];

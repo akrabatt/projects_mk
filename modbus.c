@@ -313,7 +313,7 @@ void stop_uart_tx_dma(void)
 	}
 }
 
-void close_mb(struct tag_usart *usart) 
+void close_mb(struct tag_usart *usart)
 {
 	usart->mb_status.modb_received = 0;
 	usart->mb_status.modb_receiving = 0;
@@ -495,13 +495,18 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 		{
 			answer_illegal_data_addr(usart);
 			break;
-		} 
+		}
 		default:
 		{
 			switch (usart->in_buffer[1])
 			{
 			case 0x03:
 			{
+				if (READ_MOPS)
+				{
+					mbs_03(usart, MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
+					break;
+				}
 				if (READ_)
 				{
 					mbs_03(usart, MB_swap.buf, (start_reg - START_READ), num_reg);
@@ -950,4 +955,3 @@ void mbm_16(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
 	}
 	}
 }
-
