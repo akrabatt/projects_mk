@@ -1,51 +1,44 @@
-#include "define.h"
+#include <xc.h>
+#include <sys/attribs.h> /* contains __ISR() Macros */
+// #include "extern.h"
 #include "global.h"
-
-extern void stop_uart_tx(void);                                     // стоп юсарт
-extern void stop_uart_tx_dma(void);                                 // стоп юсарт дма
-extern void mbs(struct tag_usart *usart, unsigned char mbs_addres); // модбас слэйв
-extern void close_mb(struct tag_usart *usart);                      // закрываем модбас
-extern void InitializeSystem(void);                                 // инициализация системы
-extern unsigned short swapshort(unsigned short data);               // свап
-
-/* объявляем экземпляр объединение для МОПСа */
-MOPS_swap MOPS_1_swap_init; // в это объединенине будут записываться данные для того чтоб их просвапить
-MOPS MOPS_1_init;           // в это объединения будут записываться данные после свапа
+#include "define.h"
 
 int main(void)
 {
-    InitializeSystem(); // инициализируем систему
+    InitializeSystem();
 
     help_reset = 1;
-    ENAB_RX5; // направление прередачи порта А на прием    == PORTFbits.RF2 = 0
-    ENAB_RX4; // тоже самое но для другого интерфейса
-    ENAB_RX3; // тоже самое но для другого интерфейса
-    ENAB_RX2; // тоже самое но для другого интерфейса
-    ENAB_RX1; // тоже самое но для другого интерфейса
-
-    /* режим работы usart  по ДМА */
-    usart5.mb_status.tx_mode = DMA_type;
+    ENAB_RX5;
+    ENAB_RX4;
+    //    TAP_ON = 1;
+    //    close_mbs ( &usart1);
+    //    usart5.mb_status.tx_mode = DMA_type;
     usart4.mb_status.tx_mode = DMA_type;
-    usart3.mb_status.tx_mode = DMA_type;
-    usart2.mb_status.tx_mode = DMA_type;
-    usart1.mb_status.tx_mode = DMA_type;
-    /* режим работы по прерываниям */
-    // usart1.mb_status.tx_mode = INT_type;
-    // usart4.mb_status.tx_mode = INT_type;
+    usart5.mb_status.tx_mode = INT_type;
+    usart5m.mb_status.tx_mode = INT_type;
+    //    usart4.mb_status.tx_mode = INT_type;
 
+    //    load_config ();
+    //    IC1CONbits.ON = 1;
+    //    IC6CONbits.ON = 1;
+    //    load_config ();
     while (1)
-    {
 
-        // mbs(&usart5, 1); // вызов modbus slave usart5 по 5му порту с 1-м адрессом
-        mbm_03(&usart1, 1, 0, 28, &MOPS_1_init, 8);
-        mbs(&usart4, 1);
-        mbs(&usart3, 1);
-        mbs(&usart2, 1);
-        mbs(&usart1, 1);
+    {
+        mbs(&usart4, 1); // порт  1
         stop_uart_tx_dma();
-        //    stop_uart_tx();
-        Modbus.Modbus_data.cyl_mask = 50;
-        Modbus_sw.Modbus_data.cyl_mask = swapshort(Modbus.Modbus_data.cyl_mask);
-        //        LED3_TOGGLE;
+        //    mbs (&usart4, 1);				//4
+        if (mbm_sync == 1)
+        {
+            // mbm_03 (&usart5, 1, 0, 28, (unsigned short * ) &MOPS_arr [1], 115200);
+            // mbm_03_str(&usart5m, 1, 0, 108, (unsigned short *)&MOPS_arr[1], 115200);
+            MM_control(&usart5m);
+            mbm_sync = 0;
+        }
+        stop_uart_tx();
+        PORTGbits.RG7 = help_strobe;
+
+        LED_8 = help_strobe;
     }
 }
