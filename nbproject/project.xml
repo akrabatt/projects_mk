@@ -3,8 +3,8 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>bench</name>
-            <creation-uuid>7dca2869-fb65-4f3f-a885-319d6cfb0264</creation-uuid>
+            <name>Stend_mm</name>
+            <creation-uuid>cfa2919d-cf0c-43e3-bb77-fb178ceb7519</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>

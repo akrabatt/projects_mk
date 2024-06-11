@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project>                                  
-  <executable name="dist/default/production/bench.X.production.elf">                 
+  <executable name="dist/default/debug/bench.X.debug.elf">                 
     <memory name="program">                 
       <units>bytes</units>                 
       <length>1049728</length>                 
-<<<<<<< HEAD
-      <used>40236</used>                     
-      <free>1009492</free>                     
-=======
-      <used>39336</used>                     
-      <free>1010392</free>                     
->>>>>>> origin/feature_mbm_03
+      <used>39364</used>                     
+      <free>1010364</free>                     
     </memory>                              
     <memory name="data">              
       <units>bytes</units>                 
-      <length>524288</length>                 
-      <used>12484</used>                     
-      <free>511804</free>                     
+      <length>525184</length>                 
+      <used>14276</used>                     
+      <free>510908</free>                     
     </memory>                              
   </executable>                            
 </project>                                 
