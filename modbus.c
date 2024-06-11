@@ -184,7 +184,6 @@ void start_tx_usart(struct tag_usart *usart)
 		usart->mb_status.modb_transmiting = 1;
 		usart->out_buffer_count = 0;
 		usart->mb_status.last_byte = 0;
-		/*		if (usart->port_type==485){}*/
 		ENAB_TX4;
 		IEC5bits.U4TXIE = 1; // enable TX interrupt
 	}
@@ -200,25 +199,63 @@ void start_tx_usart(struct tag_usart *usart)
 	}
 }
 
+void start_tx_usartm(struct tag_usartm *usart)
+{
+	if (usart == &usart4m)
+	{
+		IEC5bits.U4RXIE = 0; // disable RX interrupt
+		usart->mb_status.modb_transmiting = 1;
+		usart->out_buffer_count = 0;
+		usart->mb_status.last_byte = 0;
+		ENAB_TX4;
+		IEC5bits.U4TXIE = 1; // enable TX interrupt
+	}
+
+	if (usart == &usart5m)
+	{
+		IEC5bits.U5RXIE = 0; // disable RX interrupt
+		usart->mb_status.modb_transmiting = 1;
+		usart->out_buffer_count = 0;
+		usart->mb_status.last_byte = 0;
+		ENAB_TX5;
+		IEC5bits.U5TXIE = 1; // enable TX interrupt
+	}
+}
+
 void start_tx_usart_dma(struct tag_usart *usart, unsigned short count)
 {
-	if ((usart == &usart4) && (usart4.mb_status.tx_mode == DMA_type))
+	if (usart == &usart4)
 	{
 		ENAB_TX4;
 		memcpy((void *)(buf_tx4), (const void *)(usart->out_buffer), (count));
 		IEC5bits.U4RXIE = 0;
-		//        DMA_uni (&usart4, count, 1, 1);
+		DMA_uni(&usart4, count, 1, 1);
 		usart->mb_status.modb_transmiting = 1;
-		IEC5bits.U4TXIE = 0;						   // enable TX interrupt
-		DCH4SSA = _VirtToPhys(&buf_tx4);			   // transfer source physical address
-		DCH4DSA = _VirtToPhys((const void *)&U4TXREG); // transfer destination physical address
-		DCH4SSIZ = count;							   // source size at most 200 bytes
-		DCH4DSIZ = 1;								   // dst size is 1 byte
-		DCH4CSIZ = 1;								   // one byte per UART transfer request
-		DCH4CONbits.CHEN = 1;
-		DCH4ECONbits.CFORCE = 1;
+		IEC5bits.U4TXIE = 0; // enable TX interrupt
 	}
-	if ((usart == &usart5) && (usart5.mb_status.tx_mode == DMA_type))
+	if (usart == &usart5)
+	{
+		ENAB_TX5;
+		memcpy((void *)(buf_tx5), (const void *)(usart->out_buffer), (count));
+		IEC5bits.U5RXIE = 0;
+		usart->mb_status.modb_transmiting = 1;
+		DMA_uni(&usart5, count, 1, 1);
+		IEC5bits.U5TXIE = 0;
+	}
+}
+
+void start_tx_usart_dmam(struct tag_usartm *usart, unsigned short count)
+{
+	if (usart == &usart4m)
+	{
+		ENAB_TX4;
+		memcpy((void *)(buf_tx4), (const void *)(usart->out_buffer), (count));
+		IEC5bits.U4RXIE = 0;
+		DMA_uni(&usart4, count, 1, 1);
+		usart->mb_status.modb_transmiting = 1;
+		IEC5bits.U4TXIE = 0; // enable TX interrupt
+	}
+	if (usart == &usart5m)
 	{
 		ENAB_TX5;
 		memcpy((void *)(buf_tx5), (const void *)(usart->out_buffer), (count));
@@ -250,7 +287,7 @@ void stop_uart_tx(void)
 		}
 	}
 
-	if (usart5.mb_status.tx_mode == INT_type)
+	if ((usart5.mb_status.tx_mode == INT_type) || (usart5m.mb_status.tx_mode == INT_type))
 	{
 		if ((usart5.mb_status.modb_transmiting == 1) && (U5STAbits.TRMT) && (IEC5bits.U5TXIE == 0))
 		{
@@ -263,6 +300,18 @@ void stop_uart_tx(void)
 			ENAB_RX5;
 			IEC5bits.U5RXIE = 1; // disable RX interrupt
 		}
+		if ((usart5m.mb_status.modb_transmiting == 1) && (U5STAbits.TRMT) && (IEC5bits.U5TXIE == 0))
+		{
+			usart5m.mb_status.last_byte = 0;
+			usart5m.mb_status.modb_received = 0;
+			usart5m.mb_status.modb_receiving = 0;
+			usart5m.in_buffer_count = 0;
+			usart5m.mb_status.modb_transmiting = 0;
+			IFS5bits.U5RXIF = 0;
+			ENAB_RX5;
+			IEC5bits.U5RXIE = 1; // disable RX interrupt
+		}
+
 		if (U5STAbits.OERR || U5STAbits.FERR)
 		{
 			U5STAbits.OERR = 0;
@@ -313,7 +362,7 @@ void stop_uart_tx_dma(void)
 	}
 }
 
-void close_mb(struct tag_usart *usart)
+void close_mbs(struct tag_usart *usart) // �������� ��������� ������, ����� � ������
 {
 	usart->mb_status.modb_received = 0;
 	usart->mb_status.modb_receiving = 0;
@@ -330,7 +379,7 @@ void answer_illegal(struct tag_usart *usart, unsigned char illegal)
 	usart->out_buffer[0x04] = uchCRCHi;
 	usart->number_send = 5;
 }
-
+/* ��������� �������� ������ ������� */
 void answer_illegal_func(struct tag_usart *usart)
 {
 	answer_illegal(usart, 0x01);
@@ -343,7 +392,7 @@ void answer_illegal_func(struct tag_usart *usart)
 		start_tx_usart_dma(usart, 5);
 	}
 }
-
+/* ��������� �������� ������ ��������� */
 void answer_illegal_data_addr(struct tag_usart *usart)
 {
 	answer_illegal(usart, 0x02);
@@ -356,6 +405,7 @@ void answer_illegal_data_addr(struct tag_usart *usart)
 		start_tx_usart_dma(usart, 5);
 	}
 }
+/* ��������� �������� ������ ������ */
 void answer_illegal_data_val(struct tag_usart *usart)
 {
 	answer_illegal(usart, 0x03);
@@ -371,6 +421,7 @@ void answer_illegal_data_val(struct tag_usart *usart)
 
 unsigned short num3;
 
+/* ���������� ������� 3-� ������� */
 void mbs_03(struct tag_usart *_usart, unsigned short *source, unsigned short shift, unsigned short num)
 {
 	num3 = num;
@@ -393,6 +444,7 @@ void mbs_03(struct tag_usart *_usart, unsigned short *source, unsigned short shi
 		start_tx_usart(_usart);
 	}
 }
+/* ���������� ������� 16-� ������� */
 void mbs_10(struct tag_usart *_usart, unsigned short *source, unsigned short shift_uni, unsigned short num_uni)
 {
 
@@ -460,7 +512,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 		PIC_CRC16(usart->in_buffer, (usart->in_buffer_count)); // wrong CRC
 		if (uchCRCLo | uchCRCHi)
 		{
-			close_mb(usart);
+			close_mbs(usart);
 			return;
 		} // no actions
 
@@ -495,7 +547,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 		{
 			answer_illegal_data_addr(usart);
 			break;
-		}
+		} // ������ ���������
 		default:
 		{
 			switch (usart->in_buffer[1])
@@ -504,7 +556,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 			{
 				if (READ_MOPS)
 				{
-					mbs_03(usart, (unsigned short *)MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
+					mbs_03(usart, (unsigned short*) MOPS_arr, (start_reg - START_READ_MOPS), num_reg);
 					break;
 				}
 				if (READ_)
@@ -561,7 +613,7 @@ void mbs_uni(struct tag_usart *usart, unsigned char mbs_addres)
 		}
 		}
 	}
-	close_mb(usart);
+	close_mbs(usart);
 }
 
 void mbs(struct tag_usart *usart, unsigned char mbs_addres)
@@ -575,12 +627,12 @@ void mbs(struct tag_usart *usart, unsigned char mbs_addres)
 	{
 		mbs_uni(usart, mbs_addres);
 		return;
-	} //?????????? ?????? ?????????? ?????
+	} // correct address request
 	else
 	{
-		close_mb(usart);
+		close_mbs(usart);
 		return;
-	}
+	} // wrong address request
 }
 
 void mbm_timeout_control(struct tag_usart *usart)
@@ -629,44 +681,19 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 		}
 		switch (speed)
 		{
-		case 1200:
-		{
-			usart->mbm_timeout_counter = 1100;
-			break;
-		}
-		case 2400:
-		{
-			usart->mbm_timeout_counter = 1100;
-			break;
-		}
-		case 4800:
-		{
-			usart->mbm_timeout_counter = 660;
-			break;
-		}
-		case 9600:
-		{
-			usart->mbm_timeout_counter = 660;
-			break;
-		}
-		case 19200:
-		{
-			usart->mbm_timeout_counter = 660;
-			break;
-		}
 		case 38400:
 		{
-			usart->mbm_timeout_counter = 300;
+			usart->mbm_timeout_counter = 450;
 			break;
 		}
 		case 57600:
 		{
-			usart->mbm_timeout_counter = 500;
+			usart->mbm_timeout_counter = 300;
 			break;
 		}
 		case 115200:
 		{
-			usart->mbm_timeout_counter = 500;
+			usart->mbm_timeout_counter = 150;
 			break;
 		}
 		}
@@ -683,8 +710,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 		usart->number_send = 0x08;
 
 		usart->mb_status.tm_on = 1;
-		usart->mb_status.master_timeout_flag = 0;
-		usart->mb_status.mbm_data_rdy = 0;
+
 		usart->mb_status.modb_received = 0;
 		usart->mb_status.modb_receiving = 0;
 		usart->mb_status.byte_missing = 0;
@@ -700,8 +726,7 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 		else
 		{
 			start_tx_usart(usart);
-		}
-
+		} //	start_tx_usart_dma (usart, usart->number_send);
 		usart->mbm_status = 1;
 		break;
 	}
@@ -770,12 +795,10 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 		memcpy((void *)(buff_sw), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]);
 		for (cc = 0; cc < quant_03; cc++)
 		{
-			//				MUPS.main_area[cc+shift_03 - 200] = MUPS_swap.main_area[cc+shift_03 - 200];
-//			buff_[cc] = swapshort(buff_sw[cc]);
-			buff_[cc] = buff_sw[cc];
-			usart->mb_status.mbm_data_rdy = 1;
+			buff_[cc] = swapshort(buff_sw[cc]);
 		}
 		memcpy((void *)(dest), (const void *)(buff_), usart->in_buffer[2]);
+		usart->mb_status.mbm_data_rdy = 1;
 		usart->answer_count++;
 		usart->mb_status.master_error = 0;
 		usart->mb_status.master_start = 0;
@@ -786,6 +809,183 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 	{
 		usart->mb_status.master_start = 0;
 		usart->mbm_status = 0;
+		break;
+	}
+	}
+}
+
+void mbm_03_str(struct tag_usartm *usart, unsigned char mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short *dest, unsigned long speed)
+{
+	unsigned short cc;
+	unsigned short buff_[130];
+	unsigned short buff_sw[130];
+	if (!usart->mb_status.master_start)
+		return;
+	switch (usart->mbm_status03)
+	{
+	case 0:
+	{
+		if (usart == &usart1m)
+		{
+			uart1_init(speed);
+		}
+		if (usart == &usart2m)
+		{
+			uart2_init(speed);
+		}
+		if (usart == &usart3m)
+		{
+			uart3_init(speed);
+		}
+		if (usart == &usart4m)
+		{
+			uart4_init(speed);
+		}
+		if (usart == &usart5m)
+		{
+			uart5_init(speed);
+		}
+		switch (speed)
+		{
+		case 38400:
+		{
+			usart->mbm_timeout_counter = 450;
+			break;
+		}
+		case 57600:
+		{
+			usart->mbm_timeout_counter = 300;
+			break;
+		}
+		case 115200:
+		{
+			usart->mbm_timeout_counter = 150;
+			break;
+		}
+		}
+		usart->mbm_status03++;
+		break;
+	}
+
+	case 1:
+	{
+		usart->out_buffer[0x00] = mbm_adres;
+		usart->out_buffer[0x01] = 0x03;
+		usart->out_buffer[0x03] = shift_03 & 0x00FF;
+		usart->out_buffer[0x02] = (shift_03 >> 8) & 0x00FF;
+		usart->out_buffer[0x05] = quant_03 & 0x00FF;
+		usart->out_buffer[0x04] = (quant_03 >> 8) & 0x00FF;
+		PIC_CRC16(usart->out_buffer, 0x06);
+		usart->out_buffer[0x06] = uchCRCLo;
+		usart->out_buffer[0x07] = uchCRCHi;
+		usart->number_send = 0x08;
+
+		usart->mb_status.tm_on = 1;
+		usart->mb_status.master_timeout_flag = 0;
+		usart->mb_status.mbm_data_rdy = 0;
+		usart->mb_status.modb_received = 0;
+		usart->mb_status.modb_receiving = 0;
+		usart->mb_status.byte_missing = 0;
+		usart->mb_status.crc_error = 0;
+		usart->mb_status.device_error = 0;
+		usart->mb_status.coll_1 = 0;
+		usart->mb_status.coll_2 = 0;
+		usart->mb_status.coll_3 = 0;
+		if (usart->mb_status.tx_mode == DMA_type)
+		{
+			start_tx_usart_dmam(usart, usart->number_send);
+		}
+		else
+		{
+			start_tx_usartm(usart);
+		} //	start_tx_usart_dma (usart, usart->number_send);
+		usart->mbm_status03++;
+		break;
+	}
+
+	case 2:
+	{
+		if (usart->mbm_timeout_counter > 0)
+		{
+			usart->mbm_timeout_counter -= MASTER_TICK;
+		}
+		if (usart->mbm_timeout_counter == 0)
+		{
+			usart->mb_status.master_timeout_flag = 1;
+			usart->mbm03_tm_err++;
+			usart->mbm_status03 = 0;
+			usart->mb_status.master_start = 0;
+			break;
+		}
+		if (!usart->mb_status.modb_received)
+		{
+			return;
+		}
+
+		Modbus.buf[9]++;
+		//            usart->mb_status.tm_on = 0;
+		//            usart->mbm_timeout_counter = 0;
+
+		if (usart->in_buffer[1] == 0x83) // modbus collisions
+		{
+			if (usart->in_buffer[2] == 0x01)
+			{
+				usart->mb_status.coll_1 = 1;
+				usart->mbm03_c01_err++;
+				usart->mb_status.master_start = 0;
+				usart->mbm_status03 = 0;
+				break;
+			}
+			if (usart->in_buffer[2] == 0x02)
+			{
+				usart->mb_status.coll_2 = 1;
+				usart->mbm03_c02_err++;
+				usart->mb_status.master_start = 0;
+				usart->mbm_status03 = 0;
+				break;
+			}
+			if (usart->in_buffer[2] == 0x03)
+			{
+				usart->mb_status.coll_3 = 1;
+				usart->mbm03_c03_err++;
+				usart->mb_status.master_start = 0;
+				usart->mbm_status03 = 0;
+				break;
+			}
+		}
+		//			if (usart->in_buffer_count!=(quant_03*2+5))									//byte missing
+		//				{usart->mbm_status=0; usart->mb_status.byte_missing=1; usart->mbm_err++; usart->mb_status.master_start=0; break;}
+		//			if (usart->in_buffer[0]!=usart->out_buffer[0])								//wrong device address
+		//				{usart->mbm_status03 = 0; usart->mb_status.device_error = 1; usart->mbm03_crc_err++; usart->mb_status.master_start = 0; break;}
+
+		PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));
+		if (uchCRCLo | uchCRCHi)
+		{
+			usart->mbm_status03 = 0;
+			usart->mb_status.crc_error = 1;
+			usart->mbm03_crc_err++;
+			usart->mb_status.master_start = 0;
+			break;
+		} // wrong crc
+
+		memcpy((void *)(buff_sw), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]);
+		for (cc = 0; cc < quant_03; cc++)
+		{
+			buff_[cc] = swapshort(buff_sw[cc]);
+		}
+		memcpy((void *)(dest), (const void *)(buff_), usart->in_buffer[2]);
+		usart->mb_status.mbm_data_rdy = 1;
+		usart->answer_count++;
+		usart->mb_status.master_error = 0;
+		usart->mb_status.master_start = 0;
+		usart->mbm_status03 = 0;
+		break;
+	}
+
+	default:
+	{
+		usart->mb_status.master_start = 0;
+		usart->mbm_status03 = 0;
 		break;
 	}
 	}
@@ -956,3 +1156,7 @@ void mbm_16(struct tag_usart *usart, unsigned short mbm_adres, unsigned short sh
 	}
 	}
 }
+
+/* *****************************************************************************
+ End of File
+ */

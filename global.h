@@ -20,9 +20,8 @@ extern "C"
 	unsigned short U5_speed;
 
 	unsigned short help_strobe;
+	unsigned short help_reset;
 	unsigned short help_load;
-
-	float fpos, fcurr, fpres, resss;
 
 	union tag_direct
 	{
@@ -162,6 +161,61 @@ extern "C"
 			unsigned : 10;					  // ��������� ���� (19-32)
 		} mb_status;
 	} usart1, usart2, usart3, usart4, usart5;
+
+	struct tag_usartm
+	{
+		unsigned char out_buffer[OUT_SIZE]; // ������ ������ ��� ��������� ������ (������������ ������).
+		unsigned char in_buffer[IN_SIZE];	// ������ ������ ��� �������� ������ (����������� ������).
+		unsigned short out_buffer_count;	// ������� ����� ���� � ������ ��������� ������.
+		unsigned short in_buffer_count;		// ������� ����� ���� � ������ �������� ������.
+		unsigned short in_buffer_count2;	// �������������� ������� ����� ���� � ������ �������� ������ (������ �������).
+		unsigned short number_send;			// ���������� ���� ��� ��������.
+		unsigned short mbm_status03;		// ������ MODBUS.
+		unsigned short mbm_status16;		// ������ MODBUS 16 �������.
+		unsigned short mbm03_tm_err;		// ������� ������ �������� ������� 3
+		unsigned short mbm03_c01_err;		// ������� ������ �������� 1 ������� 3
+		unsigned short mbm03_c02_err;		// ������� ������ �������� 2 ������� 3
+		unsigned short mbm03_c03_err;		// ������� ������ �������� 3 ������� 3
+		unsigned short mbm03_crc_err;		// ������� ������ CRC16 ������� 3
+		unsigned short mbm16_tm_err;		// ������� ������ �������� ������� 16
+		unsigned short mbm16_c01_err;		// ������� ������ �������� 1 ������� 16
+		unsigned short mbm16_c02_err;		// ������� ������ �������� 2 ������� 16
+		unsigned short mbm16_c03_err;		// ������� ������ �������� 3 ������� 16
+		unsigned short mbm16_crc_err;		// ������� ������ CRC16 ������� 16
+		unsigned short repeat_05;			// ������ MODBUS 05.
+		unsigned short repeat_05_;			// ������ ������ MODBUS 05.
+		unsigned short mbm_timeout_counter; // ����-��� ������� MODBUS. //
+		unsigned short answer_count;		//
+
+		struct stag_mb_statusBITS
+		{
+			unsigned modb_mode : 1;			  // 1 ��� ��� ������ MODBUS
+			unsigned term_mode : 1;			  // 2 ��� ��� ������ ���������
+			unsigned modb_received : 1;		  // 3 ���� ��������� MODBUS
+			unsigned modb_transmited : 1;	  // 4 ���� �������� MODBUS
+			unsigned modb_receiving : 1;	  // 5 ���� ������ MODBUS
+			unsigned modb_transmiting : 1;	  // 6 ���� �������� MODBUS
+			unsigned tx_mode : 1;			  // 7 ����� �������� (USART TX mode) ���������� ��� ���
+			unsigned mbm_data_rdy : 1;		  // 8 ���������� ������ � ��������
+			unsigned master_error : 1;		  // 9 ������ �������
+			unsigned bussy1 : 1;			  // 10 ��������� ����
+			unsigned bussy2 : 1;			  // 11 ��������� ����
+			unsigned last_byte : 1;			  // 12 ���� ���������� �����
+			unsigned byte_missing : 1;		  // 13 ���������� �����
+			unsigned coll_1 : 1;			  // 14 �������� 1
+			unsigned coll_2 : 1;			  // 15 �������� 2
+			unsigned coll_3 : 1;			  // 16 �������� 3
+			unsigned start16 : 1;			  // 17 ������ ��������
+			unsigned master_start : 1;		  // 18 ������ �������
+			unsigned master_timeout_flag : 1; // 19 ���� ������ ����-����
+			unsigned tm_on : 1;				  // 20 ��������� �������
+			unsigned device_error : 1;		  // 21 ������ ����������
+			unsigned crc_error : 1;			  // 22 ������ CRC
+			unsigned : 10;					  // ��������� ���� (23-32)
+		} mb_status;
+	} usart1m, usart2m, usart3m, usart4m, usart5m;
+
+	unsigned short mbm_sync;
 
 	union tag_mops
 	{
@@ -448,7 +502,3 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-
-/* *****************************************************************************
- End of File
- */

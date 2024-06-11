@@ -20,6 +20,15 @@ void TInterrupt_(struct tag_usart *usart)
     }
 }
 
+void TInterrupt_m(struct tag_usartm *usart)
+{
+    if (usart->mb_status.modb_receiving)
+    {
+        usart->mb_status.modb_received = 1;
+        usart->mb_status.modb_receiving = 0;
+    }
+}
+
 void T1Interrupt_(struct tag_usart *usart)
 {
     T1CONbits.TON = 0;
@@ -192,7 +201,6 @@ void DMA4_init(void)
 {
     DMACONSET = 0x00008000; // enable the DMA controller
     DCH4CON = 0x2;          // channel 1 off, priority 2
-
     DCH4ECONbits.CHSIRQ = _UART4_TX_VECTOR;
     DCH4ECONbits.SIRQEN = 1;
     DCH4SSA = _VirtToPhys(&buf_tx4);               // transfer source physical address
@@ -354,6 +362,7 @@ void conf_read(void)
     } // 19200
     }
     //    U1_speed = 57600;
+    help_reset = 1;
     bconf = conf;
     bconf2 = conf2;
 }
@@ -545,18 +554,21 @@ void counters(void)
         _1000msec++;
 
         Modbus.buf[0]++;
-        Modbus.buf[1] = usart5.mbm_status;
-        Modbus.buf[2] = usart5.mbm_err;
-        Modbus.buf[3] = usart5.mbm_timeout_counter;
-        Modbus.buf[4] = usart5.mb_status.master_start;
-        Modbus.buf[5] = usart5.mb_status.tm_on;
-        Modbus.buf[6] = usart5.mb_status.master_timeout_flag;
-        Modbus.buf[7] = usart5.in_buffer_count;
-        Modbus.buf[8] = usart5.mb_status.modb_received;
+        Modbus.buf[1] = usart5m.mbm_status03;
+        Modbus.buf[2] = usart5m.mbm03_tm_err;
+        Modbus.buf[3] = usart5m.mbm_timeout_counter;
+        Modbus.buf[4] = usart5m.mb_status.master_start;
+        Modbus.buf[5] = usart5m.mb_status.tm_on;
+        Modbus.buf[6] = usart5m.mb_status.master_timeout_flag;
+        Modbus.buf[7] = usart5m.in_buffer_count;
+        Modbus.buf[8] = usart5m.mb_status.modb_received;
 
         Modbus.buf[10] = MOPS_arr[1].status[0];
         Modbus.buf[11] = MOPS_arr[1].status[1];
         Modbus.buf[12] = MOPS_arr[1].status[2];
+        Modbus.buf[14] = MOPS_arr[1].current[0];
+        Modbus.buf[15] = MOPS_arr[1].current[1];
+        Modbus.buf[16] = MOPS_arr[1].current[2];
 
         Modbus_sw.buf[0] = swapshort(Modbus.buf[0]);
         Modbus_sw.buf[1] = swapshort(Modbus.buf[1]);
@@ -572,14 +584,19 @@ void counters(void)
         Modbus_sw.buf[11] = swapshort(Modbus.buf[11]);
         Modbus_sw.buf[12] = swapshort(Modbus.buf[12]);
         Modbus_sw.buf[13] = swapshort(Modbus.buf[13]);
-
+        Modbus_sw.buf[14] = swapshort(Modbus.buf[14]);
+        Modbus_sw.buf[15] = swapshort(Modbus.buf[15]);
+        Modbus_sw.buf[16] = swapshort(Modbus.buf[16]);
+        
+        
+        
         if (_100msec >= 3)
         {
             _100msec = 0;
             help_strobe ^= 1;
             if (master_start_del == 1)
             {
-                usart5.mb_status.master_start = 1;
+                usart5m.mb_status.master_start = 1;
             }
         }
 

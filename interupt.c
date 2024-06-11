@@ -34,44 +34,49 @@ void __ISR_AT_VECTOR(_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)
 void __ISR_AT_VECTOR(_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)
 {
 	T5CONbits.TON = 0;
-	TInterrupt_(&usart5);
+	TInterrupt_m(&usart5m);
 	IFS0bits.T5IF = 0;
 }
+
+// void __ISR_AT_VECTOR (_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)   {Timer6Interrupt(); IFS0bits.T6IF = 0;}
+
+// void __ISR_AT_VECTOR (_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void)   {Timer7Interrupt(); IFS1bits.T7IF = 0;}
 
 void __ISR_AT_VECTOR(_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
 {
 	IFS1bits.T9IF = 0;
 	counters();
-	mbm_timeout_control(&usart4);
-	mbm_timeout_control(&usart5);
+	mbm_sync = 1;
+	//    mbm_timeout_control(&usart4);
+	//    mbm_timeout_control(&usart5);
 }
 
 void __ISR_AT_VECTOR(_UART5_RX_VECTOR, IPL4SRS) U5RXInterrupt(void)
 {
 	IFS5bits.U5RXIF = 0;
-	usart5.mb_status.modb_receiving = 1;
+	usart5m.mb_status.modb_receiving = 1;
 	while (U5STAbits.URXDA)
 	{
-		usart5.in_buffer[usart5.in_buffer_count++] = U5RXREG;
+		usart5m.in_buffer[usart5m.in_buffer_count++] = U5RXREG;
 	}
-	if (usart5.in_buffer_count >= IN_SIZE1)
+	if (usart5m.in_buffer_count >= IN_SIZE1)
 	{
-		usart5.mb_status.modb_received = 1;
-		usart5.mb_status.modb_receiving = 0;
+		usart5m.mb_status.modb_received = 1;
+		usart5m.mb_status.modb_receiving = 0;
 	}
-	tmr5_init(frame_delay_1, 1, 1);
+	tmr_5_init(frame_delay_1, 1, 1);
 	IFS5bits.U5RXIF = 0;
 }
 
 void __ISR_AT_VECTOR(_UART5_TX_VECTOR, IPL4SRS) U5TXInterrupt(void)
 {
 	IFS5bits.U5TXIF = 0;
-	while ((!U5STAbits.UTXBF) && (!usart5.mb_status.last_byte)) // copy if buff  isn't full and byte is not last
+	while ((!U5STAbits.UTXBF) && (!usart5m.mb_status.last_byte)) // copy if buff  isn't full and byte is not last
 	{
-		U5TXREG = usart5.out_buffer[usart5.out_buffer_count++];
-		if (usart5.out_buffer_count >= (usart5.number_send))
+		U5TXREG = usart5m.out_buffer[usart5m.out_buffer_count++];
+		if (usart5m.out_buffer_count >= (usart5m.number_send))
 		{
-			usart5.mb_status.last_byte = 1;
+			usart5m.mb_status.last_byte = 1;
 			IEC5bits.U5TXIE = 0;
 		}
 	}
@@ -91,7 +96,7 @@ void __ISR_AT_VECTOR(_UART4_RX_VECTOR, IPL4SRS) U4RXInterrupt(void)
 		usart4.mb_status.modb_received = 1;
 		usart4.mb_status.modb_receiving = 0;
 	}
-	tmr4_init(frame_delay_1, 1, 1);
+	tmr_4_init(frame_delay_1, 1, 1);
 	IFS5bits.U4RXIF = 0;
 }
 

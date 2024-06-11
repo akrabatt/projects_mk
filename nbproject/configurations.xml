@@ -22,6 +22,7 @@
       <itemPath>modbus.c</itemPath>
       <itemPath>interrupt_proc.c</itemPath>
       <itemPath>ramtron_drv.c</itemPath>
+      <itemPath>Control.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
