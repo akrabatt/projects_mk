@@ -973,7 +973,7 @@ void mbm_03_str(struct tag_usartm *usart, unsigned char mbm_adres, unsigned shor
 		{
 			buff_[cc] = swapshort(buff_sw[cc]);
 		}
-		memcpy((void *)(dest), (const void *)(buff_), usart->in_buffer[2]);
+		memcpy((void *)(dest), (const void *)(buff_sw), usart->in_buffer[2]);
 		usart->mb_status.mbm_data_rdy = 1;
 		usart->answer_count++;
 		usart->mb_status.master_error = 0;
