@@ -4,13 +4,8 @@
     <memory name="program">                 
       <units>bytes</units>                 
       <length>1049728</length>                 
-<<<<<<< HEAD
-      <used>40236</used>                     
-      <free>1009492</free>                     
-=======
       <used>39336</used>                     
       <free>1010392</free>                     
->>>>>>> origin/feature_mbm_03
     </memory>                              
     <memory name="data">              
       <units>bytes</units>                 

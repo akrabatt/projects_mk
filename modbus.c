@@ -731,22 +731,6 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 		break;
 	}
 
-<<<<<<< HEAD
-        memcpy((void *)(buff_sw), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]);
-        for (cc = 0; cc < quant_03; cc++)
-        {
-            //				MUPS.main_area[cc+shift_03 - 200] = MUPS_swap.main_area[cc+shift_03 - 200];
-            buff_[cc] = swapshort(buff_sw[cc]);
-            usart->mb_status.mbm_data_rdy = 1;
-        }
-        memcpy((void *)(dest), (const void *)(buff_), usart->in_buffer[2]);
-        //         memcpy((void *)(lockal_buff_swap), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]); // если все нормально, то начинаем
-        //         for (cc = 0; cc < quant_03; cc++)
-        //         {
-        //             lockal_buff[cc + shift_03] = swapshort(lockal_buff_swap[cc + shift_03]);
-        //         }
-        //         memgit cpy((void *)(dest), (const void *)(lockal_buff), lockal_buff[2]); // если все нормально, то начинаем
-=======
 	case 1:
 	{
 		if (usart->mb_status.master_timeout_flag)
@@ -807,7 +791,6 @@ void mbm_03(struct tag_usart *usart, unsigned char mbm_adres, unsigned short shi
 			usart->mb_status.master_start = 0;
 			break;
 		} // wrong crc
->>>>>>> origin/feature_mbm_03
 
 		memcpy((void *)(buff_sw), (const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]);
 		for (cc = 0; cc < quant_03; cc++)
