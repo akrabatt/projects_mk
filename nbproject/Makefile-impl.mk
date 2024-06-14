@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=bench.X
+PROJECTNAME=Stend_mm.X
 
 # Active Configuration
 DEFAULTCONF=default

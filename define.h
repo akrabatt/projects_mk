@@ -53,20 +53,10 @@ extern "C" {
     
 /////////////////		Modbus alowed areas 		//////////////////////////
 
-#define  START_READ_MOPS				3000			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-#define  END_READ_MOPS					4090			// 
-
-#define  START_WRITE_MOPS				3000			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-#define  END_WRITE_MOPS					4090			// 
-
-#define  READ_MOPS			((start_reg>=START_READ_MOPS)&&(last_reg<=END_READ_MOPS))			// ??????? ?????? ????????? ?????
-#define  WRITE_MOPS		((start_reg>=START_WRITE_MOPS)&&(last_reg<=END_WRITE_MOPS))		// ??????? ?????? ????????????
-
-
-#define  START_READ					2000			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+#define  START_READ					2000			// отладочгая область чтение
 #define  END_READ					2078			// 
 
-#define  START_WRITE				2054			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+#define  START_WRITE				2054			// отладочгая область запись
 #define  END_WRITE					2078			// 
 
 #define  READ_			((start_reg>=START_READ)&&(last_reg<=END_READ))			// ??????? ?????? ????????? ?????
@@ -91,7 +81,7 @@ extern "C" {
 #define  START_CONF_READ				500			// config area - setting of engine parameters
 #define  END_CONF_READ  				696			// 
 #define  START_CONF_WRITE				500			//
-#define  END_CONF_WRITE					696			// 
+#define  END_CONF_WRITE					520			// 
 
 #define  CONF_READ_             ((start_reg >= START_CONF_READ) && (last_reg <= END_CONF_READ))	
 #define  CONF_WRITE_            ((start_reg >= START_CONF_WRITE) && (last_reg <= END_CONF_WRITE))
@@ -104,16 +94,16 @@ extern "C" {
 #define  MODBUS_READ_           ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))	
 #define  MODBUS_WRITE_		((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
     
-#define  START_MB_DIAGN_READ				200			// config area - setting of engine parameters
-#define  END_MB_DIAGN_READ  				312			// 
-#define  START_MB_DIAGN_WRITE				200			//
-#define  END_MB_DIAGN_WRITE				312			// 
+#define  START_MB_DIAGN_READ				3000			// config area - setting of engine parameters
+#define  END_MB_DIAGN_READ  				4200			// 
+#define  START_MB_DIAGN_WRITE				3000			//
+#define  END_MB_DIAGN_WRITE                 4200			// 
 
 #define  MB_DIAGN_READ_           ((start_reg >= START_MB_DIAGN_READ) && (last_reg <= END_MB_DIAGN_READ))	
 #define  MB_DIAGN_WRITE_          ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))    
     
-#define  RAMTRON_START              	64
-#define  RAMTRON_START_CONFIG		512
+#define  RAMTRON_START              64
+#define  RAMTRON_START_CONFIG		1024
     
 #define  COORD_MAX			MB_conf.CV_pos_max
 #define  COORD_MIN			MB_conf.CV_pos_min
@@ -147,97 +137,97 @@ extern "C" {
     
     ////////////////	End Modbus alowed area 	/////////////////////
 
-#define  STROBE		PORTGbits.RG7			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
+#define  STROBE		PORTGbits.RG7			// изменено для платы 586-хх
     
-#define  LED_AO		PORTGbits.RG12			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 96
-#define  LED_AO_ON	PORTG = LATG | 0x1000		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
-#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
+#define  LED_AO		PORTGbits.RG12			// изменено для платы 586-хх pin 96
+#define  LED_AO_ON	PORTG = LATG | 0x1000		// изменено для платы 586-хх
+#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		// изменено для платы 586-хх
     
-#define  LED_IGN	PORTGbits.RG13			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 97
-#define  LED_IGN_ON	PORTG = LATG | 0x2000		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
-#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
+#define  LED_IGN	PORTGbits.RG13			// изменено для платы 586-хх pin 97
+#define  LED_IGN_ON	PORTG = LATG | 0x2000		// изменено для платы 586-хх
+#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		// изменено для платы 586-хх
      
-#define  LED_STOP	PORTEbits.RE4			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 100
-#define  LED_STOP_ON	PORTE = LATE | 0x0010		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
-#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ    
+#define  LED_STOP	PORTEbits.RE4			// изменено для платы 586-хх pin 100
+#define  LED_STOP_ON	PORTE = LATE | 0x0010		// изменено для платы 586-хх
+#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		// изменено для платы 586-хх    
 
-#define  LED_SYNC	PORTEbits.RE3			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 99
-#define  LED_SYNC_ON	PORTE = LATE | 0x0008		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
-#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ    
+#define  LED_SYNC	PORTEbits.RE3			// изменено для платы 586-хх pin 99
+#define  LED_SYNC_ON	PORTE = LATE | 0x0008		// изменено для платы 586-хх
+#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		// изменено для платы 586-хх    
 
-#define  LED_WIGN	PORTEbits.RE2			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 98
-#define  LED_WIGN_ON	PORTG = LATG | 0x0004		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ   
-#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ   
+#define  LED_WIGN	PORTEbits.RE2			// изменено для платы 586-хх pin 98
+#define  LED_WIGN_ON	PORTG = LATG | 0x0004		// изменено для платы 586-хх   
+#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		// изменено для платы 586-хх   
 
-#define  LED_8		PORTEbits.RE0			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 91
-#define  LED_8_ON	PORTE = LATE | 0x0001		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
-#define  LED_8_OFF	PORTE = LATE & 0xFFFE		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ        
+#define  LED_8		PORTEbits.RE0			// изменено для платы 586-хх pin 91
+#define  LED_8_ON	PORTE = LATE | 0x0001		// изменено для платы 586-хх
+#define  LED_8_OFF	PORTE = LATE & 0xFFFE		// изменено для платы 586-хх        
  
-#define  LED_7		PORTEbits.RE1			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 94
-#define  LED_7_ON	PORTE = LATE | 0x0002		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ   
-#define  LED_7_OFF	PORTE = LATE & 0xFFFD		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ   
+#define  LED_7		PORTEbits.RE1			// изменено для платы 586-хх pin 94
+#define  LED_7_ON	PORTE = LATE | 0x0002		// изменено для платы 586-хх   
+#define  LED_7_OFF	PORTE = LATE & 0xFFFD		// изменено для платы 586-хх   
     
     
-#define  LED9		PORTDbits.RD15			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 48
-#define  LED9_ON	PORTD = LATD | 0x8000		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ   
-#define  LED9_OFF	PORTD = LATD & 0x7FFF		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ       
+#define  LED9		PORTDbits.RD15			// изменено для платы 586-хх pin 48
+#define  LED9_ON	PORTD = LATD | 0x8000		// изменено для платы 586-хх   
+#define  LED9_OFF	PORTD = LATD & 0x7FFF		// изменено для платы 586-хх       
     
-#define  LED10		PORTAbits.RA2			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 59
-#define  LED10_ON	PORTA = LATA | 0x0004		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ   
-#define  LED10_OFF	PORTA = LATA & 0xFFFB		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ       
+#define  LED10		PORTAbits.RA2			// изменено для платы 586-хх pin 59
+#define  LED10_ON	PORTA = LATA | 0x0004		// изменено для платы 586-хх   
+#define  LED10_OFF	PORTA = LATA & 0xFFFB		// изменено для платы 586-хх       
 
-#define  DO_2		PORTAbits.RA3			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 60
-#define  DO_2_ON	PORTA = LATA | 0x0008		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ   
-#define  DO_2_OFF	PORTA = LATA & 0xFFF7		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ       
+#define  DO_2		PORTAbits.RA3			// изменено для платы 606-хх pin 60
+#define  DO_2_ON	PORTA = LATA | 0x0008		// изменено для платы 606-хх   
+#define  DO_2_OFF	PORTA = LATA & 0xFFF7		// изменено для платы 606-хх       
 
-#define  DO_1		PORTAbits.RA4			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 61
-#define  DO_1_ON	PORTA = LATA | 0x0010		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ   
-#define  DO_1_OFF	PORTA = LATA & 0xFFEF		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ   
+#define  DO_1		PORTAbits.RA4			// изменено для платы 606-хх pin 61
+#define  DO_1_ON	PORTA = LATA | 0x0010		// изменено для платы 606-хх   
+#define  DO_1_OFF	PORTA = LATA & 0xFFEF		// изменено для платы 606-хх   
 
-#define  IGN_ON		PORTDbits.RD5			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 82
+#define  IGN_ON		PORTDbits.RD5			// изменено для платы 606-хх pin 82
 
-#define  TAP_ON		PORTC = LATC | 0x2000		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 72
-#define  TAP_OFF	PORTC = LATC & 0xDFFF		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 72
+#define  TAP_ON		PORTC = LATC | 0x2000		// изменено для платы 586-хх pin 72
+#define  TAP_OFF	PORTC = LATC & 0xDFFF		// изменено для платы 586-хх pin 72
 
-#define  IGN_1		PORTDbits.RD9			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 68
-#define  IGN_2		PORTDbits.RD2			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 77
-#define  IGN_3		PORTDbits.RD10			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 69
-#define  IGN_4		PORTDbits.RD3			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 78
-#define  IGN_5		PORTDbits.RD11			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 70
-#define  IGN_6		PORTDbits.RD12			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 79
-#define  IGN_7		PORTDbits.RD0			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 71
-#define  IGN_8		PORTDbits.RD13			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 80
-#define  IGN_9		PORTDbits.RD1			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 76
-#define  IGN_10		PORTDbits.RD4			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 81
+#define  IGN_1		PORTDbits.RD9			// изменено для платы 586-хх pin 68
+#define  IGN_2		PORTDbits.RD2			// изменено для платы 586-хх pin 77
+#define  IGN_3		PORTDbits.RD10			// изменено для платы 586-хх pin 69
+#define  IGN_4		PORTDbits.RD3			// изменено для платы 586-хх pin 78
+#define  IGN_5		PORTDbits.RD11			// изменено для платы 586-хх pin 70
+#define  IGN_6		PORTDbits.RD12			// изменено для платы 586-хх pin 79
+#define  IGN_7		PORTDbits.RD0			// изменено для платы 586-хх pin 71
+#define  IGN_8		PORTDbits.RD13			// изменено для платы 586-хх pin 80
+#define  IGN_9		PORTDbits.RD1			// изменено для платы 586-хх pin 76
+#define  IGN_10		PORTDbits.RD4			// изменено для платы 586-хх pin 81
 
-#define  ON_IGN_1       PORTD = LATD | 0x0200		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 68
-#define  ON_IGN_2       PORTD = LATD | 0x0004		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 77
-#define  ON_IGN_3       PORTD = LATD | 0x0400		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 69
-#define  ON_IGN_4       PORTD = LATD | 0x0008		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 78
-#define  ON_IGN_5       PORTD = LATD | 0x0800		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 70
-#define  ON_IGN_6       PORTD = LATD | 0x1000		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 79
-#define  ON_IGN_7       PORTD = LATD | 0x0001		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 71
-#define  ON_IGN_8       PORTD = LATD | 0x2000		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 80
-#define  ON_IGN_9       PORTD = LATD | 0x0002		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 76
-#define  ON_IGN_10      PORTD = LATD | 0x0010		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 81
+#define  ON_IGN_1       PORTD = LATD | 0x0200		// изменено для платы 586-хх pin 68
+#define  ON_IGN_2       PORTD = LATD | 0x0004		// изменено для платы 586-хх pin 77
+#define  ON_IGN_3       PORTD = LATD | 0x0400		// изменено для платы 586-хх pin 69
+#define  ON_IGN_4       PORTD = LATD | 0x0008		// изменено для платы 586-хх pin 78
+#define  ON_IGN_5       PORTD = LATD | 0x0800		// изменено для платы 586-хх pin 70
+#define  ON_IGN_6       PORTD = LATD | 0x1000		// изменено для платы 586-хх pin 79
+#define  ON_IGN_7       PORTD = LATD | 0x0001		// изменено для платы 586-хх pin 71
+#define  ON_IGN_8       PORTD = LATD | 0x2000		// изменено для платы 586-хх pin 80
+#define  ON_IGN_9       PORTD = LATD | 0x0002		// изменено для платы 586-хх pin 76
+#define  ON_IGN_10      PORTD = LATD | 0x0010		// изменено для платы 586-хх pin 81
     
-#define  IGN_RESET      PORTD = LATD & 0xC1E0		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
-#define  MAX_CYL_NUM    10				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ
+#define  IGN_RESET      PORTD = LATD & 0xC1E0		// изменено для платы 586-хх
+#define  MAX_CYL_NUM    10				// изменено для платы 586-хх
 
-#define  CTRL1      PORTGbits.RG0			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 88
-#define  CTRL2      PORTGbits.RG1			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 87
+#define  CTRL1      PORTGbits.RG0			// изменено для платы 586-хх pin 88
+#define  CTRL2      PORTGbits.RG1			// изменено для платы 586-хх pin 87
 
-#define  CONF1		PORTCbits.RC2			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 7 
-#define  CONF2		PORTCbits.RC3			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 8
-#define  CONF3		PORTCbits.RC4			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 9
-#define  CONF4		PORTGbits.RG6			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 10 
-#define  CONF5		PORTEbits.RE5			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 3
-#define  CONF6		PORTEbits.RE6			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 4 
-#define  CONF7		PORTEbits.RE7			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 5
-#define  CONF8		PORTCbits.RC1			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 586-пїЅпїЅ pin 6
+#define  CONF1		PORTCbits.RC2			// изменено для платы 606-хх pin 7 
+#define  CONF2		PORTCbits.RC3			// изменено для платы 606-хх pin 8
+#define  CONF3		PORTCbits.RC4			// изменено для платы 606-хх pin 9
+#define  CONF4		PORTGbits.RG6			// изменено для платы 606-хх pin 10 
+#define  CONF5		PORTEbits.RE5			// изменено для платы 586-хх pin 3
+#define  CONF6		PORTEbits.RE6			// изменено для платы 586-хх pin 4 
+#define  CONF7		PORTEbits.RE7			// изменено для платы 586-хх pin 5
+#define  CONF8		PORTCbits.RC1			// изменено для платы 586-хх pin 6
 
-#define  DI_1		PORTAbits.RA5 			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 2
-#define  DI_2		PORTGbits.RG15			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 606-пїЅпїЅ pin 1
+#define  DI_1		PORTAbits.RA5 			// изменено для платы 606-хх pin 2
+#define  DI_2		PORTGbits.RG15			// изменено для платы 606-хх pin 1
     
 //  Modbus data define
 /*    */
