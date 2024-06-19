@@ -413,7 +413,7 @@ void mbs_10 (struct tag_usart * _usart, unsigned short * source, unsigned short 
             MB.input  [ii+shift_uni] = _bswapw(MB.input  [ii+shift_uni]);
 			}
 		}
-    if (source == Stand_sw.buf) 
+    if (source == Stand_sw.buf)
         {
         memcpy ((void *) (Stand_sw.buf + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni*2));
         for (ii=0; ii<num_uni; ii++)        

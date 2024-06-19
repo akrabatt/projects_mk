@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project>                                  
-  <executable name="dist/default/production/bench.X.production.elf">                 
+  <executable name="dist/default/debug/bench.X.debug.elf">                 
     <memory name="program">                 
       <units>bytes</units>                 
       <length>1049728</length>                 
-      <used>38552</used>                     
-      <free>1011176</free>                     
+      <used>38580</used>                     
+      <free>1011148</free>                     
     </memory>                              
     <memory name="data">              
       <units>bytes</units>                 
-      <length>524288</length>                 
-      <used>15120</used>                     
-      <free>509168</free>                     
+      <length>525184</length>                 
+      <used>16912</used>                     
+      <free>508272</free>                     
     </memory>                              
   </executable>                            
 </project>                                 
