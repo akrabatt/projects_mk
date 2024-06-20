@@ -54,6 +54,8 @@ int main(void)
     mbs (&usart4, 1);				// порт  1
     stop_uart_tx_dma();   
 //    mbs (&usart4, 1);				//  4
+    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[2], 115200);
+    stop_uart_tx();
     if ( mbm_sync ==  1 ) {  
 //        mbm_03 (&usart5, 1, 0, 28, (unsigned short * ) &MOPS_arr [1], 115200);
 //        mbm_03_str (&usart5m, 1, 0, 108, (unsigned short * ) &MOPS_arr [1], 115200);
