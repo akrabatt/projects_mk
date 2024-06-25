@@ -268,6 +268,8 @@ extern "C"
 
     extern union tag_mops MOPS_arr[10];
     extern union tag_mops MOPS_arr_sw[10];
+    
+    
 
     extern unsigned short mops_stat;
     extern unsigned short mups_stat;
@@ -470,6 +472,9 @@ extern "C"
 
         unsigned short main_area[350];
     } uMBusWork, test_mups;
+    
+    extern union tag_mups MUPS_arr[10];
+    extern union tag_mups MUPS_arr_sw[10];
 
 #ifdef __cplusplus
 }

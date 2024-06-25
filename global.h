@@ -316,6 +316,7 @@ extern "C"
     } uMBusWork;
     
     union tag_mups MUPS_arr[10];
+    union tag_mups MUPS_arr_sw[10];
 
     unsigned short mops_stat;
     unsigned short mups_stat;

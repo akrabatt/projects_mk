@@ -78,7 +78,8 @@ void MOPS_control (struct tag_usartm * usart)
 void MUPS_control(struct tag_usartm * usart)
 {   
     usart->mb_status.master_start = 1;
-    
+    mbm_03_str(usart, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
+//    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
 }
 
 
