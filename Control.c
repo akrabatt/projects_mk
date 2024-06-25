@@ -75,6 +75,12 @@ void MOPS_control (struct tag_usartm * usart)
     Modbus.buf [16] = usart->mb_status.master_timeout_flag;
 }
 
+void MUPS_control(struct tag_usartm * usart)
+{   
+    usart->mb_status.master_start = 1;
+    
+}
+
 
 
 
