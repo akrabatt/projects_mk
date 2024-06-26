@@ -95,7 +95,7 @@ unsigned short cc;
 
         case READ_CYCLE:    {
             if (mups_num >= 10) {mups_num = 0; mups_stat++ ; break;}
-            if (Stand.active_mups [mups_num] != 0) {    mbm_03_str (&usart5m, (mups_num + 1), 0, 109, (unsigned short * ) &MUPS_arr [mups_num], 115200); }
+            if (Stand.active_mups [mups_num] != 0) {    mbm_03_str (&usart5m, (mups_num + 1), 200, 48, (unsigned short * ) &MUPS_arr [mups_num], 115200); }
             else {mups_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
                 for (cc = 0; cc < 109; cc++)    { MUPS_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_arr [mups_num].main_area [cc]); }

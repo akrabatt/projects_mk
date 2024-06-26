@@ -478,7 +478,7 @@ void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres)
                     if (CONF_READ_) 	{ mbs_03 (usart, Stand_sw.buf, (start_reg - START_CONF_READ), num_reg); break; }      // 500 ... 680
                     if (MODBUS_READ_) 	{ mbs_03 (usart, Modbus_sw.buf, (start_reg - START_MODBUS_READ), num_reg); break; }     // 0 ... 80
                     if (MB_DIAGN_READ_) { mbs_03 (usart, (unsigned short *)MOPS_arr_sw, (start_reg - START_MB_DIAGN_READ), num_reg); break; }  // 200 ... 312
-//                    if (READ_MUPS)      { mbs_03 (usart, )}
+                    if (READ_MUPS)      { mbs_03 (usart, (unsigned short*)MUPS_arr_sw, (start_reg - START_READ_MUPS), num_reg); break;} //5000
 					answer_illegal_data_addr (usart);
 					break; }			
 
