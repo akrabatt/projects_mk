@@ -457,6 +457,11 @@ extern "C"
                     unsigned short relay;           // 78
                     unsigned short AD_RES[4];       // 79
                     float AD_F_RES[4];              // 83 ... 86
+                    unsigned short timeout_err;
+                    unsigned short crc_err;
+                    unsigned short coll_1_err;
+                    unsigned short coll_2_err;
+                    unsigned short coll_3_err;
                 };
                 unsigned short read[num_zones * 3 + 20];
             };
