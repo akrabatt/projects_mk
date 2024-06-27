@@ -95,16 +95,16 @@ unsigned short cc;
 
         case READ_CYCLE:    {
             if (mups_num >= 10) {mups_num = 0; mups_stat++ ; break;}
-            if (Stand.active_mups [mups_num] != 0) {    mbm_03_str (&usart5m, (mups_num + 1), 200, 48, (unsigned short * ) &MUPS_arr [mups_num], 115200); }
+            if (Stand.active_mups [mups_num] != 0) {    mbm_03_str (&usart5m, (mups_num + 1), 200, 86, (unsigned short * ) &MUPS_arr [mups_num], 115200); }
             else {mups_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
-                for (cc = 0; cc < 109; cc++)    { MUPS_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_arr [mups_num].main_area [cc]); }
+                for (cc = 0; cc < 86; cc++)    { MUPS_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_arr [mups_num].main_area [cc]); }
                 usart->mb_status.mbm_data_rdy = 0; mups_num++; 
                 }
             if (usart->mb_status.master_timeout_flag == 1)  
                 {MUPS_arr [mups_num].timeout_err++; Stand.mups_timeout_err [mups_num]++; usart->mb_status.master_timeout_flag = 0;mups_num++; }    
             if (usart->mb_status.crc_error == 1)    {MUPS_arr [mups_num].crc_err++; Stand.mups_crc_err [mups_num]++; usart->mb_status.crc_error = 0; mups_num++; }
-            if (usart->mb_status.coll_1 == 1)       {MUPS_arr [mups_num].coll_1_err++; Stand.mops_coll_1_err [mups_num]++; usart->mb_status.coll_1 = 0; mups_num++; }
+            if (usart->mb_status.coll_1 == 1)       {MUPS_arr [mups_num].coll_1_err++; Stand.mups_coll_1_err [mups_num]++; usart->mb_status.coll_1 = 0; mups_num++; }
             if (usart->mb_status.coll_2 == 1)       {MUPS_arr [mups_num].coll_2_err++; Stand.mups_coll_2_err [mups_num]++; usart->mb_status.coll_2 = 0; mups_num++; }
             if (usart->mb_status.coll_3 == 1)       {MUPS_arr [mups_num].coll_3_err++; Stand.mups_coll_3_err [mups_num]++; usart->mb_status.coll_3 = 0; mups_num++; }
             break;}

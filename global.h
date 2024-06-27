@@ -298,26 +298,26 @@ extern "C"
                     unsigned short ADC[16];         // 62
                     unsigned short relay;           // 78
                     unsigned short AD_RES[4];       // 79
-                    float AD_F_RES[4];              // 83 ... 86
-                    unsigned short timeout_err;
-                    unsigned short crc_err;
-                    unsigned short coll_1_err;
-                    unsigned short coll_2_err;
-                    unsigned short coll_3_err;
+                    float AD_F_RES[4];              // 83 ... 90
+                    unsigned short timeout_err;     // 91
+                    unsigned short crc_err;         // 92  
+                    unsigned short coll_1_err;      //93
+                    unsigned short coll_2_err;      //94
+                    unsigned short coll_3_err;      //95
                 };
-                unsigned short read[num_zones * 3 + 20];
+                unsigned short read[96];
             };
-            union
-            {
-                //      struct {
-                //        unsigned short command [num_zones];
-                //        unsigned short type [num_zones];
-                //                               };
-                unsigned short write[num_zones * 26];
-            };
+//            union
+//            {
+//                //      struct {
+//                //        unsigned short command [num_zones];
+//                //        unsigned short type [num_zones];
+//                //                               };
+//                unsigned short write[num_zones * 26];
+//            };
         };
 
-        unsigned short main_area[350];
+        unsigned short main_area[96];
     } uMBusWork;
     
     union tag_mups MUPS_arr[10];

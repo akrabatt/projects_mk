@@ -463,19 +463,19 @@ extern "C"
                     unsigned short coll_2_err;
                     unsigned short coll_3_err;
                 };
-                unsigned short read[num_zones * 3 + 20];
+                unsigned short read[96];
             };
-            union
-            {
-                //      struct {
-                //        unsigned short command [num_zones];
-                //        unsigned short type [num_zones];
-                //                               };
-                unsigned short write[num_zones * 26];
-            };
+//            union
+//            {
+//                //      struct {
+//                //        unsigned short command [num_zones];
+//                //        unsigned short type [num_zones];
+//                //                               };
+//                unsigned short write[num_zones * 26];
+//            };
         };
 
-        unsigned short main_area[350];
+        unsigned short main_area[96];
     } uMBusWork, test_mups;
     
     extern union tag_mups MUPS_arr[10];
