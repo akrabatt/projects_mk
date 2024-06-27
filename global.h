@@ -301,9 +301,9 @@ extern "C"
                     float AD_F_RES[4];              // 83 ... 90
                     unsigned short timeout_err;     // 91
                     unsigned short crc_err;         // 92  
-                    unsigned short coll_1_err;      //93
-                    unsigned short coll_2_err;      //94
-                    unsigned short coll_3_err;      //95
+                    unsigned short coll_1_err;      // 93 
+                    unsigned short coll_2_err;      // 94
+                    unsigned short coll_3_err;      // 95
                 };
                 unsigned short read[96];
             };
