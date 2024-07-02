@@ -52,15 +52,16 @@ extern "C" {
 #define  frame_delay_4          PBCLK2_/115200*timeout4
     
 /////////////////		Modbus alowed areas 		//////////////////////////
+    
+    
+#define START_READ_MUPS     5000
+#define END_READ_MUPS       6200
+    
+#define START_WRITE_MUPS    5000
+#define END_WRITE_MUPS      6200
 
-#define  START_READ_MOPS				3000			// ���������� ������� ������
-#define  END_READ_MOPS					4090			// 
-
-#define  START_WRITE_MOPS				3000			// ���������� ������� ������
-#define  END_WRITE_MOPS					4090			// 
-
-#define  READ_MOPS			((start_reg>=START_READ_MOPS)&&(last_reg<=END_READ_MOPS))			// ??????? ?????? ????????? ?????
-#define  WRITE_MOPS		((start_reg>=START_WRITE_MOPS)&&(last_reg<=END_WRITE_MOPS))		// ??????? ?????? ????????????
+#define  READ_MUPS			((start_reg>=START_READ_MUPS)&&(last_reg<=END_READ_MUPS))			
+#define  WRITE_MUPS		    ((start_reg>=START_WRITE_MUPS)&&(last_reg<=END_WRITE_MUPS))		
 
 
 #define  START_READ					2000			// ���������� ������� ������
@@ -91,7 +92,7 @@ extern "C" {
 #define  START_CONF_READ				500			// config area - setting of engine parameters
 #define  END_CONF_READ  				696			// 
 #define  START_CONF_WRITE				500			//
-#define  END_CONF_WRITE					696			// 
+#define  END_CONF_WRITE					520			// 
 
 #define  CONF_READ_             ((start_reg >= START_CONF_READ) && (last_reg <= END_CONF_READ))	
 #define  CONF_WRITE_            ((start_reg >= START_CONF_WRITE) && (last_reg <= END_CONF_WRITE))
@@ -104,16 +105,16 @@ extern "C" {
 #define  MODBUS_READ_           ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))	
 #define  MODBUS_WRITE_		((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
     
-#define  START_MB_DIAGN_READ				200			// config area - setting of engine parameters
-#define  END_MB_DIAGN_READ  				312			// 
-#define  START_MB_DIAGN_WRITE				200			//
-#define  END_MB_DIAGN_WRITE				312			// 
+#define  START_MB_DIAGN_READ				3000			// config area - setting of engine parameters
+#define  END_MB_DIAGN_READ  				4200			// 
+#define  START_MB_DIAGN_WRITE				3000			//
+#define  END_MB_DIAGN_WRITE                 4200			// 
 
 #define  MB_DIAGN_READ_           ((start_reg >= START_MB_DIAGN_READ) && (last_reg <= END_MB_DIAGN_READ))	
 #define  MB_DIAGN_WRITE_          ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))    
     
-#define  RAMTRON_START              	64
-#define  RAMTRON_START_CONFIG		512
+#define  RAMTRON_START              64
+#define  RAMTRON_START_CONFIG		1024
     
 #define  COORD_MAX			MB_conf.CV_pos_max
 #define  COORD_MIN			MB_conf.CV_pos_min
