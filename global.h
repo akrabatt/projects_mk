@@ -282,7 +282,7 @@ extern "C"
                     unsigned short Ch_Cmd[4];       // 9
                     unsigned short Ch_Strategy[4];  // 13
                     unsigned short Ch_Res[4];       // 17
-                    unsigned short Ch_Current[4];   // 21
+                    unsigned short Ch_Current[4];   // 21 //
                     unsigned short Ch_P1[4];        // 25
                     unsigned short Ch_P2[4];        // 29
                     unsigned short Ch_P3[4];        // 33
@@ -298,7 +298,7 @@ extern "C"
                     unsigned short ADC[16];         // 62
                     unsigned short relay;           // 78
                     unsigned short AD_RES[4];       // 79
-                    float AD_F_RES[4];              // 83 ... 90
+                    float AD_F_RES[4];              // 83 ... 90    //
                     unsigned short timeout_err;     // 91
                     unsigned short crc_err;         // 92  
                     unsigned short coll_1_err;      // 93 
