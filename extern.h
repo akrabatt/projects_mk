@@ -265,9 +265,43 @@ extern "C"
         };
         unsigned short main_area[num_zones * 13 + 16];
     };
+    
+    extern union tag_mops_short
+    {
+        struct
+        {
+            union
+            {
+                struct
+                {
+                    unsigned short info[3];                // ����������������� �������: ��� �������, ������ ��������, ������ �����
+                    unsigned short status[num_zones];      // ������� ���
+                    unsigned short hold_status[num_zones]; // ����������� ������� ���
+                    unsigned short current[num_zones + 1]; // ���� ���
+                };
+                unsigned short read[num_zones * 3 + 4]; // ������� ������
+            };
+            unsigned short type[num_zones];    // ���� ���: �������, �������� � �� � ��� ��
+            unsigned short beak_err;
+            unsigned short norma_err;
+            unsigned short att_err;
+            unsigned short fire_err;
+            unsigned short short_err;
+            unsigned short current_err;
+            unsigned short timeout_err;
+            unsigned short crc_err;
+            unsigned short coll_1_err;
+            unsigned short coll_2_err;
+            unsigned short coll_3_err;
+        };
+        unsigned short main_area[num_zones * 5 + 15];
+    }mops_short;
 
     extern union tag_mops MOPS_arr[10];
     extern union tag_mops MOPS_arr_sw[10];
+    
+    extern union tag_mops_short MOPS_S_arr[10];
+    extern union tag_mops_short MOPS_S_arr_sw[10];
     
     
 

@@ -56,12 +56,17 @@ extern "C" {
     
 #define START_READ_MUPS     5000
 #define END_READ_MUPS       6200
-    
 #define START_WRITE_MUPS    5000
 #define END_WRITE_MUPS      6200
-
 #define  READ_MUPS			((start_reg>=START_READ_MUPS)&&(last_reg<=END_READ_MUPS))			
 #define  WRITE_MUPS		    ((start_reg>=START_WRITE_MUPS)&&(last_reg<=END_WRITE_MUPS))		
+    
+#define START_READ_MUPS_SHORT   7000
+#define END_READ_MUPS_SHORT     8000
+#define START_WRITE_MUPS_SHORT  7000
+#define END_WRITE_MUPS_SHORT    8000
+#define READ_MUPS_SHORT			((start_reg>=START_READ_MUPS_SHORT)&&(last_reg<=END_READ_MUPS_SHORT))			
+#define WRITE_MUPS_SHORT		((start_reg>=START_WRITE_MUPS_SHORT)&&(last_reg<=END_WRITE_MUPS_SHORT))
 
 
 #define  START_READ					2000			// ���������� ������� ������

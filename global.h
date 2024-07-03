@@ -281,23 +281,7 @@ extern "C"
                 };
                 unsigned short read[num_zones * 3 + 4]; // ������� ������
             };
-            union
-            {
-                struct
-                {
-                    unsigned short type[num_zones];    // ���� ���: �������, �������� � �� � ��� ��
-                    unsigned short limit1[num_zones];  // ������ ���� - ����� ��� ���� ���
-                    unsigned short limit2[num_zones];  // ������ ����� - �������� ��� ���� ���
-                    unsigned short limit3[num_zones];  // ������ �������� - ����� ��� ���� ���
-                    unsigned short limit4[num_zones];  // ������ ����� - �� ��� ���� ���
-                    unsigned short timer1[num_zones];  // ������������� ������� ���� ���
-                    unsigned short timer2[num_zones];
-                    unsigned short timer3[num_zones];
-                    unsigned short timer4[num_zones];
-                    unsigned short stat_hysteresis;
-                };
-                unsigned short write[num_zones * 10 + 1];
-            };
+            unsigned short type[num_zones];    // ���� ���: �������, �������� � �� � ��� ��
             unsigned short beak_err;
             unsigned short norma_err;
             unsigned short att_err;
@@ -310,11 +294,14 @@ extern "C"
             unsigned short coll_2_err;
             unsigned short coll_3_err;
         };
-        unsigned short main_area[num_zones * 13 + 16];
+        unsigned short main_area[num_zones * 5 + 15];
     };
 
     union tag_mops MOPS_arr[10];
     union tag_mops MOPS_arr_sw[10];
+    
+    union tag_mops_short MOPS_S_arr[10];
+    union tag_mops_short MOPS_S_arr_sw[10];
 
     union tag_mups
     {
