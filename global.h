@@ -264,6 +264,54 @@ extern "C"
         };
         unsigned short main_area[num_zones * 13 + 16];
     };
+    
+    
+    union tag_mops_short
+    {
+        struct
+        {
+            union
+            {
+                struct
+                {
+                    unsigned short info[3];                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+                    unsigned short status[num_zones];      // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                    unsigned short hold_status[num_zones]; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                    unsigned short current[num_zones + 1]; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                };
+                unsigned short read[num_zones * 3 + 4]; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            };
+            union
+            {
+                struct
+                {
+                    unsigned short type[num_zones];    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ
+                    unsigned short limit1[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                    unsigned short limit2[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                    unsigned short limit3[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                    unsigned short limit4[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                    unsigned short timer1[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+                    unsigned short timer2[num_zones];
+                    unsigned short timer3[num_zones];
+                    unsigned short timer4[num_zones];
+                    unsigned short stat_hysteresis;
+                };
+                unsigned short write[num_zones * 10 + 1];
+            };
+            unsigned short beak_err;
+            unsigned short norma_err;
+            unsigned short att_err;
+            unsigned short fire_err;
+            unsigned short short_err;
+            unsigned short current_err;
+            unsigned short timeout_err;
+            unsigned short crc_err;
+            unsigned short coll_1_err;
+            unsigned short coll_2_err;
+            unsigned short coll_3_err;
+        };
+        unsigned short main_area[num_zones * 13 + 16];
+    };
 
     union tag_mops MOPS_arr[10];
     union tag_mops MOPS_arr_sw[10];
@@ -308,7 +356,7 @@ extern "C"
                 unsigned short read[96];
             };
         };
-        
+    };    
         
     // like tag_mups but shorted
     union tag_mups_short
@@ -333,10 +381,13 @@ extern "C"
             unsigned short read[29];    //выровнять
         };
         unsigned short main_area[29];
-    } uMBusWork;
+    } mups_short;
     
     union tag_mups MUPS_arr[10];
     union tag_mups MUPS_arr_sw[10];
+    
+    union tag_mups_short MUPS_S_arr[10];
+    union tag_mups_short MUPS_S_arr_sw[10];
 
     unsigned short mops_stat;
     unsigned short mups_stat;

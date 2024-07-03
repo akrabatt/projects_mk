@@ -478,8 +478,35 @@ extern "C"
         unsigned short main_area[96];
     } uMBusWork, test_mups;
     
+    extern union tag_mups_short
+    {
+        union
+        {
+            struct
+            {
+                unsigned short info[3];         // 1
+                unsigned short Int_Voltage;     // 4
+                unsigned short Ch_State[4];     // 5
+                unsigned short Ch_Cmd[4];       // 9
+                unsigned short Ch_Strategy[4];  // 13
+                unsigned short Ch_Res[4];       // 17
+                unsigned short Ch_Current[4];   // 21 
+                unsigned short timeout_err;     // 25
+                unsigned short crc_err;         // 26  
+                unsigned short coll_1_err;      // 27 
+                unsigned short coll_2_err;      // 28
+                unsigned short coll_3_err;      // 29
+            };
+            unsigned short read[29];    //выровнять
+        };
+        unsigned short main_area[29];
+    }mups_short;
+    
     extern union tag_mups MUPS_arr[10];
     extern union tag_mups MUPS_arr_sw[10];
+    
+    extern union tag_mups_short MUPS_S_arr[10];
+    extern union tag_mups_short MUPS_S_arr_sw[10];
 
 #ifdef __cplusplus
 }
