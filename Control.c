@@ -178,10 +178,10 @@ unsigned short cc;
 
         case READ_CYCLE:    {
             if (mups_num >= 10) {mups_num = 0; mups_stat++ ; break;}
-            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (&usart5m, (mups_num + 1), 200, 86, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
+            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (&usart5m, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
             else {mups_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
-                for (cc = 0; cc < 86; cc++)    { MUPS_S_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_S_arr [mups_num].main_area [cc]); }
+                for (cc = 0; cc < 29; cc++)    { MUPS_S_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_S_arr [mups_num].main_area [cc]); }
                 usart->mb_status.mbm_data_rdy = 0; mups_num++; 
                 }
             if (usart->mb_status.master_timeout_flag == 1)  
