@@ -63,7 +63,8 @@ int main(void)
 //        mbm_03_str (&usart5m, 1, 0, 108, (unsigned short * ) &MOPS_arr [1], 115200);
 //        MOPS_control (&usart5m );
 //        MUPS_control (&usart5m);
-        MUPS_S_control (&usart5m);
+//        MUPS_S_control (&usart5m);
+        MOPS_S_control (&usart5m);
         mbm_sync = 0;
         }
     stop_uart_tx();

@@ -281,7 +281,15 @@ extern "C"
                 };
                 unsigned short read[num_zones * 3 + 4]; // ������� ������
             };
-            unsigned short type[num_zones];    // ���� ���: �������, �������� � �� � ��� ��
+            union
+            {
+                struct
+                {
+                    unsigned short command[num_zones]; 
+                    unsigned short type[num_zones];    // ���� ���: �������, �������� � �� � ��� ��
+                };
+                unsigned short write[num_zones * 2];
+            };
             unsigned short beak_err;
             unsigned short norma_err;
             unsigned short att_err;
@@ -294,7 +302,7 @@ extern "C"
             unsigned short coll_2_err;
             unsigned short coll_3_err;
         };
-        unsigned short main_area[num_zones * 5 + 15];
+        unsigned short main_area[num_zones * 6 + 15];
     }mops_short;
 
     extern union tag_mops MOPS_arr[10];

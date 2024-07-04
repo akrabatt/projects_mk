@@ -62,11 +62,18 @@ extern "C" {
 #define  WRITE_MUPS		    ((start_reg>=START_WRITE_MUPS)&&(last_reg<=END_WRITE_MUPS))		
     
 #define START_READ_MUPS_SHORT   7000
-#define END_READ_MUPS_SHORT     8000
+#define END_READ_MUPS_SHORT     7900
 #define START_WRITE_MUPS_SHORT  7000
-#define END_WRITE_MUPS_SHORT    8000
+#define END_WRITE_MUPS_SHORT    7900
 #define READ_MUPS_SHORT			((start_reg>=START_READ_MUPS_SHORT)&&(last_reg<=END_READ_MUPS_SHORT))			
 #define WRITE_MUPS_SHORT		((start_reg>=START_WRITE_MUPS_SHORT)&&(last_reg<=END_WRITE_MUPS_SHORT))
+
+#define START_READ_MOPS_SHORT   8000    
+#define END_READ_MOPS_SHORT     8900
+//#define START_WRITE_MOPS_SHORT  8000
+//#define END_WRITE_MOPS_SHORT    8900
+#define READ_MOPS_SHORT			((start_reg>=START_READ_MOPS_SHORT)&&(last_reg<=END_READ_MOPS_SHORT))			
+//#define WRITE_MOPS_SHORT		((start_reg>=START_WRITE_MOPS_SHORT)&&(last_reg<=END_WRITE_MOPS_SHORT))
 
 
 #define  START_READ					2000			// ���������� ������� ������

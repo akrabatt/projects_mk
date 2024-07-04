@@ -91,10 +91,10 @@ void MOPS_S_control (struct tag_usartm * usart)
 
         case READ_CYCLE:    {
             if (mops_num >= 10) {mops_num = 0; mops_stat++ ; break;}
-            if (Stand.active_mops [mops_num] != 0) { mbm_03_str (&usart5m, (mops_num + 1), 0, 109, (unsigned short * ) &MOPS_S_arr [mops_num], 115200); }
+            if (Stand.active_mops [mops_num] != 0) { mbm_03_str (&usart5m, (mops_num + 1), 0, 63, (unsigned short * ) &MOPS_S_arr [mops_num], 115200); }
             else {mops_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
-                for (cc = 0; cc < 109; cc++)    { MOPS_S_arr_sw [mops_num].main_area [cc] = swapshort (MOPS_S_arr [mops_num].main_area [cc]); }
+                for (cc = 0; cc < 63; cc++)    { MOPS_S_arr_sw [mops_num].main_area [cc] = swapshort (MOPS_S_arr [mops_num].main_area [cc]); }
                 usart->mb_status.mbm_data_rdy = 0; mops_num++; 
                 }
             if (usart->mb_status.master_timeout_flag == 1)  
