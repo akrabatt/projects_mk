@@ -5,6 +5,7 @@
 #include "define.h"
 #include "extern.h"
 //#include "global.h"
+//#include "global.h"
 
 
 
@@ -63,8 +64,13 @@ void __ISR_AT_VECTOR (_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)   {T5CONbits.T
 void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)   {     
     IFS1bits.T9IF = 0;
     counters ();  
-     mbm_sync = 1;
-     usart5m.mb_status.start16 = 1;
+    mbm_sync = 1;
+    
+    if(++usart5m.mbm16_counter_start >= 100)
+    {
+        usart5m.mbm16_counter_start = 0;
+        usart5m.mb_status.start16 = 1;
+    }
 //    mbm_timeout_control(&usart4);
 //    mbm_timeout_control(&usart5);
     }    

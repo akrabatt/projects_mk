@@ -186,6 +186,7 @@ extern "C"
         unsigned short repeat_05_;          // ������ ������ MODBUS 05.
         unsigned short mbm_timeout_counter; // ����-��� ������� MODBUS. //
         unsigned short answer_count;        //
+        unsigned short mbm16_counter_start; //
 
         struct stag_mb_statusBITS
         {
