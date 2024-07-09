@@ -64,7 +64,7 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)   {
     IFS1bits.T9IF = 0;
     counters ();  
      mbm_sync = 1;
-     usart5m.mb_status.start16 =1;
+     usart5m.mb_status.start16 = 1;
 //    mbm_timeout_control(&usart4);
 //    mbm_timeout_control(&usart5);
     }    

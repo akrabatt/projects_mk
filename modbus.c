@@ -684,16 +684,16 @@ void mbm_03_str (struct tag_usartm * usart, unsigned char mbm_adres, unsigned sh
 
 
 
-void mbm_16 (struct tag_usart * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
+void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
 {
 	if (!usart->mb_status.start16) return;
 	switch (usart->mbm_status16) {
 		case 0:	{
-            if (usart==&usart1) {uart1_init (speed);}
-            if (usart==&usart2) {uart2_init (speed);}
-            if (usart==&usart3) {uart3_init (speed);}
-            if (usart==&usart4) {uart4_init (speed);}
-            if (usart==&usart5) {uart5_init (speed);}            
+            if (usart==&usart1m) {uart1_init (speed);}
+            if (usart==&usart2m) {uart2_init (speed);}
+            if (usart==&usart3m) {uart3_init (speed);}
+            if (usart==&usart4m) {uart4_init (speed);}
+            if (usart==&usart5m) {uart5_init (speed);}            
 			switch (speed)
             {
 				case 38400:     {usart->mbm_timeout_counter = 450; break;}
@@ -725,7 +725,7 @@ void mbm_16 (struct tag_usart * usart, unsigned short mbm_adres, unsigned short 
 			usart->mb_status.coll_1=0;
 			usart->mb_status.coll_2=0;
 			usart->mb_status.coll_3=0;
-			start_tx_usart (usart);
+			start_tx_usartm (usart);
 			usart->mbm_status16=2;
 			 break;	}
 
@@ -733,22 +733,22 @@ void mbm_16 (struct tag_usart * usart, unsigned short mbm_adres, unsigned short 
 			{
 			if (!usart->mb_status.master_timeout_flag && !usart->mb_status.modb_received) return;
 			if (usart->mb_status.master_timeout_flag) 
-				{ usart->mbm_err16++; usart->mbm_status16=0; usart->mb_status.start16=0; break;}
+				{ usart->mbm16_crc_err++; usart->mbm_status16=0; usart->mb_status.start16=0; break;}
 
 			if (usart->in_buffer[1]==0x83)										//modbus collisions
 				{
-				if (usart->in_buffer[2]==0x01)	{usart->mb_status.coll_1=1; usart->mbm_err16++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
-				if (usart->in_buffer[2]==0x02)	{usart->mb_status.coll_2=1; usart->mbm_err16++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
-				if (usart->in_buffer[2]==0x03)	{usart->mb_status.coll_3=1; usart->mbm_err16++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+				if (usart->in_buffer[2]==0x01)	{usart->mb_status.coll_1=1; usart->mbm16_c01_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+				if (usart->in_buffer[2]==0x02)	{usart->mb_status.coll_2=1; usart->mbm16_c02_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+				if (usart->in_buffer[2]==0x03)	{usart->mb_status.coll_3=1; usart->mbm16_c03_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
 				}
 			if (usart->in_buffer[0]!=usart->out_buffer[0])								//wrong device address
-				{usart->mbm_status16=0; usart->mb_status.device_error=1; usart->mbm_err16++; usart->mb_status.start16=0; break;}
+				{usart->mbm_status16=0; usart->mb_status.device_error=1; usart->mbm16_tm_err++; usart->mb_status.start16=0; break;}
 			PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));		
 			if (uchCRCLo|uchCRCHi) 
-				{usart->mbm_status16=0; usart->mb_status.crc_error=1; usart->mbm_err16++; usart->mb_status.start16=0; break;}	//wrong crc
+				{usart->mbm_status16=0; usart->mb_status.crc_error=1; usart->mbm16_crc_err++; usart->mb_status.start16=0; break;}	//wrong crc
 			if ((usart->in_buffer[0]!=usart->out_buffer[0])||(usart->in_buffer[1]!=usart->out_buffer[1])||(usart->in_buffer[2]!=usart->out_buffer[2])||
 				(usart->in_buffer[3]!=usart->out_buffer[3])||(usart->in_buffer[4]!=usart->out_buffer[4])||(usart->in_buffer[5]!=usart->out_buffer[5]))
-				{usart->mbm_status16=0; usart->mb_status.crc_error=1; usart->mbm_err16++; usart->mb_status.start16=0; break;}
+				{usart->mbm_status16=0; usart->mb_status.crc_error=1; usart->mbm16_crc_err++; usart->mb_status.start16=0; break;}
 			usart->answer_count++;
 			usart->mb_status.master_error=0; 
 			usart->mb_status.start16=0;			

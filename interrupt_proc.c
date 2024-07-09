@@ -241,8 +241,8 @@ void counters (void)
         _1000msec ++;
 
         Modbus.buf [0]++; 
-        Modbus.buf [1] = usart5m.mbm_status03;
-        Modbus.buf [2] = usart5m.mbm03_tm_err;        
+        Modbus.buf [1] = usart5m.mbm_status16;
+        Modbus.buf [2] = usart5m.mbm16_tm_err;        
         Modbus.buf [3] = usart5m.mbm_timeout_counter;
         Modbus.buf [4] = usart5m.mb_status.master_start;
         Modbus.buf [5] = usart5m.mb_status.tm_on;
