@@ -353,7 +353,7 @@ extern "C"
         };
     };    
         
-    // like tag_mups but shorted
+    // ike tag_mups but shorted
     union tag_mups_short
     {
         union

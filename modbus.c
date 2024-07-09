@@ -528,10 +528,12 @@ void mbm_03 (struct tag_usart * usart, unsigned char mbm_adres, unsigned short s
             if (usart==&usart3) {uart3_init (speed);}
             if (usart==&usart4) {uart4_init (speed);}
             if (usart==&usart5) {uart5_init (speed);}            
-			switch (speed){
+			switch (speed)
+            {
 				case 38400:     {usart->mbm_timeout_counter = 450; break;}
 				case 57600:     {usart->mbm_timeout_counter = 300; break;}
-				case 115200:    {usart->mbm_timeout_counter = 100; break;}			}
+				case 115200:    {usart->mbm_timeout_counter = 100; break;}			
+            }
 
 			usart->out_buffer [0x00] = mbm_adres;
 			usart->out_buffer [0x01] = 0x03;
@@ -684,21 +686,20 @@ void mbm_03_str (struct tag_usartm * usart, unsigned char mbm_adres, unsigned sh
 
 void mbm_16 (struct tag_usart * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
 {
-		if (!usart->mb_status.start16) return;
+	if (!usart->mb_status.start16) return;
 	switch (usart->mbm_status16) {
 		case 0:	{
-//			if (usart==&usart1) {UART1_init (speed, 4);}
-//			if (usart==&usart2) {UART2_init (speed, 4);}
-			switch (speed){
-				case 1: {usart->mbm_timeout_counter = 1000; break;}
-				case 2: {usart->mbm_timeout_counter = 480; break;}
-				case 3: {usart->mbm_timeout_counter = 240; break;}
-				case 4: {usart->mbm_timeout_counter = 120; break;}
-				case 5: {usart->mbm_timeout_counter = 60; break;}
-				case 6: {usart->mbm_timeout_counter = 30; break;}
-				case 7: {usart->mbm_timeout_counter = 20; break;}
-				case 8: {usart->mbm_timeout_counter = 10; break;}
-				}
+            if (usart==&usart1) {uart1_init (speed);}
+            if (usart==&usart2) {uart2_init (speed);}
+            if (usart==&usart3) {uart3_init (speed);}
+            if (usart==&usart4) {uart4_init (speed);}
+            if (usart==&usart5) {uart5_init (speed);}            
+			switch (speed)
+            {
+				case 38400:     {usart->mbm_timeout_counter = 450; break;}
+				case 57600:     {usart->mbm_timeout_counter = 300; break;}
+				case 115200:    {usart->mbm_timeout_counter = 100; break;}			
+            }
 			 usart->mbm_status16=1;
 			break;	}
 		case 1:	{

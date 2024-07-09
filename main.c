@@ -48,9 +48,11 @@ int main(void)
 //    IC1CONbits.ON = 1; 
 //    IC6CONbits.ON = 1; 
 //    load_config ();   
+    
     while(1)
 
     {
+    
     mbs (&usart4, 1);				// порт  1
     stop_uart_tx_dma();   
 //    mbs (&usart4, 1);				//  4
@@ -63,7 +65,10 @@ int main(void)
 //        mbm_03_str (&usart5m, 1, 0, 108, (unsigned short * ) &MOPS_arr [1], 115200);
 //        MOPS_control (&usart5m );
 //        MUPS_control (&usart5m);
-        MUPS_S_control (&usart5m);
+        
+//        MUPS_S_control (&usart5m);
+        
+        mbm_16(&usart5m, 1, 0xD5, 1, (unsigned short *)3, 115200);
 //        MOPS_S_control (&usart5m);
         mbm_sync = 0;
         }
