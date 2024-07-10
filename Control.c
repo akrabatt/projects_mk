@@ -1,6 +1,8 @@
 #include <proc/p32mz1024efh100.h>
 #include <xc.h>
 #include <sys/attribs.h>
+#include <stdio.h>
+#include <string.h>
 #include "define.h"
 #include "extern.h"
 
@@ -203,8 +205,21 @@ unsigned short cc;
     Modbus.buf [16] = usart->mb_status.master_timeout_flag;
 }
 
-
-
+/**
+ * @brief fun change mups strategy
+ * 
+ * @param strategy_num - mups's strategy
+ */
+void change_mups_strategy(int strategy_num)
+{
+    switch(strategy_num) 
+    {
+            case 1: {memcpy(mups_strategy, mups_1_strategy, sizeof(mups_1_strategy)); break;}
+            case 2: {memcpy(mups_strategy, mups_2_strategy, sizeof(mups_2_strategy)); break;}
+            case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
+        default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
+    }
+}
 
 /* *****************************************************************************
  End of File

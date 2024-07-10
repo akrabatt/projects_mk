@@ -760,11 +760,7 @@ void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short
 
 }
 
-
-
 }
-
-
 
 /* *****************************************************************************
  End of File
