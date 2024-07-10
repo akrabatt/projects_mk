@@ -66,7 +66,7 @@ int main(void)
         
 //        MUPS_S_control (&usart5m);
         unsigned short mups_strategy[4] = {0x0300, 0x0300, 0x0300, 0x0300};
-        mbm_16(&usart5m, 1, 212, 4, (unsigned short *)mups_strategy, 115200);
+        mbm_16(&usart5m, 2, 212, 4, (unsigned short *)mups_strategy, 115200);
 //        MOPS_S_control (&usart5m);
         mbm_sync = 0;
         }
