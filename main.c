@@ -53,10 +53,8 @@ int main(void)
 
     {
     
-    mbs (&usart4, 1);				// порт  1
+    mbs (&usart4, 1);				// порт  4
     stop_uart_tx_dma();   
-//    mbs (&usart4, 1);				//  4
-//    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
 //    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
 //    stop_uart_tx();
 //    MUPS_control (&usart5m);
@@ -67,9 +65,8 @@ int main(void)
 //        MUPS_control (&usart5m);
         
 //        MUPS_S_control (&usart5m);
-        unsigned short mups_strategy[4] = {3, 3, 3, 3};
-        mbm_16(&usart5m, 2, 212, 4, (unsigned short *)mups_strategy, 115200);
-//        mbm_16(&usart5m, 1, 212, 4, (unsigned short *)mups_strategy, 115200);
+        unsigned short mups_strategy[4] = {0x0300, 0x0300, 0x0300, 0x0300};
+        mbm_16(&usart5m, 1, 212, 4, (unsigned short *)mups_strategy, 115200);
 //        MOPS_S_control (&usart5m);
         mbm_sync = 0;
         }
