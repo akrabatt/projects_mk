@@ -354,7 +354,7 @@ extern "C"
         };
     };    
         
-    // ike tag_mups but shorted
+    // like tag_mups but shorted
     union tag_mups_short
     {
         union
@@ -384,6 +384,12 @@ extern "C"
     
     union tag_mups_short MUPS_S_arr[10];
     union tag_mups_short MUPS_S_arr_sw[10];
+    
+    // mups strategy for all chanels
+    unsigned short mups_strategy[4];
+    unsigned short mups_1_strategy[4] = {0x0100, 0x0100, 0x0100, 0x0100};
+    unsigned short mups_2_strategy[4] = {0x0200, 0x0200, 0x0200, 0x0200};
+    unsigned short mups_3_strategy[4] = {0x0300, 0x0300, 0x0300, 0x0300};
 
     unsigned short mops_stat;
     unsigned short mups_stat;

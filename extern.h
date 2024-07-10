@@ -550,6 +550,12 @@ extern "C"
     
     extern union tag_mups_short MUPS_S_arr[10];
     extern union tag_mups_short MUPS_S_arr_sw[10];
+    
+    // mups strategy for all chanels
+    extern unsigned short mups_strategy[4];
+    extern unsigned short mups_1_strategy[4];// = {0x0100, 0x0100, 0x0100, 0x0100};
+    extern unsigned short mups_2_strategy[4];// = {0x0200, 0x0200, 0x0200, 0x0200};
+    extern unsigned short mups_3_strategy[4];// = {0x0300, 0x0300, 0x0300, 0x0300};
 
 #ifdef __cplusplus
 }

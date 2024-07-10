@@ -1,7 +1,8 @@
 /*
 ** main.c
 /** INCLUDES ******************************************************************/
-
+#include <stdio.h>
+#include <string.h>
 #include <xc.h>
 #include <sys/attribs.h>    /* contains __ISR() Macros */
 //#include "extern.h"
@@ -50,32 +51,28 @@ int main(void)
 //    load_config ();   
     
     while(1)
-
     {
-    
-    mbs (&usart4, 1);				// порт  4
-    stop_uart_tx_dma();   
-//    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
-//    stop_uart_tx();
-//    MUPS_control (&usart5m);
-    if ( mbm_sync ==  1 ) {  
-//        mbm_03 (&usart5, 1, 0, 28, (unsigned short * ) &MOPS_arr [1], 115200);
-//        mbm_03_str (&usart5m, 1, 0, 108, (unsigned short * ) &MOPS_arr [1], 115200);
-//        MOPS_control (&usart5m );
-//        MUPS_control (&usart5m);
-        
-//        MUPS_S_control (&usart5m);
-        unsigned short mups_strategy[4] = {0x0300, 0x0300, 0x0300, 0x0300};
-        mbm_16(&usart5m, 2, 212, 4, (unsigned short *)mups_strategy, 115200);
-//        MOPS_S_control (&usart5m);
+        mbs (&usart4, 1);				// порт  4
+        stop_uart_tx_dma();   
+        //    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
+        //    stop_uart_tx();
+        //    MUPS_control (&usart5m);
+        if ( mbm_sync ==  1 ) {  
+        //        mbm_03 (&usart5, 1, 0, 28, (unsigned short * ) &MOPS_arr [1], 115200);
+        //        mbm_03_str (&usart5m, 1, 0, 108, (unsigned short * ) &MOPS_arr [1], 115200);
+        //        MOPS_control (&usart5m );
+        //        MUPS_control (&usart5m);
+        //        MUPS_S_control (&usart5m);
+        memcpy(mups_strategy, mups_3_strategy, sizeof(mups_1_strategy));
+        mbm_16(&usart5m, 2, 212, 4, mups_strategy, 115200);
+        //        MOPS_S_control (&usart5m);
         mbm_sync = 0;
-        }
+    }
     stop_uart_tx();
     PORTGbits.RG7 = help_strobe;
 
     LED_8 = help_strobe;
     }
-
 } 
 
 
