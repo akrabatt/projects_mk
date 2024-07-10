@@ -111,8 +111,8 @@ extern "C" {
 
 #define  START_MODBUS_READ				0			// working area of engine control and statuses
 #define  END_MODBUS_READ  				82			// 
-#define  START_MODBUS_WRITE				0			//
-#define  END_MODBUS_WRITE				12			// 
+#define  START_MODBUS_WRITE				20			//
+#define  END_MODBUS_WRITE				82			// 
 
 #define  MODBUS_READ_           ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))	
 #define  MODBUS_WRITE_		((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))

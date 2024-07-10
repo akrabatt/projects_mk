@@ -61,11 +61,11 @@ int main(void)
         //        mbm_03 (&usart5, 1, 0, 28, (unsigned short * ) &MOPS_arr [1], 115200);
         //        mbm_03_str (&usart5m, 1, 0, 108, (unsigned short * ) &MOPS_arr [1], 115200);
         //        MOPS_S_control (&usart5m);
-        MUPS_S_control (&usart5m);
+//        MUPS_S_control (&usart5m);
 //        memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy));
 //        mbm_16(&usart5m, 2, 212, 4, mups_strategy, 115200);
-        
-        mbm_sync = 0;
+            change_mups_strategy(1, 1);
+            mbm_sync = 0;
     }
     stop_uart_tx();
     PORTGbits.RG7 = help_strobe;

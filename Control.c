@@ -210,7 +210,7 @@ unsigned short cc;
  * 
  * @param strategy_num - mups's strategy
  */
-void change_mups_strategy(int strategy_num)
+void change_mups_strategy(int slave_id, int strategy_num)
 {
     switch(strategy_num) 
     {
@@ -219,6 +219,7 @@ void change_mups_strategy(int strategy_num)
             case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
         default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
     }
+    mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200);
 }
 
 /* *****************************************************************************
