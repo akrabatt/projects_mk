@@ -1,19 +1,10 @@
 #ifndef DEFINE_H
 #define DEFINE_H
 
-
-/* ************************************************************************** */
-/***************************************************************** */
 #include <proc/p32mz1024efh100.h>
 #include <xc.h>
 #include <sys/attribs.h>
 
-//#include "global.h"    /* contains __ISR() Macros */
-//#include "extern.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 #define EXAMPLE_CONSTANT 0
 
 
@@ -80,26 +71,26 @@ extern "C" {
 //#define WRITE_MOPS_SHORT		((start_reg>=START_WRITE_MOPS_SHORT)&&(last_reg<=END_WRITE_MOPS_SHORT))
 
 
-#define  START_READ					2000			// ���������� ������� ������
+#define  START_READ					2000			// 
 #define  END_READ					2078			// 
 
-#define  START_WRITE				2054			// ���������� ������� ������
+#define  START_WRITE				2054			// 
 #define  END_WRITE					2078			// 
 
-#define  READ_			((start_reg>=START_READ)&&(last_reg<=END_READ))			// ??????? ?????? ????????? ?????
-#define  WRITE_			((start_reg>=START_WRITE)&&(last_reg<=END_WRITE))		// ??????? ?????? ????????????
+#define  READ_			((start_reg>=START_READ)&&(last_reg<=END_READ))			// 
+#define  WRITE_			((start_reg>=START_WRITE)&&(last_reg<=END_WRITE))		// 
 
-#define  START_WORK_READ				800			// ??????? ?????? ??????? ??????
+#define  START_WORK_READ				800			// 
 #define  END_WORK_READ					812			// 
-#define  START_WORK_WRITE				806			// ??????? ?????? ??????? ??????
+#define  START_WORK_WRITE				806			// 
 #define  END_WORK_WRITE					812			// 
 
 #define  WORK_READ_		((start_reg >= START_WORK_READ) && (last_reg <= END_WORK_READ))	
 #define  WORK_WRITE_		((start_reg >= START_WORK_WRITE) && (last_reg <= END_WORK_WRITE))
 
-#define  START_CALIBR_READ				1000			// ??????? ?????? ??????? ??????
+#define  START_CALIBR_READ				1000			// 
 #define  END_CALIBR_READ				1034			// 
-#define  START_CALIBR_WRITE				1000			// ??????? ?????? ??????? ??????
+#define  START_CALIBR_WRITE				1000			// 
 #define  END_CALIBR_WRITE				1034			// 
 
 #define  CALIBR_READ_		((start_reg >= START_CALIBR_READ) && (last_reg <= END_CALIBR_READ))	
@@ -164,100 +155,98 @@ extern "C" {
     
     ////////////////	End Modbus alowed area 	/////////////////////
 
-#define  STROBE		PORTGbits.RG7			// �������� ��� ����� 586-��
+#define  STROBE		PORTGbits.RG7			
     
-#define  LED_AO		PORTGbits.RG12			// �������� ��� ����� 586-�� pin 96
-#define  LED_AO_ON	PORTG = LATG | 0x1000		// �������� ��� ����� 586-��
-#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		// �������� ��� ����� 586-��
+#define  LED_AO		PORTGbits.RG12			
+#define  LED_AO_ON	PORTG = LATG | 0x1000		
+#define  LED_AO_OFF	PORTG = LATG & 0xEFFF		
     
-#define  LED_IGN	PORTGbits.RG13			// �������� ��� ����� 586-�� pin 97
-#define  LED_IGN_ON	PORTG = LATG | 0x2000		// �������� ��� ����� 586-��
-#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		// �������� ��� ����� 586-��
+#define  LED_IGN	PORTGbits.RG13			
+#define  LED_IGN_ON	PORTG = LATG | 0x2000		
+#define  LED_IGN_OFF	PORTG = LATG & 0xDFFF		
      
-#define  LED_STOP	PORTEbits.RE4			// �������� ��� ����� 586-�� pin 100
-#define  LED_STOP_ON	PORTE = LATE | 0x0010		// �������� ��� ����� 586-��
-#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		// �������� ��� ����� 586-��    
+#define  LED_STOP	PORTEbits.RE4			
+#define  LED_STOP_ON	PORTE = LATE | 0x0010		
+#define  LED_STOP_OFF	PORTE = LATE & 0xFFEF		
 
-#define  LED_SYNC	PORTEbits.RE3			// �������� ��� ����� 586-�� pin 99
-#define  LED_SYNC_ON	PORTE = LATE | 0x0008		// �������� ��� ����� 586-��
-#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		// �������� ��� ����� 586-��    
+#define  LED_SYNC	PORTEbits.RE3			
+#define  LED_SYNC_ON	PORTE = LATE | 0x0008		
+#define  LED_SYNC_OFF	PORTE = LATE & 0xFFF7		
 
-#define  LED_WIGN	PORTEbits.RE2			// �������� ��� ����� 586-�� pin 98
-#define  LED_WIGN_ON	PORTG = LATG | 0x0004		// �������� ��� ����� 586-��   
-#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		// �������� ��� ����� 586-��   
+#define  LED_WIGN	PORTEbits.RE2			
+#define  LED_WIGN_ON	PORTG = LATG | 0x0004		
+#define  LED_WIGN_OFF	PORTG = LATG & 0xFFFB		
 
-#define  LED_8		PORTEbits.RE0			// �������� ��� ����� 586-�� pin 91
-#define  LED_8_ON	PORTE = LATE | 0x0001		// �������� ��� ����� 586-��
-#define  LED_8_OFF	PORTE = LATE & 0xFFFE		// �������� ��� ����� 586-��        
+#define  LED_8		PORTEbits.RE0			
+#define  LED_8_ON	PORTE = LATE | 0x0001		
+#define  LED_8_OFF	PORTE = LATE & 0xFFFE		
  
-#define  LED_7		PORTEbits.RE1			// �������� ��� ����� 586-�� pin 94
-#define  LED_7_ON	PORTE = LATE | 0x0002		// �������� ��� ����� 586-��   
-#define  LED_7_OFF	PORTE = LATE & 0xFFFD		// �������� ��� ����� 586-��   
+#define  LED_7		PORTEbits.RE1			
+#define  LED_7_ON	PORTE = LATE | 0x0002		
+#define  LED_7_OFF	PORTE = LATE & 0xFFFD		
     
     
-#define  LED9		PORTDbits.RD15			// �������� ��� ����� 586-�� pin 48
-#define  LED9_ON	PORTD = LATD | 0x8000		// �������� ��� ����� 586-��   
-#define  LED9_OFF	PORTD = LATD & 0x7FFF		// �������� ��� ����� 586-��       
+#define  LED9		PORTDbits.RD15			
+#define  LED9_ON	PORTD = LATD | 0x8000		
+#define  LED9_OFF	PORTD = LATD & 0x7FFF		
     
-#define  LED10		PORTAbits.RA2			// �������� ��� ����� 586-�� pin 59
-#define  LED10_ON	PORTA = LATA | 0x0004		// �������� ��� ����� 586-��   
-#define  LED10_OFF	PORTA = LATA & 0xFFFB		// �������� ��� ����� 586-��       
+#define  LED10		PORTAbits.RA2			
+#define  LED10_ON	PORTA = LATA | 0x0004		
+#define  LED10_OFF	PORTA = LATA & 0xFFFB		
 
-#define  DO_2		PORTAbits.RA3			// �������� ��� ����� 606-�� pin 60
-#define  DO_2_ON	PORTA = LATA | 0x0008		// �������� ��� ����� 606-��   
-#define  DO_2_OFF	PORTA = LATA & 0xFFF7		// �������� ��� ����� 606-��       
+#define  DO_2		PORTAbits.RA3			
+#define  DO_2_ON	PORTA = LATA | 0x0008		
+#define  DO_2_OFF	PORTA = LATA & 0xFFF7		       
 
-#define  DO_1		PORTAbits.RA4			// �������� ��� ����� 606-�� pin 61
-#define  DO_1_ON	PORTA = LATA | 0x0010		// �������� ��� ����� 606-��   
-#define  DO_1_OFF	PORTA = LATA & 0xFFEF		// �������� ��� ����� 606-��   
+#define  DO_1		PORTAbits.RA4			//  pin 61
+#define  DO_1_ON	PORTA = LATA | 0x0010		//    
+#define  DO_1_OFF	PORTA = LATA & 0xFFEF		
 
-#define  IGN_ON		PORTDbits.RD5			// �������� ��� ����� 606-�� pin 82
+#define  IGN_ON		PORTDbits.RD5			//  pin 82
 
-#define  TAP_ON		PORTC = LATC | 0x2000		// �������� ��� ����� 586-�� pin 72
-#define  TAP_OFF	PORTC = LATC & 0xDFFF		// �������� ��� ����� 586-�� pin 72
+#define  TAP_ON		PORTC = LATC | 0x2000		//  pin 72
+#define  TAP_OFF	PORTC = LATC & 0xDFFF		//  pin 72
 
-#define  IGN_1		PORTDbits.RD9			// �������� ��� ����� 586-�� pin 68
-#define  IGN_2		PORTDbits.RD2			// �������� ��� ����� 586-�� pin 77
-#define  IGN_3		PORTDbits.RD10			// �������� ��� ����� 586-�� pin 69
-#define  IGN_4		PORTDbits.RD3			// �������� ��� ����� 586-�� pin 78
-#define  IGN_5		PORTDbits.RD11			// �������� ��� ����� 586-�� pin 70
-#define  IGN_6		PORTDbits.RD12			// �������� ��� ����� 586-�� pin 79
-#define  IGN_7		PORTDbits.RD0			// �������� ��� ����� 586-�� pin 71
-#define  IGN_8		PORTDbits.RD13			// �������� ��� ����� 586-�� pin 80
-#define  IGN_9		PORTDbits.RD1			// �������� ��� ����� 586-�� pin 76
-#define  IGN_10		PORTDbits.RD4			// �������� ��� ����� 586-�� pin 81
+#define  IGN_1		PORTDbits.RD9			//  pin 68
+#define  IGN_2		PORTDbits.RD2			//  pin 77
+#define  IGN_3		PORTDbits.RD10			//  pin 69
+#define  IGN_4		PORTDbits.RD3			//  pin 78
+#define  IGN_5		PORTDbits.RD11			//  pin 70
+#define  IGN_6		PORTDbits.RD12			//  pin 79
+#define  IGN_7		PORTDbits.RD0			//  pin 71
+#define  IGN_8		PORTDbits.RD13			//  pin 80
+#define  IGN_9		PORTDbits.RD1			//  pin 76
+#define  IGN_10		PORTDbits.RD4			//  pin 81
 
-#define  ON_IGN_1       PORTD = LATD | 0x0200		// �������� ��� ����� 586-�� pin 68
-#define  ON_IGN_2       PORTD = LATD | 0x0004		// �������� ��� ����� 586-�� pin 77
-#define  ON_IGN_3       PORTD = LATD | 0x0400		// �������� ��� ����� 586-�� pin 69
-#define  ON_IGN_4       PORTD = LATD | 0x0008		// �������� ��� ����� 586-�� pin 78
-#define  ON_IGN_5       PORTD = LATD | 0x0800		// �������� ��� ����� 586-�� pin 70
-#define  ON_IGN_6       PORTD = LATD | 0x1000		// �������� ��� ����� 586-�� pin 79
-#define  ON_IGN_7       PORTD = LATD | 0x0001		// �������� ��� ����� 586-�� pin 71
-#define  ON_IGN_8       PORTD = LATD | 0x2000		// �������� ��� ����� 586-�� pin 80
-#define  ON_IGN_9       PORTD = LATD | 0x0002		// �������� ��� ����� 586-�� pin 76
-#define  ON_IGN_10      PORTD = LATD | 0x0010		// �������� ��� ����� 586-�� pin 81
+#define  ON_IGN_1       PORTD = LATD | 0x0200		//  pin 68
+#define  ON_IGN_2       PORTD = LATD | 0x0004		//  pin 77
+#define  ON_IGN_3       PORTD = LATD | 0x0400		//  pin 69
+#define  ON_IGN_4       PORTD = LATD | 0x0008		//  pin 78
+#define  ON_IGN_5       PORTD = LATD | 0x0800		//  pin 70
+#define  ON_IGN_6       PORTD = LATD | 0x1000		//  pin 79
+#define  ON_IGN_7       PORTD = LATD | 0x0001		//  pin 71
+#define  ON_IGN_8       PORTD = LATD | 0x2000		//  pin 80
+#define  ON_IGN_9       PORTD = LATD | 0x0002		//  pin 76
+#define  ON_IGN_10      PORTD = LATD | 0x0010		//  pin 81
     
-#define  IGN_RESET      PORTD = LATD & 0xC1E0		// �������� ��� ����� 586-��
-#define  MAX_CYL_NUM    10				// �������� ��� ����� 586-��
+#define  IGN_RESET      PORTD = LATD & 0xC1E0		
+#define  MAX_CYL_NUM    10				
 
-#define  CTRL1      PORTGbits.RG0			// �������� ��� ����� 586-�� pin 88
-#define  CTRL2      PORTGbits.RG1			// �������� ��� ����� 586-�� pin 87
+#define  CTRL1      PORTGbits.RG0			//  pin 88
+#define  CTRL2      PORTGbits.RG1			//  pin 87
 
-#define  CONF1		PORTCbits.RC2			// �������� ��� ����� 606-�� pin 7 
-#define  CONF2		PORTCbits.RC3			// �������� ��� ����� 606-�� pin 8
-#define  CONF3		PORTCbits.RC4			// �������� ��� ����� 606-�� pin 9
-#define  CONF4		PORTGbits.RG6			// �������� ��� ����� 606-�� pin 10 
-#define  CONF5		PORTEbits.RE5			// �������� ��� ����� 586-�� pin 3
-#define  CONF6		PORTEbits.RE6			// �������� ��� ����� 586-�� pin 4 
-#define  CONF7		PORTEbits.RE7			// �������� ��� ����� 586-�� pin 5
-#define  CONF8		PORTCbits.RC1			// �������� ��� ����� 586-�� pin 6
+#define  CONF1		PORTCbits.RC2			//  pin 7 
+#define  CONF2		PORTCbits.RC3			//  pin 8
+#define  CONF3		PORTCbits.RC4			//  pin 9
+#define  CONF4		PORTGbits.RG6			//  pin 10 
+#define  CONF5		PORTEbits.RE5			//  pin 3
+#define  CONF6		PORTEbits.RE6			//  pin 4 
+#define  CONF7		PORTEbits.RE7			//  pin 5
+#define  CONF8		PORTCbits.RC1			//  pin 6
 
-#define  DI_1		PORTAbits.RA5 			// �������� ��� ����� 606-�� pin 2
-#define  DI_2		PORTGbits.RG15			// �������� ��� ����� 606-�� pin 1
+#define  DI_1		PORTAbits.RA5 			//  pin 2
+#define  DI_2		PORTGbits.RG15			//  pin 1
     
-//  Modbus data define
-/*    */
 #define  FLAP_SET	Modbus.CV_set
 #define  FLAP_POS	Modbus.CV_pos
 #define  FLAP_CURR	Modbus.CV_current    
@@ -270,7 +259,7 @@ extern "C" {
 #define  CONST_UOZ      MB_conf.constructive_UOZ
     
 #define CYLINDERS_NUM	        10
-#define CANDLES_NUM	        1
+#define CANDLES_NUM             1
 
 #define AO_MISS_IGN_SIGN        1
 #define AO_SAU_COMMAND          2
@@ -285,19 +274,9 @@ extern "C" {
 #define AO_CV_CURR_ERROR        11
 #define AO_NO_CHARGE            12
 #define CV_SENSOR_BRAKE         13
-#define AO_5CYL_ERROR_EVEN	14
-#define AO_5CYL_ERROR_ODD	15
+#define AO_5CYL_ERROR_EVEN      14
+#define AO_5CYL_ERROR_ODD       15
 
     
-    
- 
-    
-    
-    
-    
-    
-/* *****************************************************************************
- End of File
- */
     
 #endif //DEFINE_H

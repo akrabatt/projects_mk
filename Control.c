@@ -6,11 +6,9 @@
 #include "define.h"
 #include "extern.h"
 
-
-
-
-extern void mbm_03 (struct tag_usart * usart, unsigned char mbm_adres, unsigned short shift_03, unsigned short quant_03, unsigned short * dest, unsigned long speed);
-
+/** 
+ * @brief stages for control functions
+ */
 enum 
 {
     INIT = 0,
@@ -30,12 +28,12 @@ enum
     IGN_CHECK
 };
 
-void group_read (struct tag_usart * usart)
-{
-    
-}
 
-
+/**
+ * @brief read mops full
+ * 
+ * @param usart - tag_usartm
+ */
 void MOPS_control (struct tag_usartm * usart)
 {
     unsigned short cc;
@@ -77,6 +75,12 @@ void MOPS_control (struct tag_usartm * usart)
     Modbus.buf [16] = usart->mb_status.master_timeout_flag;
 }
 
+
+/**
+ * @brief read mops short
+ * 
+ * @param usart - tag_usartm
+ */
 void MOPS_S_control (struct tag_usartm * usart)
 {
     unsigned short cc;
@@ -118,6 +122,12 @@ void MOPS_S_control (struct tag_usartm * usart)
     Modbus.buf [16] = usart->mb_status.master_timeout_flag;
 }
 
+
+/**
+ * @brief read mus full
+ * 
+ * @param usart - tag_usartm
+ */
 void MUPS_control(struct tag_usartm * usart)
 {   
     // usart->mb_status.master_start = 1;
@@ -163,7 +173,13 @@ unsigned short cc;
     Modbus.buf [16] = usart->mb_status.master_timeout_flag;
 }
 
-// mups control short
+
+
+/**
+ * @brief read mups short
+ * 
+ * @param usart - tag_usartm
+ */
 void MUPS_S_control(struct tag_usartm * usart)
 {   
 unsigned short cc;
@@ -221,7 +237,3 @@ void change_mups_strategy(int slave_id, int strategy_num)
     }
     mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200);
 }
-
-/* *****************************************************************************
- End of File
- */

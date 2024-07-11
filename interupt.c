@@ -7,39 +7,6 @@
 //#include "global.h"
 //#include "global.h"
 
-
-
-extern void tmr_1_init(unsigned short T1_delay, unsigned short TMR1_IE, unsigned  short  TMR1_ON);
-extern void T1Interrupt_(struct tag_usart * usart);
-extern void T5Interrupt_(struct tag_usart * usart);
-extern void T4Interrupt_(struct tag_usart * usart);
-extern void TInterrupt_(struct tag_usart * usart);
-extern void TInterrupt_m(struct tag_usartm * usart);
-
-extern void mbs (struct tag_usart * usart, unsigned char mbs_addres, union tag_direct * dir);
-extern void DMA_uni ( struct tag_usart * usart, unsigned short cnt, unsigned short on, unsigned short force);
-extern void test_uart_dma(void);
-extern void counters (void);
-extern void motor_control (void);
-extern void pid_control(float Kp, float Kd, float Ki);
-extern void ADC_data_store (void);
-
-extern void ADC_interrupt_F (void);
-extern void ADC_dma_store (void);
-extern void IC1Interrupt_(void);
-extern void IC6Interrupt_(void);
-extern void Timer6Interrupt(void);
-extern void Timer7Interrupt(void);
-extern void ignit_stop (void) ;
-extern void IC3Int3527 (void) ;
-extern void IC4Int3527 (void) ;  
-extern void IC7Int (void) ;
-extern void IC8Int (void) ;
-extern void IC7_measure(void);  
-extern void IC8_measure(void);  
-extern void IC3_measure(void);  
-extern void mbm_timeout_control(struct tag_usart *usart);  
-
 unsigned short send_dma;
 
 
@@ -124,8 +91,3 @@ DCH0INTCLR=0x000000ff;      // clear the DMA channel interrupt flags
 IFS4bits.DMA0IF = 0;        // Be sure to clear the DMA0 interrupt flags
 // before exiting the service routine.
 }
-
-
-/* *****************************************************************************
- End of File
- */
