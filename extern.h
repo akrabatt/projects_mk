@@ -4,12 +4,6 @@
 
 #include "define.h"
 
-/* Provide C++ Compatibility */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
     extern unsigned char __attribute__((coherent)) buf_tx5[300];
     extern unsigned char __attribute__((coherent)) buf_tx4[300];
     extern unsigned char __attribute__((coherent)) buf_tx3[300];
@@ -117,106 +111,106 @@ extern "C"
             };
         };
         unsigned short buf[78];
-    } MB, MB_swap, calibr, calibr_swap; // ???????? ?????? 2000 - 2078 (READ / WRITE)
+    } MB, MB_swap, calibr, calibr_swap; // 2000 - 2078 (READ / WRITE)
 
     extern struct tag_usart
     {
-        unsigned char out_buffer[OUT_SIZE]; // ������ ������ ��� ��������� ������ (������������ ������).
-        unsigned char in_buffer[IN_SIZE];   // ������ ������ ��� �������� ������ (����������� ������).
-        unsigned short out_buffer_count;    // ������� ����� ���� � ������ ��������� ������.
-        unsigned short in_buffer_count;     // ������� ����� ���� � ������ �������� ������.
-        unsigned short in_buffer_count2;    // �������������� ������� ����� ���� � ������ �������� ������ (������ �������).
-        unsigned short number_send;         // ���������� ���� ��� ��������.
-        unsigned short port_type;           // ��� �����.
-        unsigned short mbm_status;          // ������ MODBUS.
-        unsigned short mbm_err;             // ������ MODBUS.
-        unsigned short mbm_err16;           // ������ 16 �������
-        unsigned short mbm_status_hl;       // ������ MODBUS �������� ������.
-        unsigned short mbm_status16;        // ������ MODBUS 16 �������.
-        unsigned short repeat_05;           // ������ MODBUS 05.
-        unsigned short repeat_05_;          // ������ ������ MODBUS 05.
-        unsigned short mbm_timeout_counter; // ����-��� ������� MODBUS. //
+        unsigned char out_buffer[OUT_SIZE]; // 
+        unsigned char in_buffer[IN_SIZE];   // 
+        unsigned short out_buffer_count;    // 
+        unsigned short in_buffer_count;     // 
+        unsigned short in_buffer_count2;    // 
+        unsigned short number_send;         // 
+        unsigned short port_type;           // 
+        unsigned short mbm_status;          // 
+        unsigned short mbm_err;             // 
+        unsigned short mbm_err16;           // 
+        unsigned short mbm_status_hl;       // 
+        unsigned short mbm_status16;        // 
+        unsigned short repeat_05;           // 
+        unsigned short repeat_05_;          // 
+        unsigned short mbm_timeout_counter; // 
         unsigned short answer_count;        //
 
         struct tag_mb_statusBITS
         {
-            unsigned modb_mode : 1;           // 1 ��� ��� ������ MODBUS
-            unsigned term_mode : 1;           // 1 ��� ��� ������ ���������
-            unsigned modb_received : 1;       // ���� ��������� MODBUS
-            unsigned modb_transmited : 1;     // ���� �������� MODBUS
-            unsigned modb_receiving : 1;      // ���� ������ MODBUS
-            unsigned modb_transmiting : 1;    // ���� �������� MODBUS
-            unsigned tx_mode : 1;             // ����� �������� (USART TX mode)
-            unsigned mbm_data_rdy : 1;        // ���������� ������ � ��������
-            unsigned master_error : 1;        // ������ �������
-            unsigned bussy1 : 1;              // ��������� ����
-            unsigned bussy2 : 1;              // ��������� ����
-            unsigned last_byte : 1;           // ���� ���������� �����
-            unsigned byte_missing : 1;        // ���������� �����
-            unsigned coll_1 : 1;              // �������� 1
-            unsigned coll_2 : 1;              // �������� 2
-            unsigned coll_3 : 1;              // �������� 3
-            unsigned start16 : 1;             // ������ ��������
-            unsigned master_start : 1;        // ������ �������
-            unsigned master_timeout_flag : 1; // ���� ������ ����-����
-            unsigned tm_on : 1;               // ��������� �������
-            unsigned device_error : 1;        // ������ ����������
-            unsigned crc_error : 1;           // ������ CRC
-            unsigned : 10;                    // ��������� ���� (19-32)
+            unsigned modb_mode : 1;           // 
+            unsigned term_mode : 1;           //
+            unsigned modb_received : 1;       // 
+            unsigned modb_transmited : 1;     // 
+            unsigned modb_receiving : 1;      // 
+            unsigned modb_transmiting : 1;    // 
+            unsigned tx_mode : 1;             // 
+            unsigned mbm_data_rdy : 1;        // 
+            unsigned master_error : 1;        // 
+            unsigned bussy1 : 1;              // 
+            unsigned bussy2 : 1;              // 
+            unsigned last_byte : 1;           // 
+            unsigned byte_missing : 1;        // 
+            unsigned coll_1 : 1;              // 1
+            unsigned coll_2 : 1;              // 2
+            unsigned coll_3 : 1;              // 3
+            unsigned start16 : 1;             // 
+            unsigned master_start : 1;        // 
+            unsigned master_timeout_flag : 1; // 
+            unsigned tm_on : 1;               // 
+            unsigned device_error : 1;        // 
+            unsigned crc_error : 1;           // 
+            unsigned : 10;                    // (19-32)
         } mb_status;
     } usart1, usart2, usart3, usart4, usart5;
 
     extern struct tag_usartm
     {
-        unsigned char out_buffer[OUT_SIZE]; // ������ ������ ��� ��������� ������ (������������ ������).
-        unsigned char in_buffer[IN_SIZE];   // ������ ������ ��� �������� ������ (����������� ������).
-        unsigned short out_buffer_count;    // ������� ����� ���� � ������ ��������� ������.
-        unsigned short in_buffer_count;     // ������� ����� ���� � ������ �������� ������.
-        unsigned short in_buffer_count2;    // �������������� ������� ����� ���� � ������ �������� ������ (������ �������).
-        unsigned short number_send;         // ���������� ���� ��� ��������.
-        unsigned short mbm_status03;        // ������ MODBUS.
-        unsigned short mbm_status16;        // ������ MODBUS 16 �������.
-        unsigned short mbm03_tm_err;        // ������� ������ �������� ������� 3
-        unsigned short mbm03_c01_err;       // ������� ������ �������� 1 ������� 3
-        unsigned short mbm03_c02_err;       // ������� ������ �������� 2 ������� 3
-        unsigned short mbm03_c03_err;       // ������� ������ �������� 3 ������� 3
-        unsigned short mbm03_crc_err;       // ������� ������ CRC16 ������� 3
-        unsigned short mbm16_tm_err;        // ������� ������ �������� ������� 16
-        unsigned short mbm16_c01_err;       // ������� ������ �������� 1 ������� 16
-        unsigned short mbm16_c02_err;       // ������� ������ �������� 2 ������� 16
-        unsigned short mbm16_c03_err;       // ������� ������ �������� 3 ������� 16
-        unsigned short mbm16_crc_err;       // ������� ������ CRC16 ������� 16
-        unsigned short repeat_05;           // ������ MODBUS 05.
-        unsigned short repeat_05_;          // ������ ������ MODBUS 05.
-        unsigned short mbm_timeout_counter; // ����-��� ������� MODBUS. //
+        unsigned char out_buffer[OUT_SIZE]; // 
+        unsigned char in_buffer[IN_SIZE];   // 
+        unsigned short out_buffer_count;    // 
+        unsigned short in_buffer_count;     // 
+        unsigned short in_buffer_count2;    // 
+        unsigned short number_send;         // 
+        unsigned short mbm_status03;        // 
+        unsigned short mbm_status16;        // 
+        unsigned short mbm03_tm_err;        // 
+        unsigned short mbm03_c01_err;       // 
+        unsigned short mbm03_c02_err;       // 
+        unsigned short mbm03_c03_err;       // 
+        unsigned short mbm03_crc_err;       // 
+        unsigned short mbm16_tm_err;        // 
+        unsigned short mbm16_c01_err;       // 
+        unsigned short mbm16_c02_err;       // 
+        unsigned short mbm16_c03_err;       // 
+        unsigned short mbm16_crc_err;       // 
+        unsigned short repeat_05;           // 
+        unsigned short repeat_05_;          // 
+        unsigned short mbm_timeout_counter; // 
         unsigned short answer_count;        //
         unsigned short mbm16_counter_start;
 
         struct stag_mb_statusBITS
         {
-            unsigned modb_mode : 1;           // 1 ��� ��� ������ MODBUS
-            unsigned term_mode : 1;           // 1 ��� ��� ������ ���������
-            unsigned modb_received : 1;       // ���� ��������� MODBUS
-            unsigned modb_transmited : 1;     // ���� �������� MODBUS
-            unsigned modb_receiving : 1;      // ���� ������ MODBUS
-            unsigned modb_transmiting : 1;    // ���� �������� MODBUS
-            unsigned tx_mode : 1;             // ����� �������� (USART TX mode) ���������� ��� ���
-            unsigned mbm_data_rdy : 1;        // ���������� ������ � ��������
-            unsigned master_error : 1;        // ������ �������
-            unsigned bussy1 : 1;              // ��������� ����
-            unsigned bussy2 : 1;              // ��������� ����
-            unsigned last_byte : 1;           // ���� ���������� �����
-            unsigned byte_missing : 1;        // ���������� �����
-            unsigned coll_1 : 1;              // �������� 1
-            unsigned coll_2 : 1;              // �������� 2
-            unsigned coll_3 : 1;              // �������� 3
-            unsigned start16 : 1;             // ������ ��������
-            unsigned master_start : 1;        // ������ �������
-            unsigned master_timeout_flag : 1; // ���� ������ ����-����
-            unsigned tm_on : 1;               // ��������� �������
-            unsigned device_error : 1;        // ������ ����������
-            unsigned crc_error : 1;           // ������ CRC
-            unsigned : 10;                    // ��������� ���� (19-32)
+            unsigned modb_mode : 1;           // 
+            unsigned term_mode : 1;           // 
+            unsigned modb_received : 1;       // 
+            unsigned modb_transmited : 1;     // 
+            unsigned modb_receiving : 1;      // 
+            unsigned modb_transmiting : 1;    // 
+            unsigned tx_mode : 1;             // 
+            unsigned mbm_data_rdy : 1;        // 
+            unsigned master_error : 1;        // 
+            unsigned bussy1 : 1;              // 
+            unsigned bussy2 : 1;              // 
+            unsigned last_byte : 1;           // 
+            unsigned byte_missing : 1;        // 
+            unsigned coll_1 : 1;              // 
+            unsigned coll_2 : 1;              // 
+            unsigned coll_3 : 1;              // 
+            unsigned start16 : 1;             // 
+            unsigned master_start : 1;        // 
+            unsigned master_timeout_flag : 1; // 
+            unsigned tm_on : 1;               // 
+            unsigned device_error : 1;        // 
+            unsigned crc_error : 1;           // 
+            unsigned : 10;                    // (19-32)
         } mb_status;
     } usart1m, usart2m, usart3m, usart4m, usart5m;
 
@@ -230,24 +224,24 @@ extern "C"
             {
                 struct
                 {
-                    unsigned short info[3];                // ����������������� �������: ��� �������, ������ ��������, ������ �����
-                    unsigned short status[num_zones];      // ������� ���
-                    unsigned short hold_status[num_zones]; // ����������� ������� ���
-                    unsigned short current[num_zones + 1]; // ���� ���
+                    unsigned short info[3];                // 
+                    unsigned short status[num_zones];      // 
+                    unsigned short hold_status[num_zones]; // 
+                    unsigned short current[num_zones + 1]; // 
                 };
-                unsigned short read[num_zones * 3 + 4]; // ������� ������
+                unsigned short read[num_zones * 3 + 4]; // 
             };
             union
             {
                 struct
                 {
-                    unsigned short command[num_zones]; // ������� ���
-                    unsigned short type[num_zones];    // ���� ���: �������, �������� � �� � ��� ��
-                    unsigned short limit1[num_zones];  // ������ ���� - ����� ��� ���� ���
-                    unsigned short limit2[num_zones];  // ������ ����� - �������� ��� ���� ���
-                    unsigned short limit3[num_zones];  // ������ �������� - ����� ��� ���� ���
-                    unsigned short limit4[num_zones];  // ������ ����� - �� ��� ���� ���
-                    unsigned short timer1[num_zones];  // ������������� ������� ���� ���
+                    unsigned short command[num_zones]; // 
+                    unsigned short type[num_zones];    // 
+                    unsigned short limit1[num_zones];  // 
+                    unsigned short limit2[num_zones];  // 
+                    unsigned short limit3[num_zones];  // 
+                    unsigned short limit4[num_zones];  // 
+                    unsigned short timer1[num_zones];  // 
                     unsigned short timer2[num_zones];
                     unsigned short timer3[num_zones];
                     unsigned short timer4[num_zones];
@@ -278,19 +272,19 @@ extern "C"
             {
                 struct
                 {
-                    unsigned short info[3];                // ����������������� �������: ��� �������, ������ ��������, ������ �����
-                    unsigned short status[num_zones];      // ������� ���
-                    unsigned short hold_status[num_zones]; // ����������� ������� ���
-                    unsigned short current[num_zones + 1]; // ���� ���
+                    unsigned short info[3];                // 
+                    unsigned short status[num_zones];     // 
+                    unsigned short hold_status[num_zones]; // 
+                    unsigned short current[num_zones + 1]; // 
                 };
-                unsigned short read[num_zones * 3 + 4]; // ������� ������
+                unsigned short read[num_zones * 3 + 4]; // 
             };
             union
             {
                 struct
                 {
                     unsigned short command[num_zones]; 
-                    unsigned short type[num_zones];    // ���� ���: �������, �������� � �� � ��� ��
+                    unsigned short type[num_zones];    // 
                 };
                 unsigned short write[num_zones * 2];
             };
@@ -338,23 +332,23 @@ extern "C"
                 struct
                 {
                     unsigned flap_On : 1;           // 1
-                    unsigned start : 1;             // 2 ������� ����
-                    unsigned ignit_allow : 1;       // 4 Comman ON current stabilization function
-                    unsigned CV_dir_ctrl : 1;       // 8 ����� ������� ���������� ���
-                    unsigned PWM_dir_ctrl : 1;      // 16 ����� ������� ���������� ���
-                    unsigned ign_ctrl : 1;          // 32 ����� �������� ���������
-                    unsigned unlock : 1;            // 64 ������������
-                    unsigned AO : 1;                // 128 ������� ���������� ��������
-                    unsigned clr_err_cnt : 1;       // 256 ������� ��������� ������
-                    unsigned stop : 1;              // 512 ������� ���� - ����� �� ��������������� �������
-                    unsigned press_mode_int : 1;    // 1024 �������� �� ����������
-                    unsigned press_mode_analog : 1; // 2048 �������� �� �������
-                    unsigned deep_on : 1;           // 4096 �������� ������������
-                    unsigned NO : 1;                // 8192 ���������� �������
-                    unsigned stop_pid_on : 1;       // 16384 ������������ ���-����������
-                    unsigned stop_pid_off : 1;      // 32768 ��������� ���-����������
-                    unsigned forced_pid_on : 1;     // 65536 ��������� �������������� ���-����������
-                    unsigned forced_pid_off : 1;    // 131072 ���������� �������������� ���-����������
+                    unsigned start : 1;             // 2 
+                    unsigned ignit_allow : 1;       // 4 
+                    unsigned CV_dir_ctrl : 1;       // 8 
+                    unsigned PWM_dir_ctrl : 1;      // 16 
+                    unsigned ign_ctrl : 1;          // 32 
+                    unsigned unlock : 1;            // 64 
+                    unsigned AO : 1;                // 128 
+                    unsigned clr_err_cnt : 1;       // 256 
+                    unsigned stop : 1;              // 512 
+                    unsigned press_mode_int : 1;    // 1024 
+                    unsigned press_mode_analog : 1; // 2048 
+                    unsigned deep_on : 1;           // 4096 
+                    unsigned NO : 1;                // 8192 
+                    unsigned stop_pid_on : 1;       // 16384 
+                    unsigned stop_pid_off : 1;      // 32768 
+                    unsigned forced_pid_on : 1;     // 65536 
+                    unsigned forced_pid_off : 1;    // 131072 
                     unsigned : 14;                  // Last 8 bits = byte for value of Kp regulator (current current stabilization function)
                 };
                 unsigned long cmd1; // 1
@@ -375,16 +369,16 @@ extern "C"
             unsigned short ADC_CV_pos;    // 25
             unsigned short ADC_CV_curr;   // 26
             unsigned short pulses_11;     // 27
-            unsigned short pulses_40;     // 28	���������� ��������� �� ������ �������� �� ���� ������ �� ������ �������������
+            unsigned short pulses_40;     // 28	
             float err_rpm;                // 29
             union
             {
                 struct
                 {
-                    unsigned CV_locked : 1;        // 1 "�����������" ���
-                    unsigned press_via_analog : 1; // 2 1 - ������ �� ����������� �������; 0 - ������ �� ����������
-                    unsigned CV_magnet_brake : 1;  // 4 ����� �������������� ���
-                    unsigned CV_sensor_err : 1;    // 8 ��������������� ������� ��������� ���
+                    unsigned CV_locked : 1;        // 1 
+                    unsigned press_via_analog : 1; // 2 
+                    unsigned CV_magnet_brake : 1;  // 4 
+                    unsigned CV_sensor_err : 1;    // 8 
                     unsigned deep_mode : 1;        // 16 Command ON
                     unsigned Protect_unswitch : 1; // 32 Command ON
                     unsigned DI1_ctrl : 1;         // 64 Command ON
@@ -392,12 +386,12 @@ extern "C"
                     unsigned CONTROL2 : 1;         // 256
                     unsigned CONTROL3 : 1;         // 512
                     unsigned CONTROL4 : 1;         // 1024
-                    unsigned s12 : 1;              // 2048 �������� �� �������
-                    unsigned deep_is_on : 1;       // 4096 �������� ������������
-                    unsigned stop_pid : 1;         // 8192 �������� ���-���������
-                    unsigned miss_sync : 1;        // 16384 �������� ������ �������������
-                    unsigned miss_rpm : 1;         // 32768 �������� ������ ��������
-                    unsigned forced_pid : 1;       // 65536 ������� ������������� ���
+                    unsigned s12 : 1;              // 2048 
+                    unsigned deep_is_on : 1;       // 4096 
+                    unsigned stop_pid : 1;         // 8192 
+                    unsigned miss_sync : 1;        // 16384 
+                    unsigned miss_rpm : 1;         // 32768 
+                    unsigned forced_pid : 1;       // 65536 
                     unsigned : 15;                 // Last 16 bits = byte for value of Kp regulator (current current stabilization function)
                 };
                 unsigned long statuses; // 31
@@ -432,7 +426,7 @@ extern "C"
             float charge_hold[CYLINDERS_NUM];         //  -   middle discharge time capture for 10 cylinders
         };
         unsigned short buf[112];
-    } MB_diagn, MB_diagn_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270  ��������������� ������
+    } MB_diagn, MB_diagn_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270  
 
     extern unsigned short dir_sc_low[CYLINDERS_NUM];
     extern unsigned short dir_br_low[CYLINDERS_NUM];
@@ -445,24 +439,24 @@ extern "C"
     {
         struct
         {
-            unsigned short active_mops[10];      // 1 ���������� �������� ����
-            unsigned short active_mups[10];      // 11 ���������� �������� ����
+            unsigned short active_mops[10];      // 1 
+            unsigned short active_mups[10];      // 11 
             unsigned short mops_timeout_err[10]; // 21
-            unsigned short mops_crc_err[10];     // 31 ���������� �������� ����
-            unsigned short mops_coll_1_err[10];  // 41 ���������� �������� ����
-            unsigned short mops_coll_2_err[10];  // 51 ���������� �������� ����
-            unsigned short mops_coll_3_err[10];  // 61 ���������� �������� ����
+            unsigned short mops_crc_err[10];     // 31 
+            unsigned short mops_coll_1_err[10];  // 41 
+            unsigned short mops_coll_2_err[10];  // 51 
+            unsigned short mops_coll_3_err[10];  // 61 
             unsigned short mups_timeout_err[10]; // 71
-            unsigned short mups_crc_err[10];     // 81 ���������� �������� ����
-            unsigned short mups_coll_1_err[10];  // 91 ���������� �������� ����
-            unsigned short mups_coll_2_err[10];  // 101 ���������� �������� ����
-            unsigned short mups_coll_3_err[10];  // 111 ���������� �������� ����
-            unsigned short beak_err[10];         // 121 ���������� �������� ����
-            unsigned short norma_err[10];        // 131 ���������� �������� ����
-            unsigned short att_err[10];          // 141 ���������� �������� ����
-            unsigned short fire_err[10];         // 151 ���������� �������� ����
-            unsigned short short_err[10];        // 161 ���������� �������� ����
-            unsigned short current_err[10];      // 171 ���������� �������� ����
+            unsigned short mups_crc_err[10];     // 81 
+            unsigned short mups_coll_1_err[10];  // 91 
+            unsigned short mups_coll_2_err[10];  // 101 
+            unsigned short mups_coll_3_err[10];  // 111 
+            unsigned short beak_err[10];         // 121 
+            unsigned short norma_err[10];        // 131 
+            unsigned short att_err[10];          // 141 
+            unsigned short fire_err[10];         // 151 
+            unsigned short short_err[10];        // 161 
+            unsigned short current_err[10];      // 171 
         };
         //    unsigned short buf [168];
         unsigned short buf[180];
@@ -559,14 +553,5 @@ extern "C"
     extern unsigned short mups_1_strategy[4];// = {0x0100, 0x0100, 0x0100, 0x0100};
     extern unsigned short mups_2_strategy[4];// = {0x0200, 0x0200, 0x0200, 0x0200};
     extern unsigned short mups_3_strategy[4];// = {0x0300, 0x0300, 0x0300, 0x0300};
-
-#ifdef __cplusplus
-}
-#endif
-
-/* *****************************************************************************
- End of File
- */
-
 
 #endif //EXTERN_H
