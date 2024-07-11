@@ -1,3 +1,6 @@
+#ifndef EXTERN_H
+#define EXTERN_H
+
 
 #include "define.h"
 
@@ -564,3 +567,6 @@ extern "C"
 /* *****************************************************************************
  End of File
  */
+
+
+#endif //EXTERN_H

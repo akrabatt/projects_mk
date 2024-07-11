@@ -1,3 +1,6 @@
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
 
 #include "define.h"
 
@@ -549,3 +552,5 @@ extern "C"
 /* *****************************************************************************
  End of File
  */
+
+#endif //GLOBAL_H
