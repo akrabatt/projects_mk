@@ -99,7 +99,7 @@
 #define  START_CONF_READ				500			// config area - setting of engine parameters
 #define  END_CONF_READ  				696			// 
 #define  START_CONF_WRITE				500			//
-#define  END_CONF_WRITE					520			// 
+#define  END_CONF_WRITE					540			// 
 
 #define  CONF_READ_             ((start_reg >= START_CONF_READ) && (last_reg <= END_CONF_READ))	
 #define  CONF_WRITE_            ((start_reg >= START_CONF_WRITE) && (last_reg <= END_CONF_WRITE))
