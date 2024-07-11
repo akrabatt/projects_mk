@@ -235,5 +235,11 @@ void change_mups_strategy(int slave_id, int strategy_num)
             case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
         default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
     }
+    
+    // exemp. work with var end reg
+    unsigned short test;
+    test = Modbus_sw.buf[25];
+    Modbus_sw.buf[26] = test;
+    
     mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200);
 }
