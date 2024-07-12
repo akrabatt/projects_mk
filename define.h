@@ -46,16 +46,19 @@
 #define  frame_delay_1          PBCLK2_/115200*timeout1
 #define  frame_delay_4          PBCLK2_/115200*timeout4
     
+
+
 /////////////////		Modbus alowed areas 		//////////////////////////
     
-    
+/*read MOPS*/
 #define START_READ_MUPS     5000
 #define END_READ_MUPS       6200
 #define START_WRITE_MUPS    5000
 #define END_WRITE_MUPS      6200
 #define  READ_MUPS			((start_reg>=START_READ_MUPS)&&(last_reg<=END_READ_MUPS))			
 #define  WRITE_MUPS		    ((start_reg>=START_WRITE_MUPS)&&(last_reg<=END_WRITE_MUPS))		
-   
+
+/*read MUPS*/
 #define START_READ_MUPS_SHORT   7000
 #define END_READ_MUPS_SHORT     7900
 #define START_WRITE_MUPS_SHORT  7000
@@ -63,6 +66,7 @@
 #define READ_MUPS_SHORT			((start_reg>=START_READ_MUPS_SHORT)&&(last_reg<=END_READ_MUPS_SHORT))			
 #define WRITE_MUPS_SHORT		((start_reg>=START_WRITE_MUPS_SHORT)&&(last_reg<=END_WRITE_MUPS_SHORT))
 
+/*read MOPS short*/
 #define START_READ_MOPS_SHORT   8000    
 #define END_READ_MOPS_SHORT     8900
 //#define START_WRITE_MOPS_SHORT  8000
@@ -70,53 +74,51 @@
 #define READ_MOPS_SHORT			((start_reg>=START_READ_MOPS_SHORT)&&(last_reg<=END_READ_MOPS_SHORT))			
 //#define WRITE_MOPS_SHORT		((start_reg>=START_WRITE_MOPS_SHORT)&&(last_reg<=END_WRITE_MOPS_SHORT))
 
-
+/*read*/
 #define  START_READ					2000			// 
 #define  END_READ					2078			// 
-
 #define  START_WRITE				2054			// 
 #define  END_WRITE					2078			// 
-
 #define  READ_			((start_reg>=START_READ)&&(last_reg<=END_READ))			// 
 #define  WRITE_			((start_reg>=START_WRITE)&&(last_reg<=END_WRITE))		// 
+
 
 #define  START_WORK_READ				800			// 
 #define  END_WORK_READ					812			// 
 #define  START_WORK_WRITE				806			// 
 #define  END_WORK_WRITE					812			// 
-
 #define  WORK_READ_		((start_reg >= START_WORK_READ) && (last_reg <= END_WORK_READ))	
 #define  WORK_WRITE_		((start_reg >= START_WORK_WRITE) && (last_reg <= END_WORK_WRITE))
+
 
 #define  START_CALIBR_READ				1000			// 
 #define  END_CALIBR_READ				1034			// 
 #define  START_CALIBR_WRITE				1000			// 
 #define  END_CALIBR_WRITE				1034			// 
-
 #define  CALIBR_READ_		((start_reg >= START_CALIBR_READ) && (last_reg <= END_CALIBR_READ))	
 #define  CALIBR_WRITE_		((start_reg >= START_CALIBR_WRITE) && (last_reg <= END_CALIBR_WRITE))
 
+/*read&write conf*/
 #define  START_CONF_READ				500			// config area - setting of engine parameters
 #define  END_CONF_READ  				696			// 
 #define  START_CONF_WRITE				500			//
 #define  END_CONF_WRITE					540			// 
-
 #define  CONF_READ_             ((start_reg >= START_CONF_READ) && (last_reg <= END_CONF_READ))	
 #define  CONF_WRITE_            ((start_reg >= START_CONF_WRITE) && (last_reg <= END_CONF_WRITE))
 
+/*read&write modbus*/
 #define  START_MODBUS_READ				0			// working area of engine control and statuses
 #define  END_MODBUS_READ  				82			// 
 #define  START_MODBUS_WRITE				20			//
 #define  END_MODBUS_WRITE				82			// 
-
 #define  MODBUS_READ_           ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))	
 #define  MODBUS_WRITE_		((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
-    
+
+
 #define  START_MB_DIAGN_READ				3000			// config area - setting of engine parameters
 #define  END_MB_DIAGN_READ  				4200			// 
 #define  START_MB_DIAGN_WRITE				3000			//
 #define  END_MB_DIAGN_WRITE                 4200			// 
-
 #define  MB_DIAGN_READ_           ((start_reg >= START_MB_DIAGN_READ) && (last_reg <= END_MB_DIAGN_READ))	
 #define  MB_DIAGN_WRITE_          ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))    
     

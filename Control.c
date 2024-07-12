@@ -253,11 +253,13 @@ int slave_id;   // mups slave_id
 int slave_id_fix;
 int strategy_num;   // mups chan. strategy
 int strategy_num_fix;   
+
 enum {READ_SLAVE_ID = 0,
             READ_MUPS_STRATEGY,
             CONFIG_MEMORY,
             CONFIG_MUPS
     } stages;
+    
 /**
  * @brief this function changes the strategy of the 4 channels of the MUPS at 
  * once
