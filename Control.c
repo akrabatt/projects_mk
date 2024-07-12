@@ -249,10 +249,9 @@ void change_mups_strategy(int slave_id, int strategy_num)
 
 
 // global vars for @change_mups_strategy_wp
-int slave_id;   // mups slave_id
-int slave_id_fix;
-int strategy_num;   // mups chan. strategy
-int strategy_num_fix;   
+int slave_id = 0;           // mups slave_id
+int strategy_num = 0;       // mups chan. strategy
+int strategy_num_fix = 0;   // flag for fix strtegy  
 
 enum {READ_SLAVE_ID = 0,
             READ_MUPS_STRATEGY,
@@ -271,9 +270,15 @@ enum {READ_SLAVE_ID = 0,
 void change_mups_strategy_wp()
 {
     switch(stages)
-    {
-        case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++; slave_id_fix = slave_id;} break;}
-        case READ_MUPS_STRATEGY: {strategy_num = Stand.buf[21]; if(strategy_num > 0 && strategy_num < 4){stages++; strategy_num_fix = strategy_num;} break;}
+    {   
+        case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
+        case READ_MUPS_STRATEGY: 
+            {
+                strategy_num = Stand.buf[21]; 
+//                if(strategy_num == strategy_num_fix && strategy_num != 0) {break;}
+                if(strategy_num > 0 && strategy_num < 4){stages++; strategy_num_fix = strategy_num;} 
+                break;
+            }
         case CONFIG_MEMORY: {
             switch(strategy_num) 
             {
