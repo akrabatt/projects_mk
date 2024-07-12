@@ -221,10 +221,13 @@ unsigned short cc;
     Modbus.buf [16] = usart->mb_status.master_timeout_flag;
 }
 
+
 /**
- * @brief fun change mups strategy
+ * @brief this function changes the strategy of the 4 channels of the MUPS with 
+ * programmatically set parameters
  * 
  * @param strategy_num - mups's strategy
+ * @param slave_id - mups's id address
  */
 void change_mups_strategy(int slave_id, int strategy_num)
 {
@@ -245,24 +248,30 @@ void change_mups_strategy(int slave_id, int strategy_num)
 }
 
 
-// global vars for change_mups_strategy_wp
-int slave_id;
-int strategy_num;
+// global vars for @change_mups_strategy_wp
+int slave_id;   // mups slave_id
+int slave_id_fix;
+int strategy_num;   // mups chan. strategy
+int strategy_num_fix;   
 enum {READ_SLAVE_ID = 0,
             READ_MUPS_STRATEGY,
             CONFIG_MEMORY,
             CONFIG_MUPS
     } stages;
 /**
- * @brief fun change mups strategy without params
+ * @brief this function changes the strategy of the 4 channels of the MUPS at 
+ * once
+ * 
+ * @note The beginning of the requested range in mudbus poll is 501, 
+ * slave_id = 521 reg(Stand.buf[20]), mups_strategy = 522 reg(Stand.buf[21])
  * 
  */
 void change_mups_strategy_wp()
 {
     switch(stages)
     {
-        case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
-        case READ_MUPS_STRATEGY: {strategy_num = Stand.buf[21]; if(strategy_num > 0 && strategy_num < 4){stages++;} break;}
+        case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++; slave_id_fix = slave_id;} break;}
+        case READ_MUPS_STRATEGY: {strategy_num = Stand.buf[21]; if(strategy_num > 0 && strategy_num < 4){stages++; strategy_num_fix = strategy_num;} break;}
         case CONFIG_MEMORY: {
             switch(strategy_num) 
             {
@@ -274,9 +283,5 @@ void change_mups_strategy_wp()
             stages++;
         }
         case CONFIG_MUPS: {mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200); stages = 0; break;}
-        // exemp work with var end reg
-//        unsigned short test;
-//        test = Stand_sw.buf[25-1];
-//        Stand_sw.buf[26-1] = test;
     }
 }
