@@ -255,6 +255,7 @@ int strategy_num_fix = 0;   // flag for fix strtegy
 
 enum {READ_SLAVE_ID = 0,
             READ_MUPS_STRATEGY,
+//            CASE_CHECK,
             CONFIG_MEMORY,
             CONFIG_MUPS
     } stages;
@@ -275,7 +276,7 @@ void change_mups_strategy_wp()
         case READ_MUPS_STRATEGY: 
             {
                 strategy_num = Stand.buf[21]; 
-//                if(strategy_num == strategy_num_fix && strategy_num != 0) {break;}
+                if((strategy_num == strategy_num_fix) && (strategy_num != 0) && (strategy_num_fix != 0)) {break;}
                 if(strategy_num > 0 && strategy_num < 4){stages++; strategy_num_fix = strategy_num;} 
                 break;
             }
