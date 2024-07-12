@@ -243,3 +243,40 @@ void change_mups_strategy(int slave_id, int strategy_num)
     
     mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200);
 }
+
+
+// global vars for change_mups_strategy_wp
+int slave_id;
+int strategy_num;
+enum {READ_SLAVE_ID = 0,
+            READ_MUPS_STRATEGY,
+            CONFIG_MEMORY,
+            CONFIG_MUPS
+    } stages;
+/**
+ * @brief fun change mups strategy without params
+ * 
+ */
+void change_mups_strategy_wp()
+{
+    switch(stages)
+    {
+        case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
+        case READ_MUPS_STRATEGY: {strategy_num = Stand.buf[21]; if(strategy_num > 0 && strategy_num < 4){stages++;} break;}
+        case CONFIG_MEMORY: {
+            switch(strategy_num) 
+            {
+                    case 1: {memcpy(mups_strategy, mups_1_strategy, sizeof(mups_1_strategy)); break;}
+                    case 2: {memcpy(mups_strategy, mups_2_strategy, sizeof(mups_2_strategy)); break;}
+                    case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
+                default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
+            }
+            stages++;
+        }
+        case CONFIG_MUPS: {mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200); stages = 0; break;}
+        // exemp work with var end reg
+//        unsigned short test;
+//        test = Stand_sw.buf[25-1];
+//        Stand_sw.buf[26-1] = test;
+    }
+}
