@@ -38,7 +38,7 @@ int main(void)
 //        memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy));
 //        mbm_16(&usart5m, 2, 212, 4, mups_strategy, 115200);
 //            change_mups_strategy(1, 1);
-            change_mups_strategy_wp();
+            change_mups_strategy_wp(&usart5m);
             mbm_sync = 0;
     }
     stop_uart_tx();

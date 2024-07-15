@@ -269,7 +269,7 @@ enum {READ_SLAVE_ID = 0,
  * slave_id = 521 reg(Stand.buf[20]), mups_strategy = 522 reg(Stand.buf[21])
  * 
  */
-void change_mups_strategy_wp()
+void change_mups_strategy_wp(struct tag_usartm * usart)
 {
     switch(stages)
     {   
@@ -293,6 +293,6 @@ void change_mups_strategy_wp()
             }
             stages++;
         }
-        case CONFIG_MUPS: {mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200); stages = 0; strategy_set_flag++; break;}
+        case CONFIG_MUPS: {mbm_16(usart, slave_id, 212, 4, mups_strategy, 115200); stages = 0; strategy_set_flag++; break;}
     }
 }
