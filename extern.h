@@ -553,5 +553,7 @@
     extern unsigned short mups_1_strategy[4];// = {0x0100, 0x0100, 0x0100, 0x0100};
     extern unsigned short mups_2_strategy[4];// = {0x0200, 0x0200, 0x0200, 0x0200};
     extern unsigned short mups_3_strategy[4];// = {0x0300, 0x0300, 0x0300, 0x0300};
+    
+    extern int incr_stages;
 
 #endif //EXTERN_H

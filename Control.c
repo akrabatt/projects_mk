@@ -221,6 +221,55 @@ unsigned short cc;
     Modbus.buf [16] = usart->mb_status.master_timeout_flag;
 }
 
+/**
+ * @brief this function reads modules and, if the last module is read, 
+ * increments the value of stages
+ * 
+ * @param usart - tag_usartm
+ * @param stg - var for stages
+ */
+void MUPS_S_control_stg(struct tag_usartm * usart)
+{   
+unsigned short cc;
+    Stand_sw.mups_timeout_err [mups_num] = swapshort (Stand.mups_timeout_err [mups_num]);
+    Stand_sw.mups_crc_err [mups_num] = swapshort (Stand.mups_crc_err [mups_num]);    
+    Stand_sw.mups_coll_1_err [mups_num] = swapshort (Stand.mups_coll_1_err [mups_num]);    
+    Stand_sw.mups_coll_2_err [mups_num] = swapshort (Stand.mups_coll_2_err [mups_num]);    
+    Stand_sw.mups_coll_3_err [mups_num] = swapshort (Stand.mups_coll_3_err [mups_num]); 
+    
+    switch (mups_stat) 
+        {
+        case INIT: {usart->mb_status.master_start = 1; mups_num = 0; mups_stat++; break;}
+        case START_MM: { mups_stat++; break; }
+
+        case READ_CYCLE:    {
+            if (mups_num >= 10) 
+            {incr_stages++; mups_num = 0; mups_stat++ ; break;}
+            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (&usart5m, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
+            else {mups_num++;}
+            if (usart->mb_status.mbm_data_rdy == 1)  {
+                for (cc = 0; cc < 29; cc++)    { MUPS_S_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_S_arr [mups_num].main_area [cc]); }
+                usart->mb_status.mbm_data_rdy = 0; mups_num++; 
+                }
+            if (usart->mb_status.master_timeout_flag == 1)  
+                {MUPS_S_arr [mups_num].timeout_err++; Stand.mups_timeout_err [mups_num]++; usart->mb_status.master_timeout_flag = 0;mups_num++; }    
+            if (usart->mb_status.crc_error == 1)    {MUPS_S_arr [mups_num].crc_err++; Stand.mups_crc_err [mups_num]++; usart->mb_status.crc_error = 0; mups_num++; }
+            if (usart->mb_status.coll_1 == 1)       {MUPS_S_arr [mups_num].coll_1_err++; Stand.mups_coll_1_err [mups_num]++; usart->mb_status.coll_1 = 0; mups_num++; }
+            if (usart->mb_status.coll_2 == 1)       {MUPS_S_arr [mups_num].coll_2_err++; Stand.mups_coll_2_err [mups_num]++; usart->mb_status.coll_2 = 0; mups_num++; }
+            if (usart->mb_status.coll_3 == 1)       {MUPS_S_arr [mups_num].coll_3_err++; Stand.mups_coll_3_err [mups_num]++; usart->mb_status.coll_3 = 0; mups_num++; }
+            break;}
+
+        case CHECK_CYCLE:  {  mups_done = 1;  mups_stat = START_MM;   break;}        
+
+        default : {mups_stat = START_MM; break;}
+        }
+
+    Modbus.buf [13] = mups_stat;  
+    Modbus.buf [14] = mups_num; 
+    Modbus.buf [15] = usart->mb_status.mbm_data_rdy;
+    Modbus.buf [16] = usart->mb_status.master_timeout_flag;
+}
+
 
 /**
  * @brief this function changes the strategy of the 4 channels of the MUPS with 
@@ -252,10 +301,12 @@ void change_mups_strategy(int slave_id, int strategy_num)
 int slave_id = 0;           // mups slave_id
 int strategy_num = 0;       // mups chan. strategy
 int strategy_num_fix = 0;   // num current strategy
-int strategy_set_flag = 0;  // flag 
+int strategy_set_flag = 0;  // flag
+int incr_stages = 0;        // incr flag for stages
 
 enum {READ_SLAVE_ID = 0,
             READ_MUPS_STRATEGY,
+            READ_MODULS,
             CHECK,
             CONFIG_MEMORY,
             CONFIG_MUPS
@@ -264,6 +315,8 @@ enum {READ_SLAVE_ID = 0,
 /**
  * @brief this function changes the strategy of the 4 channels of the MUPS at 
  * once
+ * 
+ * @param usart pointer to struct usartm
  * 
  * @note The beginning of the requested range in mudbus poll is 501, 
  * slave_id = 521 reg(Stand.buf[20]), mups_strategy = 522 reg(Stand.buf[21])
@@ -274,9 +327,9 @@ void change_mups_strategy_wp(struct tag_usartm * usart)
     switch(stages)
     {   
         case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
+        case READ_MODULS: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0)
+        {incr_stages = 0; stages++; break;} break;}
         case CHECK: if((strategy_num == strategy_num_fix) && (strategy_num != 0) && (strategy_num_fix != 0) && (strategy_set_flag > 0)) {stages = 0; break;} 
-//                    else if(!(strategy_num == strategy_num_fix) || !(strategy_num != 0) || !(strategy_num_fix != 0) || !(strategy_set_flag > 0)) {stages++; break;}
-//                    else if(strategy_num != strategy_num_fix) {stages++; break;}
         case READ_MUPS_STRATEGY: 
             {
                 strategy_num = Stand.buf[21]; 
@@ -286,12 +339,11 @@ void change_mups_strategy_wp(struct tag_usartm * usart)
         case CONFIG_MEMORY: {
             switch(strategy_num) 
             {
-                    case 1: {memcpy(mups_strategy, mups_1_strategy, sizeof(mups_1_strategy)); break;}
-                    case 2: {memcpy(mups_strategy, mups_2_strategy, sizeof(mups_2_strategy)); break;}
-                    case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
-                default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); break;}
+                    case 1: {memcpy(mups_strategy, mups_1_strategy, sizeof(mups_1_strategy)); stages++; break;}
+                    case 2: {memcpy(mups_strategy, mups_2_strategy, sizeof(mups_2_strategy)); stages++; break;}
+                    case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); stages++; break;}
+                default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); stages++; break;}
             }
-            stages++;
         }
         case CONFIG_MUPS: {mbm_16(usart, slave_id, 212, 4, mups_strategy, 115200); stages = 0; strategy_set_flag++; break;}
     }
