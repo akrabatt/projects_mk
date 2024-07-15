@@ -334,7 +334,12 @@ void change_mups_strategy_wp(struct tag_usartm * usart)
                 break;
             }
         case READ_MODULS_INFO: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages++; break;} break;}
-        case CHECK_STRATEGY: if((strategy_num == strategy_num_fix) && (strategy_num != 0) && (strategy_num_fix != 0) && (strategy_set_flag > 0)) {stages = 0; break;} 
+        case CHECK_STRATEGY: 
+        {
+            if((strategy_num == MUPS_S_arr[slave_id - 1].main_area[12]) && (strategy_num != 0) && (strategy_num_fix != 0)) 
+                {stages = READ_INPUT_SLAVE_ID; break;}
+            else {stages++; break;}
+        }
         case CONFIG_MEMORY: {
             switch(strategy_num) 
             {
