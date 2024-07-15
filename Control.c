@@ -304,10 +304,10 @@ int strategy_num_fix = 0;   // num current strategy
 int strategy_set_flag = 0;  // flag
 int incr_stages = 0;        // incr flag for stages
 
-enum {READ_SLAVE_ID = 0,
-            READ_MUPS_STRATEGY,
-            READ_MODULS,
-            CHECK,
+enum {READ_INPUT_SLAVE_ID = 0,
+            READ_INPUT_MUPS_STRATEGY,
+            READ_MODULS_INFO,
+            CHECK_STRATEGY,
             CONFIG_MEMORY,
             CONFIG_MUPS
     } stages;
@@ -326,16 +326,15 @@ void change_mups_strategy_wp(struct tag_usartm * usart)
 {
     switch(stages)
     {   
-        case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
-        case READ_MODULS: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0)
-        {incr_stages = 0; stages++; break;} break;}
-        case CHECK: if((strategy_num == strategy_num_fix) && (strategy_num != 0) && (strategy_num_fix != 0) && (strategy_set_flag > 0)) {stages = 0; break;} 
-        case READ_MUPS_STRATEGY: 
+        case READ_INPUT_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
+        case READ_INPUT_MUPS_STRATEGY: 
             {
                 strategy_num = Stand.buf[21]; 
                 if(strategy_num > 0 && strategy_num < 4){strategy_set_flag = 0; stages++; strategy_num_fix = strategy_num;} 
                 break;
             }
+        case READ_MODULS_INFO: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages++; break;} break;}
+        case CHECK_STRATEGY: if((strategy_num == strategy_num_fix) && (strategy_num != 0) && (strategy_num_fix != 0) && (strategy_set_flag > 0)) {stages = 0; break;} 
         case CONFIG_MEMORY: {
             switch(strategy_num) 
             {
