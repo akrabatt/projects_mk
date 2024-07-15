@@ -274,9 +274,9 @@ void change_mups_strategy_wp()
     switch(stages)
     {   
         case READ_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
-        case CHECK: if((strategy_num == strategy_num_fix) && (strategy_num != 0) && (strategy_num_fix != 0) && (strategy_set_flag > 0)) {break;} 
+        case CHECK: if((strategy_num == strategy_num_fix) && (strategy_num != 0) && (strategy_num_fix != 0) && (strategy_set_flag > 0)) {stages = 0; break;} 
 //                    else if(!(strategy_num == strategy_num_fix) || !(strategy_num != 0) || !(strategy_num_fix != 0) || !(strategy_set_flag > 0)) {stages++; break;}
-                    else if(strategy_num != strategy_num_fix) {stages++; break;}
+//                    else if(strategy_num != strategy_num_fix) {stages++; break;}
         case READ_MUPS_STRATEGY: 
             {
                 strategy_num = Stand.buf[21]; 
