@@ -364,7 +364,7 @@ enum {READ_INPUT_SLAVE_ID_SEP = 0,
             READ_INPUT_MUPS_STRATEGY_SEP,
             READ_MODULS_INFO_SEP,
             PREPEAR_BUF_SEP,
-            // HECK_STRATEGY_SEP,
+            HECK_STRATEGY_SEP,
             CONFIG_MUPS_SEP
     } stages_sep;
 
@@ -402,6 +402,13 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
                 mups_strategy_sep[2] = swapshort(mups_strategy_sep[2]);
                 mups_strategy_sep[3] = swapshort(mups_strategy_sep[3]);
                 stages_sep++;
+            }
+        case HECK_STRATEGY_SEP: 
+            {
+                if((mups_strategy_sep[0] == MUPS_S_arr_sw[slave_id - 1].main_area[12]) && (mups_strategy_sep[1] == MUPS_S_arr_sw[slave_id - 1].main_area[13])
+                && (mups_strategy_sep[2] == MUPS_S_arr_sw[slave_id - 1].main_area[14]) && (mups_strategy_sep[3] == MUPS_S_arr_sw[slave_id - 1].main_area[14])) 
+                    {stages_sep = READ_INPUT_SLAVE_ID_SEP; break;}
+                else{stages_sep++; break;}
             }
         case CONFIG_MUPS_SEP: {mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200); stages_sep = 0; strategy_set_flag++; break;}
     }
