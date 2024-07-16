@@ -388,6 +388,8 @@
     unsigned short mups_2_strategy[4] = {0x0200, 0x0200, 0x0200, 0x0200};
     unsigned short mups_3_strategy[4] = {0x0300, 0x0300, 0x0300, 0x0300};
 
+    unsigned short mups_strategy_sep[4];
+    
     unsigned short mops_stat;
     unsigned short mups_stat;
     unsigned short mops_done;

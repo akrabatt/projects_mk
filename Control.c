@@ -299,7 +299,7 @@ void change_mups_strategy(int slave_id, int strategy_num)
 
 // global vars for @change_mups_strategy_wp
 int slave_id = 0;           // mups slave_id
-int strategy_num = 0;       // mups chan. strategy
+int strategy_num = 0;       // mups chnls strategy
 int strategy_num_fix = 0;   // num current strategy
 int strategy_set_flag = 0;  // flag
 int incr_stages = 0;        // incr flag for stages
@@ -322,7 +322,7 @@ enum {READ_INPUT_SLAVE_ID = 0,
  * slave_id = 521 reg(Stand.buf[20]), mups_strategy = 522 reg(Stand.buf[21])
  * 
  */
-void change_mups_strategy_wp(struct tag_usartm * usart)
+void change_mups_strategy_cmmon(struct tag_usartm * usart)
 {
     switch(stages)
     {   
@@ -338,7 +338,7 @@ void change_mups_strategy_wp(struct tag_usartm * usart)
             {
                 if((strategy_num == MUPS_S_arr[slave_id - 1].main_area[12]) && (strategy_num != 0) && (strategy_num_fix != 0)) 
                     {stages = READ_INPUT_SLAVE_ID; break;}
-                else {stages++; break;}
+                else{stages++; break;}
             }
         case CONFIG_MEMORY: {
             switch(strategy_num) 
@@ -350,5 +350,47 @@ void change_mups_strategy_wp(struct tag_usartm * usart)
             }
         }
         case CONFIG_MUPS: {mbm_16(usart, slave_id, 212, 4, mups_strategy, 115200); stages = 0; strategy_set_flag++; break;}
+    }
+}
+
+
+// channels strategy
+unsigned short strategy_num_ch1;
+unsigned short strategy_num_ch2;
+unsigned short strategy_num_ch3;
+unsigned short strategy_num_ch4;
+
+enum {READ_INPUT_SLAVE_ID = 0,
+            READ_INPUT_MUPS_STRATEGY,
+            READ_MODULS_INFO,
+//            CHECK_STRATEGY,
+            CONFIG_MEMORY,
+            CONFIG_MUPS
+    } stages_sep;
+
+/**
+ * @brief this function changes the strategy of the 4 channels of the MUPC 
+ * separately
+ * 
+ * @param usart pointer to struct usartm
+ */
+void change_mups_strategy_separately(struct tag_usartm *usart)
+{
+    switch(stages_sep)
+    {
+        case READ_INPUT_SLAVE_ID: {slave_id = Stand.buf[23]; if(slave_id > 0){stages_sep++;} break;}
+        case READ_INPUT_MUPS_STRATEGY: 
+            {
+                mups_strategy_sep[1] = Stand.buf[24]; 
+                mups_strategy_sep[2] = Stand.buf[25]; 
+                mups_strategy_sep[3] = Stand.buf[26]; 
+                mups_strategy_sep[4] = Stand.buf[27]; 
+                
+                if((mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4) || (mups_strategy_sep[4] > 0 && mups_strategy_sep[4] < 4))
+                    {strategy_set_flag = 0; stages_sep++; strategy_num_fix = strategy_num;} 
+                break;
+            }
+        case READ_MODULS_INFO: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} break;}
+        case CONFIG_MEMORY: {}
     }
 }

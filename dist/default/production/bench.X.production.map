@@ -93,6 +93,7 @@ mups_stat           0x2               build/default/production/main.o
 _divider            0x2               build/default/production/interrupt_proc.o
 U4_speed            0x2               build/default/production/main.o
 dir_sc_low          0x14              build/default/production/main.o
+mups_strategy_sep   0x8               build/default/production/main.o
 Modbus_sw           0xa4              build/default/production/main.o
 send_dma            0x2               build/default/production/interupt.o
 bconf               0x1               build/default/production/interrupt_proc.o
@@ -163,21 +164,21 @@ kseg0 Data-Memory Usage
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
 .sdata                  0x80000000           0x40          64  Small init data 
-.sbss                   0x80000040           0x74         116  Small uninit data 
-.bss                    0x800000b4         0x4f94       20372  Uninitialized data 
-.data                   0x80005630           0x18          24  Initialized data 
-.COHERENTBSS$           0x80005050          0x5dc        1500   
-         Total kseg0_data_mem used  :      0x563c       22076  4.2% of 0x80000
+.sbss                   0x80000040           0x80         128  Small uninit data 
+.bss                    0x800000c0         0x4f94       20372  Uninitialized data 
+.data                   0x80005640           0x18          24  Initialized data 
+.COHERENTBSS$           0x80005060          0x5dc        1500   
+         Total kseg0_data_mem used  :      0x5648       22088  4.2% of 0x80000
         --------------------------------------------------------------------------
-            Total Data Memory used  :      0x563c       22076  4.2% of 0x80000
+            Total Data Memory used  :      0x5648       22088  4.2% of 0x80000
         --------------------------------------------------------------------------
 
 
 Dynamic Data-Memory Reservation
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
-heap                    0x80005650           0x10          16  Reserved for heap 
-stack                   0x80005678        0x7a980      502144  Reserved for stack 
+heap                    0x80005660           0x10          16  Reserved for heap 
+stack                   0x80005688        0x7a970      502128  Reserved for stack 
 
         --------------------------------------------------------------------------
 
@@ -1564,7 +1565,7 @@ END GROUP
                 0x80000040                _data_end = .
                 0x80000040                _bss_begin = .
 
-.sbss           0x80000040       0x74
+.sbss           0x80000040       0x80
                 0x80000040                _sbss_begin = .
  *(.dynsbss)
  *(.sbss .sbss.* .gnu.linkonce.sb.*)
@@ -1577,7 +1578,7 @@ END GROUP
                 0x80000050                strategy_set_flag
                 0x80000054                incr_stages
  *(.scommon)
- .scommon       0x80000058       0x32 build/default/production/main.o
+ .scommon       0x80000058       0x3c build/default/production/main.o
                 0x80000058                mops_stat
                 0x8000005a                mups_num
                 0x8000005c                U3_speed
@@ -1596,86 +1597,88 @@ END GROUP
                 0x8000007c                mops_done
                 0x8000007e                mups_stat
                 0x80000080                U4_speed
-                0x80000082                bit_br_low
-                0x80000084                bit_br_high
-                0x80000086                U5_speed
-                0x80000088                mups_done
- .scommon       0x8000008a        0x2 build/default/production/interupt.o
-                0x8000008a                send_dma
- .scommon       0x8000008c        0xa build/default/production/modbus.o
-                0x8000008c                num_reg
-                0x8000008e                length_err
-                0x80000090                last_reg
-                0x80000092                num3
-                0x80000094                start_reg
- .scommon       0x80000096       0x16 build/default/production/interrupt_proc.o
-                0x80000096                conf
-                0x80000098                DI1_cnt
-                0x8000009a                _10msec
-                0x8000009c                conf2
-                0x8000009e                master_start_del
-                0x800000a0                DI3_cnt
-                0x800000a2                _100msec
-                0x800000a4                DI2_cnt
-                0x800000a6                _divider
-                0x800000a8                bconf
-                0x800000a9                bconf2
-                0x800000aa                _1000msec
- .scommon       0x800000ac        0x4 build/default/production/ramtron_drv.o
-                0x800000ac                ucAdressH
-                0x800000ad                iDta
-                0x800000ae                ucAdressL
-                0x800000af                ucStoredData
- .scommon       0x800000b0        0x4 build/default/production/Control.o
-                0x800000b0                stages
-                0x800000b4                _sbss_end = .
-                0x800000b4                . = ALIGN (0x4)
+                0x80000084                mups_strategy_sep
+                0x8000008c                bit_br_low
+                0x8000008e                bit_br_high
+                0x80000090                U5_speed
+                0x80000092                mups_done
+ .scommon       0x80000094        0x2 build/default/production/interupt.o
+                0x80000094                send_dma
+ .scommon       0x80000096        0xa build/default/production/modbus.o
+                0x80000096                num_reg
+                0x80000098                length_err
+                0x8000009a                last_reg
+                0x8000009c                num3
+                0x8000009e                start_reg
+ .scommon       0x800000a0       0x16 build/default/production/interrupt_proc.o
+                0x800000a0                conf
+                0x800000a2                DI1_cnt
+                0x800000a4                _10msec
+                0x800000a6                conf2
+                0x800000a8                master_start_del
+                0x800000aa                DI3_cnt
+                0x800000ac                _100msec
+                0x800000ae                DI2_cnt
+                0x800000b0                _divider
+                0x800000b2                bconf
+                0x800000b3                bconf2
+                0x800000b4                _1000msec
+ .scommon       0x800000b6        0x4 build/default/production/ramtron_drv.o
+                0x800000b6                ucAdressH
+                0x800000b7                iDta
+                0x800000b8                ucAdressL
+                0x800000b9                ucStoredData
+ *fill*         0x800000ba        0x2 
+ .scommon       0x800000bc        0x4 build/default/production/Control.o
+                0x800000bc                stages
+                0x800000c0                _sbss_end = .
+                0x800000c0                . = ALIGN (0x4)
 
-.bss            0x800000b4     0x4f94
+.bss            0x800000c0     0x4f94
  *(.dynbss)
  *(COMMON)
- COMMON         0x800000b4     0x4f88 build/default/production/main.o
-                0x800000b4                MOPS_S_arr
-                0x800005a0                MUPS_S_arr_sw
-                0x800007e4                usart1
-                0x80000a04                usart4
-                0x80000c24                usart5
-                0x80000e44                usart3
-                0x80001064                usart2
-                0x80001284                calibr
-                0x80001320                Modbus
-                0x800013c4                MB_diagn
-                0x800014a4                usart2m
-                0x800016d4                Stand_sw
-                0x8000183c                MOPS_S_arr_sw
-                0x80001d28                MB_diagn_sw
-                0x80001e08                MB_diag
-                0x80001e94                MUPS_S_arr
-                0x800020d8                MOPS_arr_sw
-                0x80002a38                usart3m
-                0x80002c68                MUPS_arr
-                0x800033e8                dir_br_high
-                0x800033fc                MB_swap
-                0x80003498                MB
-                0x80003534                MOPS_arr
-                0x80003e94                usart4m
-                0x800040c4                MB_diag_sw
-                0x80004150                dir_sc_low
-                0x80004164                Modbus_sw
-                0x80004208                Stand
-                0x80004370                usart1m
-                0x800045a0                usart5m
-                0x800047d0                dir_br_low
-                0x800047e4                mups_short
-                0x80004820                calibr_swap
-                0x800048bc                MUPS_arr_sw
- COMMON         0x8000503c        0xa build/default/production/ramtron_drv.o
-                0x8000503c                usSpiBuf
-                0x80005048                . = ALIGN ((. != 0x0)?0x4:0x1)
- *fill*         0x80005046        0x2 
-                0x80005048                . = ALIGN (0x4)
-                0x80005048                _end = .
-                0x80005048                _bss_end = .
+ COMMON         0x800000c0     0x4f88 build/default/production/main.o
+                0x800000c0                MOPS_S_arr
+                0x800005ac                MUPS_S_arr_sw
+                0x800007f0                usart1
+                0x80000a10                usart4
+                0x80000c30                usart5
+                0x80000e50                usart3
+                0x80001070                usart2
+                0x80001290                calibr
+                0x8000132c                Modbus
+                0x800013d0                MB_diagn
+                0x800014b0                usart2m
+                0x800016e0                Stand_sw
+                0x80001848                MOPS_S_arr_sw
+                0x80001d34                MB_diagn_sw
+                0x80001e14                MB_diag
+                0x80001ea0                MUPS_S_arr
+                0x800020e4                MOPS_arr_sw
+                0x80002a44                usart3m
+                0x80002c74                MUPS_arr
+                0x800033f4                dir_br_high
+                0x80003408                MB_swap
+                0x800034a4                MB
+                0x80003540                MOPS_arr
+                0x80003ea0                usart4m
+                0x800040d0                MB_diag_sw
+                0x8000415c                dir_sc_low
+                0x80004170                Modbus_sw
+                0x80004214                Stand
+                0x8000437c                usart1m
+                0x800045ac                usart5m
+                0x800047dc                dir_br_low
+                0x800047f0                mups_short
+                0x8000482c                calibr_swap
+                0x800048c8                MUPS_arr_sw
+ COMMON         0x80005048        0xa build/default/production/ramtron_drv.o
+                0x80005048                usSpiBuf
+                0x80005054                . = ALIGN ((. != 0x0)?0x4:0x1)
+ *fill*         0x80005052        0x2 
+                0x80005054                . = ALIGN (0x4)
+                0x80005054                _end = .
+                0x80005054                _bss_end = .
                 0x00080000                _bmxdudba_address = 0x80000
                 0x00080000                _bmxdupba_address = 0x80000
 
@@ -1822,23 +1825,23 @@ END GROUP
  *.elf(.debug_pubnames)
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x143c3
+.debug_info     0x00000000    0x143ea
  *.elf(.debug_info .gnu.linkonce.wi.*)
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000     0x2a3c build/default/production/main.o
- .debug_info    0x00002a3c     0x5535 build/default/production/init.o
- .debug_info    0x00007f71     0x24cb build/default/production/interupt.o
- .debug_info    0x0000a43c     0x39f2 build/default/production/modbus.o
- .debug_info    0x0000de2e     0x35a4 build/default/production/interrupt_proc.o
- .debug_info    0x000113d2      0xd91 build/default/production/ramtron_drv.o
- .debug_info    0x00012163     0x1bf4 build/default/production/Control.o
- .debug_info    0x00013d57       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_info    0x00013e4c       0xce c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_info    0x00013f1a       0xd6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_info    0x00013ff0       0xe8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_info    0x000140d8       0xf1 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_info    0x000141c9       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_info    0x000142be      0x105 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_info    0x00000000     0x2a60 build/default/production/main.o
+ .debug_info    0x00002a60     0x5535 build/default/production/init.o
+ .debug_info    0x00007f95     0x24cb build/default/production/interupt.o
+ .debug_info    0x0000a460     0x39f2 build/default/production/modbus.o
+ .debug_info    0x0000de52     0x35a4 build/default/production/interrupt_proc.o
+ .debug_info    0x000113f6      0xd91 build/default/production/ramtron_drv.o
+ .debug_info    0x00012187     0x1bf7 build/default/production/Control.o
+ .debug_info    0x00013d7e       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_info    0x00013e73       0xce c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_info    0x00013f41       0xd6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_info    0x00014017       0xe8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_info    0x000140ff       0xf1 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_info    0x000141f0       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_info    0x000142e5      0x105 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
 .debug_abbrev   0x00000000     0x11ae
  *.elf(.debug_abbrev)
@@ -2078,8 +2081,8 @@ LOAD data_init
 .reginfo        0x00000000       0x18
  .reginfo       0x00000000       0x18 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100/crt0_mips32r2.o
 
-.stack          0x80005678      0x400
- .stack         0x80005678      0x400 stack
+.stack          0x80005688      0x400
+ .stack         0x80005688      0x400 stack
 
 .__vector_offset_BF810540_data
                 0xbf810540      0x178
@@ -2126,25 +2129,25 @@ LOAD data_init
  .__vector_offset_BF810894_data
                 0xbf810894        0x4 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/./proc/32MZ1024EFH100\vector_offset_init.o
 
-.COHERENTBSS$   0xa0005050      0x5dc
- .COHERENTBSS$  0xa0005050      0x12c build/default/production/main.o
-                0xa0005050                buf_tx5
+.COHERENTBSS$   0xa0005060      0x5dc
+ .COHERENTBSS$  0xa0005060      0x12c build/default/production/main.o
+                0xa0005060                buf_tx5
  .bss.buf_tx4.buf_tx4
-                0xa000517c      0x12c build/default/production/main.o
-                0xa000517c                buf_tx4
+                0xa000518c      0x12c build/default/production/main.o
+                0xa000518c                buf_tx4
  .bss.buf_tx3.buf_tx3
-                0xa00052a8      0x12c build/default/production/main.o
-                0xa00052a8                buf_tx3
+                0xa00052b8      0x12c build/default/production/main.o
+                0xa00052b8                buf_tx3
  .bss.buf_tx2.buf_tx2
-                0xa00053d4      0x12c build/default/production/main.o
-                0xa00053d4                buf_tx2
+                0xa00053e4      0x12c build/default/production/main.o
+                0xa00053e4                buf_tx2
  .bss.buf_tx1.buf_tx1
-                0xa0005500      0x12c build/default/production/main.o
-                0xa0005500                buf_tx1
+                0xa0005510      0x12c build/default/production/main.o
+                0xa0005510                buf_tx1
 
-.data           0x80005630       0x18
- .data          0x80005630       0x18 build/default/production/ramtron_drv.o
-                0x80005630                RAMTRON_RAM
+.data           0x80005640       0x18
+ .data          0x80005640       0x18 build/default/production/ramtron_drv.o
+                0x80005640                RAMTRON_RAM
 
 .bss            0x00000000        0x0
  .bss           0x00000000        0x0 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
@@ -2344,7 +2347,7 @@ LOAD data_init
                 0x9d005e18                MUPS_S_control
                 0x9d0066f8                MUPS_S_control_stg
                 0x9d006fe4                change_mups_strategy
-                0x9d007128                change_mups_strategy_wp
+                0x9d007128                change_mups_strategy_cmmon
 
 .text           0x9d007414     0x2590
  .text          0x9d007414     0x1320 build/default/production/interrupt_proc.o
