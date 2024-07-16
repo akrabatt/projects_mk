@@ -363,9 +363,8 @@ unsigned short strategy_num_ch4;
 enum {READ_INPUT_SLAVE_ID_SEP = 0,
             READ_INPUT_MUPS_STRATEGY_SEP,
             READ_MODULS_INFO_SEP,
-//            CHECK_STRATEGY_SEP,
-//            CONFIG_MEMORY_SEP,
             PREPEAR_BUF_SEP,
+            // HECK_STRATEGY_SEP,
             CONFIG_MUPS_SEP
     } stages_sep;
 
@@ -374,6 +373,10 @@ enum {READ_INPUT_SLAVE_ID_SEP = 0,
  * separately
  * 
  * @param usart pointer to struct usartm
+ * 
+ * @note The beginning of the requested range in mudbus poll is 501, 
+ * slave_id = 524 reg(Stand.buf[23]), start mups_strategy = 525 reg(Stand.buf[24])
+ * etc.1
  */
 void change_mups_strategy_separately(struct tag_usartm *usart)
 {
