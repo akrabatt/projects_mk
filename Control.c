@@ -361,8 +361,8 @@ unsigned short strategy_num_ch3;
 unsigned short strategy_num_ch4;
 
 enum {READ_INPUT_SLAVE_ID_SEP = 0,
-            READ_INPUT_MUPS_STRATEGY_SEP,
             READ_MODULS_INFO_SEP,
+            READ_INPUT_MUPS_STRATEGY_SEP,
             PREPEAR_BUF_SEP,
             HECK_STRATEGY_SEP,
             CONFIG_MUPS_SEP
@@ -383,6 +383,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
     switch(stages_sep)
     {
         case READ_INPUT_SLAVE_ID_SEP: {slave_id = Stand.buf[23]; if(slave_id > 0){stages_sep++;} break;}
+        case READ_MODULS_INFO_SEP: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} break;}
         case READ_INPUT_MUPS_STRATEGY_SEP: 
             {
                 mups_strategy_sep[0] = Stand.buf[24]; 
@@ -394,7 +395,6 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
                     {strategy_set_flag = 0; stages_sep++; strategy_num_fix = strategy_num;} 
                 break;
             }
-        case READ_MODULS_INFO_SEP: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} break;}
         case PREPEAR_BUF_SEP: 
             {
                 mups_strategy_sep[0] = swapshort(mups_strategy_sep[0]);
