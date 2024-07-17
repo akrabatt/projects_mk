@@ -414,12 +414,13 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
             }
         case CONFIG_MUPS_SEP: 
         {
-            mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200); 
+            mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200);
+            // check end 16 funktion
             if(mbm_16_end_flag > 0)
             {
                 mbm_16_end_flag = 0;
                 stages_sep = 0; 
-                Stand.buf[28] = 0; 
+                    Stand.buf[28] = 0; 
                 Stand_sw.buf[28] = 0; 
             }
             break;
