@@ -437,6 +437,20 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
     }
 }
 
+//vars for relay toggle
+unsigned short rel_tgl_ch1;
+unsigned short rel_tgl_ch2;
+unsigned short rel_tgl_ch3;
+unsigned short rel_tgl_ch4;
+
+enum {CHECK_GLOBAL_FLAG_SEP = 0,
+            READ_INPUT_SLAVE_ID_SEP,
+            READ_MODULS_INFO_SEP,
+            READ_INPUT_MUPS_STRATEGY_SEP,
+            PREPEAR_BUF_SEP,
+            HECK_APPLY_STR_SEP,
+            CONFIG_MUPS_SEP
+    } stages_relay;
 
 /**
  * @brief this funktion is designed to control MUPS relay
@@ -444,5 +458,18 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
  */
 void control_mups_reley()
 {
-    
+    switch(stages_relay)
+    {
+        case CHECK_GLOBAL_FLAG_SEP:
+        {
+            if(mbm_fun_in_work == 0){mbm_fun_in_work++; stages_sep++; break;} 
+            else{stages_sep = 0; break;} 
+        }
+        case READ_INPUT_SLAVE_ID_SEP: 
+        {
+            slave_id = Stand.buf[23]; 
+            if(slave_id > 0){stages_sep++; break;} 
+            else{stages_sep = 0; mbm_fun_in_work = 0; break;} 
+        }
+    }
 }
