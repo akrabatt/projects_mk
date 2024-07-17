@@ -359,12 +359,13 @@ unsigned short strategy_num_ch1;
 unsigned short strategy_num_ch2;
 unsigned short strategy_num_ch3;
 unsigned short strategy_num_ch4;
+unsigned short apply_strategy;
 
 enum {READ_INPUT_SLAVE_ID_SEP = 0,
             READ_MODULS_INFO_SEP,
             READ_INPUT_MUPS_STRATEGY_SEP,
             PREPEAR_BUF_SEP,
-            HECK_STRATEGY_SEP,
+            HECK_APPLY_STR_SEP,
             CONFIG_MUPS_SEP
     } stages_sep;
 
@@ -390,8 +391,10 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
                 mups_strategy_sep[1] = Stand.buf[25]; 
                 mups_strategy_sep[2] = Stand.buf[26]; 
                 mups_strategy_sep[3] = Stand.buf[27]; 
+                apply_strategy = Stand.buf[28];
                 
-                if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4))
+                if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || 
+                   (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4))
                     {stages_sep++; strategy_num_fix = strategy_num;} 
                 break;
             }
@@ -403,12 +406,11 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
                 mups_strategy_sep[3] = swapshort(mups_strategy_sep[3]);
                 stages_sep++;
             }
-        case HECK_STRATEGY_SEP: 
+        case HECK_APPLY_STR_SEP: 
             {
-                if((mups_strategy_sep[0] == MUPS_S_arr_sw[slave_id - 1].main_area[12]) && (mups_strategy_sep[1] == MUPS_S_arr_sw[slave_id - 1].main_area[13])
-                && (mups_strategy_sep[2] == MUPS_S_arr_sw[slave_id - 1].main_area[14]) && (mups_strategy_sep[3] == MUPS_S_arr_sw[slave_id - 1].main_area[14])) 
-                    {stages_sep = READ_INPUT_SLAVE_ID_SEP; break;}
-                else{stages_sep++; break;}
+                if(apply_strategy > 0) {stages_sep++; apply_strategy = 0; break;}
+                else{stages_sep = READ_INPUT_SLAVE_ID_SEP; break;}
+                
             }
         case CONFIG_MUPS_SEP: {mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200); stages_sep = 0; break;}
     }
