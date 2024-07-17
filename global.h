@@ -390,6 +390,8 @@
 
     unsigned short mups_strategy_sep[4];
     
+    unsigned short mbm_16_end_flag;
+    
     unsigned short mops_stat;
     unsigned short mups_stat;
     unsigned short mops_done;

@@ -557,5 +557,7 @@
     extern unsigned short mups_strategy_sep[4];
     
     extern int incr_stages;
+    
+    extern unsigned short mbm_16_end_flag;
 
 #endif //EXTERN_H

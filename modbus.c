@@ -753,6 +753,7 @@ void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short
 			usart->mb_status.master_error=0; 
 			usart->mb_status.start16=0;			
 			usart->mbm_status16=0; 
+            mbm_16_end_flag++;
 			break;	}
 
 

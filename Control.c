@@ -408,10 +408,21 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
             }
         case HECK_APPLY_STR_SEP: 
             {
-                if(apply_strategy > 0) {stages_sep++; apply_strategy = 0; break;}
+                if(apply_strategy > 0) {stages_sep++; break;}
                 else{stages_sep = READ_INPUT_SLAVE_ID_SEP; break;}
                 
             }
-        case CONFIG_MUPS_SEP: {mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200); stages_sep = 0; break;}
+        case CONFIG_MUPS_SEP: 
+        {
+            mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200); 
+            if(mbm_16_end_flag > 0)
+            {
+                mbm_16_end_flag = 0;
+                stages_sep = 0; 
+                Stand.buf[28] = 0; 
+                Stand_sw.buf[28] = 0; 
+            }
+            break;
+        }
     }
 }
