@@ -27,18 +27,8 @@ int main(void)
     {
         mbs (&usart4, 1);				// порт  4
         stop_uart_tx_dma();   
-        //    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
-        //    stop_uart_tx();
-        //    MUPS_control (&usart5m);
+        
         if ( mbm_sync ==  1 ) {  
-        //        mbm_03 (&usart5, 1, 0, 28, (unsigned short * ) &MOPS_arr [1], 115200);
-        //        mbm_03_str (&usart5m, 1, 0, 108, (unsigned short * ) &MOPS_arr [1], 115200);
-        //        MOPS_S_control (&usart5m);
-//        MUPS_S_control (&usart5m);
-//        memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy));
-//        mbm_16(&usart5m, 2, 212, 4, mups_strategy, 115200);
-//            change_mups_strategy(1, 1);
-//            change_mups_strategy_cmmon(&usart5m);
             change_mups_strategy_separately(&usart5m);
             control_mups_reley(&usart5m);
             mbm_sync = 0;
