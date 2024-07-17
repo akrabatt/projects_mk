@@ -556,6 +556,8 @@
     
     extern unsigned short mups_strategy_sep[4];
     
+    extern unsigned short relay_toggle[4];
+    
     extern int incr_stages;
     
     extern unsigned short mbm_16_end_flag;

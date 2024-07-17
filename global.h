@@ -390,6 +390,8 @@
 
     unsigned short mups_strategy_sep[4];
     
+    unsigned short relay_toggle[4];
+    
     // flag for a low-level function mbm_16
     unsigned short mbm_16_end_flag;
     

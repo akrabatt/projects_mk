@@ -411,7 +411,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
                 
                 if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || 
                    (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4))
-                    {stages_sep++; strategy_num_fix = strategy_num;} 
+                    {stages_sep++;} 
                 break;
             }
         case PREPEAR_BUF_SEP: 
@@ -438,38 +438,53 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
 }
 
 //vars for relay toggle
-unsigned short rel_tgl_ch1;
-unsigned short rel_tgl_ch2;
-unsigned short rel_tgl_ch3;
-unsigned short rel_tgl_ch4;
 
-enum {CHECK_GLOBAL_FLAG_SEP = 0,
-            READ_INPUT_SLAVE_ID_SEP,
-            READ_MODULS_INFO_SEP,
-            READ_INPUT_MUPS_STRATEGY_SEP,
-            PREPEAR_BUF_SEP,
-            HECK_APPLY_STR_SEP,
-            CONFIG_MUPS_SEP
+enum {CHECK_GLOBAL_FLAG_REL = 0,
+            READ_INPUT_SLAVE_ID_REL,
+            READ_MODULS_INFO_REL,
+            READ_INPUT_MUPS_RELAY_REL,
+            PREPEAR_BUF_REL,
+            HECK_APPLY_STR_REL,
+            CONFIG_MUPS_REL
     } stages_relay;
 
 /**
  * @brief this funktion is designed to control MUPS relay
  * 
  */
-void control_mups_reley()
+void control_mups_reley(struct tag_usartm * usart)
 {
     switch(stages_relay)
     {
-        case CHECK_GLOBAL_FLAG_SEP:
+        case CHECK_GLOBAL_FLAG_REL:
         {
-            if(mbm_fun_in_work == 0){mbm_fun_in_work++; stages_sep++; break;} 
-            else{stages_sep = 0; break;} 
+            if(mbm_fun_in_work == 0){mbm_fun_in_work++; stages_relay++; break;} 
+            else{stages_relay = 0; break;} 
         }
-        case READ_INPUT_SLAVE_ID_SEP: 
+        case READ_INPUT_SLAVE_ID_REL: 
         {
             slave_id = Stand.buf[23]; 
-            if(slave_id > 0){stages_sep++; break;} 
-            else{stages_sep = 0; mbm_fun_in_work = 0; break;} 
+            if(slave_id > 0){stages_relay++; break;} 
+            else{stages_relay = 0; mbm_fun_in_work = 0; break;} 
         }
+        case READ_MODULS_INFO_REL: 
+        {
+            MUPS_S_control_stg (&usart5m); 
+            if(incr_stages > 0){incr_stages = 0; stages_relay++; break;} 
+            break;
+        }
+        case READ_INPUT_MUPS_RELAY_REL: 
+            {
+                relay_toggle[0] = Stand.buf[29]; 
+                relay_toggle[1] = Stand.buf[30]; 
+                relay_toggle[2] = Stand.buf[31]; 
+                relay_toggle[3] = Stand.buf[32]; 
+                apply_strategy = Stand.buf[33];
+                
+                if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || 
+                   (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4))
+                    {stages_relay++; strategy_num_fix = strategy_num;} 
+                break;
+            }
     }
 }
