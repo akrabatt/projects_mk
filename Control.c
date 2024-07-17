@@ -361,7 +361,8 @@ unsigned short strategy_num_ch3;
 unsigned short strategy_num_ch4;
 unsigned short apply_strategy;
 
-enum {READ_INPUT_SLAVE_ID_SEP = 0,
+enum {CHECK_GLOBAL_FLAG_SEP = 0,
+            READ_INPUT_SLAVE_ID_SEP,
             READ_MODULS_INFO_SEP,
             READ_INPUT_MUPS_STRATEGY_SEP,
             PREPEAR_BUF_SEP,
@@ -377,14 +378,29 @@ enum {READ_INPUT_SLAVE_ID_SEP = 0,
  * 
  * @note The beginning of the requested range in mudbus poll is 501, 
  * slave_id = 524 reg(Stand.buf[23]), start mups_strategy = 525 reg(Stand.buf[24])
- * etc.1
+ * etc.1, apply_strategy = 531 reg(Stand.buf[28])
  */
 void change_mups_strategy_separately(struct tag_usartm *usart)
 {
     switch(stages_sep)
     {
-        case READ_INPUT_SLAVE_ID_SEP: {slave_id = Stand.buf[23]; if(slave_id > 0){stages_sep++;} break;}
-        case READ_MODULS_INFO_SEP: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} break;}
+        case CHECK_GLOBAL_FLAG_SEP: 
+        {
+            if(mbm_fun_in_work == 0){mbm_fun_in_work++; stages_sep++; break;} 
+            else{stages_sep = 0; break;} 
+        }
+        case READ_INPUT_SLAVE_ID_SEP: 
+        {
+            slave_id = Stand.buf[23]; 
+            if(slave_id > 0){stages_sep++; break;} 
+            else{stages_sep = 0; mbm_fun_in_work = 0; break;} 
+        }
+        case READ_MODULS_INFO_SEP: 
+        {
+            MUPS_S_control_stg (&usart5m); 
+            if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} 
+            break;
+        }
         case READ_INPUT_MUPS_STRATEGY_SEP: 
             {
                 mups_strategy_sep[0] = Stand.buf[24]; 
@@ -409,21 +425,24 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
         case HECK_APPLY_STR_SEP: 
             {
                 if(apply_strategy > 0) {stages_sep++; break;}
-                else{stages_sep = READ_INPUT_SLAVE_ID_SEP; break;}
-                
+                else{stages_sep = CHECK_GLOBAL_FLAG_SEP; mbm_fun_in_work = 0; break;}
             }
         case CONFIG_MUPS_SEP: 
         {
             mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200);
             // check end 16 funktion
-            if(mbm_16_end_flag > 0)
-            {
-                mbm_16_end_flag = 0;
-                stages_sep = 0; 
-                    Stand.buf[28] = 0; 
-                Stand_sw.buf[28] = 0; 
-            }
+            if(mbm_16_end_flag > 0){mbm_16_end_flag = 0; stages_sep = 0; Stand.buf[28] = 0; Stand_sw.buf[28] = 0; mbm_fun_in_work = 0;}
             break;
         }
     }
+}
+
+
+/**
+ * @brief this funktion is designed to control MUPS relay
+ * 
+ */
+void control_mups_reley()
+{
+    
 }

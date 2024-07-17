@@ -559,5 +559,7 @@
     extern int incr_stages;
     
     extern unsigned short mbm_16_end_flag;
+    
+    extern unsigned short mbm_fun_in_work;
 
 #endif //EXTERN_H

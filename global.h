@@ -390,7 +390,11 @@
 
     unsigned short mups_strategy_sep[4];
     
+    // flag for a low-level function mbm_16
     unsigned short mbm_16_end_flag;
+    
+    // flag for the order of high-level functions
+    unsigned short mbm_fun_in_work = 0;
     
     unsigned short mops_stat;
     unsigned short mups_stat;
