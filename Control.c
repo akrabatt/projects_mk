@@ -392,7 +392,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
                 mups_strategy_sep[3] = Stand.buf[27]; 
                 
                 if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4))
-                    {strategy_set_flag = 0; stages_sep++; strategy_num_fix = strategy_num;} 
+                    {stages_sep++; strategy_num_fix = strategy_num;} 
                 break;
             }
         case PREPEAR_BUF_SEP: 
@@ -410,6 +410,6 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
                     {stages_sep = READ_INPUT_SLAVE_ID_SEP; break;}
                 else{stages_sep++; break;}
             }
-        case CONFIG_MUPS_SEP: {mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200); stages_sep = 0; strategy_set_flag++; break;}
+        case CONFIG_MUPS_SEP: {mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200); stages_sep = 0; break;}
     }
 }
