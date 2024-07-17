@@ -438,6 +438,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
 }
 
 //vars for relay toggle
+unsigned short apply_toggle;
 
 enum {CHECK_GLOBAL_FLAG_REL = 0,
             READ_INPUT_SLAVE_ID_REL,
@@ -479,12 +480,32 @@ void control_mups_reley(struct tag_usartm * usart)
                 relay_toggle[1] = Stand.buf[30]; 
                 relay_toggle[2] = Stand.buf[31]; 
                 relay_toggle[3] = Stand.buf[32]; 
-                apply_strategy = Stand.buf[33];
+                apply_toggle = Stand.buf[33];
                 
-                if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || 
-                   (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4))
-                    {stages_relay++; strategy_num_fix = strategy_num;} 
+                if((relay_toggle[0] > 0 && relay_toggle[0] < 7) || (relay_toggle[1] > 0 && relay_toggle[1] < 7) || 
+                   (relay_toggle[2] > 0 && relay_toggle[2] < 7) || (relay_toggle[3] > 0 && relay_toggle[3] < 7))
+                   {stages_relay++;} 
                 break;
             }
+        case PREPEAR_BUF_REL: 
+            {
+                relay_toggle[0] = swapshort(relay_toggle[0]);
+                relay_toggle[1] = swapshort(relay_toggle[1]);
+                relay_toggle[2] = swapshort(relay_toggle[2]);
+                relay_toggle[3] = swapshort(relay_toggle[3]);
+                stages_relay++;
+            }
+        case HECK_APPLY_STR_REL: 
+            {
+                if(apply_toggle > 0) {stages_relay++; break;}
+                else{stages_relay = CHECK_GLOBAL_FLAG_REL; mbm_fun_in_work = 0; break;}
+            }
+        case CONFIG_MUPS_REL: 
+        {
+            mbm_16(usart, slave_id, 208, 4, relay_toggle, 115200);
+            // check end 16 funktion
+            if(mbm_16_end_flag > 0){mbm_16_end_flag = 0; stages_relay = 0; Stand.buf[33] = 0; Stand_sw.buf[33] = 0; mbm_fun_in_work = 0;}
+            break;
+        }
     }
 }
