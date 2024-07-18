@@ -452,6 +452,11 @@ enum {CHECK_GLOBAL_FLAG_REL = 0,
 /**
  * @brief this funktion is designed to control MUPS relay
  * 
+ * @param usart pointer to struct usartm
+ * 
+ * @note The beginning of the requested range in mudbus poll is 501, 
+ * slave_id = 530 reg(Stand.buf[23]), start mups_strategy = 530 reg(Stand.buf[30])
+ * etc.1, apply_strategy = 531 reg(Stand.buf[34])
  */
 void control_mups_reley(struct tag_usartm * usart)
 {
