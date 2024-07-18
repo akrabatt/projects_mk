@@ -48,6 +48,24 @@
     
 
 
+/////////////////		const for 530 board 		//////////////////////////
+
+// short current
+#define SHORT_CURRENT_530_1     0x9249
+#define SHORT_CURRENT_530_2     0x0024
+
+// fire
+#define FIRE_530_1      0x2492
+#define FIRE_530_2      0x0049
+
+// attantion
+#define ATTANTION_530_1     0x4924
+#define ATTANTION_530_2     0x0092
+
+// normal
+#define NORMAL_530_1    0x0000
+#define NOEMAL_530_2    0x0000
+
 /////////////////		Modbus alowed areas 		//////////////////////////
     
 /*read MOPS*/
