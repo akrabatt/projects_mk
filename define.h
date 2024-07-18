@@ -58,7 +58,7 @@
 #define  READ_MUPS			((start_reg>=START_READ_MUPS)&&(last_reg<=END_READ_MUPS))			
 #define  WRITE_MUPS		    ((start_reg>=START_WRITE_MUPS)&&(last_reg<=END_WRITE_MUPS))		
 
-/*read MUPS*/
+/*read MUPS_short*/
 #define START_READ_MUPS_SHORT   7000
 #define END_READ_MUPS_SHORT     7900
 #define START_WRITE_MUPS_SHORT  7000

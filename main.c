@@ -29,8 +29,9 @@ int main(void)
         stop_uart_tx_dma();   
         
         if ( mbm_sync ==  1 ) {  
-            change_mups_strategy_separately(&usart5m);
-            control_mups_reley(&usart5m);
+//            change_mups_strategy_separately(&usart5m);
+//            control_mups_reley(&usart5m);
+            MOPS_S_control(&usart5m);
             mbm_sync = 0;
     }
     stop_uart_tx();
