@@ -425,6 +425,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
             if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || 
                 (mups_strategy_sep[2] > 0 && mups_strategy_sep[2] < 4) || (mups_strategy_sep[3] > 0 && mups_strategy_sep[3] < 4))
                 {stages_sep++;} 
+            else {stages_sep = READ_INPUT_MUPS_STRATEGY_SEP; break;}
             break;
         }
         case PREPEAR_BUF_SEP: 
@@ -491,7 +492,7 @@ void control_mups_reley(struct tag_usartm * usart)
                 
             if((relay_toggle[0] > 0 && relay_toggle[0] < 7) || (relay_toggle[1] > 0 && relay_toggle[1] < 7) || 
                 (relay_toggle[2] > 0 && relay_toggle[2] < 7) || (relay_toggle[3] > 0 && relay_toggle[3] < 7))
-                {stages_relay++;} 
+                {stages_relay++;}
             break;
         }
         case PREPEAR_BUF_REL: 
