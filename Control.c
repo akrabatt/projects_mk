@@ -425,7 +425,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
         case HECK_APPLY_STR_SEP: 
             {
                 if(apply_strategy > 0) {stages_sep++; break;}
-                else{stages_sep = CHECK_GLOBAL_FLAG_SEP; mbm_fun_in_work = 0; break;}
+                else{stages_sep = READ_INPUT_SLAVE_ID_SEP; mbm_fun_in_work = 0; break;}
             }
         case CONFIG_MUPS_SEP: 
         {
