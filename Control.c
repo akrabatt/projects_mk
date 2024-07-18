@@ -369,6 +369,18 @@ enum {CHECK_GLOBAL_FLAG_SEP = 0,
             HECK_APPLY_STR_SEP,
             CONFIG_MUPS_SEP
     } stages_sep;
+    
+    //vars for relay toggle
+unsigned short apply_toggle;
+
+enum {CHECK_GLOBAL_FLAG_REL = 0,
+            READ_INPUT_SLAVE_ID_REL,
+            READ_MODULS_INFO_REL,
+            READ_INPUT_MUPS_RELAY_REL,
+            PREPEAR_BUF_REL,
+            HECK_APPLY_STR_REL,
+            CONFIG_MUPS_REL
+    } stages_relay;
 
 /**
  * @brief this function changes the strategy of the 4 channels of the MUPC 
@@ -397,6 +409,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
         }
         case READ_MODULS_INFO_SEP: 
         {
+            if((stages_sep = READ_MODULS_INFO_SEP) && (stages_relay == READ_MODULS_INFO_REL)) {stages_sep++; break;}
             MUPS_S_control_stg (&usart5m); 
             if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} 
             break;
@@ -437,17 +450,6 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
     }
 }
 
-//vars for relay toggle
-unsigned short apply_toggle;
-
-enum {CHECK_GLOBAL_FLAG_REL = 0,
-            READ_INPUT_SLAVE_ID_REL,
-            READ_MODULS_INFO_REL,
-            READ_INPUT_MUPS_RELAY_REL,
-            PREPEAR_BUF_REL,
-            HECK_APPLY_STR_REL,
-            CONFIG_MUPS_REL
-    } stages_relay;
 
 /**
  * @brief this funktion is designed to control MUPS relay
