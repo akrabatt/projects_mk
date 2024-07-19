@@ -18,7 +18,7 @@ unsigned short send_dma;
 
 void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void)   {T1CONbits.TON=0; TInterrupt_m(&usart1m); IFS0bits.T1IF = 0;}
 void __ISR_AT_VECTOR (_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)   {T2CONbits.TON=0; TInterrupt_m(&usart2m); IFS0bits.T2IF = 0;}
-void __ISR_AT_VECTOR (_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)   {T3CONbits.TON=0; T3Interrupt_(&usart3); IFS0bits.T3IF = 0;}
+void __ISR_AT_VECTOR (_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)   {T3CONbits.TON=0; U3_LED_RX_TOGGLE; T3Interrupt_(&usart3); IFS0bits.T3IF = 0;}
 void __ISR_AT_VECTOR (_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)   {T4CONbits.TON=0; TInterrupt_m(&usart4m); IFS0bits.T4IF = 0;}
 void __ISR_AT_VECTOR (_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)   {T5CONbits.TON=0; TInterrupt_m(&usart5m); IFS0bits.T5IF = 0;}
 
@@ -32,16 +32,16 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
     counters ();  
     mbm_sync = 1;
     
-    if(++usart5m.mbm16_counter_start >= 100)
-    {
-        usart5m.mbm16_counter_start = 0;
-        usart5m.mb_status.start16 = 1;
-    }
-    if(++usart4m.mbm16_counter_start >= 100)
-    {
-        usart4m.mbm16_counter_start = 0;
-        usart4m.mb_status.start16 = 1;
-    }
+//    if(++usart5m.mbm16_counter_start >= 100)
+//    {
+//        usart5m.mbm16_counter_start = 0;
+//        usart5m.mb_status.start16 = 1;
+//    }
+//    if(++usart4m.mbm16_counter_start >= 100)
+//    {
+//        usart4m.mbm16_counter_start = 0;
+//        usart4m.mb_status.start16 = 1;
+//    }
 //    mbm_timeout_control(&usart4);
 //    mbm_timeout_control(&usart5);
 }    

@@ -20,6 +20,8 @@
     extern unsigned short help_strobe;
     extern unsigned short help_reset;
     extern unsigned short help_load;
+    
+    extern unsigned short for_u3_led_toggle;
 
     extern union tag_direct
     {

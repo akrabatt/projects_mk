@@ -47,7 +47,15 @@
  
 #define  frame_delay_1          PBCLK2_/115200*timeout1
 #define  frame_delay_4          PBCLK2_/115200*timeout4
-    
+
+
+/////////////////		leds for modbus 		    //////////////////////////
+//uart3
+#define U3_LED_TX_TOGGLE    PORTGbits.RG14 = LATGbits.LATG14 ^ 1;   // pin 95/RG14
+#define U3_LED_RX_TOGGLE    PORTGbits.RG12 = LATGbits.LATG12 ^ 1;   // pin 96/RG12
+
+//uart2
+
 
 
 /////////////////		const for 530 board 		//////////////////////////
@@ -57,16 +65,16 @@
 #define SHORT_CURRENT_530_2     0x0024
 
 // fire
-#define FIRE_530_1      0x2492
-#define FIRE_530_2      0x0049
+#define FIRE_530_1              0x2492
+#define FIRE_530_2              0x0049
 
 // attantion
-#define ATTANTION_530_1     0x4924
-#define ATTANTION_530_2     0x0092
+#define ATTANTION_530_1         0x4924
+#define ATTANTION_530_2         0x0092
 
 // normal
-#define NORMAL_530_1    0x0000
-#define NOEMAL_530_2    0x0000
+#define NORMAL_530_1            0x0000
+#define NOEMAL_530_2            0x0000
 
 
 

@@ -4,6 +4,9 @@
 
 #include "define.h"
 
+
+unsigned short for_u3_led_toggle;
+
     unsigned char __attribute__((coherent)) buf_tx5[300];
     unsigned char __attribute__((coherent)) buf_tx4[300];
     unsigned char __attribute__((coherent)) buf_tx3[300];

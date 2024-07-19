@@ -6,21 +6,6 @@
 #include "define.h"
 #include "extern.h"
 
-
-
-
-
-extern void stop_inactive (void);
-extern void uart1_init(void);
-extern void uart2_init(void);
-extern void uart3_init(void);
-extern void uart4_init(void);
-extern void uart5_init(void);
-extern void motor_regulator (float motor_Kp, float motor_Ki, float motor_Kd);
-extern void motor_control (void);
-extern void main_control (void);
-
-//extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p)
 extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const void* p) 
 { 
  return (int)p<0?((int)p&0x1fffffffL):(unsigned int)((unsigned char*)p+0x40000000L); 
@@ -277,6 +262,8 @@ void counters (void)
             {    
                 usart5m.mb_status.master_start = 1;    
                 usart4m.mb_status.master_start = 1;    
+                usart2m.mb_status.master_start = 1;    
+                usart1m.mb_status.master_start = 1;    
             }
         }   
 

@@ -403,6 +403,7 @@ void stop_uart_tx_dma(void)
         	IFS4bits.U3RXIF = 0; 
             ENAB_RX3;
             IEC4bits.U3RXIE = 1;
+            U3_LED_TX_TOGGLE;
         }
         if (U3STAbits.OERR||U3STAbits.FERR)	{U3STAbits.OERR=0;}
     }
