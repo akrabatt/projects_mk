@@ -50,7 +50,7 @@ void MOPS_control (struct tag_usartm * usart)
 
         case READ_CYCLE:    {
             if (mops_num >= 10) {mops_num = 0; mops_stat++ ; break;}
-            if (Stand.active_mops [mops_num] != 0) {    mbm_03_str (&usart5m, (mops_num + 1), 0, 109, (unsigned short * ) &MOPS_arr [mops_num], 115200); }
+            if (Stand.active_mops [mops_num] != 0) {    mbm_03_str (usart, (mops_num + 1), 0, 109, (unsigned short * ) &MOPS_arr [mops_num], 115200); }
             else {mops_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
                 for (cc = 0; cc < 109; cc++)    { MOPS_arr_sw [mops_num].main_area [cc] = swapshort (MOPS_arr [mops_num].main_area [cc]); }
@@ -130,11 +130,7 @@ void MOPS_S_control (struct tag_usartm * usart)
  */
 void MUPS_control(struct tag_usartm * usart)
 {   
-    // usart->mb_status.master_start = 1;
-    // mbm_03_str(usart, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
-//    mbm_03_str(&usart5m, 2, 200, 100, (unsigned short*) &MUPS_arr[1], 115200);
-
-unsigned short cc;
+    unsigned short cc;
     Stand_sw.mups_timeout_err [mups_num] = swapshort (Stand.mups_timeout_err [mups_num]);
     Stand_sw.mups_crc_err [mups_num] = swapshort (Stand.mups_crc_err [mups_num]);    
     Stand_sw.mups_coll_1_err [mups_num] = swapshort (Stand.mups_coll_1_err [mups_num]);    
@@ -148,7 +144,7 @@ unsigned short cc;
 
         case READ_CYCLE:    {
             if (mups_num >= 10) {mups_num = 0; mups_stat++ ; break;}
-            if (Stand.active_mups [mups_num] != 0) {    mbm_03_str (&usart5m, (mups_num + 1), 200, 86, (unsigned short * ) &MUPS_arr [mups_num], 115200); }
+            if (Stand.active_mups [mups_num] != 0) {    mbm_03_str (usart, (mups_num + 1), 200, 86, (unsigned short * ) &MUPS_arr [mups_num], 115200); }
             else {mups_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
                 for (cc = 0; cc < 86; cc++)    { MUPS_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_arr [mups_num].main_area [cc]); }
@@ -196,7 +192,7 @@ unsigned short cc;
 
         case READ_CYCLE:    {
             if (mups_num >= 10) {mups_num = 0; mups_stat++ ; break;}
-            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (&usart5m, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
+            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (usart, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
             else {mups_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
                 for (cc = 0; cc < 29; cc++)    { MUPS_S_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_S_arr [mups_num].main_area [cc]); }
@@ -245,7 +241,7 @@ unsigned short cc;
         case READ_CYCLE:    {
             if (mups_num >= 10) 
             {incr_stages++; mups_num = 0; mups_stat++ ; break;}
-            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (&usart5m, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
+            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (usart, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
             else {mups_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
                 for (cc = 0; cc < 29; cc++)    { MUPS_S_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_S_arr [mups_num].main_area [cc]); }
@@ -278,7 +274,7 @@ unsigned short cc;
  * @param strategy_num - mups's strategy
  * @param slave_id - mups's id address
  */
-void change_mups_strategy(int slave_id, int strategy_num)
+void change_mups_strategy(int slave_id, int strategy_num, struct tag_usartm *usart)
 {
     switch(strategy_num) 
     {
@@ -293,7 +289,7 @@ void change_mups_strategy(int slave_id, int strategy_num)
     test = Stand_sw.buf[25-1];
     Stand_sw.buf[26-1] = test;
     
-    mbm_16(&usart5m, slave_id, 212, 4, mups_strategy, 115200);
+    mbm_16(usart, slave_id, 212, 4, mups_strategy, 115200);
 }
 
 
