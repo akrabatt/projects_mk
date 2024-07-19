@@ -13,6 +13,8 @@ int main(void)
     help_reset = 1;
     ENAB_RX5;
     ENAB_RX4;
+    ENAB_RX3;
+    
 //    usart5m.mb_status.tx_mode = DMA_type;
 //    usart5.mb_status.tx_mode = DMA_type;
     usart4.mb_status.tx_mode = DMA_type;

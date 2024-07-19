@@ -84,16 +84,16 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #define SYS_PORT_A_CNPD         0x0
 #define SYS_PORT_A_CNEN         0x0
 
-#define SYS_PORT_B_ANSEL        0x8000
-#define SYS_PORT_B_TRIS         0xe6ff
-#define SYS_PORT_B_LAT          0x8000
+#define SYS_PORT_B_ANSEL        0x0000
+#define SYS_PORT_B_TRIS         0x66ff
+#define SYS_PORT_B_LAT          0x0
 #define SYS_PORT_B_ODC          0x0
 #define SYS_PORT_B_CNPU         0x0
 #define SYS_PORT_B_CNPD         0x0
 #define SYS_PORT_B_CNEN         0x0
 
 #define SYS_PORT_C_ANSEL        0x0
-#define SYS_PORT_C_TRIS         0xd01e
+#define SYS_PORT_C_TRIS         0xb01e
 #define SYS_PORT_C_LAT          0x0
 #define SYS_PORT_C_ODC          0x0
 #define SYS_PORT_C_CNPU         0x0
@@ -150,21 +150,26 @@ void port_init (void) {
     ANSELG = SYS_PORT_G_ANSEL;
     
     /*  PPS configuration   */
-    U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14    
-    U5RXRbits.U5RXR = 0b1101;           //U5RX --> RPA14    
+    U3RXRbits.U3RXR = 0b0111;           //U3RX --> RPC13    uart3 Rx
+    U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14    uart4 Rx    
+    U5RXRbits.U5RXR = 0b1101;           //U5RX --> RPA14    uart5 Rx    
 
-    IC3Rbits.IC3R = 0b0010;             //IC3 --> RPF4
-    IC4Rbits.IC4R = 0b0010;             //IC4 --> RPF5
+    IC3Rbits.IC3R = 0b0010;             //IC3 --> RPF4      Input capture 3
+    IC4Rbits.IC4R = 0b0010;             //IC4 --> RPF5      Input capture 3
     
-    IC7Rbits.IC7R = 0b0100;             //IC7 --> RPF1
-    IC8Rbits.IC8R = 0b0100;             //IC8 --> RPF0
+    IC7Rbits.IC7R = 0b0100;             //IC7 --> RPF1      Input capture 7
+    IC8Rbits.IC8R = 0b0100;             //IC8 --> RPF0      Input capture 8
     
-    SDI5Rbits.SDI5R = 0b0101;           //SDI5 --> RPB9
+    SDI5Rbits.SDI5R = 0b0101;           //SDI5 --> RPB9     Input data SPI5
     
-    RPC14Rbits.RPC14R = 0b1011;         //OC3
-    RPA15Rbits.RPA15R = 0b0011;         //U5TX
-    RPF12Rbits.RPF12R = 0b0010;         //U4TX    
-    RPB10Rbits.RPB10R = 0b1001;         //SDO5
+    RPC14Rbits.RPC14R = 0b1011;         //OC3               Output compare 3
+    
+    RPC14Rbits.RPC14R = 0b0001;         //U3Tx              uart3 Tx
+    RPA15Rbits.RPA15R = 0b0011;         //U5TX              uart4 Tx
+    RPF12Rbits.RPF12R = 0b0010;         //U4TX              uart5 Tx
+    
+    
+    RPB10Rbits.RPB10R = 0b1001;         //SDO5              Serial Data Out SPI5
 }
 
 void tmr_1_init(unsigned short delay, unsigned short IE, unsigned  short  ON)

@@ -224,42 +224,47 @@ void start_tx_usartm (struct tag_usartm * usart)
 
 void start_tx_usart_dma (struct tag_usart * usart, unsigned short count)
 {
-	if (usart==&usart4)		{
+	if (usart==&usart4)		
+    {
 		ENAB_TX4;
         memcpy ((void*) (buf_tx4 ), (const void*) ( usart->out_buffer), (count));
 		IEC5bits.U4RXIE = 0;	
         DMA_uni (&usart4, count, 1, 1);
 		usart->mb_status.modb_transmiting = 1;
 		IEC5bits.U4TXIE = 0;			//enable TX interrupt
-		}
-	if (usart==&usart5)		{ 
+	}
+	if (usart==&usart5)		
+    { 
 		ENAB_TX5;
         memcpy ((void*) (buf_tx5 ), (const void*) ( usart->out_buffer), (count));
 		IEC5bits.U5RXIE = 0;	
 		usart->mb_status.modb_transmiting = 1;
         DMA_uni (&usart5, count, 1, 1);
 		IEC5bits.U5TXIE = 0;	
-		}
+	}
 }
 
 void start_tx_usart_dmam (struct tag_usartm * usart, unsigned short count)
 {
-	if (usart==&usart4m)		{
+	if (usart==&usart4m)		
+    {
 		ENAB_TX4;
         memcpy ((void*) (buf_tx4 ), (const void*) ( usart->out_buffer), (count));
 		IEC5bits.U4RXIE = 0;	
         DMA_uni (&usart4, count, 1, 1);
 		usart->mb_status.modb_transmiting = 1;
 		IEC5bits.U4TXIE = 0;			//enable TX interrupt
-		}
-	if (usart==&usart5m)		{ 
+	}
+    
+	if (usart==&usart5m)	
+    { 
 		ENAB_TX5;
         memcpy ((void*) (buf_tx5 ), (const void*) ( usart->out_buffer), (count));
 		IEC5bits.U5RXIE = 0;	
 		usart->mb_status.modb_transmiting = 1;
         DMA_uni (&usart5, count, 1, 1);
 		IEC5bits.U5TXIE = 0;	
-		}
+	}
 }
 
 
