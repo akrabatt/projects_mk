@@ -178,6 +178,15 @@ unsigned long swaplong (unsigned long data )
 
 void start_tx_usart (struct tag_usart * usart)
 {
+    if (usart==&usart3)
+		{
+		IEC4bits.U3RXIE = 0;			//disable RX interrupt
+		usart->mb_status.modb_transmiting=1;
+		usart->out_buffer_count=0;
+		usart->mb_status.last_byte=0;
+		ENAB_TX3;
+		IEC4bits.U3TXIE = 1;			//enable TX interrupt
+		}
 	if (usart==&usart4)
 		{
 		IEC5bits.U4RXIE = 0;			//disable RX interrupt
@@ -201,6 +210,15 @@ void start_tx_usart (struct tag_usart * usart)
 
 void start_tx_usartm (struct tag_usartm * usart)
 {
+    if (usart==&usart3m)
+		{
+		IEC4bits.U3RXIE = 0;			//disable RX interrupt
+		usart->mb_status.modb_transmiting=1;
+		usart->out_buffer_count=0;
+		usart->mb_status.last_byte=0;
+		ENAB_TX3;
+		IEC4bits.U3TXIE = 1;			//enable TX interrupt
+		}
 	if (usart==&usart4m)
 		{
 		IEC5bits.U4RXIE = 0;			//disable RX interrupt
@@ -224,6 +242,15 @@ void start_tx_usartm (struct tag_usartm * usart)
 
 void start_tx_usart_dma (struct tag_usart * usart, unsigned short count)
 {
+    if (usart==&usart3)		
+    {
+		ENAB_TX3;
+        memcpy ((void*) (buf_tx3 ), (const void*) ( usart->out_buffer), (count));
+		IEC4bits.U3RXIE = 0;	
+        DMA_uni (&usart3, count, 1, 1);
+		usart->mb_status.modb_transmiting = 1;
+		IEC4bits.U3TXIE = 0;			//enable TX interrupt
+	}
 	if (usart==&usart4)		
     {
 		ENAB_TX4;
@@ -246,6 +273,15 @@ void start_tx_usart_dma (struct tag_usart * usart, unsigned short count)
 
 void start_tx_usart_dmam (struct tag_usartm * usart, unsigned short count)
 {
+    if (usart==&usart3m)		
+    {
+		ENAB_TX3;
+        memcpy ((void*) (buf_tx3 ), (const void*) ( usart->out_buffer), (count));
+		IEC4bits.U3RXIE = 0;	
+        DMA_uni (&usart3, count, 1, 1);
+		usart->mb_status.modb_transmiting = 1;
+		IEC4bits.U3TXIE = 0;			//enable TX interrupt
+	}
 	if (usart==&usart4m)		
     {
 		ENAB_TX4;
@@ -270,9 +306,36 @@ void start_tx_usart_dmam (struct tag_usartm * usart, unsigned short count)
 
 void stop_uart_tx(void)
 {
-    if (usart4.mb_status.tx_mode == INT_type ){
+    if ((usart3.mb_status.tx_mode == INT_type ) || (usart3m.mb_status.tx_mode == INT_type ))
+    {
+        if ((usart3.mb_status.modb_transmiting == 1) && (U3STAbits.TRMT) && (IEC4bits.U3TXIE == 0))
+        {
+    		usart3.mb_status.last_byte=0;
+        	usart3.mb_status.modb_received=0;
+            usart3.mb_status.modb_receiving=0;
+    		usart3.in_buffer_count=0;
+        	usart3.mb_status.modb_transmiting=0;
+            IFS4bits.U3RXIF = 0; 
+            ENAB_RX3;
+        	IEC4bits.U3RXIE = 1;			//disable RX interrupt
+        }
+        if ((usart3m.mb_status.modb_transmiting == 1) && (U3STAbits.TRMT) && (IEC4bits.U3TXIE == 0))
+        {
+            usart3m.mb_status.last_byte=0;
+    		usart3m.mb_status.modb_received=0;
+        	usart3m.mb_status.modb_receiving=0;
+            usart3m.in_buffer_count=0;
+    		usart3m.mb_status.modb_transmiting=0;
+        	IFS4bits.U3RXIF = 0; 
+            ENAB_RX3;
+        	IEC4bits.U3RXIE = 1;			//disable RX interrupt
+        }
+    	if (U3STAbits.OERR||U3STAbits.FERR)	{U3STAbits.OERR=0;}        
+    }
+    if ((usart4.mb_status.tx_mode == INT_type ) || (usart4m.mb_status.tx_mode == INT_type ))
+    {
         if ((usart4.mb_status.modb_transmiting == 1) && (U4STAbits.TRMT) && (IEC5bits.U4TXIE == 0))
-            {
+        {
     		usart4.mb_status.last_byte=0;
         	usart4.mb_status.modb_received=0;
             usart4.mb_status.modb_receiving=0;
@@ -281,14 +344,25 @@ void stop_uart_tx(void)
             IFS5bits.U4RXIF = 0; 
             ENAB_RX4;
         	IEC5bits.U4RXIE = 1;			//disable RX interrupt
-            }
-    	if (U4STAbits.OERR||U4STAbits.FERR)	{U4STAbits.OERR=0;}        
         }
-
-    if ( (usart5.mb_status.tx_mode == INT_type ) || (usart5m.mb_status.tx_mode == INT_type ) )
+        if ((usart4m.mb_status.modb_transmiting == 1) && (U4STAbits.TRMT) && (IEC5bits.U4TXIE == 0))
         {
+            usart4m.mb_status.last_byte=0;
+    		usart4m.mb_status.modb_received=0;
+        	usart4m.mb_status.modb_receiving=0;
+            usart4m.in_buffer_count=0;
+    		usart4m.mb_status.modb_transmiting=0;
+        	IFS5bits.U4RXIF = 0; 
+            ENAB_RX4;
+        	IEC5bits.U4RXIE = 1;			//disable RX interrupt
+        }
+    	if (U4STAbits.OERR||U4STAbits.FERR)	{U4STAbits.OERR=0;}        
+    }
+
+    if ((usart5.mb_status.tx_mode == INT_type ) || (usart5m.mb_status.tx_mode == INT_type ))
+    {
         if ((usart5.mb_status.modb_transmiting == 1) && (U5STAbits.TRMT) && (IEC5bits.U5TXIE == 0))
-        	{
+        {
             usart5.mb_status.last_byte=0;
     		usart5.mb_status.modb_received=0;
         	usart5.mb_status.modb_receiving=0;
@@ -297,9 +371,9 @@ void stop_uart_tx(void)
         	IFS5bits.U5RXIF = 0; 
             ENAB_RX5;
         	IEC5bits.U5RXIE = 1;			//disable RX interrupt
-            }
+        }
         if ((usart5m.mb_status.modb_transmiting == 1) && (U5STAbits.TRMT) && (IEC5bits.U5TXIE == 0))
-        	{
+        {
             usart5m.mb_status.last_byte=0;
     		usart5m.mb_status.modb_received=0;
         	usart5m.mb_status.modb_receiving=0;
@@ -308,17 +382,35 @@ void stop_uart_tx(void)
         	IFS5bits.U5RXIF = 0; 
             ENAB_RX5;
         	IEC5bits.U5RXIE = 1;			//disable RX interrupt
-            }
-
-        if (U5STAbits.OERR||U5STAbits.FERR)	{U5STAbits.OERR=0;}        
         }
+        if (U5STAbits.OERR||U5STAbits.FERR)	{U5STAbits.OERR=0;}        
+    }
 }
 
 void stop_uart_tx_dma(void)
 {
-    if (usart4.mb_status.tx_mode == DMA_type ){
+    if (usart3.mb_status.tx_mode == DMA_type )
+    {
+        if ((usart3.mb_status.modb_transmiting == 1)&&(U3STAbits.TRMT))
+        {
+            DCH3CONbits.CHEN = 0;
+            DCH3ECONbits.CFORCE = 0;
+            usart3.mb_status.modb_transmiting=0;
+            DMA_uni (&usart3, 1, 0, 0);
+            usart3.mb_status.modb_received=0;
+          	usart3.mb_status.modb_receiving=0;
+            usart3.in_buffer_count=0;
+        	IFS4bits.U3RXIF = 0; 
+            ENAB_RX3;
+            IEC4bits.U3RXIE = 1;
+        }
+        if (U3STAbits.OERR||U3STAbits.FERR)	{U3STAbits.OERR=0;}
+    }
+    
+    if (usart4.mb_status.tx_mode == DMA_type )
+    {
         if ((usart4.mb_status.modb_transmiting == 1)&&(U4STAbits.TRMT))
-           	{
+        {
             DCH4CONbits.CHEN = 0;
             DCH4ECONbits.CFORCE = 0;
             usart4.mb_status.modb_transmiting=0;
@@ -329,13 +421,14 @@ void stop_uart_tx_dma(void)
         	IFS5bits.U4RXIF = 0; 
             ENAB_RX4;
             IEC5bits.U4RXIE = 1;
-            }
-        if (U4STAbits.OERR||U4STAbits.FERR)	{U4STAbits.OERR=0;}
         }
+        if (U4STAbits.OERR||U4STAbits.FERR)	{U4STAbits.OERR=0;}
+    }
 
-    if (usart5.mb_status.tx_mode == DMA_type ){
+    if (usart5.mb_status.tx_mode == DMA_type )
+    {
         if ((usart5.mb_status.modb_transmiting == 1)&&(U5STAbits.TRMT))
-        	{
+        {
             usart5.mb_status.modb_transmiting = 0;
             DMA_uni (&usart5, 1, 0, 0);
     		usart5.mb_status.modb_received=0;
@@ -344,9 +437,9 @@ void stop_uart_tx_dma(void)
        		IFS5bits.U5RXIF = 0; 
             ENAB_RX5;
         	IEC5bits.U5RXIE = 1;
-            }
-        if (U5STAbits.OERR||U5STAbits.FERR)	{U5STAbits.OERR=0;}       
         }
+        if (U5STAbits.OERR||U5STAbits.FERR)	{U5STAbits.OERR=0;}       
+    }
 }
 
 void close_mbs (struct tag_usart * usart)            // закрытие обработки модбас, сброс в начало

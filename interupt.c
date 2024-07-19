@@ -16,17 +16,18 @@ unsigned short send_dma;
 
 //void __ISR_AT_VECTOR (_ADC_DATA32_VECTOR, IPL4SRS) ADC32Interrupt(void)  {	LED_8 = 1; ADC_interrupt_F (); IFS1bits.ADCIF = 0; LED_8 = 0; IFS2bits.ADCD32IF = 0; } 
 
-void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void)   {T1CONbits.TON=0; T1Interrupt_(&usart1); IFS0bits.T1IF = 0;}
-void __ISR_AT_VECTOR (_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)   {T2CONbits.TON=0; T2Interrupt_(&usart2); IFS0bits.T2IF = 0;}
+void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void)   {T1CONbits.TON=0; TInterrupt_m(&usart1m); IFS0bits.T1IF = 0;}
+void __ISR_AT_VECTOR (_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)   {T2CONbits.TON=0; TInterrupt_m(&usart2m); IFS0bits.T2IF = 0;}
 void __ISR_AT_VECTOR (_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)   {T3CONbits.TON=0; T3Interrupt_(&usart3); IFS0bits.T3IF = 0;}
-void __ISR_AT_VECTOR (_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)   {T4CONbits.TON=0; TInterrupt_(&usart4); IFS0bits.T4IF = 0;}
+void __ISR_AT_VECTOR (_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)   {T4CONbits.TON=0; TInterrupt_m(&usart4m); IFS0bits.T4IF = 0;}
 void __ISR_AT_VECTOR (_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)   {T5CONbits.TON=0; TInterrupt_m(&usart5m); IFS0bits.T5IF = 0;}
 
 //void __ISR_AT_VECTOR (_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)   {Timer6Interrupt(); IFS0bits.T6IF = 0;}
 
 //void __ISR_AT_VECTOR (_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void)   {Timer7Interrupt(); IFS1bits.T7IF = 0;}
 
-void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)   {     
+void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)   
+{     
     IFS1bits.T9IF = 0;
     counters ();  
     mbm_sync = 1;
@@ -36,9 +37,14 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)   {
         usart5m.mbm16_counter_start = 0;
         usart5m.mb_status.start16 = 1;
     }
+    if(++usart4m.mbm16_counter_start >= 100)
+    {
+        usart4m.mbm16_counter_start = 0;
+        usart4m.mb_status.start16 = 1;
+    }
 //    mbm_timeout_control(&usart4);
 //    mbm_timeout_control(&usart5);
-    }    
+}    
 
 
 /*interrupts tx-rx*/
@@ -69,9 +75,9 @@ void __ISR_AT_VECTOR (_UART5_TX_VECTOR, IPL4SRS) U5TXInterrupt(void)
 void __ISR_AT_VECTOR (_UART4_RX_VECTOR, IPL4SRS) U4RXInterrupt(void)  
 {		
     IFS5bits.U4RXIF = 0;    
-	usart4.mb_status.modb_receiving = 1;	    	
-	while (U4STAbits.URXDA)	{ usart4.in_buffer[usart4.in_buffer_count++] = U4RXREG; }
-	if (usart4.in_buffer_count>=IN_SIZE1) { usart4.mb_status.modb_received = 1; usart4.mb_status.modb_receiving = 0;}
+	usart4m.mb_status.modb_receiving = 1;	    	
+	while (U4STAbits.URXDA)	{ usart4m.in_buffer[usart4m.in_buffer_count++] = U4RXREG; }
+	if (usart4m.in_buffer_count>=IN_SIZE1) { usart4m.mb_status.modb_received = 1; usart4m.mb_status.modb_receiving = 0;}
 	tmr_4_init( frame_delay_1, 1, 1);
 	IFS5bits.U4RXIF = 0;     
 }
@@ -79,10 +85,10 @@ void __ISR_AT_VECTOR (_UART4_RX_VECTOR, IPL4SRS) U4RXInterrupt(void)
 void __ISR_AT_VECTOR (_UART4_TX_VECTOR, IPL4SRS) U4TXInterrupt(void)  
 {	
 	IFS5bits.U4TXIF=0; 	
-	while ((!U4STAbits.UTXBF)&&(!usart4.mb_status.last_byte))		//copy if buff  isn't full and byte is not last
+	while ((!U4STAbits.UTXBF)&&(!usart4m.mb_status.last_byte))		//copy if buff  isn't full and byte is not last
 	{
-		U4TXREG = usart4.out_buffer[usart4.out_buffer_count++];
-		if (usart4.out_buffer_count >= (usart4.number_send)) {usart4.mb_status.last_byte = 1;	IEC5bits.U4TXIE = 0;}
+		U4TXREG = usart4m.out_buffer[usart4m.out_buffer_count++];
+		if (usart4m.out_buffer_count >= (usart4m.number_send)) {usart4m.mb_status.last_byte = 1;	IEC5bits.U4TXIE = 0;}
 	}
 	IFS5bits.U4TXIF=0;
 }

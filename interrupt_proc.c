@@ -269,11 +269,16 @@ void counters (void)
         Modbus_sw.buf [12] = swapshort (Modbus.buf [12]); 
         Modbus_sw.buf [13] = swapshort (Modbus.buf [13]); 
                 
-        if (_100msec >= 3) {
+        if (_100msec >= 3) 
+        {
             _100msec = 0; 
             help_strobe  ^= 1; 
-            if (master_start_del == 1) {    usart5m.mb_status.master_start = 1;    }
-            }   
+            if (master_start_del == 1) 
+            {    
+                usart5m.mb_status.master_start = 1;    
+                usart4m.mb_status.master_start = 1;    
+            }
+        }   
 
         if (_1000msec >= 100) {
             master_start_del = 1;

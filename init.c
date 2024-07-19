@@ -435,6 +435,9 @@ void InitializeSystem(void)
     tmr7_init ();
     uart5_init(115200);
     uart4_init(115200);
+    uart3_init(115200);
+    uart2_init(115200);
+    uart1_init(115200);
     DMA1_init ();
     DMA2_init ();
     DMA3_init ();

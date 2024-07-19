@@ -15,25 +15,19 @@ int main(void)
     ENAB_RX4;
     ENAB_RX3;
     
-//    usart5m.mb_status.tx_mode = DMA_type;
-//    usart5.mb_status.tx_mode = DMA_type;
-    usart4.mb_status.tx_mode = DMA_type;
-    usart5.mb_status.tx_mode = INT_type;
+    usart3.mb_status.tx_mode = DMA_type;
     usart5m.mb_status.tx_mode = INT_type;
-//    usart4.mb_status.tx_mode = INT_type;
-//    load_config ();
-//    IC1CONbits.ON = 1; 
-//    IC6CONbits.ON = 1; 
-//    load_config ();   
+    usart4m.mb_status.tx_mode = INT_type;
+    
     while(1)
     {
-        mbs (&usart4, 1);				// порт  4
+        mbs (&usart3, 1);				// порт  4
         stop_uart_tx_dma();   
         
         if ( mbm_sync ==  1 ) {  
 //            change_mups_strategy_separately(&usart5m);
 //            control_mups_reley(&usart5m);
-            MOPS_S_control(&usart5m);
+            MOPS_S_control(&usart4m);
             mbm_sync = 0;
     }
     stop_uart_tx();
