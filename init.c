@@ -221,17 +221,6 @@ void tmr_5_init(unsigned short delay, unsigned short IE, unsigned short ON)
 	T5CONbits.TCKPS = 0b00;				//T1 prescaler 1:8
 	T5CONbits.TON = ON;
 	}
-//void tmr_5_init(void)
-//	{
-//    T5CONbits.TON = 0;
-//	TMR5=0x0000;
-//	PR5 = TMR4CLK / (OC_FREQ * (FILTER ));   
-//    IFS0bits.T5IF = 0;      // Clear the T5 interrupt flag
-//	IEC0bits.T5IE = 0;
-//	IPC6bits.T5IP = 0b10;			// priority = 2
-//	T5CONbits.TCKPS = 0;				//T1 prescaler 1:8
-//	T5CONbits.TON = 1;
-//	}
 
 void tmr_9_init(unsigned short delay, unsigned short IE, unsigned short ON)
 	{

@@ -4,8 +4,6 @@
 #include <sys/attribs.h>    /* contains __ISR() Macros */
 #include "define.h"
 #include "extern.h"
-//#include "global.h"
-//#include "global.h"
 
 unsigned short send_dma;
 

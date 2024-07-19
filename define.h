@@ -66,6 +66,8 @@
 #define NORMAL_530_1    0x0000
 #define NOEMAL_530_2    0x0000
 
+
+
 /////////////////		Modbus alowed areas 		//////////////////////////
     
 /*read MOPS*/
