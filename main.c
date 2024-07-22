@@ -34,7 +34,7 @@ int main(void)
         {  
 //            change_mups_strategy_separately(&usart5m);
 //            control_mups_reley(&usart5m);
-            MOPS_S_control(&usart2m);
+            MOPS_S_control(&usart1m);
             mbm_sync = 0;
         }
     stop_uart_tx();
