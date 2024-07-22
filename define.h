@@ -68,10 +68,12 @@
 #define U3_LED_RX_TOGGLE    PORTGbits.RG12 = LATGbits.LATG12 ^ 1;   // pin 96/RG12
 
 //uart2
-#define U2_LED_TX_TOGGLE    PORTGbits.RG13 = LATGbits.LATG13 ^ 1;     //pin 97/RG13
-#define U2_LED_RX_TOGGLE    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;       //pin 98/RE2
+#define U2_LED_TX_TOGGLE    PORTGbits.RG13 = LATGbits.LATG13 ^ 1;   //pin 97/RG13
+#define U2_LED_RX_TOGGLE    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;     //pin 98/RE2
 
-
+//uart1
+#define U1_LED_TX_TOGGLE    PORTEbits.RE3 = LATEbits.LATE3 ^ 1;     //pin 99/RE3
+#define U1_LED_RX_TOGGLE    PORTEbits.RE4 = LATEbits.LATE4 ^ 1;     //pin 100/RE4
 /////////////////		const for 530 board 		//////////////////////////
 
 // short current
