@@ -11,6 +11,8 @@ int main(void)
 {
     InitializeSystem();
     help_reset = 1;
+    
+    //pre enable
     ENAB_RX5;
     ENAB_RX4;
     ENAB_RX3;
@@ -21,10 +23,11 @@ int main(void)
     usart5m.mb_status.tx_mode = INT_type;
     usart4m.mb_status.tx_mode = INT_type;
     usart2m.mb_status.tx_mode = INT_type;
+    usart1m.mb_status.tx_mode = INT_type;
     
     while(1)
     {
-        mbs (&usart3, 1);				// порт  4
+        mbs (&usart3, 1);
         stop_uart_tx_dma();   
         
         if ( mbm_sync ==  1 ) 

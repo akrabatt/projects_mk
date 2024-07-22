@@ -124,7 +124,6 @@ void __ISR_AT_VECTOR (_UART3_TX_VECTOR, IPL4SRS) U3TXInterrupt(void)
 void __ISR_AT_VECTOR (_UART2_RX_VECTOR, IPL4SRS) U2RXInterrupt(void)  
 {		
     IFS4bits.U2RXIF = 0;  
-    
 	usart2m.mb_status.modb_receiving = 1;	    	
 	while (U2STAbits.URXDA)	{ usart2m.in_buffer[usart2m.in_buffer_count++] = U2RXREG; U2_LED_RX_TOGGLE;}
 	if (usart2m.in_buffer_count>=IN_SIZE1) { usart2m.mb_status.modb_received = 1; usart2m.mb_status.modb_receiving = 0;}
@@ -142,6 +141,29 @@ void __ISR_AT_VECTOR (_UART2_TX_VECTOR, IPL4SRS) U2TXInterrupt(void)
 		if (usart2m.out_buffer_count >= (usart2m.number_send)) {usart2m.mb_status.last_byte = 1;	IEC4bits.U2TXIE = 0;}
 	}
 	IFS4bits.U2TXIF=0;
+}
+
+//1
+void __ISR_AT_VECTOR (_UART1_RX_VECTOR, IPL4SRS) U1RXInterrupt(void)  
+{		
+    IFS3bits.U1RXIF = 0;  
+	usart1m.mb_status.modb_receiving = 1;	    	
+	while (U1STAbits.URXDA)	{ usart1m.in_buffer[usart1m.in_buffer_count++] = U1RXREG; /*U2_LED_RX_TOGGLE*/;}
+	if (usart1m.in_buffer_count>=IN_SIZE1) { usart1m.mb_status.modb_received = 1; usart1m.mb_status.modb_receiving = 0;}
+	tmr_1_init( frame_delay_1, 1, 1);
+	IFS3bits.U1RXIF = 0;     
+}
+
+void __ISR_AT_VECTOR (_UART1_TX_VECTOR, IPL4SRS) U1TXInterrupt(void)  
+{	
+	IFS3bits.U1TXIF=0; 
+    /*U2_LED_TX_TOGGLE;*/
+	while ((!U1STAbits.UTXBF)&&(!usart1m.mb_status.last_byte))		//copy if buff  isn't full and byte is not last
+	{
+		U1TXREG = usart1m.out_buffer[usart1m.out_buffer_count++];
+		if (usart1m.out_buffer_count >= (usart1m.number_send)) {usart1m.mb_status.last_byte = 1;	IEC3bits.U1TXIE = 0;}
+	}
+	IFS3bits.U1TXIF=0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

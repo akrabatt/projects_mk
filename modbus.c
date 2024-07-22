@@ -178,6 +178,15 @@ unsigned long swaplong (unsigned long data )
 
 void start_tx_usart (struct tag_usart * usart)
 {
+    if (usart==&usart1)
+	{
+		IEC3bits.U1RXIE = 0;			//disable RX interrupt
+		usart->mb_status.modb_transmiting=1;
+		usart->out_buffer_count=0;
+		usart->mb_status.last_byte=0;
+		ENAB_TX1;
+		IEC3bits.U1TXIE = 1;			//enable TX interrupt
+	}
     if (usart==&usart2)
 	{
 		IEC4bits.U2RXIE = 0;			//disable RX interrupt
