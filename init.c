@@ -150,7 +150,7 @@ void port_init (void) {
     ANSELG = SYS_PORT_G_ANSEL;
     
     /*  PPS configuration   */
-    U3RXRbits.U3RXR = 0b0100;           //U2RX --> RPD4     uart2 Rx
+    U2RXRbits.U2RXR = 0b0100;           //U2RX --> RPD4     uart2 Rx
     U3RXRbits.U3RXR = 0b0111;           //U3RX --> RPC13    uart3 Rx
     U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14    uart4 Rx    
     U5RXRbits.U5RXR = 0b1101;           //U5RX --> RPA14    uart5 Rx   
