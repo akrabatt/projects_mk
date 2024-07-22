@@ -101,7 +101,7 @@ extern __inline__ unsigned int __attribute__((always_inline)) _VirtToPhys(const 
 #define SYS_PORT_C_CNEN         0x0
 
 #define SYS_PORT_D_ANSEL        0x0
-#define SYS_PORT_D_TRIS         0xf90
+#define SYS_PORT_D_TRIS         0xf94
 #define SYS_PORT_D_LAT          0x0
 #define SYS_PORT_D_ODC          0x0
 #define SYS_PORT_D_CNPU         0x0
@@ -150,6 +150,7 @@ void port_init (void) {
     ANSELG = SYS_PORT_G_ANSEL;
     
     /*  PPS configuration   */
+    U1RXRbits.U1RXR = 0b0000;           //U1RX --> RPD2     uart1 Rx
     U2RXRbits.U2RXR = 0b0100;           //U2RX --> RPD4     uart2 Rx
     U3RXRbits.U3RXR = 0b0111;           //U3RX --> RPC13    uart3 Rx
     U4RXRbits.U4RXR = 0b0010;           //U4RX --> RPB14    uart4 Rx    
@@ -165,6 +166,7 @@ void port_init (void) {
     
     RPC14Rbits.RPC14R = 0b1011;         //OC3               Output compare 3
     
+    RPD3Rbits.RPD3R = 0b0001;           //U1Tx              uart1 Tx
     RPD5Rbits.RPD5R = 0b0010;           //U2Tx              uart2 Tx
     RPC14Rbits.RPC14R = 0b0001;         //U3Tx              uart3 Tx
     RPA15Rbits.RPA15R = 0b0011;         //U5Tx              uart4 Tx

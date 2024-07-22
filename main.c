@@ -15,6 +15,7 @@ int main(void)
     ENAB_RX4;
     ENAB_RX3;
     ENAB_RX2;
+    ENAB_RX1;
     
     usart3.mb_status.tx_mode = DMA_type;
     usart5m.mb_status.tx_mode = INT_type;

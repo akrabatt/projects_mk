@@ -25,14 +25,25 @@
 #define  DMA_type	0
 #define  INT_type	1
 
+
+//ENAB_TX_RX
+//u5
 #define  ENAB_TX5		PORTFbits.RF2 = 1	
 #define  ENAB_RX5		PORTFbits.RF2 = 0	
+//u4
 #define  ENAB_TX4		PORTBbits.RB12 = 1
 #define  ENAB_RX4		PORTBbits.RB12 = 0 
+//u3
 #define  ENAB_TX3       PORTBbits.RB15 = 1
 #define  ENAB_RX3       PORTBbits.RB15 = 0
+//u2
 #define  ENAB_TX2       PORTDbits.RD13 = 1
 #define  ENAB_RX2       PORTDbits.RD13 = 0
+//u1
+#define  ENAB_TX1       PORTDbits.RD1 = 1
+#define  ENAB_RX1       PORTDbits.RD1 = 0
+//
+
 
 #define  OUT_SIZE		0x100
 #define  IN_SIZE		0x100
@@ -57,7 +68,8 @@
 #define U3_LED_RX_TOGGLE    PORTGbits.RG12 = LATGbits.LATG12 ^ 1;   // pin 96/RG12
 
 //uart2
-
+#define U2_LED_TX_TOGGLE    PORTGbits.RG13 = LATGbits.LATG13 ^ 1;     //pin 97/RG13
+#define U2_LED_RX_TOGGLE    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;       //pin 98/RE2
 
 
 /////////////////		const for 530 board 		//////////////////////////
