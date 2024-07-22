@@ -19,18 +19,20 @@ int main(void)
     usart3.mb_status.tx_mode = DMA_type;
     usart5m.mb_status.tx_mode = INT_type;
     usart4m.mb_status.tx_mode = INT_type;
+    usart2m.mb_status.tx_mode = INT_type;
     
     while(1)
     {
         mbs (&usart3, 1);				// порт  4
         stop_uart_tx_dma();   
         
-        if ( mbm_sync ==  1 ) {  
+        if ( mbm_sync ==  1 ) 
+        {  
 //            change_mups_strategy_separately(&usart5m);
 //            control_mups_reley(&usart5m);
-            MOPS_S_control(&usart4m);
+            MOPS_S_control(&usart2m);
             mbm_sync = 0;
-    }
+        }
     stop_uart_tx();
     PORTGbits.RG7 = help_strobe;
     LED_8 = help_strobe;

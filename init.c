@@ -191,9 +191,9 @@ void tmr_2_init(unsigned short delay, unsigned short IE, unsigned short ON)
 	TMR2 = 0x0000;
 	PR2 = delay;					//
 	IEC0bits.T2IE = IE;
-    IPC3bits.T3IP=0b10;			// priority = 2
-	T3CONbits.TCKPS = 0b00;				//T1 prescaler 1:8
-	T3CONbits.TON = ON;
+    IPC2bits.T2IP=0b10;			// priority = 2
+	T2CONbits.TCKPS = 0b00;				//T1 prescaler 1:8
+	T2CONbits.TON = ON;
 	}
 
 void tmr_3_init(unsigned short delay, unsigned short IE, unsigned short ON)
@@ -456,7 +456,8 @@ void InitializeSystem(void)
     __builtin_enable_interrupts();
 
     /* Enable the peripheral */
-    T2CONbits.TON = 1;
+//    T2CONbits.TON = 1;
+    T2CONbits.ON = 1;      // Enable Timer 2
     T4CONbits.ON = 1;      // Enable Timer 4
     T5CONbits.ON = 1;      // Enable Timer 5
     OC3CONbits.ON = 1;     // Enable OC3//

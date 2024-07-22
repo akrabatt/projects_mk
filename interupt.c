@@ -42,6 +42,11 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
 //        usart4m.mbm16_counter_start = 0;
 //        usart4m.mb_status.start16 = 1;
 //    }
+//    if(++usart2m.mbm16_counter_start >= 100)
+//    {
+//        usart2m.mbm16_counter_start = 0;
+//        usart2m.mb_status.start16 = 1;
+//    }
 //    mbm_timeout_control(&usart4);
 //    mbm_timeout_control(&usart5);
 }    
