@@ -407,7 +407,8 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
         {
             if((stages_sep = READ_MODULS_INFO_SEP) && (stages_relay == READ_MODULS_INFO_REL)) {stages_sep++; break;}
             MUPS_S_control_stg (usart); 
-            if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} 
+            if(incr_stages > 0)
+            {incr_stages = 0; stages_sep++; break;} 
             break;
         }
         case READ_INPUT_MUPS_STRATEGY_SEP: 
@@ -415,7 +416,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
             mups_strategy_sep[0] = Stand.buf[24]; 
             mups_strategy_sep[1] = Stand.buf[25]; 
             mups_strategy_sep[2] = Stand.buf[26]; 
-            mups_strategy_sep[3] = Stand.buf[27]; 
+            mups_strategy_sep[3] = Stand.buf[27];
             apply_strategy = Stand.buf[28];
                 
             if((mups_strategy_sep[0] > 0 && mups_strategy_sep[0] < 4) || (mups_strategy_sep[1] > 0 && mups_strategy_sep[1] < 4) || 
@@ -439,7 +440,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
             }
         case CONFIG_MUPS_SEP: 
         {
-            mbm_16(usart, slave_id, 212, 4, mups_strategy_sep, 115200);
+            mbm_16(&usart5m, slave_id, 212, 4, mups_strategy_sep, 115200);
             // check end 16 funktion
             if(mbm_16_end_flag > 0){mbm_16_end_flag = 0; stages_sep = 0; Stand.buf[28] = 0; Stand_sw.buf[28] = 0; mbm_fun_in_work = 0;}
             break;
