@@ -406,7 +406,7 @@ void change_mups_strategy_separately(struct tag_usartm *usart)
         case READ_MODULS_INFO_SEP: 
         {
             if((stages_sep = READ_MODULS_INFO_SEP) && (stages_relay == READ_MODULS_INFO_REL)) {stages_sep++; break;}
-            MUPS_S_control_stg (&usart5m); 
+            MUPS_S_control_stg (usart); 
             if(incr_stages > 0){incr_stages = 0; stages_sep++; break;} 
             break;
         }
@@ -474,7 +474,7 @@ void control_mups_reley(struct tag_usartm * usart)
         }
         case READ_MODULS_INFO_REL: 
         {
-            MUPS_S_control_stg (&usart5m); 
+            MUPS_S_control_stg (usart); 
             if(incr_stages > 0){incr_stages = 0; stages_relay++; break;} 
             break;
         }
