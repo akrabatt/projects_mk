@@ -600,4 +600,18 @@ unsigned short DINPUT1;
 unsigned short DINPUT2;
 unsigned short DINPUT3;
 
+//530 board arr for mods
+
+unsigned short _530_board_normal[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2, 
+                                       NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};
+
+unsigned short _530_board_short_current[8] = {SHORT_CURRENT_530_1, SHORT_CURRENT_530_2, SHORT_CURRENT_530_1, SHORT_CURRENT_530_2, 
+                                              SHORT_CURRENT_530_1, SHORT_CURRENT_530_2, SHORT_CURRENT_530_1, SHORT_CURRENT_530_2};
+
+unsigned short _530_board_fire[8] = {FIRE_530_1, FIRE_530_2, FIRE_530_1, FIRE_530_2, 
+                                     FIRE_530_1, FIRE_530_2, FIRE_530_1, FIRE_530_2};
+
+unsigned short _530_board_attantion[8] = {ATTANTION_530_1, ATTANTION_530_2, ATTANTION_530_1, ATTANTION_530_2, 
+                                          ATTANTION_530_1, ATTANTION_530_2, ATTANTION_530_1, ATTANTION_530_2};
+
 #endif // GLOBAL_H
