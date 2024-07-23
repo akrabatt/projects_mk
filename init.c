@@ -242,7 +242,7 @@ void tmr_9_init(unsigned short delay, unsigned short IE, unsigned short ON)
 	T9CONbits.TON = ON;
 	}
 
-void tmr6_init (void)   {
+void tmr_6_init (void)   {
     T6CONbits.TON = 0;
 	TMR6=0x0000;
 	PR6=1500;					//
@@ -252,7 +252,7 @@ void tmr6_init (void)   {
 	T6CONbits.TON = 0;
     }
 
-void tmr7_init (void)   {
+void tmr_7_init (void)   {
     T7CONbits.TON = 0;
 	TMR7=0x0000;
 	PR7=1500;					//
@@ -425,28 +425,38 @@ void InitializeSystem(void)
     port_init ();
     spi5_init ();
     help_load = 1;
-//    DRV_ADC_Initialize_F();
-//    ADC_init_scan ();
+    
+    //pre enable
+    ENAB_RX5;
+    ENAB_RX4;
+    ENAB_RX3;
+    ENAB_RX2;
+    ENAB_RX1;
 
-    tmr_1_init (100, 0, 0);
-    tmr_2_init (100, 0, 0);
-    tmr_3_init (100, 0, 0);
-    tmr_4_init (100, 0, 0);    
-    tmr_5_init (100, 0, 0);
-
+    // init timers
+    tmr_1_init(100, 0, 0);
+    tmr_2_init(100, 0, 0);
+    tmr_3_init(100, 0, 0);
+    tmr_4_init(100, 0, 0);    
+    tmr_5_init(100, 0, 0);
+    tmr_6_init();
+    tmr_7_init();
     tmr_9_init (49765, 1 ,1);
-    tmr6_init ();
-    tmr7_init ();
+    
+    // uarts init
     uart5_init(115200);
     uart4_init(115200);
     uart3_init(115200);
     uart2_init(115200);
     uart1_init(115200);
-    DMA1_init ();
-    DMA2_init ();
-    DMA3_init ();
-    DMA4_init ();
-    DMA5_init ();
+    
+    // dma init
+    DMA1_init();
+    DMA2_init();
+    DMA3_init();
+    DMA4_init();
+    DMA5_init();
+    
     /* Assign PIC32MZ shadow register sets to specific CPU IPLs */
     PRISS = 0x76543210;
     
@@ -456,35 +466,11 @@ void InitializeSystem(void)
     /* Enable Interrupt Exceptions */
     // set the CP0 status IE bit high to turn on interrupts globally
     __builtin_enable_interrupts();
-
-    /* Enable the peripheral */
-//    T2CONbits.TON = 1;
-    T2CONbits.ON = 1;      // Enable Timer 2
-    T4CONbits.ON = 1;      // Enable Timer 4
-    T5CONbits.ON = 1;      // Enable Timer 5
-    OC3CONbits.ON = 1;     // Enable OC3//
-//    ADCCON3bits.GSWTRG = 1;
+    
+    // uart operating mode
+    usart3.mb_status.tx_mode = DMA_type;
+    usart5m.mb_status.tx_mode = INT_type;
+    usart4m.mb_status.tx_mode = INT_type;
+    usart2m.mb_status.tx_mode = INT_type;
+    usart1m.mb_status.tx_mode = INT_type;
 } 
-
-/******************************************************************************
- * Function:        void InitializeSystem(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This routine takes care of all of the system
- *                  initialization that is required.
- *
- * Note:
- *
- *****************************************************************************/
-
-
-/* *****************************************************************************
- End of File
- */
