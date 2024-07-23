@@ -66,14 +66,27 @@
 //uart3
 #define U3_LED_TX_TOGGLE    PORTGbits.RG14 = LATGbits.LATG14 ^ 1;   // pin 95/RG14
 #define U3_LED_RX_TOGGLE    PORTGbits.RG12 = LATGbits.LATG12 ^ 1;   // pin 96/RG12
+#define U3_LED_TX_ON        PORTGbits.RG14 = 1;
+#define U3_LED_TX_OFF       PORTGbits.RG14 = 0;
+#define U3_LED_RX_ON        PORTGbits.RG12 = 1;
+#define U3_LED_RX_OFF       PORTGbits.RG12 = 0;
 
 //uart2
 #define U2_LED_TX_TOGGLE    PORTGbits.RG13 = LATGbits.LATG13 ^ 1;   //pin 97/RG13
 #define U2_LED_RX_TOGGLE    PORTEbits.RE2 = LATEbits.LATE2 ^ 1;     //pin 98/RE2
+#define U2_LED_TX_ON        PORTGbits.RG13 = 1;
+#define U2_LED_TX_OFF       PORTGbits.RG13 = 0;
+#define U2_LED_RX_ON        PORTEbits.RE2 = 1;
+#define U2_LED_RX_OFF       PORTEbits.RE2 = 0;
 
 //uart1
 #define U1_LED_TX_TOGGLE    PORTEbits.RE3 = LATEbits.LATE3 ^ 1;     //pin 99/RE3
 #define U1_LED_RX_TOGGLE    PORTEbits.RE4 = LATEbits.LATE4 ^ 1;     //pin 100/RE4
+#define U1_LED_TX_ON        PORTEbits.RE3 = 1;
+#define U1_LED_TX_OFF       PORTEbits.RE3 = 0;
+#define U1_LED_RX_ON        PORTEbits.RE4 = 1;
+#define U1_LED_RX_OFF       PORTEbits.RE4 = 0;
+
 /////////////////		const for 530 board 		//////////////////////////
 
 // short current
@@ -170,6 +183,8 @@
     
 #define  RAMTRON_START              64
 #define  RAMTRON_START_CONFIG		1024
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 #define  COORD_MAX			MB_conf.CV_pos_max
 #define  COORD_MIN			MB_conf.CV_pos_min

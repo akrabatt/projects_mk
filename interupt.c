@@ -9,29 +9,31 @@ unsigned short send_dma;
 
 
 //void __ISR_AT_VECTOR (_ADC_VECTOR, IPL4SRS) ADCInterrupt(void)  {	LED_7_ON; ADC_interrupt_F ();  LED_7_OFF; IFS1bits.ADCIF = 0; ADCCON3bits.GSWTRG = 0; }  
-
-//void __ISR_AT_VECTOR (_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)   {  IFS0bits.T5IF = 0; }
-
 //void __ISR_AT_VECTOR (_ADC_DATA10_VECTOR, IPL4SRS) ADC10Interrupt(void)  {	LED_8 = 1; ADC_interrupt_F (); IFS1bits.ADCIF = 0; LED_8 = 0; IFS2bits.ADCD10IF = 0; }  
-
 //void __ISR_AT_VECTOR (_ADC_DATA32_VECTOR, IPL4SRS) ADC32Interrupt(void)  {	LED_8 = 1; ADC_interrupt_F (); IFS1bits.ADCIF = 0; LED_8 = 0; IFS2bits.ADCD32IF = 0; } 
 
-void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void)   {T1CONbits.TON=0; TInterrupt_m(&usart1m); IFS0bits.T1IF = 0;}
-void __ISR_AT_VECTOR (_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)   {T2CONbits.TON=0; TInterrupt_m(&usart2m); IFS0bits.T2IF = 0;}
-void __ISR_AT_VECTOR (_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)   {T3CONbits.TON=0; U3_LED_RX_TOGGLE; T3Interrupt_(&usart3); IFS0bits.T3IF = 0;}
+
+/*timers interrupts*/
+void __ISR_AT_VECTOR (_TIMER_1_VECTOR, IPL4SRS) T1Interrupt(void)   {T1CONbits.TON=0; TInterrupt_m(&usart1m); U1_LED_RX_OFF; IFS0bits.T1IF = 0;}
+void __ISR_AT_VECTOR (_TIMER_2_VECTOR, IPL4SRS) T2Interrupt(void)   {T2CONbits.TON=0; TInterrupt_m(&usart2m); U2_LED_RX_OFF; IFS0bits.T2IF = 0;}
+void __ISR_AT_VECTOR (_TIMER_3_VECTOR, IPL4SRS) T3Interrupt(void)   {T3CONbits.TON=0; /*U3_LED_RX_TOGGLE*/ U3_LED_RX_OFF; T3Interrupt_(&usart3); IFS0bits.T3IF = 0;}
 void __ISR_AT_VECTOR (_TIMER_4_VECTOR, IPL4SRS) T4Interrupt(void)   {T4CONbits.TON=0; TInterrupt_m(&usart4m); IFS0bits.T4IF = 0;}
 void __ISR_AT_VECTOR (_TIMER_5_VECTOR, IPL4SRS) T5Interrupt(void)   {T5CONbits.TON=0; TInterrupt_m(&usart5m); IFS0bits.T5IF = 0;}
 
 //void __ISR_AT_VECTOR (_TIMER_6_VECTOR, IPL4SRS) T6Interrupt(void)   {Timer6Interrupt(); IFS0bits.T6IF = 0;}
-
 //void __ISR_AT_VECTOR (_TIMER_7_VECTOR, IPL4SRS) T7Interrupt(void)   {Timer7Interrupt(); IFS1bits.T7IF = 0;}
 
 void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)   
 {     
     IFS1bits.T9IF = 0;
-    counters ();  
+    
+    // counter for modbus master start
+    counters ();
+    
+    // up sync flag for main
     mbm_sync = 1;
     
+    // starting 16 function u5-1
     if(++usart5m.mbm16_counter_start >= 100)
     {
         usart5m.mbm16_counter_start = 0;
@@ -52,8 +54,6 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
         usart1m.mbm16_counter_start = 0;
         usart1m.mb_status.start16 = 1;
     }
-//    mbm_timeout_control(&usart4);
-//    mbm_timeout_control(&usart5);
 }    
 
 
@@ -106,7 +106,8 @@ void __ISR_AT_VECTOR (_UART4_TX_VECTOR, IPL4SRS) U4TXInterrupt(void)
 //3
 void __ISR_AT_VECTOR (_UART3_RX_VECTOR, IPL4SRS) U3RXInterrupt(void)  
 {		
-    IFS4bits.U3RXIF = 0;    
+    IFS4bits.U3RXIF = 0;
+    U3_LED_RX_ON;
 	usart3.mb_status.modb_receiving = 1;	    	
 	while (U3STAbits.URXDA)	{ usart3.in_buffer[usart3.in_buffer_count++] = U3RXREG; }
 	if (usart3.in_buffer_count>=IN_SIZE1) { usart3.mb_status.modb_received = 1; usart3.mb_status.modb_receiving = 0;}
@@ -129,8 +130,9 @@ void __ISR_AT_VECTOR (_UART3_TX_VECTOR, IPL4SRS) U3TXInterrupt(void)
 void __ISR_AT_VECTOR (_UART2_RX_VECTOR, IPL4SRS) U2RXInterrupt(void)  
 {		
     IFS4bits.U2RXIF = 0;  
+    U2_LED_RX_ON;
 	usart2m.mb_status.modb_receiving = 1;	    	
-	while (U2STAbits.URXDA)	{ usart2m.in_buffer[usart2m.in_buffer_count++] = U2RXREG; U2_LED_RX_TOGGLE;}
+	while (U2STAbits.URXDA)	{ usart2m.in_buffer[usart2m.in_buffer_count++] = U2RXREG; /*U2_LED_RX_TOGGLE*/;}
 	if (usart2m.in_buffer_count>=IN_SIZE1) { usart2m.mb_status.modb_received = 1; usart2m.mb_status.modb_receiving = 0;}
 	tmr_2_init( frame_delay_1, 1, 1);
 	IFS4bits.U2RXIF = 0;     
@@ -152,8 +154,9 @@ void __ISR_AT_VECTOR (_UART2_TX_VECTOR, IPL4SRS) U2TXInterrupt(void)
 void __ISR_AT_VECTOR (_UART1_RX_VECTOR, IPL4SRS) U1RXInterrupt(void)  
 {		
     IFS3bits.U1RXIF = 0;  
+    U1_LED_RX_ON;
 	usart1m.mb_status.modb_receiving = 1;	    	
-	while (U1STAbits.URXDA)	{ usart1m.in_buffer[usart1m.in_buffer_count++] = U1RXREG; U1_LED_RX_TOGGLE;}
+	while (U1STAbits.URXDA)	{ usart1m.in_buffer[usart1m.in_buffer_count++] = U1RXREG; /*U1_LED_RX_TOGGLE*/;}
 	if (usart1m.in_buffer_count>=IN_SIZE1) { usart1m.mb_status.modb_received = 1; usart1m.mb_status.modb_receiving = 0;}
 	tmr_1_init( frame_delay_1, 1, 1);
 	IFS3bits.U1RXIF = 0;     
@@ -172,6 +175,8 @@ void __ISR_AT_VECTOR (_UART1_TX_VECTOR, IPL4SRS) U1TXInterrupt(void)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 void __ISR_AT_VECTOR(_DMA0_VECTOR, IPL4SRS) __DMA0Interrupt(void)
 {
 int dmaFlags=DCH0INT&0xff; // read the interrupt flags

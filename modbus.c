@@ -298,6 +298,7 @@ void start_tx_usart_dma (struct tag_usart * usart, unsigned short count)
 	}
     if (usart==&usart3)		
     {
+        U3_LED_TX_ON;
 		ENAB_TX3;
         memcpy ((void*) (buf_tx3 ), (const void*) ( usart->out_buffer), (count));
 		IEC4bits.U3RXIE = 0;	
@@ -562,7 +563,7 @@ void stop_uart_tx_dma(void)
         	IFS4bits.U3RXIF = 0; 
             ENAB_RX3;
             IEC4bits.U3RXIE = 1;
-            U3_LED_TX_TOGGLE;
+            U3_LED_TX_OFF;
         }
         if (U3STAbits.OERR||U3STAbits.FERR)	{U3STAbits.OERR=0;}
     }
@@ -618,23 +619,27 @@ void answer_illegal(struct tag_usart * usart, unsigned char illegal)
 	usart->number_send = 5;
 	}
 /* обработка коллизии ошибка функции */
-void answer_illegal_func (struct tag_usart * usart)	{
-	answer_illegal ( usart, 0x01);
-    if (usart->mb_status.tx_mode == INT_type)	{   start_tx_usart (usart); }
-    else {    start_tx_usart_dma(usart, 5); }
-	}
+void answer_illegal_func (struct tag_usart * usart)	
+{
+	answer_illegal(usart, 0x01);
+    if (usart->mb_status.tx_mode == INT_type){start_tx_usart(usart);}
+    else {start_tx_usart_dma(usart, 5);}
+}
+
 /* обработка коллизии ошибка адресации */
-void answer_illegal_data_addr(struct tag_usart * usart)	{
-	answer_illegal ( usart, 0x02);
-	if (usart->mb_status.tx_mode == INT_type)	{   start_tx_usart (usart); }
-    else {    start_tx_usart_dma(usart, 5); }
-	}
+void answer_illegal_data_addr(struct tag_usart * usart)	
+{
+	answer_illegal(usart, 0x02);
+	if (usart->mb_status.tx_mode == INT_type){start_tx_usart(usart);}
+    else {start_tx_usart_dma(usart, 5);}
+}
 /* обработка коллизии ошибка данных */
-void answer_illegal_data_val(struct tag_usart * usart)	{
-	answer_illegal ( usart, 0x03);
-    if (usart->mb_status.tx_mode == INT_type)	{   start_tx_usart (usart); }
-    else {    start_tx_usart_dma(usart, 5); }
-	}
+void answer_illegal_data_val(struct tag_usart * usart)	
+{
+	answer_illegal(usart, 0x03);
+    if (usart->mb_status.tx_mode == INT_type){start_tx_usart(usart);}
+    else {start_tx_usart_dma(usart, 5);}
+}
 
 unsigned short num3;
 
@@ -658,34 +663,32 @@ void mbs_03 (struct tag_usart * _usart, unsigned short * source, unsigned short 
 /* обработчик запроса 16-й функции */
 void mbs_10 (struct tag_usart * _usart, unsigned short * source, unsigned short shift_uni, unsigned short num_uni) 
 {
-
 	unsigned short ii, upd;
-
 	upd = 0;
-
-	if (source == MB_swap.input) {
+	if (source == MB_swap.input) 
+    {
 		memcpy ((void *) (MB_swap.input + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni*2));
 		for (ii=0; ii<num_uni; ii++) 
-			{
+		{
 			MB.input  [ii+shift_uni] = swapshort (MB_swap.input  [ii + shift_uni]);
             MB.input  [ii+shift_uni] = _bswapw(MB.input  [ii+shift_uni]);
-			}
 		}
+	}
     if (source == Stand_sw.buf)
-        {
+    {
         memcpy ((void *) (Stand_sw.buf + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni*2));
         for (ii=0; ii<num_uni; ii++)        
-            {    Stand.buf  [ii+shift_uni] = swapshort(Stand_sw.buf  [ii+shift_uni]);	}
+            {Stand.buf  [ii+shift_uni] = swapshort(Stand_sw.buf  [ii+shift_uni]);}
         putcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) Stand.buf, 40);
         getcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) Stand.buf, 40);
         load_config();
-    	}
+    }
     if (source == Modbus_sw.buf) 
-        {
+    {
         memcpy ((void *) (Modbus_sw.buf + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni*2));
         for (ii=0; ii<num_uni; ii++) 
-            {	Modbus.buf  [ii+shift_uni] = swapshort(Modbus_sw.buf  [ii+shift_uni]);		}
-        }
+            {Modbus.buf  [ii+shift_uni] = swapshort(Modbus_sw.buf[ii+shift_uni]);}
+    }
     _usart->out_buffer [0x00] = _usart->in_buffer[0x00];
 	_usart->out_buffer [0x01] = _usart->in_buffer[0x01];
 	_usart->out_buffer [0x02] = _usart->in_buffer[0x02];
@@ -696,8 +699,8 @@ void mbs_10 (struct tag_usart * _usart, unsigned short * source, unsigned short 
 	_usart->out_buffer [0x06]= uchCRCLo;
 	_usart->out_buffer [0x07]= uchCRCHi;
 	_usart->number_send=0x08;
-    if (_usart->mb_status.tx_mode == DMA_type) {  start_tx_usart_dma(_usart, _usart->number_send);  }
-	else {start_tx_usart (_usart);}
+    if (_usart->mb_status.tx_mode == DMA_type) {start_tx_usart_dma(_usart, _usart->number_send);}
+	else {start_tx_usart(_usart);}
 }
 
 unsigned short num_reg;        
@@ -707,9 +710,10 @@ unsigned short length_err;
 
 void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres) 
 {
-	if (usart->mb_status.modb_received)	{	
+	if (usart->mb_status.modb_received)	
+    {	
 		PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));							// wrong CRC 
-		if (uchCRCLo|uchCRCHi) 	{	close_mbs (usart);     return;	}					// no actions
+		if (uchCRCLo|uchCRCHi) 	{close_mbs (usart); return;}					// no actions
         
 		start_reg = usart->in_buffer[0x02]*0x100;
         start_reg += usart->in_buffer[0x03];
@@ -718,42 +722,43 @@ void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres)
         
         last_reg = start_reg + num_reg;
 
-		if (((usart->in_buffer_count - 9) != usart->in_buffer[0x06])&&(usart->in_buffer[1]==0x10))	// quantity must be equal to
-			{	length_err = 1;		}																// number received bytes - 9 bytes
-			
-								
+		if (((usart->in_buffer_count - 9) != usart->in_buffer[0x06])&&(usart->in_buffer[1]==0x10)) {length_err = 1;} // quantity must be equal to number received bytes - 9 bytes
 		else {length_err = 0;}
-		if (((usart->in_buffer_count - 9) != (num_reg*2))&&(usart->in_buffer[1]==0x10))   			// num reg*2 must be equal to
-			{	length_err = 1;		}	
+        
+		if (((usart->in_buffer_count - 9) != (num_reg*2))&&(usart->in_buffer[1]==0x10)) {length_err = 1;}   			// num reg*2 must be equal to
 		else {length_err = 0;}
 
-	switch (length_err) {
-		case 1: { answer_illegal_data_addr (usart); break;}											// ошибка адресации
-		default :{
-			switch (usart->in_buffer[1])	{
-				case 0x03 :	{
-				 	if (READ_)          { mbs_03 (usart, MB_swap.buf, (start_reg - START_READ), num_reg); break; }  // 2000 ... 2078
-                    if (CONF_READ_) 	{ mbs_03 (usart, Stand_sw.buf, (start_reg - START_CONF_READ), num_reg); break; }    // 500 ... 680
-                    if (MODBUS_READ_) 	{ mbs_03 (usart, Modbus_sw.buf, (start_reg - START_MODBUS_READ), num_reg); break; } // 0 ... 80
-                    if (MB_DIAGN_READ_) { mbs_03 (usart, (unsigned short *)MOPS_arr_sw, (start_reg - START_MB_DIAGN_READ), num_reg); break; }   // 200 ... 312
-                    if (READ_MUPS)      { mbs_03 (usart, (unsigned short*)MUPS_arr_sw, (start_reg - START_READ_MUPS), num_reg); break;} //5000 ... 6200
-                    if (READ_MUPS_SHORT) { mbs_03(usart, (unsigned short*)MUPS_S_arr_sw, (start_reg - START_READ_MUPS_SHORT), num_reg); break;} //7000 ... 7900
-                    if (READ_MOPS_SHORT) { mbs_03(usart, (unsigned short*)MOPS_S_arr_sw, (start_reg - START_READ_MOPS_SHORT), num_reg); break;} //8000 ... 8900
-					answer_illegal_data_addr (usart);
-					break; }			
+        switch (length_err) 
+        {
+            case 1: { answer_illegal_data_addr (usart); break;}											// ошибка адресации
+            default :
+            {
+                switch (usart->in_buffer[1])	
+                {
+                    case 0x03 :	
+                    {
+                        if (READ_)          { mbs_03 (usart, MB_swap.buf, (start_reg - START_READ), num_reg); break; }  // 2000 ... 2078
+                        if (CONF_READ_) 	{ mbs_03 (usart, Stand_sw.buf, (start_reg - START_CONF_READ), num_reg); break; }    // 500 ... 680
+                        if (MODBUS_READ_) 	{ mbs_03 (usart, Modbus_sw.buf, (start_reg - START_MODBUS_READ), num_reg); break; } // 0 ... 80
+                        if (MB_DIAGN_READ_) { mbs_03 (usart, (unsigned short *)MOPS_arr_sw, (start_reg - START_MB_DIAGN_READ), num_reg); break; }   // 200 ... 312
+                        if (READ_MUPS)      { mbs_03 (usart, (unsigned short*)MUPS_arr_sw, (start_reg - START_READ_MUPS), num_reg); break;} //5000 ... 6200
+                        if (READ_MUPS_SHORT){ mbs_03(usart, (unsigned short*)MUPS_S_arr_sw, (start_reg - START_READ_MUPS_SHORT), num_reg); break;} //7000 ... 7900
+                        if (READ_MOPS_SHORT){ mbs_03(usart, (unsigned short*)MOPS_S_arr_sw, (start_reg - START_READ_MOPS_SHORT), num_reg); break;} //8000 ... 8900
+                        answer_illegal_data_addr (usart);
+                        break; 
+                    }			
+                        case 0x10 :	{
+                        if (WRITE_)         { mbs_10 (usart, MB_swap.input, (start_reg - START_WRITE), num_reg); break; } 
+                        if (CONF_WRITE_) 	{ mbs_10 (usart, Stand_sw.buf, (start_reg - START_CONF_WRITE), num_reg); break; } 
+                        if (MODBUS_WRITE_) 	{ mbs_10 (usart, Modbus_sw.buf, start_reg, num_reg); break; } 
+                        answer_illegal_data_addr (usart);					
+                        break;	}
 
-					case 0x10 :	{
-			 		if (WRITE_)         { mbs_10 (usart, MB_swap.input, (start_reg - START_WRITE), num_reg); break; } 
-                    if (CONF_WRITE_) 	{ mbs_10 (usart, Stand_sw.buf, (start_reg - START_CONF_WRITE), num_reg); break; } 
-                    if (MODBUS_WRITE_) 	{ mbs_10 (usart, Modbus_sw.buf, start_reg, num_reg); break; } 
-					answer_illegal_data_addr (usart);					
-					break;	}
-		
-				default :	{ answer_illegal_func (usart);	break;	}
-				}
-			}
-		}
-	}
+                    default :	{ answer_illegal_func (usart);	break;	}
+                }
+            }
+        }   
+    }
 	close_mbs (usart);
 }
 
