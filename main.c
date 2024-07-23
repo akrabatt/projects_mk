@@ -19,7 +19,7 @@ int main(void)
         {  
             change_mups_strategy_separately(&usart2m);
             control_mups_reley(&usart2m);
-//            MOPS_S_control(&usart1m);
+            MOPS_S_control(&usart1m);
 //            MUPS_S_control(&usart2m);
             mbm_sync = 0;
         }
