@@ -9,17 +9,20 @@
 int main(void)
 {
     InitializeSystem();
-    
     while(1)
     {
         mbs (&usart3, 1);
         stop_uart_tx_dma();   
-        
         if ( mbm_sync ==  1 ) 
         {  
+            // u2
             change_mups_strategy_separately(&usart2m);
             control_mups_reley(&usart2m);
+            // u1
             MOPS_S_control(&usart1m);
+            // u3
+            mbm_16(&usart4m, 1, 0, 8, _530_board_fire, 115200);
+            
             mbm_sync = 0;
         }
     stop_uart_tx();
