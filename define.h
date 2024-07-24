@@ -89,30 +89,30 @@
 
 /////////////////		const for 530 board 		//////////////////////////
 
-// short current
-#define SHORT_CURRENT_530_1     0x9249
-#define SHORT_CURRENT_530_2     0x0024
-// sw short current
-#define SW_SHORT_CURRENT_530_1  0x4992
-#define SW_SHORT_CURRENT_530_2  0x2400
+// attantion
+#define ATTANTION_530_1             0x9249
+#define ATTANTION_530_2             0x0024
+// sw attantion
+#define SW_ATTANTION_530_1          0x4992
+#define SW_ATTANTION_530_2          0x2400
 
 // fire
-#define FIRE_530_1              0x2492
-#define FIRE_530_2              0x0049
+#define FIRE_530_1                  0x2492
+#define FIRE_530_2                  0x0049
 // sw fire
-#define SW_FIRE_530_1           0x9224
-#define SW_FIRE_530_2           0x4900
+#define SW_FIRE_530_1               0x9224
+#define SW_FIRE_530_2               0x4900
 
-// attantion
-#define ATTANTION_530_1         0x4924
-#define ATTANTION_530_2         0x0092
-// sw attantion
-#define SW_ATTANTION_530_1      0x2449
-#define SW_ATTANTION_530_2      0x9200
+// short current
+#define SHORT_CURRENT_530_1         0x4924
+#define SHORT_CURRENT_530_2         0x0092
+// sw short current
+#define SW_SHORT_CURRENT_530_1      0x2449
+#define SW_SHORT_CURRENT_530_2      0x9200
 
 // normal
-#define NORMAL_530_1            0x0000
-#define NORMAL_530_2            0x0000
+#define NORMAL_530_1                0x0000
+#define NORMAL_530_2                0x0000
 
 
 
