@@ -617,5 +617,6 @@ unsigned short _530_board_fire[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1
 unsigned short _530_board_attantion[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
                                           SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};
 
+unsigned short _530_board_mode[8];
 
 #endif // GLOBAL_H

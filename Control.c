@@ -514,3 +514,59 @@ void control_mups_reley(struct tag_usartm * usart)
         }
     }
 }
+
+// vars for 530 board
+unsigned short slave_530_id;
+unsigned short mode_num_530;
+unsigned short apply_530;
+
+enum
+{
+    READ_INPUT_SLAVE_ID_530 = 0,
+    READ_INPUT_MUPS_RELAY_530,
+    CHECK_APPLY_530,
+    WRITE_MODE_530
+}stages_530;
+
+/**
+ * @brief this function sends a signal to all modules at the same time
+ */
+void board_530_mode_common(struct tag_usartm * usart)
+{
+    switch(stages_530)
+    {
+        case READ_INPUT_SLAVE_ID_530:
+        {
+            slave_530_id = Stand.buf[35]; 
+            if(slave_530_id > 0){stages_530++; break;} 
+            else{stages_530 = 0; /*mbm_fun_in_work = 0;*/ break;}
+        }
+        case READ_INPUT_MUPS_RELAY_530:
+        {
+            mode_num_530 = Stand.buf[36];
+            apply_530 = Stand.buf[37];
+            // check range
+            if(mode_num_530 < 0 || mode_num_530 > 3) {mode_num_530 = 0;}
+            
+            switch(mode_num_530)
+            {
+                case 0: {memcpy(_530_board_mode, _530_board_normal, sizeof(_530_board_normal)); stages_530++; break;}
+                case 1: {memcpy(_530_board_mode, _530_board_short_current, sizeof(_530_board_short_current)); stages_530++; break;}
+                case 2: {memcpy(_530_board_mode, _530_board_fire, sizeof(_530_board_fire)); stages_530++; break;}
+                case 3: {memcpy(_530_board_mode, _530_board_attantion, sizeof(_530_board_attantion)); stages_530++; break;}
+            }
+        }
+        case CHECK_APPLY_530:
+        {
+            if(apply_530 > 0) {stages_530++; break;}
+            else{stages_530 = READ_INPUT_SLAVE_ID_530; /*mbm_fun_in_work = 0;*/ break;}
+        }
+        case WRITE_MODE_530:
+        {
+            mbm_16(usart, slave_530_id, 0, 8, _530_board_mode, 115200);
+            // check end 16 funktion
+            if(mbm_16_end_flag > 0){mbm_16_end_flag = 0; stages_530 = 0; Stand.buf[37] = 0; Stand_sw.buf[37] = 0; /*mbm_fun_in_work = 0;*/}
+            break;
+        }
+    }
+}
