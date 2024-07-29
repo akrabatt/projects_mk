@@ -92,21 +92,21 @@
 // attantion
 #define ATTANTION_530_1             0x9249
 #define ATTANTION_530_2             0x0024
-// sw attantion
+// swapped attantion
 #define SW_ATTANTION_530_1          0x4992
 #define SW_ATTANTION_530_2          0x2400
 
 // fire
 #define FIRE_530_1                  0x2492
 #define FIRE_530_2                  0x0049
-// sw fire
+// swapped fire
 #define SW_FIRE_530_1               0x9224
 #define SW_FIRE_530_2               0x4900
 
 // short current
 #define SHORT_CURRENT_530_1         0x4924
 #define SHORT_CURRENT_530_2         0x0092
-// sw short current
+// swapped short current
 #define SW_SHORT_CURRENT_530_1      0x2449
 #define SW_SHORT_CURRENT_530_2      0x9200
 
@@ -155,7 +155,7 @@
 #define  END_WORK_READ					812			// 
 #define  START_WORK_WRITE				806			// 
 #define  END_WORK_WRITE					812			// 
-#define  WORK_READ_		((start_reg >= START_WORK_READ) && (last_reg <= END_WORK_READ))	
+#define  WORK_READ_         ((start_reg >= START_WORK_READ) && (last_reg <= END_WORK_READ))	
 #define  WORK_WRITE_		((start_reg >= START_WORK_WRITE) && (last_reg <= END_WORK_WRITE))
 
 
