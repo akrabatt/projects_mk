@@ -605,14 +605,11 @@ unsigned short DINPUT3;
 unsigned short _530_board_normal[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2, 
                                        NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};
 
-
 unsigned short _530_board_short_current[8] = {SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, 
                                               SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2};
 
-
 unsigned short _530_board_fire[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
                                      SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
-
 
 unsigned short _530_board_attantion[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
                                           SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};

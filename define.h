@@ -180,7 +180,7 @@
 #define  START_MODBUS_WRITE				20			//
 #define  END_MODBUS_WRITE				82			// 
 #define  MODBUS_READ_           ((start_reg >= START_MODBUS_READ) && (last_reg <= END_MODBUS_READ))	
-#define  MODBUS_WRITE_		((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
+#define  MODBUS_WRITE_          ((start_reg >= START_MODBUS_WRITE) && (last_reg <= END_MODBUS_WRITE))
 
 
 #define  START_MB_DIAGN_READ				3000			// config area - setting of engine parameters
@@ -201,28 +201,25 @@
 #define  CUR_MIN			MB_conf.CV_curr_min
 #define  CUR_SCALE			MB_conf.CV_curr_scale
 
-#define  CUR_CTRL_VAL			10
+#define  CUR_CTRL_VAL		10
 //#define  CUR_CTRL_VAL			MB_conf.CV_check_level  
 
 #define  INT_CLR			0.0  
 #define  INT_MCLR			1.0  
 #define  MREG_FREQ			100    
     
-#define  TMR4CLK	    49776400
+#define  TMR4CLK            49776400
 //#define  TMR4CLK	    24883200
 #define  OC_FREQ            3000    
 #define  OC_MAX             TMR4CLK / OC_FREQ -1
 #define  OC_MIN             1500
-#define   FILTER	    20    
-#define	  d_count_size	    4
-    
+#define  FILTER             20    
+#define	 d_count_size	    4
 #define  FILT_CRPM          4
-    
 #define  FILT_C             10
 #define  FILT_I             10
 #define  FILT_DISCRET       500
 #define  CYCLE              10
-    
 #define  TMAXUOZ            58320                  
     
     ////////////////	End Modbus alowed area 	/////////////////////
