@@ -595,10 +595,10 @@ extern unsigned short mbm_fun_in_work;
 
 //530 board arr for mods
 
-extern unsigned short _530_board_normal[8];
-extern unsigned short _530_board_short_current[8];
-extern unsigned short _530_board_fire[8];
-extern unsigned short _530_board_attantion[8];
-extern unsigned short _530_board_mode[8];
+extern unsigned short _530_board_normal_mops[8];
+extern unsigned short _530_board_short_current_mops[8];
+extern unsigned short _530_board_fire_mops[8];
+extern unsigned short _530_board_attantion_mops[8];
+extern unsigned short _530_board_mode_mops[8];
 
 #endif // EXTERN_H

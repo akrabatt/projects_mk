@@ -21,7 +21,7 @@ int main(void)
             // u1
             MOPS_S_control(&usart1m);
             // u3
-//            mbm_16(&usart4m, 1, 0, 8, _530_board_normal, 115200);
+//            mbm_16(&usart4m, 1, 0, 8, _530_board_normal_mops, 115200);
             board_530_mode_common(&usart4m);
             
             mbm_sync = 0;

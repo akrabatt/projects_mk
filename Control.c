@@ -530,6 +530,12 @@ enum
 
 /**
  * @brief this function sends a signal to all modules at the same time
+ * 
+ * @param usart pointer to struct usartm
+ * 
+ * @note The beginning of the requested range in mudbus poll is 536, 
+ * com_slave_530_id = 535 reg(Stand.buf[35]), com_mode_num_530 = 536reg(Stand.buf[36])
+ * etc.1, com_apply_530 = 531 reg(Stand.buf[37])
  */
 void board_530_mode_common(struct tag_usartm * usart)
 {
@@ -550,10 +556,10 @@ void board_530_mode_common(struct tag_usartm * usart)
             
             switch(mode_num_530)
             {
-                case 0: {memcpy(_530_board_mode, _530_board_normal, sizeof(_530_board_normal)); stages_530++; break;}
-                case 1: {memcpy(_530_board_mode, _530_board_short_current, sizeof(_530_board_short_current)); stages_530++; break;}
-                case 2: {memcpy(_530_board_mode, _530_board_fire, sizeof(_530_board_fire)); stages_530++; break;}
-                case 3: {memcpy(_530_board_mode, _530_board_attantion, sizeof(_530_board_attantion)); stages_530++; break;}
+                case 0: {memcpy(_530_board_mode_mops, _530_board_normal_mops, sizeof(_530_board_normal_mops)); stages_530++; break;}
+                case 1: {memcpy(_530_board_mode_mops, _530_board_short_current_mops, sizeof(_530_board_short_current_mops)); stages_530++; break;}
+                case 2: {memcpy(_530_board_mode_mops, _530_board_fire_mops, sizeof(_530_board_fire_mops)); stages_530++; break;}
+                case 3: {memcpy(_530_board_mode_mops, _530_board_attantion_mops, sizeof(_530_board_attantion_mops)); stages_530++; break;}
             }
         }
         case CHECK_APPLY_530:
@@ -563,7 +569,7 @@ void board_530_mode_common(struct tag_usartm * usart)
         }
         case WRITE_MODE_530:
         {
-            mbm_16(usart, slave_530_id, 0, 8, _530_board_mode, 115200);
+            mbm_16(usart, slave_530_id, 0, 8, _530_board_mode_mops, 115200);
             // check end 16 funktion
             if(mbm_16_end_flag > 0){mbm_16_end_flag = 0; stages_530 = 0; Stand.buf[37] = 0; Stand_sw.buf[37] = 0; /*mbm_fun_in_work = 0;*/}
             break;
