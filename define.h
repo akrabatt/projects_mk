@@ -87,6 +87,10 @@
 #define U1_LED_RX_ON        PORTEbits.RE4 = 1;
 #define U1_LED_RX_OFF       PORTEbits.RE4 = 0;
 
+
+// healp led toggle
+#define LED_TOGGLE          PORTEbits.RE1 = LATEbits.LATE1 ^ 1;
+
 /////////////////		const for 530 board 		//////////////////////////
 
 // attantion

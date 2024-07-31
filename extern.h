@@ -594,11 +594,17 @@ extern unsigned short mbm_16_end_flag;
 extern unsigned short mbm_fun_in_work;
 
 //530 board arr for mods
-
 extern unsigned short _530_board_normal_mops[8];
 extern unsigned short _530_board_short_current_mops[8];
 extern unsigned short _530_board_fire_mops[8];
 extern unsigned short _530_board_attantion_mops[8];
 extern unsigned short _530_board_mode_mops[8];
+
+
+//var for function _1_sec
+extern unsigned short _1_sec_counter;
+
+//var for function _500_msec
+extern unsigned short _500_msec_counter;
 
 #endif // EXTERN_H

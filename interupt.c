@@ -5,7 +5,7 @@
 #include "define.h"
 #include "extern.h"
 
-unsigned short send_dma;
+//unsigned short send_dma;
 
 
 //void __ISR_AT_VECTOR (_ADC_VECTOR, IPL4SRS) ADCInterrupt(void)  {	LED_7_ON; ADC_interrupt_F ();  LED_7_OFF; IFS1bits.ADCIF = 0; ADCCON3bits.GSWTRG = 0; }  
@@ -28,7 +28,10 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
     IFS1bits.T9IF = 0;
     
     // counter for modbus master start
-    counters ();
+    counters();
+    
+    //1 second function
+    _1_sec();
     
     // up sync flag for main
     mbm_sync = 1;

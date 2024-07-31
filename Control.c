@@ -97,10 +97,10 @@ void MOPS_S_control (struct tag_usartm * usart)
 
         case READ_CYCLE:    {
             if (mops_num >= 10) {mops_num = 0; mops_stat++ ; break;}
-            if (Stand.active_mops [mops_num] != 0) { mbm_03_str (usart, (mops_num + 1), 0, 63, (unsigned short * ) &MOPS_S_arr [mops_num], 115200); }
+            if (Stand.active_mops [mops_num] != 0) { mbm_03_str (usart, (mops_num + 1), 0, 44, (unsigned short * ) &MOPS_S_arr [mops_num], 115200); }
             else {mops_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
-                for (cc = 0; cc < 63; cc++)    { MOPS_S_arr_sw [mops_num].main_area [cc] = swapshort (MOPS_S_arr [mops_num].main_area [cc]); }
+                for (cc = 0; cc < 44; cc++)    { MOPS_S_arr_sw [mops_num].main_area [cc] = swapshort (MOPS_S_arr [mops_num].main_area [cc]); }
                 usart->mb_status.mbm_data_rdy = 0; mops_num++; 
                 }
             if (usart->mb_status.master_timeout_flag == 1)  
@@ -574,5 +574,31 @@ void board_530_mode_common(struct tag_usartm * usart)
             if(mbm_16_end_flag > 0){mbm_16_end_flag = 0; stages_530 = 0; Stand.buf[37] = 0; Stand_sw.buf[37] = 0; /*mbm_fun_in_work = 0;*/}
             break;
         }
+    }
+}
+
+/**
+ * @brief this function timer 1 second
+ * 
+ */
+void _1_sec()
+{
+    if(++_1_sec_counter > 1000)
+    {
+        _1_sec_counter = 0;
+//        LED_TOGGLE;
+    }
+}
+
+/**
+ * @brief this function timer 500 milisec
+ * 
+ */
+void _500_msec()
+{
+    if(++_500_msec_counter > 500)
+    {
+        _500_msec_counter = 0;
+        LED_TOGGLE;
     }
 }

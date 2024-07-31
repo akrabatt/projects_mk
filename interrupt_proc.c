@@ -217,10 +217,15 @@ void discret_ctrl (void)
     else { DI2_cnt = 0;}
  }
 unsigned short master_start_del;
+
+/**
+ * 
+ * 
+ */
 void counters (void)
 {
     if (_divider >= 10)
-        {
+    {
         _divider = 0;
         _100msec ++;
         _1000msec ++;
@@ -254,6 +259,7 @@ void counters (void)
         Modbus_sw.buf [12] = swapshort (Modbus.buf [12]); 
         Modbus_sw.buf [13] = swapshort (Modbus.buf [13]); 
                 
+        // !!! WARNING DO NOT CHANGE THIS !!!
         if (_100msec >= 3) 
         {
             _100msec = 0; 
@@ -267,11 +273,12 @@ void counters (void)
             }
         }   
 
-        if (_1000msec >= 100) {
+        if (_1000msec >= 100) 
+        {
             master_start_del = 1;
             _1000msec = 0;  
-            if ((Stand.active_mops[0] == 0) || (Stand.active_mups[0] == 0)) {load_config ();  }          //help_load =0;
-            }
+            if ((Stand.active_mops[0] == 0) || (Stand.active_mups[0] == 0)) {load_config ();}          //help_load =0;
+        }
     }
     _divider++;
 }

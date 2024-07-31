@@ -616,4 +616,11 @@ unsigned short _530_board_attantion_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_
 
 unsigned short _530_board_mode_mops[8];
 
+
+//var for function _1_sec
+unsigned short _1_sec_counter;
+
+//var for function _500_msec
+unsigned short _500_msec_counter;
+
 #endif // GLOBAL_H
