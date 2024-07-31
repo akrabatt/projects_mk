@@ -33,6 +33,9 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
     //1 second function
     _1_sec();
     
+    //500 msec function
+    _500_msec();
+    
     // up sync flag for main
     mbm_sync = 1;
     

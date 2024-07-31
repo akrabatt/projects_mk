@@ -556,10 +556,10 @@ void board_530_mode_common(struct tag_usartm * usart)
             
             switch(mode_num_530)
             {
-                case 0: {memcpy(_530_board_mode_mops, _530_board_normal_mops, sizeof(_530_board_normal_mops)); stages_530++; break;} // 2 norma
-                case 1: {memcpy(_530_board_mode_mops, _530_board_short_current_mops, sizeof(_530_board_short_current_mops)); stages_530++; break;}  //
-                case 2: {memcpy(_530_board_mode_mops, _530_board_fire_mops, sizeof(_530_board_fire_mops)); stages_530++; break;}
-                case 3: {memcpy(_530_board_mode_mops, _530_board_attantion_mops, sizeof(_530_board_attantion_mops)); stages_530++; break;}
+                case 0: {memcpy(_530_board_mode_mops, _530_board_normal_mops, sizeof(_530_board_normal_mops)); stages_530++; break;}                // 2 - norma in mops
+                case 1: {memcpy(_530_board_mode_mops, _530_board_short_current_mops, sizeof(_530_board_short_current_mops)); stages_530++; break;}  // 6 - short current in mops
+                case 2: {memcpy(_530_board_mode_mops, _530_board_fire_mops, sizeof(_530_board_fire_mops)); stages_530++; break;}                    // 5 - fire in mops
+                case 3: {memcpy(_530_board_mode_mops, _530_board_attantion_mops, sizeof(_530_board_attantion_mops)); stages_530++; break;}          // 4 - attantion
             }
         }
         case CHECK_APPLY_530:
@@ -579,7 +579,6 @@ void board_530_mode_common(struct tag_usartm * usart)
 
 /**
  * @brief this function timer 1 second
- * 
  */
 void _1_sec()
 {
@@ -592,7 +591,6 @@ void _1_sec()
 
 /**
  * @brief this function timer 500 milisec
- * 
  */
 void _500_msec()
 {
