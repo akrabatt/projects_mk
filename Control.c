@@ -556,8 +556,8 @@ void board_530_mode_common(struct tag_usartm * usart)
             
             switch(mode_num_530)
             {
-                case 0: {memcpy(_530_board_mode_mops, _530_board_normal_mops, sizeof(_530_board_normal_mops)); stages_530++; break;}
-                case 1: {memcpy(_530_board_mode_mops, _530_board_short_current_mops, sizeof(_530_board_short_current_mops)); stages_530++; break;}
+                case 0: {memcpy(_530_board_mode_mops, _530_board_normal_mops, sizeof(_530_board_normal_mops)); stages_530++; break;} // 2 norma
+                case 1: {memcpy(_530_board_mode_mops, _530_board_short_current_mops, sizeof(_530_board_short_current_mops)); stages_530++; break;}  //
                 case 2: {memcpy(_530_board_mode_mops, _530_board_fire_mops, sizeof(_530_board_fire_mops)); stages_530++; break;}
                 case 3: {memcpy(_530_board_mode_mops, _530_board_attantion_mops, sizeof(_530_board_attantion_mops)); stages_530++; break;}
             }

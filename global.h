@@ -266,7 +266,7 @@ union tag_mops
             };
             unsigned short write[num_zones * 10 + 1];
         };
-        unsigned short beak_err;
+        unsigned short break_err;
         unsigned short norma_err;
         unsigned short att_err;
         unsigned short fire_err;
@@ -311,7 +311,7 @@ union tag_mops_short
             };
             unsigned short write[num_zones * 2];
         };
-        unsigned short beak_err;
+        unsigned short break_err;
         unsigned short norma_err;
         unsigned short att_err;
         unsigned short fire_err;
@@ -584,7 +584,7 @@ union tag_stand
         unsigned short mups_coll_1_err[10];  // 91
         unsigned short mups_coll_2_err[10];  // 101
         unsigned short mups_coll_3_err[10];  // 111
-        unsigned short beak_err[10];         // 121
+        unsigned short break_err[10];         // 121
         unsigned short norma_err[10];        // 131
         unsigned short att_err[10];          // 141
         unsigned short fire_err[10];         // 151
