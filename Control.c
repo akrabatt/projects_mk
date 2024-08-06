@@ -560,7 +560,7 @@ void board_530_mode_common(struct tag_usartm * usart)
                 case 1: {memcpy(_530_board_mode_mops, _530_board_short_current_mops, sizeof(_530_board_short_current_mops)); stages_530++; break;}  // 6 - short current in mops
                 case 2: {memcpy(_530_board_mode_mops, _530_board_fire_mops, sizeof(_530_board_fire_mops)); stages_530++; break;}                    // 5 - fire in mops
                 case 3: {memcpy(_530_board_mode_mops, _530_board_attantion_mops, sizeof(_530_board_attantion_mops)); stages_530++; break;}          // 4 - attantion
-                case 4: {memcpy(_530_board_mode_mops, _530_board_short_current_start_reley_4_mops, sizeof(_530_board_short_current_start_reley_4_mops)); stages_530++; break;}
+                case 4: {memcpy(_530_board_mode_mops, _530_board_84_reley_on_mops, sizeof(_530_board_84_reley_on_mops)); stages_530++; break;}
             }
         }
         case CHECK_APPLY_530:

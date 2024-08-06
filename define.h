@@ -125,6 +125,13 @@
 #define SW_RELEY_ON_START_4_530_1   0xf8ff
 #define SW_RELEY_ON_START_4_530_2   0xff00
 
+// relay on end 84 reley
+#define RELEY_ON_END_84_530_1       0x07ff
+#define RELEY_ON_END_84_530_2       0x0000
+// swapped reley oh end 84 reley
+#define SW_RELEY_ON_END_84_530_1    0xff07
+#define SW_RELEY_ON_END_84_530_2    0x0000
+
 //reley on
 #define RELEY_ON_530_1              0xffff
 #define RELEY_ON_530_2              0x00ff
@@ -137,8 +144,7 @@
 #define RELEY_OFF_530_2             0x0000
 
 // none
-#define NONE_530_1                  0x0000
-#define NONE_530_2                  0x0000
+#define NONE_530                 0x0000
 
 /////////////////		Modbus alowed areas 		//////////////////////////
     

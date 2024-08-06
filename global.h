@@ -622,13 +622,22 @@ unsigned short _530_board_short_current_start_reley_4_mops[8] = {SW_SHORT_CURREN
 // 1-4 fire
 unsigned short _530_board_fire_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
                                           SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
-
-//unsigned short _530_board_fire_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
-//                                          SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
+// 1 - fire, 2 - fire, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_fire_start_reley_4_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
+                                                        SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
 
                                             //===attantion===//
+// 1-4 attantion
 unsigned short _530_board_attantion_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
                                                SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};
+// 1 - attantion, 2 - attantion, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_attantion_start_reley_4_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
+                                                             SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+
+                                        //===end on with 84 reley===//
+// 1 - reley on, 2 - end 84 reley on, 3 - none, 4 - none
+unsigned short _530_board_84_reley_on_mops[8] = {SW_RELEY_ON_530_1, SW_RELEY_ON_530_2, SW_RELEY_ON_END_84_530_1, SW_RELEY_ON_END_84_530_2,
+                                                 NONE_530, NONE_530, NONE_530, NONE_530};
 
 
                                             //===main array===//

@@ -598,10 +598,15 @@ extern unsigned short _530_board_normal_mops[8];
 extern unsigned short _530_board_short_current_mops[8];
 extern unsigned short _530_board_fire_mops[8];
 extern unsigned short _530_board_attantion_mops[8];
+//main arry
 extern unsigned short _530_board_mode_mops[8];
+//start with 4th reley
 extern unsigned short _530_board_normal_start_reley_4_mops[8];
 extern unsigned short _530_board_short_current_start_reley_4_mops[8];
-
+extern unsigned short _530_board_fire_start_reley_4_mops[8];
+extern unsigned short _530_board_attantion_start_reley_4_mops[8];
+//end with 84 reley
+extern unsigned short _530_board_84_reley_on_mops[8];
 
 //var for function _1_sec
 extern unsigned short _1_sec_counter;
