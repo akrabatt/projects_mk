@@ -603,16 +603,16 @@ unsigned short DINPUT3;
 //530 board arr for mods
 
 unsigned short _530_board_normal_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2, 
-                                       NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};
+                                            NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};
 
 unsigned short _530_board_short_current_mops[8] = {SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, 
-                                              SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2};
+                                                   SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2};
 
 unsigned short _530_board_fire_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
-                                     SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
+                                          SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
 
 unsigned short _530_board_attantion_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
-                                          SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};
+                                               SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};
 
 unsigned short _530_board_mode_mops[8];
 
@@ -622,5 +622,26 @@ unsigned short _1_sec_counter;
 
 //var for function _500_msec
 unsigned short _500_msec_counter;
+
+
+// mops statement struct, show mops statements
+struct tag_mops_stand_statment
+{
+    unsigned short mops_active;
+    unsigned short mops_operable;
+    unsigned short mops_ch_status[8];
+    struct
+    {
+        unsigned short mops_ch1_err : 1;
+        unsigned short mops_ch2_err : 1;
+        unsigned short mops_ch3_err : 1;
+        unsigned short mops_ch4_err : 1;
+        unsigned short mops_ch5_err : 1;
+        unsigned short mops_ch6_err : 1;
+        unsigned short mops_ch7_err : 1;
+        unsigned short mops_ch8_err : 1;
+        unsigned short : 8;
+    }mops_ch_statement;
+}mops_stand_statment;
 
 #endif // GLOBAL_H

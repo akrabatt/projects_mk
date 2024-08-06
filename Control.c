@@ -548,7 +548,7 @@ void board_530_mode_common(struct tag_usartm * usart)
             else{stages_530 = 0; /*mbm_fun_in_work = 0;*/ break;}
         }
         case READ_INPUT_MUPS_RELAY_530:
-        {
+        {   
             mode_num_530 = Stand.buf[36];
             apply_530 = Stand.buf[37];
             // check range
@@ -598,5 +598,26 @@ void _500_msec()
     {
         _500_msec_counter = 0;
         LED_TOGGLE;
+    }
+}
+
+
+// vars for mops_service_check
+
+enum 
+{
+    RELEY_ON = 0,
+}mops_service_check_stages;
+
+
+/**
+ * @brief this function performs a service check of the module
+ * 
+ */
+void mops_service_check(struct tag_usartm * usart)
+{
+    switch(mops_service_check_stages)
+    {
+        switch RELEY_ON: {}
     }
 }

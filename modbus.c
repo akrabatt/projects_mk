@@ -740,10 +740,10 @@ void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres)
                         if (READ_)          { mbs_03 (usart, MB_swap.buf, (start_reg - START_READ), num_reg); break; }  // 2000 ... 2078
                         if (CONF_READ_) 	{ mbs_03 (usart, Stand_sw.buf, (start_reg - START_CONF_READ), num_reg); break; }    // 500 ... 680
                         if (MODBUS_READ_) 	{ mbs_03 (usart, Modbus_sw.buf, (start_reg - START_MODBUS_READ), num_reg); break; } // 0 ... 80
-                        if (MB_DIAGN_READ_) { mbs_03 (usart, (unsigned short *)MOPS_arr_sw, (start_reg - START_MB_DIAGN_READ), num_reg); break; }   // 200 ... 312
+                        if (MB_DIAGN_READ_) { mbs_03 (usart, (unsigned short*)MOPS_arr_sw, (start_reg - START_MB_DIAGN_READ), num_reg); break; }   // 200 ... 312
                         if (READ_MUPS)      { mbs_03 (usart, (unsigned short*)MUPS_arr_sw, (start_reg - START_READ_MUPS), num_reg); break;} //5000 ... 6200
-                        if (READ_MUPS_SHORT){ mbs_03(usart, (unsigned short*)MUPS_S_arr_sw, (start_reg - START_READ_MUPS_SHORT), num_reg); break;} //7000 ... 7900
-                        if (READ_MOPS_SHORT){ mbs_03(usart, (unsigned short*)MOPS_S_arr_sw, (start_reg - START_READ_MOPS_SHORT), num_reg); break;} //8000 ... 8900
+                        if (READ_MUPS_SHORT){ mbs_03 (usart, (unsigned short*)MUPS_S_arr_sw, (start_reg - START_READ_MUPS_SHORT), num_reg); break;} //7000 ... 7900
+                        if (READ_MOPS_SHORT){ mbs_03 (usart, (unsigned short*)MOPS_S_arr_sw, (start_reg - START_READ_MOPS_SHORT), num_reg); break;} //8000 ... 8900
                         answer_illegal_data_addr (usart);
                         break; 
                     }			
