@@ -608,17 +608,35 @@ void _500_msec()
 enum 
 {
     RELEY_ON = 0,
+    
 }mops_service_check_stages;
+short var_a;
+short var_b;
 
 
 /**
  * @brief this function performs a service check of the module
  * 
+ * @param usart_a. A pointer to the port to which the main number of 530 cards 
+ * is connected is passed to usart_a (start reley 4)
+ * 
+ * @param usart_b. The pointer to which the port is transmitted to which one 
+ * 530th board is connected (end reley 84)
+ * 
+ * @param usart_c. this port is used to read the states of the modules (read MOPS)
+ * 
  */
-//void mops_service_check(struct tag_usartm * usart)
-//{
-//    switch(mops_service_check_stages)
-//    {
-//        switch RELEY_ON: {}
-//    }
-//}
+void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b, struct tag_usartm * usart_c)
+{
+    switch(mops_service_check_stages)
+    {
+        case RELEY_ON: 
+        {
+            var_a = mbm_16_flag(usart_a, 1, 0, 8, _530_board_only_reley_on_start_4_mops, 115200);
+            var_b = mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200);
+            if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}
+            break;
+        }
+    }
+    mops_service_check_stages = 0;
+}

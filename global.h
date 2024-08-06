@@ -659,21 +659,24 @@ unsigned short _500_msec_counter;
 // mops statement struct, show mops statements
 struct tag_mops_stand_statment
 {
-    unsigned short mops_active;
-    unsigned short mops_operable;
-    unsigned short mops_ch_status[8];
+    unsigned short mops_active;                         // is there connection with module
+    unsigned short mops_operable;                       // is the module working properly or not
+    unsigned short mops_ch_status[8];                   // buffer for the value of the states
     struct
     {
-        unsigned short mops_ch1_err : 1;
-        unsigned short mops_ch2_err : 1;
-        unsigned short mops_ch3_err : 1;
-        unsigned short mops_ch4_err : 1;
-        unsigned short mops_ch5_err : 1;
-        unsigned short mops_ch6_err : 1;
-        unsigned short mops_ch7_err : 1;
-        unsigned short mops_ch8_err : 1;
+        unsigned short mops_ch1_err : 1;                // 1
+        unsigned short mops_ch2_err : 1;                // 2
+        unsigned short mops_ch3_err : 1;                // 3
+        unsigned short mops_ch4_err : 1;                // 4
+        unsigned short mops_ch5_err : 1;                // 5 the flags(1-8) is set if the channel outputs an incorrect value
+        unsigned short mops_ch6_err : 1;                // 6
+        unsigned short mops_ch7_err : 1;                // 7 
+        unsigned short mops_ch8_err : 1;                // 8
         unsigned short : 8;
     }mops_ch_statement;
-}mops_stand_statment;
+};
+
+//struct mups array
+struct tag_mops_stand_statment MOPS_statment[10];
 
 #endif // GLOBAL_H

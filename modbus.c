@@ -872,21 +872,25 @@ void mbm_03_str (struct tag_usartm * usart, unsigned char mbm_adres, unsigned sh
     unsigned short buff_sw [130];
 	if (!usart->mb_status.master_start) return;
 	switch (usart->mbm_status03) 
+    {
+		case 0:	
         {
-		case 0:	{
 			if (usart==&usart1m) {uart1_init (speed);}
             if (usart==&usart2m) {uart2_init (speed);}
             if (usart==&usart3m) {uart3_init (speed);}
             if (usart==&usart4m) {uart4_init (speed);}
             if (usart==&usart5m) {uart5_init (speed);}            
-			switch (speed){
+			switch (speed)
+            {
 				case 38400:     {usart->mbm_timeout_counter = 450; break;}
 				case 57600:     {usart->mbm_timeout_counter = 300; break;}
-				case 115200:    {usart->mbm_timeout_counter = 150; break;}			}
+				case 115200:    {usart->mbm_timeout_counter = 150; break;}			
+            }
             usart->mbm_status03++;
-			break;	}
-
-		case 1:	{        
+			break;	
+        }
+		case 1:	
+        {        
 			usart->out_buffer [0x00] = mbm_adres;
 			usart->out_buffer [0x01] = 0x03;
 			usart->out_buffer [0x03] = shift_03&0x00FF;
@@ -902,59 +906,71 @@ void mbm_03_str (struct tag_usartm * usart, unsigned char mbm_adres, unsigned sh
 			usart->mb_status.modb_received = 0;
             usart->mb_status.modb_receiving = 0;
 			usart->mb_status.byte_missing = 0;
-//			usart->mb_status.crc_error = 0;
-//			usart->mb_status.device_error = 0;
-//			usart->mb_status.coll_1 = 0;
-//			usart->mb_status.coll_2 = 0;
-//			usart->mb_status.coll_3 = 0;
-            if (usart->mb_status.tx_mode == DMA_type) {  start_tx_usart_dmam(usart, usart->number_send);  }
+            if (usart->mb_status.tx_mode == DMA_type) {start_tx_usart_dmam(usart, usart->number_send);}
         	else {start_tx_usartm (usart);}		//	start_tx_usart_dma (usart, usart->number_send);
 			usart->mbm_status03++;
-			break;	}
-        
-		case 2:	{
-            if ( usart->mbm_timeout_counter > 0 )   { usart->mbm_timeout_counter -= MASTER_TICK;}
-            if ( usart->mbm_timeout_counter == 0 )  { usart->mb_status.master_timeout_flag = 1; usart->mbm03_tm_err++; usart->mbm_status03 = 0; usart->mb_status.master_start = 0; break;}
-            if ( !usart->mb_status.modb_received )  { return; }
+			break;	
+        }
+		case 2:	
+        {
+            if ( usart->mbm_timeout_counter > 0 )   {usart->mbm_timeout_counter -= MASTER_TICK;}
+            if ( usart->mbm_timeout_counter == 0 )  {usart->mb_status.master_timeout_flag = 1; usart->mbm03_tm_err++; usart->mbm_status03 = 0; usart->mb_status.master_start = 0; break;}
+            if ( !usart->mb_status.modb_received )  {return;}
                        
             Modbus.buf [9]++;
             
-            if (usart->in_buffer[1]==0x83)										//modbus collisions
-				{
+            if (usart->in_buffer[1]==0x83)	//modbus collisions
+			{
 				if (usart->in_buffer[2]==0x01)	{usart->mb_status.coll_1 = 1; usart->mbm03_c01_err++; usart->mb_status.master_start = 0; usart->mbm_status03 = 0; break;}
 				if (usart->in_buffer[2]==0x02)	{usart->mb_status.coll_2 = 1; usart->mbm03_c02_err++; usart->mb_status.master_start = 0; usart->mbm_status03 = 0; break;}
 				if (usart->in_buffer[2]==0x03)	{usart->mb_status.coll_3 = 1; usart->mbm03_c03_err++; usart->mb_status.master_start = 0; usart->mbm_status03 = 0; break;}
-				}
+			}
 
 			PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));		
 			if (uchCRCLo|uchCRCHi) 
-				{ usart->mbm_status03 = 0; usart->mb_status.crc_error = 1; usart->mbm03_crc_err++; usart->mb_status.master_start = 0;   break;}	//wrong crc
+			{usart->mbm_status03 = 0; usart->mb_status.crc_error = 1; usart->mbm03_crc_err++; usart->mb_status.master_start = 0; break;}	//wrong crc
 			
-			memcpy ((void *) (buff_sw), (const void *) (usart->in_buffer + 0x03), usart->in_buffer[2]);
-			for(cc=0; cc<quant_03; cc++){
+			memcpy ((void *)(buff_sw),(const void *)(usart->in_buffer + 0x03), usart->in_buffer[2]);
+			for(cc=0; cc<quant_03; cc++)
+            {
 				buff_ [cc] = swapshort( buff_sw [cc]);
-				}
+			}
             memcpy ((void *) (dest), (const void *) (buff_), usart->in_buffer[2]);
 			usart->mb_status.mbm_data_rdy = 1;
 			usart->answer_count++;
 			usart->mb_status.master_error = 0; 
 			usart->mb_status.master_start = 0;			
 			usart->mbm_status03 = 0; 
-			break;	}
-
-		default:	{	usart->mb_status.master_start = 0; usart->mbm_status03 = 0; break;	}            
-
+			break;	
         }
+		default:{usart->mb_status.master_start = 0; usart->mbm_status03 = 0; break;}            
+    }
 }    
 
 
 
-
+/**
+ * @brief this function, numbered 0x10, is used to write registers
+ * 
+ * @param usart. Usart port number
+ * @param mbm_adres. The address of the slave device to which we are writing data
+ * @param shift. Initial register for writing
+ * @param quant. The number of registers to write
+ * @param source. The data source that we are sending
+ * @param speed. The speed of exchange between devices
+ * 
+ * @note this function is a master, using the data transmitted to it, it 
+ * sends via the source-data COM port to the slave device
+ * 
+ * @return none
+ */
 void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
 {
 	if (!usart->mb_status.start16) return;
-	switch (usart->mbm_status16) {
-		case 0:	{
+	switch (usart->mbm_status16) 
+    {
+		case 0:	
+        {
             if (usart==&usart1m) {uart1_init (speed);}
             if (usart==&usart2m) {uart2_init (speed);}
             if (usart==&usart3m) {uart3_init (speed);}
@@ -966,9 +982,11 @@ void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short
 				case 57600:     {usart->mbm_timeout_counter = 300; break;}
 				case 115200:    {usart->mbm_timeout_counter = 100; break;}			
             }
-			 usart->mbm_status16=1;
-			break;	}
-		case 1:	{
+			usart->mbm_status16=1;
+			break;	
+        }
+		case 1:	
+        {
 			usart->out_buffer [0x00]=mbm_adres;
 			usart->out_buffer [0x01]=0x10;
 			usart->out_buffer [0x03]=shift&0x00FF;
@@ -981,9 +999,6 @@ void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short
 			usart->out_buffer [((quant*2)+7)]= uchCRCLo;
 			usart->out_buffer [((quant*2)+8)]= uchCRCHi;
 			usart->number_send=(quant*2)+9;
-//			if (usart==&usart1) {	T4_delay_4=mbm_timeout;		t4_del_4=1;}
-//			if (usart==&usart2) {	T4_delay_5=mbm_timeout;		t4_del_5=1;}
-//			usart->mb_status.master_timeout=0;
 			usart->mb_status.modb_received=0;
 			usart->mb_status.byte_missing=0;
 			usart->mb_status.crc_error=0;
@@ -993,25 +1008,36 @@ void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short
 			usart->mb_status.coll_3=0;
 			start_tx_usartm (usart);
 			usart->mbm_status16=2;
-			 break;	}
+			break;	
+        }
 
 		case 2:
-			{
+		{
 			if (!usart->mb_status.master_timeout_flag && !usart->mb_status.modb_received) return;
-			if (usart->mb_status.master_timeout_flag) 
-				{ usart->mbm16_crc_err++; usart->mbm_status16=0; usart->mb_status.start16=0; break;}
-
+			if (usart->mb_status.master_timeout_flag){ usart->mbm16_crc_err++; usart->mbm_status16=0; usart->mb_status.start16=0; break;}
 			if (usart->in_buffer[1]==0x83)										//modbus collisions
-				{
+			{
 				if (usart->in_buffer[2]==0x01)	{usart->mb_status.coll_1=1; usart->mbm16_c01_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
 				if (usart->in_buffer[2]==0x02)	{usart->mb_status.coll_2=1; usart->mbm16_c02_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
 				if (usart->in_buffer[2]==0x03)	{usart->mb_status.coll_3=1; usart->mbm16_c03_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
-				}
+			}
 			if (usart->in_buffer[0]!=usart->out_buffer[0])								//wrong device address
-				{usart->mbm_status16=0; usart->mb_status.device_error=1; usart->mbm16_tm_err++; usart->mb_status.start16=0; break;}
+			{
+                usart->mbm_status16=0; 
+                usart->mb_status.device_error=1; 
+                usart->mbm16_tm_err++; 
+                usart->mb_status.start16=0; 
+                break;
+            }
 			PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));		
-			if (uchCRCLo|uchCRCHi) 
-				{usart->mbm_status16=0; usart->mb_status.crc_error=1; usart->mbm16_crc_err++; usart->mb_status.start16=0; break;}	//wrong crc
+			if (uchCRCLo|uchCRCHi) //wrong crc
+			{
+                usart->mbm_status16=0; 
+                usart->mb_status.crc_error=1; 
+                usart->mbm16_crc_err++; 
+                usart->mb_status.start16=0; 
+                break;
+            }	
 			if ((usart->in_buffer[0]!=usart->out_buffer[0])||(usart->in_buffer[1]!=usart->out_buffer[1])||(usart->in_buffer[2]!=usart->out_buffer[2])||
 				(usart->in_buffer[3]!=usart->out_buffer[3])||(usart->in_buffer[4]!=usart->out_buffer[4])||(usart->in_buffer[5]!=usart->out_buffer[5]))
 				{usart->mbm_status16=0; usart->mb_status.crc_error=1; usart->mbm16_crc_err++; usart->mb_status.start16=0; break;}
@@ -1020,13 +1046,117 @@ void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short
 			usart->mb_status.start16=0;			
 			usart->mbm_status16=0; 
             mbm_16_end_flag++;
-			break;	}
-
-
-		default:	{	usart->mb_status.start16=0; usart->mbm_status16=0; break;	}
-
+			break;	
+        }
+		default:{usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+    }
 }
 
+
+
+/**
+ * @brief this function, numbered 0x10, is used to write registers
+ * 
+ * @param usart. Usart port number
+ * @param mbm_adres. The address of the slave device to which we are writing data
+ * @param shift. Initial register for writing
+ * @param quant. The number of registers to write
+ * @param source. The data source that we are sending
+ * @param speed. The speed of exchange between devices
+ * 
+ * @note this function is a master, using the data transmitted to it, it 
+ * sends via the source-data COM port to the slave device
+ * 
+ * @return none
+ */
+short mbm_16_flag (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
+{
+    unsigned short flag_for_ret = 0; 
+	if (!usart->mb_status.start16) return;
+	switch (usart->mbm_status16) 
+    {
+		case 0:	
+        {
+            if (usart==&usart1m) {uart1_init (speed);}
+            if (usart==&usart2m) {uart2_init (speed);}
+            if (usart==&usart3m) {uart3_init (speed);}
+            if (usart==&usart4m) {uart4_init (speed);}
+            if (usart==&usart5m) {uart5_init (speed);}            
+			switch (speed)
+            {
+				case 38400:     {usart->mbm_timeout_counter = 450; break;}
+				case 57600:     {usart->mbm_timeout_counter = 300; break;}
+				case 115200:    {usart->mbm_timeout_counter = 100; break;}			
+            }
+			usart->mbm_status16=1;
+			break;	
+        }
+		case 1:	
+        {
+			usart->out_buffer [0x00]=mbm_adres;
+			usart->out_buffer [0x01]=0x10;
+			usart->out_buffer [0x03]=shift&0x00FF;
+			usart->out_buffer [0x02]=(shift>>8)&0x00FF;
+			usart->out_buffer [0x05]=quant&0x00FF;
+			usart->out_buffer [0x04]=(quant>>8)&0x00FF;
+			usart->out_buffer [0x06]=(quant*2)&0x00FF;
+			memcpy ((void *) (usart->out_buffer+7), (const void *) (source),(quant*2));
+			PIC_CRC16(usart->out_buffer, ((quant*2)+7));
+			usart->out_buffer [((quant*2)+7)]= uchCRCLo;
+			usart->out_buffer [((quant*2)+8)]= uchCRCHi;
+			usart->number_send=(quant*2)+9;
+			usart->mb_status.modb_received=0;
+			usart->mb_status.byte_missing=0;
+			usart->mb_status.crc_error=0;
+			usart->mb_status.device_error=0;
+			usart->mb_status.coll_1=0;
+			usart->mb_status.coll_2=0;
+			usart->mb_status.coll_3=0;
+			start_tx_usartm (usart);
+			usart->mbm_status16=2;
+			break;	
+        }
+
+		case 2:
+		{
+			if (!usart->mb_status.master_timeout_flag && !usart->mb_status.modb_received) return;
+			if (usart->mb_status.master_timeout_flag){ usart->mbm16_crc_err++; usart->mbm_status16=0; usart->mb_status.start16=0; break;}
+			if (usart->in_buffer[1]==0x83)										//modbus collisions
+			{
+				if (usart->in_buffer[2]==0x01)	{usart->mb_status.coll_1=1; usart->mbm16_c01_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+				if (usart->in_buffer[2]==0x02)	{usart->mb_status.coll_2=1; usart->mbm16_c02_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+				if (usart->in_buffer[2]==0x03)	{usart->mb_status.coll_3=1; usart->mbm16_c03_err++; usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+			}
+			if (usart->in_buffer[0]!=usart->out_buffer[0])								//wrong device address
+			{
+                usart->mbm_status16=0; 
+                usart->mb_status.device_error=1; 
+                usart->mbm16_tm_err++; 
+                usart->mb_status.start16=0; 
+                break;
+            }
+			PIC_CRC16(usart->in_buffer, (usart->in_buffer_count));		
+			if (uchCRCLo|uchCRCHi) //wrong crc
+			{
+                usart->mbm_status16=0; 
+                usart->mb_status.crc_error=1; 
+                usart->mbm16_crc_err++; 
+                usart->mb_status.start16=0; 
+                break;
+            }	
+			if ((usart->in_buffer[0]!=usart->out_buffer[0])||(usart->in_buffer[1]!=usart->out_buffer[1])||(usart->in_buffer[2]!=usart->out_buffer[2])||
+				(usart->in_buffer[3]!=usart->out_buffer[3])||(usart->in_buffer[4]!=usart->out_buffer[4])||(usart->in_buffer[5]!=usart->out_buffer[5]))
+				{usart->mbm_status16=0; usart->mb_status.crc_error=1; usart->mbm16_crc_err++; usart->mb_status.start16=0; break;}
+			usart->answer_count++;
+			usart->mb_status.master_error=0; 
+			usart->mb_status.start16=0;			
+			usart->mbm_status16=0; 
+            return ++flag_for_ret;
+			break;	
+        }
+		default:{usart->mb_status.start16=0; usart->mbm_status16=0; break;}
+    }
+    return flag_for_ret;
 }
 
 /* *****************************************************************************
