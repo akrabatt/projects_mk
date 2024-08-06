@@ -639,6 +639,11 @@ unsigned short _530_board_attantion_start_reley_4_mops[8] = {SW_ATTANTION_530_1,
 unsigned short _530_board_84_reley_on_mops[8] = {SW_RELEY_ON_530_1, SW_RELEY_ON_530_2, SW_RELEY_ON_END_84_530_1, SW_RELEY_ON_END_84_530_2,
                                                  NONE_530, NONE_530, NONE_530, NONE_530};
 
+                                    //===just reley on without strategy===//
+// 1 - none, 2 - none, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_only_reley_on_start_4_mops[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                           SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+
 
                                             //===main array===//
 unsigned short _530_board_mode_mops[8];

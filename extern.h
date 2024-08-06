@@ -607,6 +607,8 @@ extern unsigned short _530_board_fire_start_reley_4_mops[8];
 extern unsigned short _530_board_attantion_start_reley_4_mops[8];
 //end with 84 reley
 extern unsigned short _530_board_84_reley_on_mops[8];
+// reley on start from 4th without strategy
+extern unsigned short _530_board_only_reley_on_start_4_mops[8];
 
 //var for function _1_sec
 extern unsigned short _1_sec_counter;
