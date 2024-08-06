@@ -599,6 +599,8 @@ extern unsigned short _530_board_short_current_mops[8];
 extern unsigned short _530_board_fire_mops[8];
 extern unsigned short _530_board_attantion_mops[8];
 extern unsigned short _530_board_mode_mops[8];
+extern unsigned short _530_board_normal_start_reley_4_mops[8];
+extern unsigned short _530_board_short_current_start_reley_4_mops[8];
 
 
 //var for function _1_sec

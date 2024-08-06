@@ -552,7 +552,7 @@ void board_530_mode_common(struct tag_usartm * usart)
             mode_num_530 = Stand.buf[36];
             apply_530 = Stand.buf[37];
             // check range
-            if(mode_num_530 < 0 || mode_num_530 > 3) {mode_num_530 = 0;}
+            if(mode_num_530 < 0 || mode_num_530 > 4) {mode_num_530 = 0;}
             
             switch(mode_num_530)
             {
@@ -560,6 +560,7 @@ void board_530_mode_common(struct tag_usartm * usart)
                 case 1: {memcpy(_530_board_mode_mops, _530_board_short_current_mops, sizeof(_530_board_short_current_mops)); stages_530++; break;}  // 6 - short current in mops
                 case 2: {memcpy(_530_board_mode_mops, _530_board_fire_mops, sizeof(_530_board_fire_mops)); stages_530++; break;}                    // 5 - fire in mops
                 case 3: {memcpy(_530_board_mode_mops, _530_board_attantion_mops, sizeof(_530_board_attantion_mops)); stages_530++; break;}          // 4 - attantion
+                case 4: {memcpy(_530_board_mode_mops, _530_board_short_current_start_reley_4_mops, sizeof(_530_board_short_current_start_reley_4_mops)); stages_530++; break;}
             }
         }
         case CHECK_APPLY_530:
@@ -614,10 +615,10 @@ enum
  * @brief this function performs a service check of the module
  * 
  */
-void mops_service_check(struct tag_usartm * usart)
-{
-    switch(mops_service_check_stages)
-    {
-        switch RELEY_ON: {}
-    }
-}
+//void mops_service_check(struct tag_usartm * usart)
+//{
+//    switch(mops_service_check_stages)
+//    {
+//        switch RELEY_ON: {}
+//    }
+//}

@@ -602,18 +602,36 @@ unsigned short DINPUT3;
 
 //530 board arr for mods
 
+                                            //===attantion===//
+// 1-4 normal
 unsigned short _530_board_normal_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2, 
                                             NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};
+// 1 - normal, 2 - normal, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_normal_start_reley_4_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2,
+                                                          RELEY_ON_START_4_530_1, RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
 
+                                            //===short current===//
+//1-4 short current
 unsigned short _530_board_short_current_mops[8] = {SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, 
                                                    SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2};
+// 1 - sc, 2 - sc, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_short_current_start_reley_4_mops[8] = {SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2,
+                                                                 SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
 
+                                                //===fire===//
+// 1-4 fire
 unsigned short _530_board_fire_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
                                           SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
 
+//unsigned short _530_board_fire_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
+//                                          SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
+
+                                            //===attantion===//
 unsigned short _530_board_attantion_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
                                                SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};
 
+
+                                            //===main array===//
 unsigned short _530_board_mode_mops[8];
 
 
