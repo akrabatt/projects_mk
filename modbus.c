@@ -964,7 +964,7 @@ void mbm_03_str (struct tag_usartm * usart, unsigned char mbm_adres, unsigned sh
  * 
  * @return none
  */
-void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
+void mbm_16(struct tag_usartm * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
 {
 	if (!usart->mb_status.start16) return;
 	switch (usart->mbm_status16) 
@@ -1063,15 +1063,16 @@ void mbm_16 (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short
  * @param quant. The number of registers to write
  * @param source. The data source that we are sending
  * @param speed. The speed of exchange between devices
+ * @param flag_for_ret. This variable serves as a flag indicating that the 
+ * function has completed completely successfully
  * 
  * @note this function is a master, using the data transmitted to it, it 
  * sends via the source-data COM port to the slave device
  * 
  * @return none
  */
-short mbm_16_flag (struct tag_usartm * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed) 
+void mbm_16_flag(struct tag_usartm * usart, unsigned short mbm_adres, unsigned short shift, unsigned short quant, unsigned short * source, unsigned long speed, unsigned short * flag_for_ret) 
 {
-    unsigned short flag_for_ret = 0; 
 	if (!usart->mb_status.start16) return;
 	switch (usart->mbm_status16) 
     {
@@ -1151,12 +1152,11 @@ short mbm_16_flag (struct tag_usartm * usart, unsigned short mbm_adres, unsigned
 			usart->mb_status.master_error=0; 
 			usart->mb_status.start16=0;			
 			usart->mbm_status16=0; 
-            return ++flag_for_ret;
+            ++(*flag_for_ret);
 			break;	
         }
 		default:{usart->mb_status.start16=0; usart->mbm_status16=0; break;}
     }
-    return flag_for_ret;
 }
 
 /* *****************************************************************************

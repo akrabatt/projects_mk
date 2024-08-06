@@ -19,12 +19,12 @@ int main(void)
             change_mups_strategy_separately(&usart2m);
             control_mups_reley(&usart2m);
             // u1
-            MOPS_S_control(&usart1m);
+//            MOPS_S_control(&usart1m);
             // u4
 //            board_530_mode_common(&usart4m);
             // u5
 //            board_530_mode_common(&usart5m);
-            mops_service_check(&usart4m, &usart5m);
+            mops_service_check(&usart4m, &usart5m, &usart1m);
             
             mbm_sync = 0;
         }

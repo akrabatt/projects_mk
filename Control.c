@@ -608,10 +608,11 @@ void _500_msec()
 enum 
 {
     RELEY_ON = 0,
+    READ_MOPS
     
 }mops_service_check_stages;
-short var_a;
-short var_b;
+short var_a;    //mbm_16 success end flag
+short var_b;    //
 
 
 /**
@@ -632,11 +633,11 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     {
         case RELEY_ON: 
         {
-            var_a = mbm_16_flag(usart_a, 1, 0, 8, _530_board_only_reley_on_start_4_mops, 115200);
-            var_b = mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200);
+            mbm_16_flag(usart_a, 1, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
+            mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
             if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}
             break;
         }
+        case READ_MOPS: {MOPS_S_control(usart_c); break;}
     }
-    mops_service_check_stages = 0;
 }
