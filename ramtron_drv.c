@@ -455,12 +455,17 @@ void vSPI5InterruptHandler( void )
 void load_config (void)
 {
     unsigned short iii;
-//	getcs_FRAM(RAMTRON_START_CONFIG, MB_conf.buf, 392);
 	getcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) Stand.buf, 40);    
-//	for (iii=0; iii<196; iii++) {		MB_sw_conf.buf  [iii] = swapshort(MB_conf.buf  [iii]);		}
-    for (iii=0; iii<20; iii++) {		Stand_sw.buf  [iii] = swapshort(Stand.buf  [iii]);		}
+    for (iii=0; iii<20; iii++) {Stand_sw.buf  [iii] = swapshort(Stand.buf[iii]);}
 }
 
+
+void load_config_sted_area(void)
+{
+    unsigned short iii;
+    getcs_FRAM(RAMTRON_STEND_CONFIG_AREA, (unsigned char *)conf_stand_sw.comm_buff, 200);
+    for(iii=0; iii<100; iii++){conf_stand_sw.comm_buff[iii] = swapshort(conf_stand.comm_buff[iii]);}
+}
 
 /* *****************************************************************************
  End of File

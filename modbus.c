@@ -678,11 +678,18 @@ void mbs_10 (struct tag_usart * _usart, unsigned short * source, unsigned short 
     if (source == Stand_sw.buf)
     {
         memcpy ((void *) (Stand_sw.buf + shift_uni), (const void *) (_usart->in_buffer + 0x07), (num_uni*2));
-        for (ii=0; ii<num_uni; ii++)        
-            {Stand.buf  [ii+shift_uni] = swapshort(Stand_sw.buf  [ii+shift_uni]);}
+        for (ii=0; ii<num_uni; ii++){Stand.buf  [ii+shift_uni] = swapshort(Stand_sw.buf  [ii+shift_uni]);}
         putcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) Stand.buf, 40);
         getcs_FRAM(RAMTRON_START_CONFIG, (unsigned char *) Stand.buf, 40);
         load_config();
+    }
+    if(source == conf_stand_sw.comm_buff)
+    {
+        memcpy((void *)(conf_stand_sw.comm_buff + shift_uni), (const void *)(_usart->in_buffer + 0x07), (num_uni*2));
+        for(ii = 0; ii < num_uni; ii++){conf_stand.comm_buff[ii + shift_uni] = swapshort(conf_stand_sw.comm_buff[ii + shift_uni]);}
+        putcs_FRAM(RAMTRON_STEND_CONFIG_AREA, (unsigned char *)conf_stand.comm_buff, 200);
+        getcs_FRAM(RAMTRON_STEND_CONFIG_AREA, (unsigned char *)conf_stand.comm_buff, 200);
+        load_config_sted_area();
     }
     if (source == Modbus_sw.buf) 
     {

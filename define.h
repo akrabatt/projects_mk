@@ -228,7 +228,8 @@
 #define  MB_DIAGN_WRITE_          ((start_reg >= START_MB_DIAGN_WRITE) && (last_reg <= END_MB_DIAGN_WRITE))    
     
 #define  RAMTRON_START              64
-#define  RAMTRON_START_CONFIG		1024
+#define  RAMTRON_START_CONFIG		1024    // for Stand_sw
+#define  RAMTRON_STEND_CONFIG_AREA  2000    //for conf_stand_sw
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
