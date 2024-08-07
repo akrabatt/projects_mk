@@ -689,6 +689,6 @@ union tag_conf_stand
        unsigned short not_usable[99];
     }stand_commands;
     unsigned short comm_buff[100];
-}conf_stand, conf_stand_sw;
+}conf_stand, conf_stand_sw;     // conf_stand - normal data
 
 #endif // GLOBAL_H
