@@ -31,7 +31,9 @@ void __ISR_AT_VECTOR (_TIMER_9_VECTOR, IPL4SRS) T9Interrupt(void)
     counters();
     
     //1 second function
-    _1_sec();
+//    _1_sec();
+    // increment var for @_1_sec function
+    start_1_sec_timer++;
     
     //500 msec function
     _500_msec();

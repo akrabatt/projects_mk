@@ -617,4 +617,15 @@ extern short start_1_sec_timer;        //
 //var for function _500_msec
 extern unsigned short _500_msec_counter;
 
+//union for configuration stand
+extern union tag_conf_stand
+{
+    struct
+    {
+       unsigned short start_check_mops;
+       unsigned short not_usable[99];
+    }stand_commands;
+    unsigned short comm_buff[100];
+}conf_stand, conf_stand_sw;
+
 #endif // EXTERN_H

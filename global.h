@@ -680,4 +680,15 @@ struct tag_mops_stand_statment
 //struct mups array
 struct tag_mops_stand_statment MOPS_statment[10];
 
+//union for configuration stand
+union tag_conf_stand
+{
+    struct
+    {
+       unsigned short start_check_mops;
+       unsigned short not_usable[99];
+    }stand_commands;
+    unsigned short comm_buff[100];
+}conf_stand, conf_stand_sw;
+
 #endif // GLOBAL_H

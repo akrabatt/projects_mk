@@ -660,6 +660,7 @@ void mbs_03 (struct tag_usart * _usart, unsigned short * source, unsigned short 
     if (_usart->mb_status.tx_mode == DMA_type) {  start_tx_usart_dma(_usart, num3);  }
 	else {start_tx_usart (_usart);}
 }
+
 /* обработчик запроса 16-й функции */
 void mbs_10 (struct tag_usart * _usart, unsigned short * source, unsigned short shift_uni, unsigned short num_uni) 
 {
@@ -744,12 +745,14 @@ void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres)
                         if (READ_MUPS)      { mbs_03 (usart, (unsigned short*)MUPS_arr_sw, (start_reg - START_READ_MUPS), num_reg); break;} //5000 ... 6200
                         if (READ_MUPS_SHORT){ mbs_03 (usart, (unsigned short*)MUPS_S_arr_sw, (start_reg - START_READ_MUPS_SHORT), num_reg); break;} //7000 ... 7900
                         if (READ_MOPS_SHORT){ mbs_03 (usart, (unsigned short*)MOPS_S_arr_sw, (start_reg - START_READ_MOPS_SHORT), num_reg); break;} //8000 ... 8900
+                        if (READ_STAND_CONF_AREA){ mbs_03 (usart, conf_stand_sw.comm_buff, (start_reg - START_READ_STAND_CONF_AREA), num_reg); break;} //9000 ... 9900
                         answer_illegal_data_addr (usart);
                         break; 
                     }			
                         case 0x10 :	{
-                        if (WRITE_)         { mbs_10 (usart, MB_swap.input, (start_reg - START_WRITE), num_reg); break; } 
-                        if (CONF_WRITE_) 	{ mbs_10 (usart, Stand_sw.buf, (start_reg - START_CONF_WRITE), num_reg); break; } 
+                        if (WRITE_)         { mbs_10 (usart, MB_swap.input, (start_reg - START_WRITE), num_reg); break; }       
+                        if (CONF_WRITE_) 	{ mbs_10 (usart, Stand_sw.buf, (start_reg - START_CONF_WRITE), num_reg); break; } // 501...
+                        if (WRITE_STAND_CONF_AREA) 	{ mbs_10 (usart, conf_stand_sw.comm_buff, (start_reg - START_WRITE_STAND_CONF_AREA), num_reg); break; } // 9000 ... 9900
                         if (MODBUS_WRITE_) 	{ mbs_10 (usart, Modbus_sw.buf, start_reg, num_reg); break; } 
                         answer_illegal_data_addr (usart);					
                         break;	}

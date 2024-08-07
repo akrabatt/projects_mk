@@ -635,12 +635,12 @@ void _500_msec()
 
 
 // vars for mops_service_check
-
 enum 
 {
-    RELEY_ON = 0,
-    WAIT_SEC_1,
-    READ_MOPS
+    RELEY_ON = 0,                           // 4 - 84 releys turne on
+    WAIT_SEC_1,                             // just waite one sec to init modules
+    READ_MOPS,                              // get full modules information
+    READ_MOPS_CONNACTION_STATMENT           // check connection with active modules
     
 }mops_service_check_stages;
 
@@ -657,7 +657,7 @@ void _1_sec()
 {
     if(start_1_sec_timer > 0)
     {
-        if(++_1_sec_counter > 5000)
+        if(++_1_sec_counter > 1000)
         {
             end_1_sec_timer = 1;             // timer off
             _1_sec_counter = 0;              // reset
@@ -671,10 +671,8 @@ void _1_sec()
  * 
  * @param usart_a. A pointer to the port to which the main number of 530 cards 
  * is connected is passed to usart_a (start reley 4)
- * 
  * @param usart_b. The pointer to which the port is transmitted to which one 
  * 530th board is connected (end reley 84)
- * 
  * @param usart_c. this port is used to read the states of the modules (read MOPS)
  * 
  */
@@ -692,15 +690,19 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         case WAIT_SEC_1:
         {
             start_1_sec_timer = 1;
-            if(end_1_sec_timer = 1)
-            {start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
-            break;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
+            else{mops_service_check_stages = 1; break;}
         }
         case READ_MOPS: 
         {
             MOPS_S_control_flag(usart_c, &mups_read_flag);
             if(mups_read_flag > 0){mups_read_flag = 0; mops_service_check_stages = 0; break;}
             break;
+        }
+        case READ_MOPS_CONNACTION_STATMENT:
+        {
+            
         }
     }
 }

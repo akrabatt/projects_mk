@@ -147,6 +147,13 @@
 #define NONE_530                 0x0000
 
 /////////////////		Modbus alowed areas 		//////////////////////////
+/*stand configuration area*/
+#define START_READ_STAND_CONF_AREA     9000
+#define END_READ_STAND_CONF_AREA       9900
+#define START_WRITE_STAND_CONF_AREA    9000
+#define END_WRITE_STAND_CONF_AREA      9900
+#define READ_STAND_CONF_AREA           ((start_reg>=START_READ_STAND_CONF_AREA)&&(last_reg<=END_READ_STAND_CONF_AREA))
+#define WRITE_STAND_CONF_AREA          ((start_reg>=START_WRITE_STAND_CONF_AREA)&&(last_reg<=END_WRITE_STAND_CONF_AREA))
     
 /*read MOPS*/
 #define START_READ_MUPS     5000
