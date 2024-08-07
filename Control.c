@@ -123,6 +123,48 @@ void MOPS_S_control (struct tag_usartm * usart)
 }
 
 
+void MOPS_S_control_flag (struct tag_usartm * usart, unsigned short *mops_end_flag)
+{
+    unsigned short cc;
+    Stand_sw.mops_timeout_err [mops_num] = swapshort (Stand.mops_timeout_err [mops_num]);
+    Stand_sw.mops_crc_err [mops_num] = swapshort (Stand.mops_crc_err [mops_num]);    
+    Stand_sw.mops_coll_1_err [mops_num] = swapshort (Stand.mops_coll_1_err [mops_num]);    
+    Stand_sw.mops_coll_2_err [mops_num] = swapshort (Stand.mops_coll_2_err [mops_num]);    
+    Stand_sw.mops_coll_3_err [mops_num] = swapshort (Stand.mops_coll_3_err [mops_num]); 
+    
+    switch (mops_stat) 
+        {
+        case INIT: {usart->mb_status.master_start = 1; mops_num = 0; mops_stat++; break;}
+        case START_MM: { mops_stat++; break;}
+
+        case READ_CYCLE:    {
+            if (mops_num >= 10) {++(*mops_end_flag); mops_num = 0; mops_stat++ ; break;}
+            if (Stand.active_mops [mops_num] != 0) { mbm_03_str (usart, (mops_num + 1), 0, 44, (unsigned short * ) &MOPS_S_arr [mops_num], 115200); }
+            else {mops_num++;}
+            if (usart->mb_status.mbm_data_rdy == 1)  {
+                for (cc = 0; cc < 44; cc++)    { MOPS_S_arr_sw [mops_num].main_area [cc] = swapshort (MOPS_S_arr [mops_num].main_area [cc]); }
+                usart->mb_status.mbm_data_rdy = 0; mops_num++; 
+                }
+            if (usart->mb_status.master_timeout_flag == 1)  
+                { MOPS_S_arr [mops_num].timeout_err++; Stand.mops_timeout_err [mops_num]++; usart->mb_status.master_timeout_flag = 0;mops_num++; }    
+            if (usart->mb_status.crc_error == 1)    {MOPS_S_arr [mops_num].crc_err++; Stand.mops_crc_err [mops_num]++; usart->mb_status.crc_error = 0; mops_num++; }
+            if (usart->mb_status.coll_1 == 1)       {MOPS_S_arr [mops_num].coll_1_err++; Stand.mops_coll_1_err [mops_num]++; usart->mb_status.coll_1 = 0; mops_num++; }
+            if (usart->mb_status.coll_2 == 1)       {MOPS_S_arr [mops_num].coll_2_err++; Stand.mops_coll_2_err [mops_num]++; usart->mb_status.coll_2 = 0; mops_num++; }
+            if (usart->mb_status.coll_3 == 1)       {MOPS_S_arr [mops_num].coll_3_err++; Stand.mops_coll_3_err [mops_num]++; usart->mb_status.coll_3 = 0; mops_num++; }
+            break;}
+
+        case CHECK_CYCLE:  {  mops_done = 1;  mops_stat = START_MM;   break;}        
+
+        default : {mops_stat = START_MM; break;}
+        }
+
+    Modbus.buf [13] = mops_stat;  
+    Modbus.buf [14] = mops_num; 
+    Modbus.buf [15] = usart->mb_status.mbm_data_rdy;
+    Modbus.buf [16] = usart->mb_status.master_timeout_flag;
+}
+
+
 /**
  * @brief read mus full
  * 
@@ -578,17 +620,6 @@ void board_530_mode_common(struct tag_usartm * usart)
     }
 }
 
-/**
- * @brief this function timer 1 second
- */
-void _1_sec()
-{
-    if(++_1_sec_counter > 1000)
-    {
-        _1_sec_counter = 0;
-//        LED_TOGGLE;
-    }
-}
 
 /**
  * @brief this function timer 500 milisec
@@ -598,7 +629,7 @@ void _500_msec()
     if(++_500_msec_counter > 500)
     {
         _500_msec_counter = 0;
-        LED_TOGGLE;
+//        LED_TOGGLE;
     }
 }
 
@@ -608,12 +639,32 @@ void _500_msec()
 enum 
 {
     RELEY_ON = 0,
+    WAIT_SEC_1,
     READ_MOPS
     
 }mops_service_check_stages;
-short var_a;    //mbm_16 success end flag
-short var_b;    //
 
+short var_a;                    //mbm_16 success end flag
+short var_b;                    //
+short mups_read_flag;           //mops read last module flag
+short start_1_sec_timer;        //
+short end_1_sec_timer;          //
+
+/**
+ * @brief this function timer 1 second
+ */
+void _1_sec()
+{
+    if(start_1_sec_timer > 0)
+    {
+        if(++_1_sec_counter > 5000)
+        {
+            end_1_sec_timer = 1;             // timer off
+            _1_sec_counter = 0;              // reset
+            LED_TOGGLE;
+        }
+    }    
+}
 
 /**
  * @brief this function performs a service check of the module
@@ -638,6 +689,18 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}
             break;
         }
-        case READ_MOPS: {MOPS_S_control(usart_c); break;}
+        case WAIT_SEC_1:
+        {
+            start_1_sec_timer = 1;
+            if(end_1_sec_timer = 1)
+            {start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
+            break;
+        }
+        case READ_MOPS: 
+        {
+            MOPS_S_control_flag(usart_c, &mups_read_flag);
+            if(mups_read_flag > 0){mups_read_flag = 0; mops_service_check_stages = 0; break;}
+            break;
+        }
     }
 }

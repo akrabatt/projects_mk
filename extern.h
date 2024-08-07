@@ -612,6 +612,7 @@ extern unsigned short _530_board_only_reley_on_start_4_mops[8];
 
 //var for function _1_sec
 extern unsigned short _1_sec_counter;
+extern short start_1_sec_timer;        //
 
 //var for function _500_msec
 extern unsigned short _500_msec_counter;
