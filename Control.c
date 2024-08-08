@@ -702,7 +702,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 {
     // vars for cycles
     unsigned short mops_num_;       // 1th layer
-    unsigned short ii;      // 2th
+    unsigned short ch_num_;      // 2th
     
     switch(mops_service_check_stages)
     {
@@ -753,6 +753,21 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mops[mops_num_] == 0)
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
+                    continue;
+                }
+                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
+                {
+                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 2)    //check ch status
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_normal[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    }
                 }
             }
             mops_service_check_stages = CHECK_START_BUTTON;
