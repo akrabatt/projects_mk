@@ -284,13 +284,10 @@ union tag_mops
 // short struct mops
 union tag_mops_short
 {
-
     struct
     {
-
         union
         {
-
             struct
             {
                 unsigned short info[3];                //
@@ -300,10 +297,8 @@ union tag_mops_short
             };
             unsigned short read[num_zones * 3 + 4]; //
         };
-
         union
         {
-
             struct
             {
                 unsigned short command[num_zones];
@@ -664,8 +659,12 @@ unsigned short _500_msec_counter;
 // mops statement struct, show mops statements
 struct tag_mops_stand_statment
 {
-    unsigned short mops_active;                         // is there connection with module
-    unsigned short mops_operable;                       // is the module working properly or not
+    struct 
+    {
+        unsigned short mops_online      : 1;            // is there connection with module
+        unsigned short mops_operable    : 1;            // is the module working properly or not
+        unsigned short : 14;
+    }mops_statment;
     unsigned short mops_ch_status[8];                   // buffer for the value of the states
     struct
     {
@@ -679,7 +678,7 @@ struct tag_mops_stand_statment
         unsigned short mops_ch8_err : 1;                // 8
         unsigned short : 8;
     }mops_ch_statement;
-};
+}mops_stand_statment;
 
 //struct mups array
 struct tag_mops_stand_statment MOPS_statment[10];

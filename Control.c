@@ -700,6 +700,10 @@ void _var_sec(unsigned short time)
  */
 void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b, struct tag_usartm * usart_c)
 {
+    // vars for cycles
+    unsigned short mops_num_;       // 1th layer
+    unsigned short ii;      // 2th
+    
     switch(mops_service_check_stages)
     {
         case CHECK_START_BUTTON: // this case checks that the check start button has been pressed
@@ -734,12 +738,21 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             if(end_var_sec_timer == 0)
             {
                 MOPS_S_control_flag(usart_c, &mups_read_flag);
-            }else {mups_read_flag = 0; mops_service_check_stages = CHECK_START_BUTTON; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            }else {mups_read_flag = 0; ++mops_service_check_stages; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
-        case READ_MOPS_CONNACTION_STATMENT:
+        case READ_MOPS_CONNACTION_STATMENT:     // chec connection module and normal statment
         {
-            
+            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
+            {
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
+                    memcpy(MOPS_statment[mops_num_].mops_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+                }
+            }
+            mops_service_check_stages = CHECK_START_BUTTON;
+            break;
         }
     }
 }
