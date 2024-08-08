@@ -637,9 +637,10 @@ void _500_msec()
 // vars for mops_service_check
 enum 
 {
-    RELEY_ON = 0,                           // 4 - 84 releys turne on
+    CHECK_START_BUTTON = 0,
+    RELEY_ON,                           // 4 - 84 releys turne on
     WAIT_SEC_1,                             // just waite one sec to init modules
-    READ_MOPS,                              // get full modules information
+    READ_MOPS,                              // get full modules information during 1 sec
     READ_MOPS_CONNACTION_STATMENT           // check connection with active modules
     
 }mops_service_check_stages;
@@ -649,6 +650,8 @@ short var_b;                    //
 short mups_read_flag;           //mops read last module flag
 short start_1_sec_timer;        //
 short end_1_sec_timer;          //
+short start_var_sec_timer;      //
+short end_var_sec_timer;        //
 
 /**
  * @brief this function timer 1 second
@@ -661,9 +664,28 @@ void _1_sec()
         {
             end_1_sec_timer = 1;             // timer off
             _1_sec_counter = 0;              // reset
-            LED_TOGGLE;
+//            LED_TOGGLE;
         }
     }    
+}
+
+/**
+ * @brief This function is a configurable timer
+ * 
+ * @param time. The variable is set in milliseconds, 1000 = 1 second
+ * 
+ * @note to get started, you need to assign a value greater than zero to 
+ * the start_var_sec_timer variable
+ */
+void _var_sec(unsigned short time)
+{
+    if(start_var_sec_timer > 0)
+        if(++_var_sec_conunter > time)
+        {
+            end_var_sec_timer = 1;
+            _var_sec_conunter = 0;
+            LED_TOGGLE;
+        }
 }
 
 /**
@@ -680,24 +702,39 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 {
     switch(mops_service_check_stages)
     {
-        case RELEY_ON: 
+        case CHECK_START_BUTTON: // this case checks that the check start button has been pressed
+        {
+            if(conf_stand.stand_commands.start_check_mops > 0) 
+            {
+                mops_service_check_stages++; 
+                conf_stand.stand_commands.start_check_mops = 0; 
+                conf_stand_sw.stand_commands.start_check_mops = 0;
+                break;
+            }
+            else{mops_service_check_stages = 0; break;}
+        }
+        case RELEY_ON:      // turne on releys 4-84
         {
             mbm_16_flag(usart_a, 1, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
             mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
             if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}
             break;
         }
-        case WAIT_SEC_1:
+        case WAIT_SEC_1:    // wait 1 second for initial modules
         {
             start_1_sec_timer = 1;
             _1_sec();
             if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
-            else{mops_service_check_stages = 1; break;}
+            else{mops_service_check_stages = WAIT_SEC_1; break;}
         }
-        case READ_MOPS: 
+        case READ_MOPS:     // read modules info during 2 seconds
         {
-            MOPS_S_control_flag(usart_c, &mups_read_flag);
-            if(mups_read_flag > 0){mups_read_flag = 0; mops_service_check_stages = 0; break;}
+            start_var_sec_timer = 1;
+            _var_sec(2000);
+            if(end_var_sec_timer == 0)
+            {
+                MOPS_S_control_flag(usart_c, &mups_read_flag);
+            }else {mups_read_flag = 0; mops_service_check_stages = CHECK_START_BUTTON; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
         case READ_MOPS_CONNACTION_STATMENT:

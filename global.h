@@ -651,7 +651,11 @@ unsigned short _530_board_mode_mops[8];
 
 //var for function _1_sec
 unsigned short _1_sec_counter;
-short start_1_sec_timer;        
+short start_1_sec_timer; 
+
+// var for function _var_sec
+unsigned short _var_sec_conunter;
+short start_var_sec_timer;
 
 //var for function _500_msec
 unsigned short _500_msec_counter;
