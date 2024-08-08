@@ -730,7 +730,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         case READ_MOPS:     // read modules info during 2 seconds
         {
             start_var_sec_timer = 1;
-            _var_sec(2000);
+            _var_sec(3000);
             if(end_var_sec_timer == 0)
             {
                 MOPS_S_control_flag(usart_c, &mups_read_flag);
