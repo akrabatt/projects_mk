@@ -638,21 +638,18 @@ extern struct tag_mops_stand_statment
     struct 
     {
         unsigned short mops_online      : 1;            // is there connection with module
+        unsigned short mops_online_err  : 1;            // connection error
         unsigned short mops_operable    : 1;            // is the module working properly or not
-        unsigned short : 14;
+        unsigned short : 13;
     }mops_statment;
-    unsigned short mops_ch_status[8];                   // buffer for the value of the states
+    unsigned short mops_current_ch_status[8];                   // buffer for the value of the states
     struct
     {
-        unsigned short mops_ch1_err : 1;                // 1
-        unsigned short mops_ch2_err : 1;                // 2
-        unsigned short mops_ch3_err : 1;                // 3
-        unsigned short mops_ch4_err : 1;                // 4
-        unsigned short mops_ch5_err : 1;                // 5 the flags(1-8) is set if the channel outputs an incorrect value
-        unsigned short mops_ch6_err : 1;                // 6
-        unsigned short mops_ch7_err : 1;                // 7 
-        unsigned short mops_ch8_err : 1;                // 8
-        unsigned short : 8;
+        unsigned short mops_ch_err_break[8];                   // break(1)
+        unsigned short mops_ch_err_normal[8];                  // normal(2)
+        unsigned short mops_ch_err_attantion[8];               // attantion(4)
+        unsigned short mops_ch_err_fire[8];                    // fire(5)
+        unsigned short mops_ch_err_sc[8];                      // short current(6)
     }mops_ch_statement;
 }mops_stand_statment;
 

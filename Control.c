@@ -748,7 +748,11 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_online = 1;
-                    memcpy(MOPS_statment[mops_num_].mops_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+                }
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
                 }
             }
             mops_service_check_stages = CHECK_START_BUTTON;

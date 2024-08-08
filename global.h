@@ -662,53 +662,18 @@ struct tag_mops_stand_statment
     struct 
     {
         unsigned short mops_online      : 1;            // is there connection with module
+        unsigned short mops_online_err  : 1;            // connection error
         unsigned short mops_operable    : 1;            // is the module working properly or not
-        unsigned short : 14;
+        unsigned short : 13;
     }mops_statment;
-    unsigned short mops_ch_status[8];                   // buffer for the value of the states
+    unsigned short mops_current_ch_status[8];                   // buffer for the value of the states
     struct
     {
-        unsigned short mops_ch1_err_break : 1;                  // 1    break(1)
-        unsigned short mops_ch2_err_break : 1;                  // 2
-        unsigned short mops_ch3_err_break : 1;                  // 3
-        unsigned short mops_ch4_err_break : 1;                  // 4
-        unsigned short mops_ch5_err_break : 1;                  // 5 
-        unsigned short mops_ch6_err_break : 1;                  // 6
-        unsigned short mops_ch7_err_break : 1;                  // 7 
-        unsigned short mops_ch8_err_break : 1;                  // 8
-        unsigned short mops_ch1_err_normal : 1;                 // 1    normal(2)
-        unsigned short mops_ch2_err_normal : 1;                 // 2
-        unsigned short mops_ch3_err_normal : 1;                 // 3
-        unsigned short mops_ch4_err_normal : 1;                 // 4
-        unsigned short mops_ch5_err_normal : 1;                 // 5 
-        unsigned short mops_ch6_err_normal : 1;                 // 6
-        unsigned short mops_ch7_err_normal : 1;                 // 7 
-        unsigned short mops_ch8_err_normal : 1;                 // 8
-        unsigned short mops_ch1_err_attantion : 1;              // 1    attantion(4)
-        unsigned short mops_ch2_err_attantion : 1;              // 2
-        unsigned short mops_ch3_err_attantion : 1;              // 3
-        unsigned short mops_ch4_err_attantion : 1;              // 4
-        unsigned short mops_ch5_err_attantion : 1;              // 5 
-        unsigned short mops_ch6_err_attantion : 1;              // 6
-        unsigned short mops_ch7_err_attantion : 1;              // 7 
-        unsigned short mops_ch8_err_attantion : 1;              // 8
-        unsigned short mops_ch1_err_fire : 1;                   // 1    fire(5)
-        unsigned short mops_ch2_err_fire : 1;                   // 2
-        unsigned short mops_ch3_err_fire : 1;                   // 3
-        unsigned short mops_ch4_err_fire : 1;                   // 4
-        unsigned short mops_ch5_err_fire : 1;                   // 5 
-        unsigned short mops_ch6_err_fire : 1;                   // 6
-        unsigned short mops_ch7_err_fire : 1;                   // 7 
-        unsigned short mops_ch8_err_fire : 1;                   // 8
-        unsigned short mops_ch1_err_sc : 1;                     // 1    short current(6)
-        unsigned short mops_ch2_err_sc : 1;                     // 2
-        unsigned short mops_ch3_err_sc : 1;                     // 3
-        unsigned short mops_ch4_err_sc : 1;                     // 4
-        unsigned short mops_ch5_err_sc : 1;                     // 5 
-        unsigned short mops_ch6_err_sc : 1;                     // 6
-        unsigned short mops_ch7_err_sc : 1;                     // 7 
-        unsigned short mops_ch8_err_sc : 1;                     // 8
-        unsigned short : 8;
+        unsigned short mops_ch_err_break[8];                   // break(1)
+        unsigned short mops_ch_err_normal[8];                  // normal(2)
+        unsigned short mops_ch_err_attantion[8];               // attantion(4)
+        unsigned short mops_ch_err_fire[8];                    // fire(5)
+        unsigned short mops_ch_err_sc[8];                      // short current(6)
     }mops_ch_statement;
 }mops_stand_statment;
 
