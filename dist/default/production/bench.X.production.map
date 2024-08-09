@@ -1629,7 +1629,7 @@ END GROUP
                 0x80000050                strategy_num_fix
                 0x80000054                strategy_set_flag
                 0x80000058                incr_stages
-                0x8000005c                _530_board_num
+                0x8000005c                reley_on_cycle
  *(.scommon)
  .scommon       0x80000060       0x52 build/default/production/main.o
                 0x80000060                mops_stat

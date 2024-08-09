@@ -653,7 +653,7 @@ short start_1_sec_timer;        //
 short end_1_sec_timer;          //
 short start_var_sec_timer;      //
 short end_var_sec_timer;        //
-unsigned short _530_board_num = 0;      //
+unsigned short reley_on_cycle = 0;      //
 
 /**
  * @brief this function timer 1 second
@@ -706,7 +706,6 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     unsigned short mops_num_;           // 1th layer
     unsigned short ch_num_;             // 2th
     
-    
     switch(mops_service_check_stages)
     {
         case CHECK_START_BUTTON: // this case checks that the check start button has been pressed
@@ -722,20 +721,20 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case RELEY_ON:      // turne on releys 4-84
         {
-            switch(_530_board_num)
+            switch(reley_on_cycle)
             {
                 case 0:
                 {
                     mbm_16_flag(usart_a, 3, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
                     if(var_a > 0)
-                    {_530_board_num++; break;}
+                    {reley_on_cycle++; break;}
                     break;
                 }
                 case 1:
                 {
                     mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
                     if(var_b > 0)
-                    {_530_board_num = 0; break;}
+                    {reley_on_cycle = 0; break;}
                     break;
                 }
             }
