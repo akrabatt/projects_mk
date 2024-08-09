@@ -653,6 +653,7 @@ short start_1_sec_timer;        //
 short end_1_sec_timer;          //
 short start_var_sec_timer;      //
 short end_var_sec_timer;        //
+unsigned short _530_board_num = 0;      //
 
 /**
  * @brief this function timer 1 second
@@ -704,7 +705,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     // vars for cycles
     unsigned short mops_num_;           // 1th layer
     unsigned short ch_num_;             // 2th
-    unsigned short _530_board_num;      //
+    
     
     switch(mops_service_check_stages)
     {
@@ -721,8 +722,24 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case RELEY_ON:      // turne on releys 4-84
         {
-            mbm_16_flag(usart_a, 3, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
-            mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
+            switch(_530_board_num)
+            {
+                case 0:
+                {
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
+                    if(var_a > 0)
+                    {_530_board_num++; break;}
+                    break;
+                }
+                case 1:
+                {
+                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
+                    if(var_b > 0)
+                    {_530_board_num = 0; break;}
+                    break;
+                }
+            }
+//            mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
             if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}
             break;
         }
