@@ -638,10 +638,11 @@ void _500_msec()
 enum 
 {
     CHECK_START_BUTTON = 0,
-    RELEY_ON,                           // 4 - 84 releys turne on
+    RELEY_ON,                               // 4 - 84 releys turne on
     WAIT_SEC_1,                             // just waite one sec to init modules
     READ_MOPS,                              // get full modules information during 1 sec
-    READ_MOPS_CONNACTION_STATMENT           // check connection with active modules
+    READ_MOPS_CONNACTION_STATMENT,          // check connection with active modules
+    WRITE_ATTANTION_STATMENT                // 530 board write attantion
     
 }mops_service_check_stages;
 
@@ -701,8 +702,9 @@ void _var_sec(unsigned short time)
 void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b, struct tag_usartm * usart_c)
 {
     // vars for cycles
-    unsigned short mops_num_;       // 1th layer
-    unsigned short ch_num_;      // 2th
+    unsigned short mops_num_;           // 1th layer
+    unsigned short ch_num_;             // 2th
+    unsigned short _530_board_num;      //
     
     switch(mops_service_check_stages)
     {
@@ -719,7 +721,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case RELEY_ON:      // turne on releys 4-84
         {
-            mbm_16_flag(usart_a, 1, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
+            mbm_16_flag(usart_a, 3, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
             mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
             if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}
             break;
@@ -741,7 +743,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             }else {mups_read_flag = 0; ++mops_service_check_stages; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
-        case READ_MOPS_CONNACTION_STATMENT:     // chec connection module and normal statment
+        case READ_MOPS_CONNACTION_STATMENT:     // check connection module and normal statment
         {
             memset(MOPS_statment, 0, sizeof(MOPS_statment));    //clear MOPS_statment
             for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
@@ -757,7 +759,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     continue;
                 }
-                if(Stand.active_mops[mops_num_] == 0)
+                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
                     continue;
@@ -773,6 +775,11 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             }
             mops_service_check_stages = CHECK_START_BUTTON;
             break;
+        }
+        case WRITE_ATTANTION_STATMENT:
+        {
+            
+            
         }
     }
 }
