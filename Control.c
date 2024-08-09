@@ -743,6 +743,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_CONNACTION_STATMENT:     // chec connection module and normal statment
         {
+            memset(MOPS_statment, 0, sizeof(MOPS_statment));    //clear MOPS_statment
             for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
             {
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
