@@ -641,10 +641,11 @@ enum
     RELEY_ON,                               // 4 - 84 releys turne on
     WAIT_SEC_INIT,                          // just waite one sec to init modules
     READ_MOPS_PRE_CONNACTION,               // get full modules information during 3 sec
-    READ_MOPS_CONNACTION_STATMENT,          // check connection with active modules
+    READ_MOPS_CONNACTION_STATMENT,          // check connection with active modules and normal statment 
     WRITE_ATTANTION_STATMENT,               // 530 board write attantion
     WAIT_SEC_ATTANTION,                     // just waite one sec after init attantion to 530 boart and init sys
-    READ_MOPS_PRE_ATTANTION                 // get full modules information during 3 sec
+    READ_MOPS_PRE_ATTANTION,                // get full modules information during 3 sec
+    READ_MOPS_ATTANTION_STATMENT            // check connection with active modules and attantion statment
     
 }mops_service_check_stages;
 
@@ -860,7 +861,43 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             if(end_var_sec_timer == 0)
             {
                 MOPS_S_control_flag(usart_c, &mups_read_flag);
-            }else {mups_read_flag = 0; mops_service_check_stages = CHECK_START_BUTTON; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            }else {mups_read_flag = 0; mops_service_check_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case READ_MOPS_ATTANTION_STATMENT:  // check attantion statment 
+        {
+            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
+            {
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
+                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+                }
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
+                    continue;
+                }
+                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
+                {
+                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 4)    //check ch status
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    }
+                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 4)
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 0;
+                    }
+                }
+            }
+            mops_service_check_stages = CHECK_START_BUTTON;     // next step
             break;
         }
     }
