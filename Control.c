@@ -734,6 +734,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case RELEY_ON:      // turne on releys 4-84
         {
+            // NORMAL
             switch(reley_on_cycle)
             {
                 case 0:
@@ -824,6 +825,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case WRITE_ATTANTION_STATMENT:      // write the attention status to all 530 boards 
         {
+            // ATTANTION
             switch(attantion_on_cycle)
             {
                 case 0: 
@@ -917,6 +919,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case WRITE_FIRE_STATMENT:           // wirte fire statment to 530 boards
         {
+            // FIRE
             switch(fire_on_cycle)
             {
                 case 0: 
@@ -996,12 +999,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 {
                     if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 5)    //check ch status
                     {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 1;
                         MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     }
                     if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 5)
                     {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 0;
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 0;
                     }
                 }
             }
