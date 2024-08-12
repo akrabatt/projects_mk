@@ -166,21 +166,21 @@ section                    address  length [bytes]      (dec)  Description
 .app_excpt              0x9d000180           0x10          16  General-Exception 
 .text._bootstrap_except 0x9d000190           0x48          72   
 .vectors                0x9d000200         0x20e4        8420   
-.text                   0x9d0022e4         0x94cc       38092  App's exec code 
-.text                   0x9d00b7b0         0x26e8        9960  App's exec code 
-.text                   0x9d00de98         0x131c        4892  App's exec code 
-.rodata                 0x9d00f1b4          0x600        1536  Read-only const 
-.dinit                  0x9d00f7b4          0x530        1328   
-.text                   0x9d00fce4          0x168         360  App's exec code 
-.text._cache_err_except 0x9d00fe4c           0xd8         216   
-.text.simple_tlb_refill 0x9d00ff24           0xd8         216   
-.tlb.__pic32_tlb_init_e 0x9d00fffc           0xbc         188   
-.text                   0x9d0100b8          0x160         352  App's exec code 
-.text._general_exceptio 0x9d010218           0x48          72   
-.text._cache_err_except 0x9d010260           0x48          72   
-.text._simple_tlb_refil 0x9d0102a8           0x48          72   
-.text                   0x9d0102f0           0x44          68  App's exec code 
-      Total kseg0_program_mem used  :     0x10304       66308  6.3% of 0x100000
+.text                   0x9d0022e4         0x9690       38544  App's exec code 
+.text                   0x9d00b974         0x26e8        9960  App's exec code 
+.text                   0x9d00e05c         0x131c        4892  App's exec code 
+.rodata                 0x9d00f378          0x600        1536  Read-only const 
+.dinit                  0x9d00f978          0x530        1328   
+.text                   0x9d00fea8          0x168         360  App's exec code 
+.text._cache_err_except 0x9d010010           0xd8         216   
+.text.simple_tlb_refill 0x9d0100e8           0xd8         216   
+.tlb.__pic32_tlb_init_e 0x9d0101c0           0xbc         188   
+.text                   0x9d01027c          0x160         352  App's exec code 
+.text._general_exceptio 0x9d0103dc           0x48          72   
+.text._cache_err_except 0x9d010424           0x48          72   
+.text._simple_tlb_refil 0x9d01046c           0x48          72   
+.text                   0x9d0104b4           0x44          68  App's exec code 
+      Total kseg0_program_mem used  :     0x104c8       66760  6.4% of 0x100000
 
 kseg0 Boot-Memory Usage
 section                    address  length [bytes]      (dec)  Description
@@ -194,7 +194,7 @@ section                    address  length [bytes]      (dec)  Description
 .bev_excpt              0xbfc00380           0x10          16  BEV-Exception 
          Total kseg1_boot_mem used  :       0x230         560  48.6% of 0x480
         --------------------------------------------------------------------------
-         Total Program Memory used  :     0x10534       66868  6.4% of 0x100480
+         Total Program Memory used  :     0x106f8       67320  6.4% of 0x100480
         --------------------------------------------------------------------------
 
 
@@ -1913,7 +1913,7 @@ END GROUP
  *.elf(.debug_pubnames)
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x191b0
+.debug_info     0x00000000    0x1922c
  *.elf(.debug_info .gnu.linkonce.wi.*)
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x2cbe build/default/production/main.o
@@ -1922,14 +1922,14 @@ END GROUP
  .debug_info    0x0000c63c     0x5597 build/default/production/modbus.o
  .debug_info    0x00011bd3     0x35e2 build/default/production/interrupt_proc.o
  .debug_info    0x000151b5      0xe98 build/default/production/ramtron_drv.o
- .debug_info    0x0001604d     0x2af7 build/default/production/Control.o
- .debug_info    0x00018b44       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_info    0x00018c39       0xce c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_info    0x00018d07       0xd6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_info    0x00018ddd       0xe8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_info    0x00018ec5       0xf1 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_info    0x00018fb6       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_info    0x000190ab      0x105 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_info    0x0001604d     0x2b73 build/default/production/Control.o
+ .debug_info    0x00018bc0       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_info    0x00018cb5       0xce c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_info    0x00018d83       0xd6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_info    0x00018e59       0xe8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_info    0x00018f41       0xf1 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_info    0x00019032       0xf5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_info    0x00019127      0x105 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
 .debug_abbrev   0x00000000     0x128f
  *.elf(.debug_abbrev)
@@ -1949,7 +1949,7 @@ END GROUP
  .debug_abbrev  0x0000123f       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
  .debug_abbrev  0x00001267       0x28 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
-.debug_line     0x00000000     0x194d
+.debug_line     0x00000000     0x1969
  *.elf(.debug_line)
  *(.debug_line)
  .debug_line    0x00000000       0xd3 build/default/production/main.o
@@ -1958,14 +1958,14 @@ END GROUP
  .debug_line    0x000005e0      0x5e4 build/default/production/modbus.o
  .debug_line    0x00000bc4      0x2a4 build/default/production/interrupt_proc.o
  .debug_line    0x00000e68      0x256 build/default/production/ramtron_drv.o
- .debug_line    0x000010be      0x41b build/default/production/Control.o
- .debug_line    0x000014d9       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
- .debug_line    0x00001580       0x94 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
- .debug_line    0x00001614       0x98 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
- .debug_line    0x000016ac       0xa6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
- .debug_line    0x00001752       0xa5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
- .debug_line    0x000017f7       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
- .debug_line    0x0000189e       0xaf c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+ .debug_line    0x000010be      0x437 build/default/production/Control.o
+ .debug_line    0x000014f5       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-bootstrap-exception-handler.o)
+ .debug_line    0x0000159c       0x94 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-reset.o)
+ .debug_line    0x00001630       0x98 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-on-bootstrap.o)
+ .debug_line    0x000016c8       0xa6 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(defaultinterrupt.o)
+ .debug_line    0x0000176e       0xa5 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+ .debug_line    0x00001813       0xa7 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+ .debug_line    0x000018ba       0xaf c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
 
 .debug_frame    0x00000000     0x1288
  *.elf(.debug_frame)
@@ -2416,8 +2416,8 @@ LOAD data_init
                 0xbfc00480       0x2c c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\debug-exception-return.o
                 0xbfc00480                __DbgExecReturn
 
-.text           0x9d0022e4     0x94cc
- .text          0x9d0022e4     0x4ac8 build/default/production/Control.o
+.text           0x9d0022e4     0x9690
+ .text          0x9d0022e4     0x4c8c build/default/production/Control.o
                 0x9d0022e4                MOPS_control
                 0x9d002b1c                MOPS_S_control
                 0x9d003354                MOPS_S_control_flag
@@ -2433,101 +2433,101 @@ LOAD data_init
                 0x9d0064c0                _1_sec
                 0x9d006518                _var_sec
                 0x9d0065ac                mops_service_check
- .text          0x9d006dac     0x4a04 build/default/production/modbus.o
-                0x9d006dac                PIC_CRC16
-                0x9d006e68                MODBUS_CRC16_calculate
-                0x9d006f0c                swapshort
-                0x9d006f50                swapfloat
-                0x9d006fa4                swaplong
-                0x9d006ff8                start_tx_usart
-                0x9d007274                start_tx_usartm
-                0x9d0074f0                start_tx_usart_dma
-                0x9d007844                start_tx_usart_dmam
-                0x9d007b84                stop_uart_tx
-                0x9d0085e4                stop_uart_tx_dma
-                0x9d008c00                close_mbs
-                0x9d008c4c                answer_illegal
-                0x9d008cf0                answer_illegal_func
-                0x9d008d64                answer_illegal_data_addr
-                0x9d008dd8                answer_illegal_data_val
-                0x9d008e4c                mbs_03
-                0x9d008fb4                mbs_10
-                0x9d00947c                mbs_uni
-                0x9d009a70                mbs
-                0x9d009b00                mbm_timeout_control
-                0x9d009b88                mbm_03
-                0x9d00a284                mbm_03_str
-                0x9d00a918                mbm_16
-                0x9d00b060                mbm_16_flag
+ .text          0x9d006f70     0x4a04 build/default/production/modbus.o
+                0x9d006f70                PIC_CRC16
+                0x9d00702c                MODBUS_CRC16_calculate
+                0x9d0070d0                swapshort
+                0x9d007114                swapfloat
+                0x9d007168                swaplong
+                0x9d0071bc                start_tx_usart
+                0x9d007438                start_tx_usartm
+                0x9d0076b4                start_tx_usart_dma
+                0x9d007a08                start_tx_usart_dmam
+                0x9d007d48                stop_uart_tx
+                0x9d0087a8                stop_uart_tx_dma
+                0x9d008dc4                close_mbs
+                0x9d008e10                answer_illegal
+                0x9d008eb4                answer_illegal_func
+                0x9d008f28                answer_illegal_data_addr
+                0x9d008f9c                answer_illegal_data_val
+                0x9d009010                mbs_03
+                0x9d009178                mbs_10
+                0x9d009640                mbs_uni
+                0x9d009c34                mbs
+                0x9d009cc4                mbm_timeout_control
+                0x9d009d4c                mbm_03
+                0x9d00a448                mbm_03_str
+                0x9d00aadc                mbm_16
+                0x9d00b224                mbm_16_flag
 
-.text           0x9d00b7b0     0x26e8
- .text          0x9d00b7b0     0x1380 build/default/production/init.o
-                0x9d00b7b0                port_init
-                0x9d00b9b8                tmr_1_init
-                0x9d00ba74                tmr_2_init
-                0x9d00bb30                tmr_3_init
-                0x9d00bbec                tmr_4_init
-                0x9d00bca8                tmr_5_init
-                0x9d00bd64                tmr_9_init
-                0x9d00be20                tmr_6_init
-                0x9d00beb0                tmr_7_init
-                0x9d00bf40                uart1_init
-                0x9d00c0bc                uart2_init
-                0x9d00c238                uart3_init
-                0x9d00c3b4                uart4_init
-                0x9d00c530                uart5_init
-                0x9d00c6ac                spi5_init
-                0x9d00c878                InitializeSystem
- .text          0x9d00cb30     0x1368 build/default/production/interrupt_proc.o
-                0x9d00cb30                TInterrupt_
-                0x9d00cb8c                TInterrupt_m
-                0x9d00cbe8                T1Interrupt_
-                0x9d00cc64                T2Interrupt_
-                0x9d00cce0                T3Interrupt_
-                0x9d00cd5c                T4Interrupt_
-                0x9d00cdd8                T5Interrupt_
-                0x9d00ce54                T9Interrupt_
-                0x9d00ced0                DMA_uni
-                0x9d00d364                DMA1_init
-                0x9d00d480                DMA2_init
-                0x9d00d59c                DMA3_init
-                0x9d00d6b8                DMA4_init
-                0x9d00d7d4                DMA5_init
-                0x9d00d8f0                discret_ctrl
-                0x9d00d9d8                counters
+.text           0x9d00b974     0x26e8
+ .text          0x9d00b974     0x1380 build/default/production/init.o
+                0x9d00b974                port_init
+                0x9d00bb7c                tmr_1_init
+                0x9d00bc38                tmr_2_init
+                0x9d00bcf4                tmr_3_init
+                0x9d00bdb0                tmr_4_init
+                0x9d00be6c                tmr_5_init
+                0x9d00bf28                tmr_9_init
+                0x9d00bfe4                tmr_6_init
+                0x9d00c074                tmr_7_init
+                0x9d00c104                uart1_init
+                0x9d00c280                uart2_init
+                0x9d00c3fc                uart3_init
+                0x9d00c578                uart4_init
+                0x9d00c6f4                uart5_init
+                0x9d00c870                spi5_init
+                0x9d00ca3c                InitializeSystem
+ .text          0x9d00ccf4     0x1368 build/default/production/interrupt_proc.o
+                0x9d00ccf4                TInterrupt_
+                0x9d00cd50                TInterrupt_m
+                0x9d00cdac                T1Interrupt_
+                0x9d00ce28                T2Interrupt_
+                0x9d00cea4                T3Interrupt_
+                0x9d00cf20                T4Interrupt_
+                0x9d00cf9c                T5Interrupt_
+                0x9d00d018                T9Interrupt_
+                0x9d00d094                DMA_uni
+                0x9d00d528                DMA1_init
+                0x9d00d644                DMA2_init
+                0x9d00d760                DMA3_init
+                0x9d00d87c                DMA4_init
+                0x9d00d998                DMA5_init
+                0x9d00dab4                discret_ctrl
+                0x9d00db9c                counters
 
-.text           0x9d00de98     0x131c
- .text          0x9d00de98     0x131c build/default/production/ramtron_drv.o
-                0x9d00de98                SPI_BufferWrite
-                0x9d00dee4                SPI_BufferRead
-                0x9d00df28                vMemDelay
-                0x9d00df74                vMemoryInit
-                0x9d00df94                getcs_FRAM
-                0x9d00e100                putcs_FRAM
-                0x9d00e2f0                getss_FRAM
-                0x9d00e4b8                putss_FRAM
-                0x9d00e6fc                getc_FRAM
-                0x9d00e838                putc_FRAM
-                0x9d00ea0c                put_cmd_FRAM
-                0x9d00eb3c                we_FRAM
-                0x9d00ebf0                wd_FRAM
-                0x9d00eca4                erase_FRAM
-                0x9d00ee7c                pgetc_FRAM
-                0x9d00efc0                vSPI5InterruptHandler
-                0x9d00f054                load_config
-                0x9d00f104                load_config_sted_area
+.text           0x9d00e05c     0x131c
+ .text          0x9d00e05c     0x131c build/default/production/ramtron_drv.o
+                0x9d00e05c                SPI_BufferWrite
+                0x9d00e0a8                SPI_BufferRead
+                0x9d00e0ec                vMemDelay
+                0x9d00e138                vMemoryInit
+                0x9d00e158                getcs_FRAM
+                0x9d00e2c4                putcs_FRAM
+                0x9d00e4b4                getss_FRAM
+                0x9d00e67c                putss_FRAM
+                0x9d00e8c0                getc_FRAM
+                0x9d00e9fc                putc_FRAM
+                0x9d00ebd0                put_cmd_FRAM
+                0x9d00ed00                we_FRAM
+                0x9d00edb4                wd_FRAM
+                0x9d00ee68                erase_FRAM
+                0x9d00f040                pgetc_FRAM
+                0x9d00f184                vSPI5InterruptHandler
+                0x9d00f218                load_config
+                0x9d00f2c8                load_config_sted_area
 
-.rodata         0x9d00f1b4      0x600
- .rodata        0x9d00f1b4      0x600 build/default/production/modbus.o
-                0x9d00f1b4                auchCRCHi
-                0x9d00f2b4                auchCRCLo
+.rodata         0x9d00f378      0x600
+ .rodata        0x9d00f378      0x600 build/default/production/modbus.o
+                0x9d00f378                auchCRCHi
+                0x9d00f478                auchCRCLo
 
-.dinit          0x9d00f7b4      0x530
- .dinit         0x9d00f7b4      0x530 data_init
+.dinit          0x9d00f978      0x530
+ .dinit         0x9d00f978      0x530 data_init
 
-.text           0x9d00fce4      0x168
- .text          0x9d00fce4      0x168 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(memcpy.o)
-                0x9d00fce4                memcpy
+.text           0x9d00fea8      0x168
+ .text          0x9d00fea8      0x168 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(memcpy.o)
+                0x9d00fea8                memcpy
 
 .text.general_exception
                 0x9d000010       0xdc
@@ -2536,28 +2536,28 @@ LOAD data_init
                 0x9d000010                _general_exception_context
 
 .text._cache_err_exception_context
-                0x9d00fe4c       0xd8
+                0x9d010010       0xd8
  .text._cache_err_exception_context
-                0x9d00fe4c       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(cache-err-exception.o)
-                0x9d00fe4c                _cache_err_exception_context
+                0x9d010010       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(cache-err-exception.o)
+                0x9d010010                _cache_err_exception_context
 
 .text.simple_tlb_refill_context
-                0x9d00ff24       0xd8
+                0x9d0100e8       0xd8
  .text.simple_tlb_refill_context
-                0x9d00ff24       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(simple-tlb-refill-exception.o)
-                0x9d00ff24                _simple_tlb_refill_exception_context
+                0x9d0100e8       0xd8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(simple-tlb-refill-exception.o)
+                0x9d0100e8                _simple_tlb_refill_exception_context
 
 .tlb.__pic32_tlb_init_ebi_sqi
-                0x9d00fffc       0xbc
+                0x9d0101c0       0xbc
  .tlb.__pic32_tlb_init_ebi_sqi
-                0x9d00fffc       0xbc c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(pic32_init_tlb_ebi_sqi.o)
-                0x9d00fffc                __pic32_tlb_init_ebi_sqi
+                0x9d0101c0       0xbc c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(pic32_init_tlb_ebi_sqi.o)
+                0x9d0101c0                __pic32_tlb_init_ebi_sqi
 
-.text           0x9d0100b8      0x160
- .text          0x9d0100b8       0xb8 build/default/production/main.o
-                0x9d0100b8                main
- .text          0x9d010170       0xa8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(memset.o)
-                0x9d010170                memset
+.text           0x9d01027c      0x160
+ .text          0x9d01027c       0xb8 build/default/production/main.o
+                0x9d01027c                main
+ .text          0x9d010334       0xa8 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(memset.o)
+                0x9d010334                memset
 
 .text.main_entry
                 0x9d000110       0x54
@@ -2572,26 +2572,26 @@ LOAD data_init
                 0x9d000190                _bootstrap_exception_handler
 
 .text._general_exception_handler
-                0x9d010218       0x48
+                0x9d0103dc       0x48
  .text._general_exception_handler
-                0x9d010218       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
-                0x9d010218                _general_exception_handler
+                0x9d0103dc       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-general-exception-handler.o)
+                0x9d0103dc                _general_exception_handler
 
 .text._cache_err_exception_handler
-                0x9d010260       0x48
+                0x9d010424       0x48
  .text._cache_err_exception_handler
-                0x9d010260       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
-                0x9d010260                _cache_err_exception_handler
+                0x9d010424       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-cache-err-exception-handler.o)
+                0x9d010424                _cache_err_exception_handler
 
 .text._simple_tlb_refill_exception_handler
-                0x9d0102a8       0x48
+                0x9d01046c       0x48
  .text._simple_tlb_refill_exception_handler
-                0x9d0102a8       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
-                0x9d0102a8                _simple_tlb_refill_exception_handler
+                0x9d01046c       0x48 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-simple-tlb-refill-exception-handler.o)
+                0x9d01046c                _simple_tlb_refill_exception_handler
 
-.text           0x9d0102f0       0x44
- .text          0x9d0102f0       0x44 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\pic32_software_reset.o
-                0x9d0102f0                __pic32_software_reset
+.text           0x9d0104b4       0x44
+ .text          0x9d0104b4       0x44 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\pic32_software_reset.o
+                0x9d0104b4                __pic32_software_reset
 
 .text           0x9d000164       0x18
  .text          0x9d000164       0x18 c:/program files (x86)/microchip/xc32/v1.44/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib/fpu64\libpic32.a(default-nmi-handler.o)

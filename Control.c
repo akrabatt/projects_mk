@@ -639,10 +639,12 @@ enum
 {
     CHECK_START_BUTTON = 0,
     RELEY_ON,                               // 4 - 84 releys turne on
-    WAIT_SEC_1,                             // just waite one sec to init modules
-    READ_MOPS,                              // get full modules information during 1 sec
+    WAIT_SEC_INIT,                          // just waite one sec to init modules
+    READ_MOPS_PRE_CONNACTION,               // get full modules information during 3 sec
     READ_MOPS_CONNACTION_STATMENT,          // check connection with active modules
-    WRITE_ATTANTION_STATMENT                // 530 board write attantion
+    WRITE_ATTANTION_STATMENT,               // 530 board write attantion
+    WAIT_SEC_ATTANTION,                     // just waite one sec after init attantion to 530 boart and init sys
+    READ_MOPS_PRE_ATTANTION                 // get full modules information during 3 sec
     
 }mops_service_check_stages;
 
@@ -728,30 +730,44 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 case 0:
                 {
-                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);   // 3id 530 board
+                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_normal_mops, 115200, &var_a);   // 3id 530 board
                     if(var_a > 0)
                     {reley_on_cycle++; break;}
                     break;
                 }
                 case 1:
                 {
-                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);             // 4id 530 board
+                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_normal_mops, 115200, &var_b);             // 4id 530 board
                     if(var_b > 0)
+                    {reley_on_cycle++; break;}
+                    break;
+                }
+                case 2:
+                {
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_normal_start_reley_4_mops, 115200, &var_c);             // 4id 530 board
+                    if(var_c> 0)
+                    {reley_on_cycle++; break;}
+                    break;
+                }
+                case 3:
+                {
+                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_d);             // 4id 530 board
+                    if(var_d > 0)
                     {reley_on_cycle = 0; break;}
                     break;
                 }
             }
-            if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}          // reset vars end exit
+            if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;}          // reset vars end exit
             break;
         }
-        case WAIT_SEC_1:    // wait 1 second for initial modules
+        case WAIT_SEC_INIT:    // wait 1 second for initial modules
         {
             start_1_sec_timer = 1;
             _1_sec();
             if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
-            else{mops_service_check_stages = WAIT_SEC_1; break;}
+            else{mops_service_check_stages = WAIT_SEC_INIT; break;}
         }
-        case READ_MOPS:     // read modules info during 2 seconds
+        case READ_MOPS_PRE_CONNACTION:     // read modules info during 3 seconds
         {
             start_var_sec_timer = 1;
             _var_sec(3000);
@@ -827,7 +843,24 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     break;
                 }
             }
-            if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages = CHECK_START_BUTTON; break;}          // reset vars end exit
+            if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;} // reset vars end exit
+            break;
+        }
+        case WAIT_SEC_ATTANTION:    // waiting for a second to initialize the state
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
+            else{mops_service_check_stages = WAIT_SEC_ATTANTION; break;}
+        }
+        case READ_MOPS_PRE_ATTANTION:   // read modules info during 3 seconds
+        {
+            start_var_sec_timer = 1;
+            _var_sec(3000);
+            if(end_var_sec_timer == 0)
+            {
+                MOPS_S_control_flag(usart_c, &mups_read_flag);
+            }else {mups_read_flag = 0; mops_service_check_stages = CHECK_START_BUTTON; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
     }
