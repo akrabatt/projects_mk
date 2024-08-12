@@ -1049,14 +1049,13 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     {sc_on_cycle = 0; break;}
                     break;
                 }
-//                default:
-//                {
-//                    sc_on_cycle = 0; mops_service_check_stages = WRITE_SC_STATMENT; break;
-//                }
-                if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;} // reset vars end exit
-                if(var_a == 0 || var_b == 0 || var_c == 0 || var_d == 0){mops_service_check_stages = WRITE_SC_STATMENT; break;}
-//                break;
+                default:
+                {
+                    sc_on_cycle = 0; mops_service_check_stages = WRITE_SC_STATMENT; break;
+                }
             }
+            if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;} // reset vars end exit
+            break;
         }
         case WAIT_SEC_SC:
         {
