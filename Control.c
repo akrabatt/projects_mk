@@ -643,10 +643,13 @@ enum
     READ_MOPS_PRE_CONNACTION,               // get full modules information during 3 sec
     READ_MOPS_CONNACTION_STATMENT,          // check connection with active modules and normal statment 
     WRITE_ATTANTION_STATMENT,               // 530 board write attantion
-    WAIT_SEC_ATTANTION,                     // just waite one sec after init attantion to 530 boart and init sys
+    WAIT_SEC_ATTANTION,                     // just waite one sec after init attantion to 530 board and init sys
     READ_MOPS_PRE_ATTANTION,                // get full modules information during 3 sec
-    READ_MOPS_ATTANTION_STATMENT            // check connection with active modules and attantion statment
-    
+    READ_MOPS_ATTANTION_STATMENT,           // check connection with active modules and attantion statment
+    WRITE_FIRE_STATMENT,                    // 530 board write fire
+    WAIT_SEC_FIRE,                          // just wait one sec after init fire to 530 board and inti sys
+    READ_MOPS_PRE_FIRE,                     // get full modules information durind 3 sec
+    READ_MOPS_FIRE_STATMENT                 // check connection with activ modules and fire statment
 }mops_service_check_stages;
 
 short var_a;                    //mbm_16 success end flag
@@ -658,8 +661,8 @@ short start_1_sec_timer;        //
 short end_1_sec_timer;          //
 short start_var_sec_timer;      //
 short end_var_sec_timer;        //
-unsigned short reley_on_cycle = 0;      //
-unsigned short attantion_on_cycle = 0;  //
+//unsigned short reley_on_cycle = 0;      //
+//unsigned short attantion_on_cycle = 0;  //
 
 /**
  * @brief this function timer 1 second
@@ -708,6 +711,10 @@ void _var_sec(unsigned short time)
  */
 void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b, struct tag_usartm * usart_c)
 {
+    static unsigned short reley_on_cycle = 0;
+    static unsigned short attantion_on_cycle = 0;
+    static unsigned short fire_on_cycle = 0;
+    
     // vars for cycles
     unsigned short mops_num_;           // for mops
     unsigned short ch_num_;             // for chnl in mops
@@ -756,6 +763,10 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     if(var_d > 0)
                     {reley_on_cycle = 0; break;}
                     break;
+                }
+                default:
+                {
+                    reley_on_cycle = 0; mops_service_check_stages = RELEY_ON; break;
                 }
             }
             if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;}          // reset vars end exit
@@ -843,6 +854,10 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     {attantion_on_cycle = 0; break;}
                     break;
                 }
+                default:
+                {
+                    attantion_on_cycle = 0; mops_service_check_stages = WRITE_ATTANTION_STATMENT; break;
+                }
             }
             if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;} // reset vars end exit
             break;
@@ -892,6 +907,99 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                         MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     }
                     if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 4)
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 0;
+                    }
+                }
+            }
+            mops_service_check_stages++;     // next step
+            break;
+        }
+        case WRITE_FIRE_STATMENT:           // wirte fire statment to 530 boards
+        {
+            switch(fire_on_cycle)
+            {
+                case 0: 
+                {
+                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_fire_mops, 115200, &var_a);   // 1id 530 board, all board attantion
+                    if(var_a > 0)
+                    {fire_on_cycle++; break;}
+                    break;
+                }
+                case 1:
+                {
+                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_fire_mops, 115200, &var_b);   // 2id 530 board, all board attantion
+                    if(var_b > 0)
+                    {fire_on_cycle++; break;}
+                    break;
+                }
+                case 2:
+                {
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_fire_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, attantion
+                    if(var_c > 0)
+                    {fire_on_cycle++; break;}
+                    break;
+                }
+                case 3:
+                {
+                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_d);   // 4id 530 board, 84 reley turne on 
+                    if(var_d > 0)
+                    {fire_on_cycle = 0; break;}
+                    break;
+                }
+                default:
+                {
+                    fire_on_cycle = 0; mops_service_check_stages = WRITE_FIRE_STATMENT; break;
+                }
+            }
+            if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;} // reset vars end exit
+            break;
+        }
+        case WAIT_SEC_FIRE:         // wait 1 sec to init fire statment
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
+            else{mops_service_check_stages = WAIT_SEC_FIRE; break;}
+        }
+        case READ_MOPS_PRE_FIRE:        // read modules info during 3 seconds
+        {
+            start_var_sec_timer = 1;
+            _var_sec(3000);
+            if(end_var_sec_timer == 0)
+            {
+                MOPS_S_control_flag(usart_c, &mups_read_flag);
+            }else {mups_read_flag = 0; mops_service_check_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case READ_MOPS_FIRE_STATMENT:
+        {
+            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
+            {
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
+                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+                }
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
+                    continue;
+                }
+                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
+                {
+                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 5)    //check ch status
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    }
+                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 5)
                     {
                         MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 0;
                     }
