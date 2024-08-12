@@ -603,7 +603,7 @@ unsigned short _530_board_normal_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_5
                                             NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};
 // 1 - normal, 2 - normal, 3 - reley on starting from 4th, 4 - reley on
 unsigned short _530_board_normal_start_reley_4_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2,
-                                                          RELEY_ON_START_4_530_1, RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+                                                          SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
 
                                             //===short current===//
 //1-4 short current
