@@ -649,7 +649,11 @@ enum
     WRITE_FIRE_STATMENT,                    // 530 board write fire
     WAIT_SEC_FIRE,                          // just wait one sec after init fire to 530 board and inti sys
     READ_MOPS_PRE_FIRE,                     // get full modules information durind 3 sec
-    READ_MOPS_FIRE_STATMENT                 // check connection with activ modules and fire statment
+    READ_MOPS_FIRE_STATMENT,                // check connection with activ modules and fire statment
+    WRITE_SC_STATMENT,
+    WAIT_SEC_SC,
+    READ_MOPS_PRE_SC,
+    READ_MOPS_SC_STATMENT
 }mops_service_check_stages;
 
 short var_a;                    //mbm_16 success end flag
@@ -714,6 +718,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     static unsigned short reley_on_cycle = 0;
     static unsigned short attantion_on_cycle = 0;
     static unsigned short fire_on_cycle = 0;
+    static unsigned short sc_on_cycle = 0;
     
     // vars for cycles
     unsigned short mops_num_;           // for mops
@@ -1005,6 +1010,101 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 5)
                     {
                         MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 0;
+                    }
+                }
+            }
+            mops_service_check_stages = WRITE_SC_STATMENT;     // next step
+            break;
+        }
+        // SHORT CURRENT
+        case WRITE_SC_STATMENT: 
+        {
+            switch(sc_on_cycle)
+            {
+                case 0: 
+                {
+                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_short_current_mops, 115200, &var_a);   // 1id 530 board, all board attantion
+                    if(var_a > 0)
+                    {sc_on_cycle++; break;}
+                    break;
+                }
+                case 1:
+                {
+                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_short_current_mops, 115200, &var_b);   // 2id 530 board, all board attantion
+                    if(var_b > 0)
+                    {sc_on_cycle++; break;}
+                    break;
+                }
+                case 2:
+                {
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_short_current_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, attantion
+                    if(var_c > 0)
+                    {sc_on_cycle++; break;}
+                    break;
+                }
+                case 3:
+                {
+                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_d);   // 4id 530 board, 84 reley turne on 
+                    if(var_d > 0)
+                    {sc_on_cycle = 0; break;}
+                    break;
+                }
+//                default:
+//                {
+//                    sc_on_cycle = 0; mops_service_check_stages = WRITE_SC_STATMENT; break;
+//                }
+                if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages++; break;} // reset vars end exit
+                if(var_a == 0 || var_b == 0 || var_c == 0 || var_d == 0){mops_service_check_stages = WRITE_SC_STATMENT; break;}
+//                break;
+            }
+        }
+        case WAIT_SEC_SC:
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mops_service_check_stages++; break;}
+            else{mops_service_check_stages = WAIT_SEC_SC; break;}
+        }
+        case READ_MOPS_PRE_SC:
+        {
+            start_var_sec_timer = 1;
+            _var_sec(3000);
+            if(end_var_sec_timer == 0)
+            {
+                MOPS_S_control_flag(usart_c, &mups_read_flag);
+            }else {mups_read_flag = 0; mops_service_check_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case READ_MOPS_SC_STATMENT:
+        {
+            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
+            {
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
+                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+                }
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
+                {
+                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
+                    continue;
+                }
+                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
+                {
+                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 6)    //check ch status
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                    }
+                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 6)
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 0;
                     }
                 }
             }
