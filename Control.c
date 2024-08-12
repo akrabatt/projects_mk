@@ -653,7 +653,11 @@ enum
     WRITE_SC_STATMENT,
     WAIT_SEC_SC,
     READ_MOPS_PRE_SC,
-    READ_MOPS_SC_STATMENT
+    READ_MOPS_SC_STATMENT,
+    WRITE_BREAK_STATMENT,
+    WAIT_SEC_BREAK,
+    READ_MOPS_PRE_BREAK,
+    READ_MOPS_BREAK_STATMENT
 }mops_service_check_stages;
 
 short var_a;                    //mbm_16 success end flag
@@ -665,8 +669,6 @@ short start_1_sec_timer;        //
 short end_1_sec_timer;          //
 short start_var_sec_timer;      //
 short end_var_sec_timer;        //
-//unsigned short reley_on_cycle = 0;      //
-//unsigned short attantion_on_cycle = 0;  //
 
 /**
  * @brief this function timer 1 second
@@ -719,6 +721,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     static unsigned short attantion_on_cycle = 0;
     static unsigned short fire_on_cycle = 0;
     static unsigned short sc_on_cycle = 0;
+    static unsigned short break_on_cycle = 0;
     
     // vars for cycles
     unsigned short mops_num_;           // for mops
@@ -744,21 +747,21 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 case 0:
                 {
-                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_normal_mops, 115200, &var_a);   // 3id 530 board
+                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_normal_mops, 115200, &var_a);   // 1id 530 board
                     if(var_a > 0)
                     {reley_on_cycle++; break;}
                     break;
                 }
                 case 1:
                 {
-                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_normal_mops, 115200, &var_b);             // 4id 530 board
+                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_normal_mops, 115200, &var_b);             // 2id 530 board
                     if(var_b > 0)
                     {reley_on_cycle++; break;}
                     break;
                 }
                 case 2:
                 {
-                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_normal_start_reley_4_mops, 115200, &var_c);             // 4id 530 board
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_normal_start_reley_4_mops, 115200, &var_c);             // 3id 530 board
                     if(var_c> 0)
                     {reley_on_cycle++; break;}
                     break;
@@ -929,21 +932,21 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 case 0: 
                 {
-                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_fire_mops, 115200, &var_a);   // 1id 530 board, all board attantion
+                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_fire_mops, 115200, &var_a);   // 1id 530 board, all board fire
                     if(var_a > 0)
                     {fire_on_cycle++; break;}
                     break;
                 }
                 case 1:
                 {
-                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_fire_mops, 115200, &var_b);   // 2id 530 board, all board attantion
+                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_fire_mops, 115200, &var_b);   // 2id 530 board, all board fire
                     if(var_b > 0)
                     {fire_on_cycle++; break;}
                     break;
                 }
                 case 2:
                 {
-                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_fire_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, attantion
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_fire_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, fire
                     if(var_c > 0)
                     {fire_on_cycle++; break;}
                     break;
@@ -1023,21 +1026,21 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 case 0: 
                 {
-                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_short_current_mops, 115200, &var_a);   // 1id 530 board, all board attantion
+                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_short_current_mops, 115200, &var_a);   // 1id 530 board, all board sc
                     if(var_a > 0)
                     {sc_on_cycle++; break;}
                     break;
                 }
                 case 1:
                 {
-                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_short_current_mops, 115200, &var_b);   // 2id 530 board, all board attantion
+                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_short_current_mops, 115200, &var_b);   // 2id 530 board, all board sc
                     if(var_b > 0)
                     {sc_on_cycle++; break;}
                     break;
                 }
                 case 2:
                 {
-                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_short_current_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, attantion
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_short_current_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, sc
                     if(var_c > 0)
                     {sc_on_cycle++; break;}
                     break;
@@ -1110,5 +1113,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             mops_service_check_stages = CHECK_START_BUTTON;     // next step
             break;
         }
+        // BREAK
+        
     }
 }
