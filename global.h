@@ -597,7 +597,7 @@ unsigned short DINPUT3;
 
 //530 board arr for mods
 
-                                            //===attantion===//
+                                            //===normal===//
 // 1-4 normal
 unsigned short _530_board_normal_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2, 
                                             NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};

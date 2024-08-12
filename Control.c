@@ -648,12 +648,15 @@ enum
 
 short var_a;                    //mbm_16 success end flag
 short var_b;                    //
+short var_c;
+short var_d;
 short mups_read_flag;           //mops read last module flag
 short start_1_sec_timer;        //
 short end_1_sec_timer;          //
 short start_var_sec_timer;      //
 short end_var_sec_timer;        //
 unsigned short reley_on_cycle = 0;      //
+unsigned short attantion_on_cycle = 0;  //
 
 /**
  * @brief this function timer 1 second
@@ -691,7 +694,7 @@ void _var_sec(unsigned short time)
 }
 
 /**
- * @brief this function performs a service check of the module
+ * @brief this function performs a service check of the modules MOPS
  * 
  * @param usart_a. A pointer to the port to which the main number of 530 cards 
  * is connected is passed to usart_a (start reley 4)
@@ -703,8 +706,8 @@ void _var_sec(unsigned short time)
 void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b, struct tag_usartm * usart_c)
 {
     // vars for cycles
-    unsigned short mops_num_;           // 1th layer
-    unsigned short ch_num_;             // 2th
+    unsigned short mops_num_;           // for mops
+    unsigned short ch_num_;             // for chnl in mops
     
     switch(mops_service_check_stages)
     {
@@ -725,21 +728,20 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 case 0:
                 {
-                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_only_reley_on_start_4_mops, 115200, &var_a);   // 3id 530 board
                     if(var_a > 0)
                     {reley_on_cycle++; break;}
                     break;
                 }
                 case 1:
                 {
-                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
+                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);             // 4id 530 board
                     if(var_b > 0)
                     {reley_on_cycle = 0; break;}
                     break;
                 }
             }
-//            mbm_16_flag(usart_b, 1, 0, 8, _530_board_84_reley_on_mops, 115200, &var_b);
-            if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}
+            if(var_a > 0 && var_b > 0) {var_a = 0; var_b = 0; mops_service_check_stages++; break;}          // reset vars end exit
             break;
         }
         case WAIT_SEC_1:    // wait 1 second for initial modules
@@ -789,13 +791,44 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     }
                 }
             }
-            mops_service_check_stages = CHECK_START_BUTTON;
+            mops_service_check_stages++;     // next step
             break;
         }
-        case WRITE_ATTANTION_STATMENT:
+        case WRITE_ATTANTION_STATMENT:      // write the attention status to all 530 boards 
         {
-            
-            
+            switch(attantion_on_cycle)
+            {
+                case 0: 
+                {
+                    mbm_16_flag(usart_a, 1, 0, 8, _530_board_attantion_mops, 115200, &var_a);   // 1id 530 board, all board attantion
+                    if(var_a > 0)
+                    {attantion_on_cycle++; break;}
+                    break;
+                }
+                case 1:
+                {
+                    mbm_16_flag(usart_a, 2, 0, 8, _530_board_attantion_mops, 115200, &var_b);   // 2id 530 board, all board attantion
+                    if(var_b > 0)
+                    {attantion_on_cycle++; break;}
+                    break;
+                }
+                case 2:
+                {
+                    mbm_16_flag(usart_a, 3, 0, 8, _530_board_attantion_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, attantion
+                    if(var_c > 0)
+                    {attantion_on_cycle++; break;}
+                    break;
+                }
+                case 3:
+                {
+                    mbm_16_flag(usart_a, 4, 0, 8, _530_board_84_reley_on_mops, 115200, &var_d);   // 4id 530 board, 84 reley turne on 
+                    if(var_d > 0)
+                    {attantion_on_cycle = 0; break;}
+                    break;
+                }
+            }
+            if(var_a > 0 && var_b > 0 && var_c > 0 && var_d > 0) {var_a = 0; var_b = 0; var_c = 0; var_d = 0; mops_service_check_stages = CHECK_START_BUTTON; break;}          // reset vars end exit
+            break;
         }
     }
 }
