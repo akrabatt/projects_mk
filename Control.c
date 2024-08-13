@@ -811,6 +811,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     continue;
                 }
@@ -901,6 +902,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     continue;
                 }
@@ -995,6 +997,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     continue;
                 }
@@ -1089,6 +1092,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     continue;
                 }
@@ -1183,6 +1187,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
                 {
                     MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                     continue;
                 }
