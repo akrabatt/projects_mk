@@ -650,21 +650,21 @@ enum
     WAIT_SEC_FIRE,                          // just wait one sec after init fire to 530 board and inti sys
     READ_MOPS_PRE_FIRE,                     // get full modules information durind 3 sec
     READ_MOPS_FIRE_STATMENT,                // check connection with activ modules and fire statment
-    WRITE_SC_STATMENT,
-    WAIT_SEC_SC,
-    READ_MOPS_PRE_SC,
-    READ_MOPS_SC_STATMENT,
-    WRITE_BREAK_STATMENT,
-    WAIT_SEC_BREAK,
-    READ_MOPS_PRE_BREAK,
-    READ_MOPS_BREAK_STATMENT,
-    CHECK_POWER_CYCLE
+    WRITE_SC_STATMENT,                      // ...
+    WAIT_SEC_SC,                            // ...
+    READ_MOPS_PRE_SC,                       // ...
+    READ_MOPS_SC_STATMENT,                  // ...
+    WRITE_BREAK_STATMENT,                   // ...
+    WAIT_SEC_BREAK,                         // ...
+    READ_MOPS_PRE_BREAK,                    // ...
+    READ_MOPS_BREAK_STATMENT,               // ...
+    CHECK_POWER_CYCLE                       // this case implements the execution of the cycle 3 times
 }mops_service_check_stages;
 
 short var_a;                    //mbm_16 success end flag
-short var_b;                    //
-short var_c;
-short var_d;
+short var_b;                    // ..
+short var_c;                    // ..
+short var_d;                    // ..
 short mups_read_flag;           //mops read last module flag
 short start_1_sec_timer;        //
 short end_1_sec_timer;          //
@@ -763,7 +763,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 2:
                 {
-                    _530_board_normal_start_reley_4_mops[4] = SW_RELEY_ON_START_4_001_1;
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_normal_start_reley_4_mops[4] = SW_RELEY_ON_START_4_001_1; break;}   // 18v
+                        case 1: {_530_board_normal_start_reley_4_mops[4] = SW_RELEY_ON_START_4_011_1; break;}   // 24v
+                        case 2: {_530_board_normal_start_reley_4_mops[4] = SW_RELEY_ON_START_4_111_1; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 3, 0, 8, _530_board_normal_start_reley_4_mops, 115200, &var_c);             // 3id 530 board
                     if(var_c> 0)
                     {reley_on_cycle++; break;}
@@ -856,6 +861,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 2:
                 {
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_attantion_start_reley_4_mops[4] = SW_RELEY_ON_START_4_001_1; break;}   // 18v
+                        case 1: {_530_board_attantion_start_reley_4_mops[4] = SW_RELEY_ON_START_4_011_1; break;}   // 24v
+                        case 2: {_530_board_attantion_start_reley_4_mops[4] = SW_RELEY_ON_START_4_111_1; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 3, 0, 8, _530_board_attantion_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, attantion
                     if(var_c > 0)
                     {attantion_on_cycle++; break;}
@@ -951,6 +962,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 2:
                 {
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_fire_start_reley_4_mops[4] = SW_RELEY_ON_START_4_001_1; break;}   // 18v
+                        case 1: {_530_board_fire_start_reley_4_mops[4] = SW_RELEY_ON_START_4_011_1; break;}   // 24v
+                        case 2: {_530_board_fire_start_reley_4_mops[4] = SW_RELEY_ON_START_4_111_1; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 3, 0, 8, _530_board_fire_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, fire
                     if(var_c > 0)
                     {fire_on_cycle++; break;}
@@ -1046,6 +1063,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 2:
                 {
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_short_current_start_reley_4_mops[4] = SW_RELEY_ON_START_4_001_1; break;}   // 18v
+                        case 1: {_530_board_short_current_start_reley_4_mops[4] = SW_RELEY_ON_START_4_011_1; break;}   // 24v
+                        case 2: {_530_board_short_current_start_reley_4_mops[4] = SW_RELEY_ON_START_4_111_1; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 3, 0, 8, _530_board_short_current_start_reley_4_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, sc
                     if(var_c > 0)
                     {sc_on_cycle++; break;}
@@ -1127,6 +1150,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 case 0: 
                 {
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_none_mops[4] = 0x0000; break;}   // 18v
+                        case 1: {_530_board_none_mops[4] = 0x0000; break;}   // 24v
+                        case 2: {_530_board_none_mops[4] = 0x0000; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 1, 0, 8, _530_board_none_mops, 115200, &var_a);   // 1id 530 board, all board sc
                     if(var_a > 0)
                     {break_on_cycle++; break;}
@@ -1134,6 +1163,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 1:
                 {
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_none_mops[4] = 0x0000; break;}   // 18v
+                        case 1: {_530_board_none_mops[4] = 0x0000; break;}   // 24v
+                        case 2: {_530_board_none_mops[4] = 0x0000; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 2, 0, 8, _530_board_none_mops, 115200, &var_b);   // 2id 530 board, all board sc
                     if(var_b > 0)
                     {break_on_cycle++; break;}
@@ -1141,6 +1176,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 2:
                 {
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_none_mops[4] = 0x0100; break;}   // 18v
+                        case 1: {_530_board_none_mops[4] = 0x0300; break;}   // 24v
+                        case 2: {_530_board_none_mops[4] = 0x0700; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 3, 0, 8, _530_board_none_mops, 115200, &var_c);   // 3id 530 board, 50/50 start reley 4 turne on, sc
                     if(var_c > 0)
                     {break_on_cycle++; break;}
@@ -1148,6 +1189,12 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 3:
                 {
+                    switch(power_cycle) // the power supply increases with each cycle
+                    {
+                        case 0: {_530_board_none_mops[4] = 0x0000; break;}   // 18v
+                        case 1: {_530_board_none_mops[4] = 0x0000; break;}   // 24v
+                        case 2: {_530_board_none_mops[4] = 0x0000; break;}   // 28v
+                    }
                     mbm_16_flag(usart_a, 4, 0, 8, _530_board_none_mops, 115200, &var_d);   // 4id 530 board, 84 reley turne on 
                     if(var_d > 0)
                     {break_on_cycle = 0; break;}
@@ -1226,7 +1273,6 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             }
             if(power_cycle <= 2)
             {
-//                power_cycle++;
                 mops_service_check_stages = RELEY_ON;
                 break;
             }
