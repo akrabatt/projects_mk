@@ -640,6 +640,10 @@ unsigned short _530_board_only_reley_on_start_4_mops[8] = {NONE_530, NONE_530, N
                                                            SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
 
 
+                                            //===none===//
+unsigned short _530_board_none_mops[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                          NONE_530, NONE_530, NONE_530, NONE_530};
+
                                             //===main array===//
 unsigned short _530_board_mode_mops[8];
 

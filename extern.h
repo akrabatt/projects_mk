@@ -598,6 +598,7 @@ extern unsigned short _530_board_normal_mops[8];
 extern unsigned short _530_board_short_current_mops[8];
 extern unsigned short _530_board_fire_mops[8];
 extern unsigned short _530_board_attantion_mops[8];
+extern unsigned short _530_board_none_mops[8];
 //main arry
 extern unsigned short _530_board_mode_mops[8];
 //start with 4th reley
