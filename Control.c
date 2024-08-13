@@ -657,7 +657,8 @@ enum
     WRITE_BREAK_STATMENT,
     WAIT_SEC_BREAK,
     READ_MOPS_PRE_BREAK,
-    READ_MOPS_BREAK_STATMENT
+    READ_MOPS_BREAK_STATMENT,
+    CHECK_POWER_CYCLE
 }mops_service_check_stages;
 
 short var_a;                    //mbm_16 success end flag
@@ -1211,7 +1212,24 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                     }
                 }
             }
-            mops_service_check_stages = CHECK_START_BUTTON;     // next step
+            mops_service_check_stages++;     // next step
+            break;
+        }
+        case CHECK_POWER_CYCLE:
+        {
+            ++power_cycle;
+            if(power_cycle > 2)
+            {
+                mops_service_check_stages = CHECK_START_BUTTON;
+                power_cycle = 0;
+                break;
+            }
+            if(power_cycle <= 2)
+            {
+//                power_cycle++;
+                mops_service_check_stages = RELEY_ON;
+                break;
+            }
             break;
         }
     }
