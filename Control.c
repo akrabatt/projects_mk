@@ -722,6 +722,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     static unsigned short fire_on_cycle = 0;
     static unsigned short sc_on_cycle = 0;
     static unsigned short break_on_cycle = 0;
+    static unsigned short power_cycle = 0;
     
     // vars for cycles
     unsigned short mops_num_;           // for mops
@@ -761,6 +762,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 case 2:
                 {
+                    _530_board_normal_start_reley_4_mops[4] = SW_RELEY_ON_START_4_001_1;
                     mbm_16_flag(usart_a, 3, 0, 8, _530_board_normal_start_reley_4_mops, 115200, &var_c);             // 3id 530 board
                     if(var_c> 0)
                     {reley_on_cycle++; break;}

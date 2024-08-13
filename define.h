@@ -125,10 +125,31 @@
 #define SW_RELEY_ON_START_4_530_1   0xf8ff
 #define SW_RELEY_ON_START_4_530_2   0xff00
 
-// relay on end 84 reley
+// reley on start 4 reley 001 18v
+#define RELEY_ON_START_4_001_1      0xfff9
+#define RELEY_ON_START_4_001_2      0x00ff
+// swapped reley on start 4 reley 18v
+#define SW_RELEY_ON_START_4_001_1   0xf9ff
+#define SW_RELEY_ON_START_4_001_2   0xff00
+
+// reley on start 4 reley 011 24v
+#define RELEY_ON_START_4_011_1      0xfffb
+#define RELEY_ON_START_4_011_2      0x00ff
+// swapped reley on start 4 reley 24v
+#define SW_RELEY_ON_START_4_011_1   0xfbff
+#define SW_RELEY_ON_START_4_011_2   0xff00
+
+//reley on start 4 reley 111 28v
+#define RELEY_ON_START_4_111_1      0xffff
+#define RELEY_ON_START_4_111_2      0x00ff
+// swapped reley on start 4 reley 28v
+#define SW_RELEY_ON_START_4_111_1   0xffff
+#define SW_RELEY_ON_START_4_111_2   0xff00
+
+// relay on end 83 reley
 #define RELEY_ON_END_84_530_1       0x07ff
 #define RELEY_ON_END_84_530_2       0x0000
-// swapped reley oh end 84 reley
+// swapped reley oh end 83 reley
 #define SW_RELEY_ON_END_84_530_1    0xff07
 #define SW_RELEY_ON_END_84_530_2    0x0000
 
