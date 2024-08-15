@@ -634,29 +634,34 @@ extern union tag_conf_stand
 }conf_stand, conf_stand_sw;
 
 // mops statement struct, show mops statements
-extern struct tag_mops_stand_statment
+extern union tag_mops_stand_statment
 {
-    struct 
-    {
-        unsigned short mops_online       : 1;            // is there connection with module
-        unsigned short mops_online_err   : 1;            // connection error
-        unsigned short mops_offline      : 1;            // mops not connected special
-        unsigned short mops_operable     : 1;            // is the module working properly or not
-        unsigned short mops_not_operable : 1;            // the module is not working properly
-        unsigned short : 11;
-    }mops_statment;
-    unsigned short mops_current_ch_status[8];                   // buffer for the value of the states
     struct
     {
-        unsigned short mops_ch_err_break[8];                   // break(1)
-        unsigned short mops_ch_err_normal[8];                  // normal(2)
-        unsigned short mops_ch_err_attantion[8];               // attantion(4)
-        unsigned short mops_ch_err_fire[8];                    // fire(5)
-        unsigned short mops_ch_err_sc[8];                      // short current(6)
-    }mops_ch_statement;
+        struct 
+        {
+            unsigned short mops_online       : 1;            // is there connection with module
+            unsigned short mops_online_err   : 1;            // connection error
+            unsigned short mops_offline      : 1;            // mops not connected special
+            unsigned short mops_operable     : 1;            // is the module working properly or not
+            unsigned short mops_not_operable : 1;            // the module is not working properly
+            unsigned short : 11;
+        }mops_statment;
+        unsigned short mops_current_ch_status[8];                   // buffer for the value of the states
+        struct
+        {
+            unsigned short mops_ch_err_break[8];                   // break(1)
+            unsigned short mops_ch_err_normal[8];                  // normal(2)
+            unsigned short mops_ch_err_attantion[8];               // attantion(4)
+            unsigned short mops_ch_err_fire[8];                    // fire(5)
+            unsigned short mops_ch_err_sc[8];                      // short current(6)
+        }mops_ch_statement;
+    };
+    unsigned short main_buff[50];
 }mops_stand_statment;
 
 //struct mups array
-extern struct tag_mops_stand_statment MOPS_statment[10];
+extern union tag_mops_stand_statment MOPS_statment[10];
+extern union tag_mops_stand_statment MOPS_statment_sw[10];
 
 #endif // EXTERN_H
