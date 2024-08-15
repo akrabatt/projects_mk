@@ -1269,7 +1269,14 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 mops_service_check_stages = CHECK_START_BUTTON;
                 power_cycle = 0;
-//                swapshort((unsigned short*)MOPS_statment);
+                int i, ii;
+                for(i = 0; i <= 10; i++)
+                {
+                    for(ii = 0; ii <= 50; ii++)
+                    {
+                        MOPS_statment_sw[i].main_buff[ii] = swapshort(MOPS_statment[i].main_buff[ii]);
+                    }
+                }
                 break;
             }
             if(power_cycle <= 2)
