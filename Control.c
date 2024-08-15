@@ -723,7 +723,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     static unsigned short fire_on_cycle = 0;
     static unsigned short sc_on_cycle = 0;
     static unsigned short break_on_cycle = 0;
-    static unsigned short power_cycle = 0;
+    static unsigned short power_cycle = 0;  // 0 - 18v, 1 - 24v, 2 - 28v
     
     // vars for cycles
     unsigned short mops_num_;           // for mops
@@ -1270,7 +1270,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         case CHECK_POWER_CYCLE:
         {
             ++power_cycle;
-            if(power_cycle > 2)
+            if(power_cycle > 2) // end
             {
                 mops_service_check_stages = CHECK_START_BUTTON;
                 power_cycle = 0;
@@ -1284,7 +1284,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 break;
             }
-            if(power_cycle <= 2)
+            if(power_cycle <= 2)    // up power
             {
                 mops_service_check_stages = RELEY_ON;
                 break;
