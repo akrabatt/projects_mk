@@ -825,6 +825,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
                 {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
                     continue;
                 }
@@ -922,6 +923,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
                 {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
                     continue;
                 }
@@ -1023,6 +1025,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
                 {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
                     continue;
                 }
@@ -1124,6 +1127,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
                 {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
                     continue;
                 }
@@ -1243,6 +1247,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 }
                 if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
                 {
+                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
                     continue;
                 }
@@ -1272,7 +1277,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 int i, ii;
                 for(i = 0; i <= 10; i++)
                 {
-                    for(ii = 0; ii <= 50; ii++)
+                    for(ii = 0; ii <= 53; ii++)
                     {
                         MOPS_statment_sw[i].main_buff[ii] = swapshort(MOPS_statment[i].main_buff[ii]);
                     }

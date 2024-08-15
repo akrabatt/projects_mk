@@ -667,12 +667,11 @@ union tag_mops_stand_statment
     {
         struct 
         {
-            unsigned short mops_online       : 1;            // is there connection with module
-            unsigned short mops_online_err   : 1;            // connection error
-            unsigned short mops_offline      : 1;            // mops not connected special
-            unsigned short mops_operable     : 1;            // is the module working properly or not
-            unsigned short mops_not_operable : 1;            // the module is not working properly
-            unsigned short : 11;
+            unsigned short mops_online;                 // is there connection with module
+            unsigned short mops_online_err;             // connection error
+            unsigned short mops_offline;                // mops not connected special
+            unsigned short mops_operable;               // is the module working properly or not
+            unsigned short mops_not_operable;           // the module is not working properly
         }mops_statment;
         unsigned short mops_current_ch_status[8];                   // buffer for the value of the states
         struct
@@ -684,7 +683,7 @@ union tag_mops_stand_statment
             unsigned short mops_ch_err_sc[8];                      // short current(6)
         }mops_ch_statement;
     };
-    unsigned short main_buff[50];
+    unsigned short main_buff[53];
 }mops_stand_statment;
 
 //struct mups array
