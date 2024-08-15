@@ -91,7 +91,7 @@
 // healp led toggle
 #define LED_TOGGLE          PORTEbits.RE1 = LATEbits.LATE1 ^ 1;
 
-/////////////////		const for 530 board 		//////////////////////////
+/////////////////		const for 530 board MOPS		//////////////////////////
 
 // attantion
 #define ATTANTION_530_1             0x9249
@@ -175,6 +175,11 @@
 #define END_WRITE_STAND_CONF_AREA      9900
 #define READ_STAND_CONF_AREA           ((start_reg>=START_READ_STAND_CONF_AREA)&&(last_reg<=END_READ_STAND_CONF_AREA))
 #define WRITE_STAND_CONF_AREA          ((start_reg>=START_WRITE_STAND_CONF_AREA)&&(last_reg<=END_WRITE_STAND_CONF_AREA))
+
+/*stand read mops area*/
+#define START_READ_STAND_MOPS_AREA      10000
+#define END_READ_STAND_MOPS_AREA        10900
+#define READ_STAND_MOPS_AREA            ((start_reg>=START_READ_STAND_MOPS_AREA)&&(last_reg<=END_READ_STAND_MOPS_AREA))
     
 /*read MOPS*/
 #define START_READ_MUPS     5000
