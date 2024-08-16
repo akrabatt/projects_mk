@@ -682,8 +682,14 @@ union tag_mops_stand_statment
             unsigned short mops_ch_err_fire[8];                    // fire(5)
             unsigned short mops_ch_err_sc[8];                      // short current(6)
         }mops_ch_statement;
+        struct
+        {
+            unsigned short mops_18v_error;
+            unsigned short mops_24v_error;
+            unsigned short mops_28v_error;
+        }mops_power_supply_error;
     };
-    unsigned short main_buff[53];
+    unsigned short main_buff[56];
 }mops_stand_statment;
 
 //struct mups array

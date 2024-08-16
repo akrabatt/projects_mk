@@ -724,6 +724,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     static unsigned short sc_on_cycle = 0;
     static unsigned short break_on_cycle = 0;
     static unsigned short power_cycle = 0;  // 0 - 18v, 1 - 24v, 2 - 28v
+    static unsigned short supply_err_buff[3];
     
     // vars for cycles
     unsigned short mops_num_;           // for mops
@@ -1269,24 +1270,41 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case CHECK_POWER_CYCLE:
         {
-            ++power_cycle;
-            if(power_cycle > 2) // end
+            // check errors on current power level
+            int check_power;
+            for(check_power = 0; check_power <=10; check_power++)
             {
-                mops_service_check_stages = CHECK_START_BUTTON;
+                if(MOPS_statment[check_power].mops_statment.mops_not_operable == 1)
+                {
+                    switch(power_cycle)
+                    {
+                        case 0:{supply_err_buff[0] = 1; break;}
+                        case 1:{supply_err_buff[1] = 1; break;}
+                        case 2:{supply_err_buff[2] = 1; break;}
+                    }
+                }
+            }
+            ++power_cycle;  // increase the power supply
+            // EXITE
+            if(power_cycle > 2) // end if power supply == 28v
+            {
+                mops_service_check_stages = CHECK_START_BUTTON; // end
                 power_cycle = 0;
                 int i, ii;
-                for(i = 0; i <= 10; i++)
+                // copy the buffer for data swap to transfer to the top
+                for(i = 0; i <= 10; i++)    
                 {
-                    for(ii = 0; ii <= 53; ii++)
+                    for(ii = 0; ii <= 56; ii++)
                     {
                         MOPS_statment_sw[i].main_buff[ii] = swapshort(MOPS_statment[i].main_buff[ii]);
                     }
                 }
                 break;
             }
+            // NEXT POWER STEP
             if(power_cycle <= 2)    // up power
             {
-                mops_service_check_stages = RELEY_ON;
+                mops_service_check_stages = RELEY_ON;   // start again with apped supply
                 break;
             }
             break;
