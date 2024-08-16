@@ -724,7 +724,18 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     static unsigned short sc_on_cycle = 0;
     static unsigned short break_on_cycle = 0;
     static unsigned short power_cycle = 0;  // 0 - 18v, 1 - 24v, 2 - 28v
-    static unsigned short supply_err_buff[3];
+    //===//
+    static union 
+    {
+        struct
+        {
+            unsigned short _18v_err;
+            unsigned short _24v_err;
+            unsigned short _28v_err;
+        };
+        unsigned short sup_buff[3];
+    }supply_err_buff[10];
+    //==//
     
     // vars for cycles
     unsigned short mops_num_;           // for mops
@@ -1278,9 +1289,18 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 {
                     switch(power_cycle)
                     {
-                        case 0:{supply_err_buff[0] = 1; break;}
-                        case 1:{supply_err_buff[1] = 1; break;}
-                        case 2:{supply_err_buff[2] = 1; break;}
+                        case 0:{supply_err_buff[check_power]._18v_err = 1; break;}
+                        case 1:{supply_err_buff[check_power]._24v_err = 1; break;}
+                        case 2:{supply_err_buff[check_power]._28v_err = 1; break;}
+                    }
+                }
+                if(MOPS_statment[check_power].mops_statment.mops_not_operable == 0)
+                {
+                    switch(power_cycle)
+                    {
+                        case 0:{supply_err_buff[check_power]._18v_err = 0; break;}
+                        case 1:{supply_err_buff[check_power]._24v_err = 0; break;}
+                        case 2:{supply_err_buff[check_power]._28v_err = 0; break;}
                     }
                 }
             }
@@ -1288,6 +1308,17 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             // EXITE
             if(power_cycle > 2) // end if power supply == 28v
             {
+                int j, jj;
+                // copy supply errors to main struct
+                for(j = 0; j <= 10; j++)
+                {
+                    memcpy(&MOPS_statment[j].mops_power_supply_error, &supply_err_buff[j], sizeof(supply_err_buff[j]));
+                }
+                // clearning supply error buffer
+                for(jj = 0; jj <= 10; jj++)
+                {
+                    memset(&supply_err_buff[jj], 0, sizeof(supply_err_buff[jj]));
+                }
                 mops_service_check_stages = CHECK_START_BUTTON; // end
                 power_cycle = 0;
                 int i, ii;
