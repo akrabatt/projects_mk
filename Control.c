@@ -748,6 +748,8 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             if(conf_stand.stand_commands.start_check_mops > 0) 
             {
                 mops_service_check_stages++; 
+                conf_stand.stand_commands.mops_diagnostics_in_progress = 1;
+                conf_stand_sw.stand_commands.mops_diagnostics_in_progress = 0x0100;
                 conf_stand.stand_commands.start_check_mops = 0; 
                 conf_stand_sw.stand_commands.start_check_mops = 0;
                 break;
@@ -1330,6 +1332,8 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                         MOPS_statment_sw[i].main_buff[ii] = swapshort(MOPS_statment[i].main_buff[ii]);
                     }
                 }
+                conf_stand.stand_commands.mops_diagnostics_in_progress = 0;
+                conf_stand_sw.stand_commands.mops_diagnostics_in_progress = 0;
                 break;
             }
             // NEXT POWER STEP

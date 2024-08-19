@@ -702,7 +702,8 @@ union tag_conf_stand
     struct
     {
        unsigned short start_check_mops;
-       unsigned short not_usable[99];
+       unsigned short mops_diagnostics_in_progress;
+       unsigned short not_usable[98];
     }stand_commands;
     unsigned short comm_buff[100];
 }conf_stand, conf_stand_sw;     // conf_stand - normal data
