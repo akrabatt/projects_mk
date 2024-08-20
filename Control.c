@@ -1401,11 +1401,15 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 enum 
 {
     CHECK_BUTTON_MUPS,              //
-    WRITE_CONF_STRAT_2              //
+    TEST_READ_MODULES,              //
+    WRITE_STR_2,
+    TEST_READ_MODULES_2
 }mups_service_stages;
 
 unsigned short var_flag_1 = 0;
 unsigned short var_flag_2 = 0;
+
+unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
 
 
 /**
@@ -1430,14 +1434,31 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
             }
             else{mups_service_stages = 0; break;}
         }
-        case WRITE_CONF_STRAT_2:
+        case TEST_READ_MODULES:
         {
             start_var_sec_timer = 1;
             _var_sec(1000);
             if(end_var_sec_timer == 0)
             {
-                MUPS_S_control_flag(usart_e, &var_flag_2);
-            }else {var_flag_2 = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+                MUPS_S_control_flag(usart_e, &var_flag_1);
+            }else {var_flag_1 = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case WRITE_STR_2:
+        {
+            mbm_16_flag(usart_e, 1, 212, 4, mups_strat_buff, 115200, &var_flag_2);
+            if(var_flag_2 > 0){var_flag_2 = 0; mups_service_stages++; break;}
+            else{mups_service_stages = WRITE_STR_2; break;}
+            break;
+        }
+        case TEST_READ_MODULES_2:
+        {
+            start_var_sec_timer = 1;
+            _var_sec(1000);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e, &var_flag_1);
+            }else {var_flag_1 = 0; mups_service_stages = 0; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
     }
