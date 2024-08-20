@@ -629,7 +629,9 @@ extern union tag_conf_stand
     {
        unsigned short start_check_mops;
        unsigned short mops_diagnostics_in_progress;
-       unsigned short not_usable[98];
+       unsigned short start_check_mups;
+       unsigned short mups_diagnostics_in_progress;
+       unsigned short not_usable[96];
     }stand_commands;
     unsigned short comm_buff[100];
 }conf_stand, conf_stand_sw;     // conf_stand - normal data

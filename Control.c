@@ -266,6 +266,56 @@ unsigned short cc;
  * @param usart - tag_usartm
  * @param stg - var for stages
  */
+void MUPS_S_control_flag(struct tag_usartm * usart, unsigned short *flag)
+{   
+unsigned short cc;
+    Stand_sw.mups_timeout_err [mups_num] = swapshort (Stand.mups_timeout_err [mups_num]);
+    Stand_sw.mups_crc_err [mups_num] = swapshort (Stand.mups_crc_err [mups_num]);    
+    Stand_sw.mups_coll_1_err [mups_num] = swapshort (Stand.mups_coll_1_err [mups_num]);    
+    Stand_sw.mups_coll_2_err [mups_num] = swapshort (Stand.mups_coll_2_err [mups_num]);    
+    Stand_sw.mups_coll_3_err [mups_num] = swapshort (Stand.mups_coll_3_err [mups_num]); 
+    
+    switch (mups_stat) 
+        {
+        case INIT: {usart->mb_status.master_start = 1; mups_num = 0; mups_stat++; break;}
+        case START_MM: { mups_stat++; break; }
+
+        case READ_CYCLE:    {
+            if (mups_num >= 10) 
+            {++(*flag); mups_num = 0; mups_stat++ ; break;}
+            if (Stand.active_mups [mups_num] != 0) { mbm_03_str (usart, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
+            else {mups_num++;}
+            if (usart->mb_status.mbm_data_rdy == 1)  {
+                for (cc = 0; cc < 29; cc++)    { MUPS_S_arr_sw [mups_num].main_area [cc] = swapshort (MUPS_S_arr [mups_num].main_area [cc]); }
+                usart->mb_status.mbm_data_rdy = 0; mups_num++; 
+                }
+            if (usart->mb_status.master_timeout_flag == 1)  
+                {MUPS_S_arr [mups_num].timeout_err++; Stand.mups_timeout_err [mups_num]++; usart->mb_status.master_timeout_flag = 0;mups_num++; }    
+            if (usart->mb_status.crc_error == 1)    {MUPS_S_arr [mups_num].crc_err++; Stand.mups_crc_err [mups_num]++; usart->mb_status.crc_error = 0; mups_num++; }
+            if (usart->mb_status.coll_1 == 1)       {MUPS_S_arr [mups_num].coll_1_err++; Stand.mups_coll_1_err [mups_num]++; usart->mb_status.coll_1 = 0; mups_num++; }
+            if (usart->mb_status.coll_2 == 1)       {MUPS_S_arr [mups_num].coll_2_err++; Stand.mups_coll_2_err [mups_num]++; usart->mb_status.coll_2 = 0; mups_num++; }
+            if (usart->mb_status.coll_3 == 1)       {MUPS_S_arr [mups_num].coll_3_err++; Stand.mups_coll_3_err [mups_num]++; usart->mb_status.coll_3 = 0; mups_num++; }
+            break;}
+
+        case CHECK_CYCLE:  {  mups_done = 1;  mups_stat = START_MM;   break;}        
+
+        default : {mups_stat = START_MM; break;}
+        }
+
+    Modbus.buf [13] = mups_stat;  
+    Modbus.buf [14] = mups_num; 
+    Modbus.buf [15] = usart->mb_status.mbm_data_rdy;
+    Modbus.buf [16] = usart->mb_status.master_timeout_flag;
+}
+
+
+/**
+ * @brief this function reads modules and, if the last module is read, 
+ * increments the value of stages
+ * 
+ * @param usart - tag_usartm
+ * @param stg - var for stages
+ */
 void MUPS_S_control_stg(struct tag_usartm * usart)
 {   
 unsigned short cc;
@@ -282,7 +332,7 @@ unsigned short cc;
 
         case READ_CYCLE:    {
             if (mups_num >= 10) 
-            {incr_stages++; mups_num = 0; mups_stat++ ; break;}
+            {++incr_stages; mups_num = 0; mups_stat++ ; break;}
             if (Stand.active_mups [mups_num] != 0) { mbm_03_str (usart, (mups_num + 1), 200, 29, (unsigned short * ) &MUPS_S_arr[mups_num], 115200); }
             else {mups_num++;}
             if (usart->mb_status.mbm_data_rdy == 1)  {
@@ -360,36 +410,36 @@ enum {READ_INPUT_SLAVE_ID = 0,
  * slave_id = 521 reg(Stand.buf[20]), mups_strategy = 522 reg(Stand.buf[21])
  * 
  */
-void change_mups_strategy_cmmon(struct tag_usartm * usart)
-{
-    switch(stages)
-    {   
-        case READ_INPUT_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
-        case READ_INPUT_MUPS_STRATEGY: 
-            {
-                strategy_num = Stand.buf[21]; 
-                if(strategy_num > 0 && strategy_num < 4){strategy_set_flag = 0; stages++; strategy_num_fix = strategy_num;} 
-                break;
-            }
-        case READ_MODULS_INFO: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages++; break;} break;}
-        case CHECK_STRATEGY: 
-            {
-                if((strategy_num == MUPS_S_arr[slave_id - 1].main_area[12]) && (strategy_num != 0) && (strategy_num_fix != 0)) 
-                    {stages = READ_INPUT_SLAVE_ID; break;}
-                else{stages++; break;}
-            }
-        case CONFIG_MEMORY: {
-            switch(strategy_num) 
-            {
-                case 1: {memcpy(mups_strategy, mups_1_strategy, sizeof(mups_1_strategy)); stages++; break;}
-                case 2: {memcpy(mups_strategy, mups_2_strategy, sizeof(mups_2_strategy)); stages++; break;}
-                case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); stages++; break;}
-                default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); stages++; break;}
-            }
-        }
-        case CONFIG_MUPS: {mbm_16(usart, slave_id, 212, 4, mups_strategy, 115200); stages = 0; strategy_set_flag++; break;}
-    }
-}
+//void change_mups_strategy_cmmon(struct tag_usartm * usart)
+//{
+//    switch(stages)
+//    {   
+//        case READ_INPUT_SLAVE_ID: {slave_id = Stand.buf[20]; if(slave_id > 0){stages++;} break;}
+//        case READ_INPUT_MUPS_STRATEGY: 
+//            {
+//                strategy_num = Stand.buf[21]; 
+//                if(strategy_num > 0 && strategy_num < 4){strategy_set_flag = 0; stages++; strategy_num_fix = strategy_num;} 
+//                break;
+//            }
+//        case READ_MODULS_INFO: {MUPS_S_control_stg (&usart5m); if(incr_stages > 0){incr_stages = 0; stages++; break;} break;}
+//        case CHECK_STRATEGY: 
+//            {
+//                if((strategy_num == MUPS_S_arr[slave_id - 1].main_area[12]) && (strategy_num != 0) && (strategy_num_fix != 0)) 
+//                    {stages = READ_INPUT_SLAVE_ID; break;}
+//                else{stages++; break;}
+//            }
+//        case CONFIG_MEMORY: {
+//            switch(strategy_num) 
+//            {
+//                case 1: {memcpy(mups_strategy, mups_1_strategy, sizeof(mups_1_strategy)); stages++; break;}
+//                case 2: {memcpy(mups_strategy, mups_2_strategy, sizeof(mups_2_strategy)); stages++; break;}
+//                case 3: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); stages++; break;}
+//                default: {memcpy(mups_strategy, mups_3_strategy, sizeof(mups_3_strategy)); stages++; break;}
+//            }
+//        }
+//        case CONFIG_MUPS: {mbm_16(usart, slave_id, 212, 4, mups_strategy, 115200); stages = 0; strategy_set_flag++; break;}
+//    }
+//}
 
 
 // channels strategy
@@ -1342,6 +1392,54 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
                 mops_service_check_stages = RELEY_ON;   // start again with apped supply
                 break;
             }
+            break;
+        }
+    }
+}
+
+// vars for mups check
+enum 
+{
+    CHECK_BUTTON_MUPS,              //
+    WRITE_CONF_STRAT_2              //
+}mups_service_stages;
+
+unsigned short var_flag_1 = 0;
+unsigned short var_flag_2 = 0;
+
+
+/**
+ * 
+ * @param usart_d
+ * @param usart_e
+ */
+void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e)
+{
+    switch(mups_service_stages)
+    {
+        case CHECK_BUTTON_MUPS:
+        {
+            if(conf_stand.stand_commands.start_check_mups > 0) 
+            {
+                mups_service_stages++; 
+                conf_stand.stand_commands.mups_diagnostics_in_progress = 1;
+                conf_stand_sw.stand_commands.mups_diagnostics_in_progress= 0x0100;
+                conf_stand.stand_commands.start_check_mups = 0; 
+                conf_stand_sw.stand_commands.start_check_mups = 0;
+                break;
+            }
+            else{mups_service_stages = 0; break;}
+        }
+        case WRITE_CONF_STRAT_2:
+        {
+//            mbm_16_flag(usart_e, 1, 212, 4, 2, 115200, &var_flag_1);
+//            if(var_flag_1 > 0)
+//            {var_flag_1 = 0; mups_service_stages = 0; break;}
+//            else{mups_service_stages = WRITE_CONF_STRAT_2;}
+            MUPS_S_control_flag(usart_e, &var_flag_2);
+            if(var_flag_2 > 0)
+            {var_flag_2 = 0; mups_service_stages = 0; break;}
+            else{mups_service_stages = WRITE_CONF_STRAT_2; break;}
             break;
         }
     }
