@@ -1432,14 +1432,12 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
         }
         case WRITE_CONF_STRAT_2:
         {
-//            mbm_16_flag(usart_e, 1, 212, 4, 2, 115200, &var_flag_1);
-//            if(var_flag_1 > 0)
-//            {var_flag_1 = 0; mups_service_stages = 0; break;}
-//            else{mups_service_stages = WRITE_CONF_STRAT_2;}
-            MUPS_S_control_flag(usart_e, &var_flag_2);
-            if(var_flag_2 > 0)
-            {var_flag_2 = 0; mups_service_stages = 0; break;}
-            else{mups_service_stages = WRITE_CONF_STRAT_2; break;}
+            start_var_sec_timer = 1;
+            _var_sec(1000);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e, &var_flag_2);
+            }else {var_flag_2 = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
     }
