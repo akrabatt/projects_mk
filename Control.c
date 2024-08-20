@@ -1400,14 +1400,13 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 // vars for mups check
 enum 
 {
-    CHECK_BUTTON_MUPS,              //
-    TEST_READ_MODULES,              //
-    WRITE_STR_2,
+    CHECK_BUTTON_MUPS,              // start check service cycle if button turned on
+    TEST_READ_MODULES,              // read mupses configurations
+    WRITE_STR_2,                    // write to all mups strategy 2
     TEST_READ_MODULES_2
 }mups_service_stages;
 
-unsigned short var_flag_1 = 0;
-unsigned short var_flag_2 = 0;
+
 
 unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
 
@@ -1419,6 +1418,10 @@ unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
  */
 void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e)
 {
+    static unsigned short read_mups_conf = 0;
+    static unsigned short mups_mbm_flag = 0;
+    static unsigned short mups_id = 0;
+    
     switch(mups_service_stages)
     {
         case CHECK_BUTTON_MUPS:
@@ -1440,15 +1443,23 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
             _var_sec(1000);
             if(end_var_sec_timer == 0)
             {
-                MUPS_S_control_flag(usart_e, &var_flag_1);
-            }else {var_flag_1 = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+                MUPS_S_control_flag(usart_e, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
         case WRITE_STR_2:
         {
-            mbm_16_flag(usart_e, 1, 212, 4, mups_strat_buff, 115200, &var_flag_2);
-            if(var_flag_2 > 0){var_flag_2 = 0; mups_service_stages++; break;}
-            else{mups_service_stages = WRITE_STR_2; break;}
+            if(Stand.active_mups[mups_id] != 0 && mups_id <= 10)
+                {mups_mbm_flag = 0; mbm_16_flag(usart_e, (mups_id + 1), 212, 4, mups_strat_buff, 115200, &mups_mbm_flag);} 
+            else 
+                {mups_id++; /*mups_service_stages = WRITE_STR_2; break;*/}
+            if(mups_mbm_flag > 0 && mups_id == 10)
+                {mups_id = 0; mups_mbm_flag = 0; mups_service_stages = TEST_READ_MODULES_2; break;}
+            if(mups_mbm_flag > 0 && mups_id != 10)
+                {++mups_id; /*mups_mbm_flag = 0;*/ mups_service_stages = WRITE_STR_2; break;}
+            if(mups_mbm_flag == 0)
+                {mups_service_stages = WRITE_STR_2; break;}
+//            else{mups_service_stages = WRITE_STR_2; break;}
             break;
         }
         case TEST_READ_MODULES_2:
@@ -1457,8 +1468,8 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
             _var_sec(1000);
             if(end_var_sec_timer == 0)
             {
-                MUPS_S_control_flag(usart_e, &var_flag_1);
-            }else {var_flag_1 = 0; mups_service_stages = 0; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+                MUPS_S_control_flag(usart_e, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = 0; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
     }
