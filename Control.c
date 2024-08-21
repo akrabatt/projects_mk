@@ -683,6 +683,7 @@ void _500_msec()
     }
 }
 
+//====== MOPS AREA ======//
 
 // vars for mops_service_check
 enum 
@@ -1396,14 +1397,79 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
     }
 }
-
+//====== MUPS AREA ======//
+/**
+ * @brief this function checks the status of the connection to the module, as 
+ * well as the status of the channels
+ * @param mups_num_ mupses id
+ */
+void check_mups_online_status(unsigned short mups_num_, unsigned short ch_strategy)
+{
+    if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] == 0)  // ActivMUPS == 1 && connection with modul == 1
+    {
+        MUPS_statment[mups_num_].mups_statment.mups_online = 1;
+        memcpy(MUPS_statment[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
+    }
+    if(Stand.active_mops[mups_num_] > 0 && Stand.mops_timeout_err[mups_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+    {
+        MOPS_statment[mups_num_].mops_statment.mops_online_err = 1;
+        MOPS_statment[mups_num_].mops_statment.mops_online = 0;
+        MOPS_statment[mups_num_].mops_statment.mops_not_operable = 1;
+        continue;
+    }
+    if(Stand.active_mops[mups_num_] == 0)       // ActivMOPS == 0
+    {
+        MOPS_statment[mups_num_].mops_statment.mops_online = 0;
+        MOPS_statment[mups_num_].mops_statment.mops_offline = 1;
+        continue;
+    }
+    for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
+    {
+        if(MOPS_statment[mops_num_].mops_current_ch_status[mups_num_] != ch_strategy)    //check ch status
+        {
+            switch(ch_strategy)
+            {
+                case 1: 
+                {
+                    MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_off[ch_num_] = 1;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                }
+                case 2: 
+                {
+                    MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_off[ch_num_] = 1;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                }
+                case 3: 
+                {
+                    MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_sc_ch_off[ch_num_] = 1;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                }
+                case 4: 
+                {
+                    MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_on[ch_num_] = 1;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                }
+                case 5: 
+                {
+                    MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[ch_num_] = 1;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                }
+                case 6: 
+                {
+                    MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_on[ch_num_] = 1;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                }
+            }
+        }
+    }
+}
 // vars for mups check
 enum 
 {
     CHECK_BUTTON_MUPS,              // start check service cycle if button turned on
     TEST_READ_MODULES,              // read mupses configurations
     WRITE_STR_2,                    // write to all mups strategy 2
-    TEST_READ_MODULES_2
+    TEST_READ_MODULES_2             // read again all modules
 }mups_service_stages;
 
 
