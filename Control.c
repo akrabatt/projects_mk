@@ -1527,6 +1527,7 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
             }else {read_mups_conf = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; /*check_mups_online_status(1, 1)*/; break;}
+            mups_service_stages = TEST_READ_MODULES; ??????????
             break;
         }
         case WRITE_STR_2:
