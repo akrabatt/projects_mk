@@ -1401,31 +1401,36 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 /**
  * @brief this function checks the status of the connection to the module, as 
  * well as the status of the channels
- * @param mups_num_ mupses id
+ * @param mups_num_ mupses id 
+ * @param ch_strategy it is necessary to substitute the channel strategy number
+ * @param just_check_online (0 - The function is just to check whether the module 
+ * is online or not) (1 - full-fledged verification with channels)
  */
-void check_mups_online_status(unsigned short mups_num_, unsigned short ch_strategy)
+void check_mups_online_status(unsigned short mups_num_, unsigned short ch_strategy, unsigned short just_check_online)
 {
     if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] == 0)  // ActivMUPS == 1 && connection with modul == 1
     {
         MUPS_statment[mups_num_].mups_statment.mups_online = 1;
+        if(just_check_online == 0){return;}  // just check online end function
         memcpy(MUPS_statment[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
     }
-    if(Stand.active_mops[mups_num_] > 0 && Stand.mops_timeout_err[mups_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+    if(Stand.active_mops[mups_num_] > 0 && Stand.mops_timeout_err[mups_num_] > 0)   // ActivMUPS == 1 && connection with modul == 0
     {
         MOPS_statment[mups_num_].mops_statment.mops_online_err = 1;
         MOPS_statment[mups_num_].mops_statment.mops_online = 0;
         MOPS_statment[mups_num_].mops_statment.mops_not_operable = 1;
-        continue;
+        return;
     }
     if(Stand.active_mops[mups_num_] == 0)       // ActivMOPS == 0
     {
         MOPS_statment[mups_num_].mops_statment.mops_online = 0;
         MOPS_statment[mups_num_].mops_statment.mops_offline = 1;
-        continue;
+        return;
     }
-    for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
+    unsigned short ch_num_;
+    for(ch_num_ = 0; ch_num_ <= 4; ch_num_++)   // start of the verification cycle for each channel
     {
-        if(MOPS_statment[mops_num_].mops_current_ch_status[mups_num_] != ch_strategy)    //check ch status
+        if(MOPS_statment[mups_num_].mops_current_ch_status[mups_num_] != ch_strategy)    //check ch status
         {
             switch(ch_strategy)
             {
@@ -1433,35 +1438,42 @@ void check_mups_online_status(unsigned short mups_num_, unsigned short ch_strate
                 {
                     MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_off[ch_num_] = 1;
                     MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    break;
                 }
                 case 2: 
                 {
                     MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_off[ch_num_] = 1;
                     MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    break;
                 }
                 case 3: 
                 {
                     MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_sc_ch_off[ch_num_] = 1;
                     MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    break;
                 }
                 case 4: 
                 {
                     MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_on[ch_num_] = 1;
                     MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    break;
                 }
                 case 5: 
                 {
                     MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[ch_num_] = 1;
                     MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    break;
                 }
                 case 6: 
                 {
                     MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_on[ch_num_] = 1;
                     MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    break;
                 }
             }
         }
     }
+    return;
 }
 // vars for mups check
 enum 
