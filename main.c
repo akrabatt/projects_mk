@@ -19,6 +19,8 @@ int main(void)
 //            change_mups_strategy_separately(&usart2m);
 //            control_mups_reley(&usart2m);
             mups_service_check(&usart4m, &usart2m);
+//            MUPS_S_control_flag(&usart2m, &iiii);
+//            MOPS_S_control(&usart1m);
             // u1
 //            MOPS_S_control(&usart1m);
             // u4
