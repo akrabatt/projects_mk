@@ -876,8 +876,10 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             memset(MOPS_statment, 0, sizeof(MOPS_statment));    //clear MOPS_statment
             for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
             {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
                 {
+                    Stand.mops_timeout_err[mops_num_] = 0;
+                    Stand_sw.mops_timeout_err[mops_num_] = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_online = 1;
                     memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
                 }
@@ -974,8 +976,10 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         {
             for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
             {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
                 {
+                    Stand.mops_timeout_err[mops_num_] = 0;
+                    Stand_sw.mops_timeout_err[mops_num_] = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_online = 1;
                     memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
                 }
@@ -1076,8 +1080,10 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         {
             for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
             {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
                 {
+                    Stand.mops_timeout_err[mops_num_] = 0;
+                    Stand_sw.mops_timeout_err[mops_num_] = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_online = 1;
                     memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
                 }
@@ -1178,8 +1184,10 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         {
             for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
             {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
                 {
+                    Stand.mops_timeout_err[mops_num_] = 0;
+                    Stand_sw.mops_timeout_err[mops_num_] = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_online = 1;
                     memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
                 }
@@ -1298,8 +1306,10 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         {
             for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
             {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] == 0)  // ActivMOPS == 1 && connection with modul == 1
+                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
                 {
+                    Stand.mops_timeout_err[mops_num_] = 0;
+                    Stand_sw.mops_timeout_err[mops_num_] = 0;
                     MOPS_statment[mops_num_].mops_statment.mops_online = 1;
                     memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
                 }
@@ -1411,8 +1421,10 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
     unsigned short mups_num_ = 0;
     for(mups_num_ = 0; mups_num_ <= 9; mups_num_++)
     {
-        if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] == 0)  // ActivMUPS == 1 && connection with modul == 1
+        if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] <= 1)  // ActivMUPS == 1 && connection with modul == 1
         {
+            Stand.mups_timeout_err[mups_num_] = 0;
+            Stand_sw.mups_timeout_err[mups_num_] = 0;
             MUPS_statment[mups_num_].mups_statment.mups_online = 1;
             if(just_check_online == 0){continue;}  // just check online end function
             memcpy(MUPS_statment[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
