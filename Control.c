@@ -1546,12 +1546,12 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
         {
             check_mups_online_status(1, 1); 
             if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READ_MODULES_2; break;}
-            if(Stand.active_mups[mups_id] != 0)
+            if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
                 {mups_mbm_flag = 0; mbm_16_flag(usart_e, (mups_id + 1), 212, 4, mups_strat_buff, 115200, &mups_mbm_flag);} 
             else 
                 {mups_id++; /*mups_service_stages = WRITE_STR_2; break;*/}
-            if(mups_mbm_flag > 0){mups_id++; mups_service_stages = WRITE_STR_2; break;}
-            
+            if(mups_mbm_flag > 0)
+            {mups_id++; mups_service_stages = WRITE_STR_2; break;}
             break;
         }
         case TEST_READ_MODULES_2:
