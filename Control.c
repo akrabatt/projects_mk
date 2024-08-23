@@ -771,7 +771,7 @@ void check_mops_online_status(unsigned short ch_statment, unsigned short just_ch
 {
     unsigned short mops_num_ = 0;
     size_t mops_num = sizeof(Stand.active_mops)/sizeof(Stand.active_mops[0]);
-    for(mops_num_ = 0; mops_num_ <= mops_num; mops_num_++)
+    for(mops_num_ = 0; mops_num_ < mops_num; mops_num_++)
     {
         if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
         {
@@ -829,7 +829,7 @@ void check_mops_online_status(unsigned short ch_statment, unsigned short just_ch
         }
         unsigned short ch_num_;
         size_t ch_num = sizeof(MOPS_statment[mops_num_].mops_current_ch_status)/sizeof(MOPS_statment[mops_num_].mops_current_ch_status[0]);
-        for(ch_num_ = 0; ch_num_ <= ch_num; ch_num_++)   // start of the verification cycle for each channel
+        for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
         {
             if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != ch_statment)    //check ch status
             {
@@ -847,19 +847,19 @@ void check_mops_online_status(unsigned short ch_statment, unsigned short just_ch
                         MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
-                    case 3: 
+                    case 4: 
                     {
                         MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
                         MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
-                    case 4: 
+                    case 5: 
                     {
                         MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 1;
                         MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
-                    case 5: 
+                    case 6: 
                     {
                         MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 1;
                         MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
@@ -904,8 +904,8 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     //==//
     
     // vars for cycles
-    unsigned short mops_num_;           // for mops
-    unsigned short ch_num_;             // for chnl in mops
+    //unsigned short mops_num_;           // for mops
+    //unsigned short ch_num_;             // for chnl in mops
     
     switch(mops_service_check_stages)
     {
@@ -989,37 +989,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         case READ_MOPS_CONNACTION_STATMENT:     // check connection module and normal statment
         {
             memset(MOPS_statment, 0, sizeof(MOPS_statment));    //clear MOPS_statment
-            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
-            {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
-                {
-                    Stand.mops_timeout_err[mops_num_] = 0;
-                    Stand_sw.mops_timeout_err[mops_num_] = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
-                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
-                }
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    continue;
-                }
-                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
-                    continue;
-                }
-                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
-                {
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 2)    //check ch status
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_normal[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    }
-                }
-            }
+            check_mops_online_status(2, 1); // check normal
             mops_service_check_stages++;     // next step
             break;
         }
@@ -1089,41 +1059,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_ATTANTION_STATMENT:  // check attantion statment 
         {
-            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
-            {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
-                {
-                    Stand.mops_timeout_err[mops_num_] = 0;
-                    Stand_sw.mops_timeout_err[mops_num_] = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
-                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
-                }
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    continue;
-                }
-                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
-                    continue;
-                }
-                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
-                {
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 4)    //check ch status
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    }
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 4)
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 0;
-                    }
-                }
-            }
+            check_mops_online_status(4, 1); // check attantion
             mops_service_check_stages++;     // next step
             break;
         }
@@ -1193,41 +1129,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_FIRE_STATMENT:
         {
-            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
-            {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
-                {
-                    Stand.mops_timeout_err[mops_num_] = 0;
-                    Stand_sw.mops_timeout_err[mops_num_] = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
-                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
-                }
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    continue;
-                }
-                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
-                    continue;
-                }
-                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
-                {
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 5)    //check ch status
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    }
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 5)
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 0;
-                    }
-                }
-            }
+            check_mops_online_status(5, 1); // check fire
             mops_service_check_stages = WRITE_SC_STATMENT;     // next step
             break;
         }
@@ -1297,41 +1199,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_SC_STATMENT:
         {
-            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
-            {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
-                {
-                    Stand.mops_timeout_err[mops_num_] = 0;
-                    Stand_sw.mops_timeout_err[mops_num_] = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
-                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
-                }
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    continue;
-                }
-                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
-                    continue;
-                }
-                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
-                {
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 6)    //check ch status
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    }
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 6)
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 0;
-                    }
-                }
-            }
+            check_mops_online_status(6, 1); // check sc
             mops_service_check_stages++;     // next step
             break;
         }
@@ -1419,41 +1287,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_BREAK_STATMENT:
         {
-            for(mops_num_ = 0; mops_num_ <= 10; mops_num_++)
-            {
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
-                {
-                    Stand.mops_timeout_err[mops_num_] = 0;
-                    Stand_sw.mops_timeout_err[mops_num_] = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 1;
-                    memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
-                }
-                if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    continue;
-                }
-                if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
-                {
-                    MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-                    MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
-                    continue;
-                }
-                for(ch_num_ = 0; ch_num_ <= 8; ch_num_++)   // start of the verification cycle for each channel
-                {
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != 1)    //check ch status
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_break[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
-                    }
-                    if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] == 1)
-                    {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_break[ch_num_] = 0;
-                    }
-                }
-            }
+            check_mops_online_status(1, 1); // check break
             mops_service_check_stages++;     // next step
             break;
         }

@@ -18,7 +18,7 @@ int main(void)
             // u2
 //            change_mups_strategy_separately(&usart2m);
 //            control_mups_reley(&usart2m);
-            mups_service_check(&usart4m, &usart2m);
+//            mups_service_check(&usart4m, &usart2m);
 //            MUPS_S_control_flag(&usart2m, &iiii);
 //            MOPS_S_control(&usart1m);
             // u1
@@ -27,7 +27,7 @@ int main(void)
 //            board_530_mode_common(&usart4m);
             // u5
 //            board_530_mode_common(&usart5m);
-//            mops_service_check(&usart4m, &usart5m, &usart1m);
+            mops_service_check(&usart4m, &usart5m, &usart1m);
             
             mbm_sync = 0;
         }
