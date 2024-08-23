@@ -5,6 +5,8 @@
 #include <string.h>
 #include "define.h"
 #include "extern.h"
+#include "stddef.h"
+
 
 /** 
  * @brief stages for control functions
@@ -758,6 +760,119 @@ void _var_sec(unsigned short time)
 }
 
 /**
+ * @brief this function checks the status of the connection to the module, as 
+ * well as the status of the channels
+ * @param mups_num_ mupses id 
+ * @param ch_strategy it is necessary to substitute the channel strategy number
+ * @param just_check_online (0 - The function is just to check whether the module 
+ * is online or not) (1 - full-fledged verification with channels)
+ */
+void check_mops_online_status(unsigned short ch_statment, unsigned short just_check_online)
+{
+    unsigned short mops_num_ = 0;
+    size_t mops_num = sizeof(Stand.active_mops)/sizeof(Stand.active_mops[0]);
+    for(mops_num_ = 0; mops_num_ <= mops_num; mops_num_++)
+    {
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] <= 1)  // ActivMOPS == 1 && connection with modul == 1
+        {
+            Stand.mops_timeout_err[mops_num_] = 0;
+            Stand_sw.mops_timeout_err[mops_num_] = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_online = 1;
+            if(just_check_online == 0){continue;}  // just check online end function
+            memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+        }
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+        {
+            MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;     // 1 - timeout
+            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_crc_err[mops_num_] > 0)   // ActivMOPS == 1 && crc error
+        {
+            MOPS_statment[mops_num_].mops_statment.mops_online_err = 2;     // 1 - crc
+            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_1_err[mops_num_] > 0)   // ActivMOPS == 1 && col_1 error
+        {
+            MOPS_statment[mops_num_].mops_statment.mops_online_err = 3;     // 3 - col_1
+            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_2_err[mops_num_] > 0)   // ActivMOPS == 1 && col_2 error
+        {
+            MOPS_statment[mops_num_].mops_statment.mops_online_err = 4;     // 4 - col_2
+            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_3_err[mops_num_] > 0)   // ActivMUPS == 1 && col_3 error
+        {
+            MOPS_statment[mops_num_].mops_statment.mops_online_err = 5;     // 5 - col_3
+            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
+        {
+            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
+            MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
+            continue;
+        }
+        unsigned short ch_num_;
+        size_t ch_num = sizeof(MOPS_statment[mops_num_].mops_current_ch_status)/sizeof(MOPS_statment[mops_num_].mops_current_ch_status[0]);
+        for(ch_num_ = 0; ch_num_ <= ch_num; ch_num_++)   // start of the verification cycle for each channel
+        {
+            if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != ch_statment)    //check ch status
+            {
+                switch(ch_statment)
+                {
+                    case 1: 
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_break[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        break;
+                    }
+                    case 2: 
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_normal[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        break;
+                    }
+                    case 3: 
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        break;
+                    }
+                    case 4: 
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        break;
+                    }
+                    case 5: 
+                    {
+                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 1;
+                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return;
+}
+
+/**
  * @brief this function performs a service check of the modules MOPS
  * 
  * @param usart_a. A pointer to the port to which the main number of 530 cards 
@@ -1419,13 +1534,15 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 void check_mups_online_status(unsigned short ch_statment, unsigned short just_check_online)
 {
     unsigned short mups_num_ = 0;
-    for(mups_num_ = 0; mups_num_ <= 9; mups_num_++)
+    size_t mups_num = sizeof(Stand.active_mups)/sizeof(Stand.active_mups[0]);
+    for(mups_num_ = 0; mups_num_ < mups_num; mups_num_++)
     {
         if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] <= 1)  // ActivMUPS == 1 && connection with modul == 1
         {
             Stand.mups_timeout_err[mups_num_] = 0;
             Stand_sw.mups_timeout_err[mups_num_] = 0;
             MUPS_statment[mups_num_].mups_statment.mups_online = 1;
+            MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
             if(just_check_online == 0){continue;}  // just check online end function
             memcpy(MUPS_statment[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
         }
@@ -1433,6 +1550,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
         {
             MUPS_statment[mups_num_].mups_statment.mups_online_err = 1;     // 1 - timeout
             MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
             MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
             continue;
         }
@@ -1440,6 +1558,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
         {
             MUPS_statment[mups_num_].mups_statment.mups_online_err = 2;     // 1 - crc
             MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
             MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
             continue;
         }
@@ -1447,6 +1566,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
         {
             MUPS_statment[mups_num_].mups_statment.mups_online_err = 3;     // 3 - col_1
             MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
             MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
             continue;
         }
@@ -1454,6 +1574,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
         {
             MUPS_statment[mups_num_].mups_statment.mups_online_err = 4;     // 4 - col_2
             MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
             MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
             continue;
         }
@@ -1461,6 +1582,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
         {
             MUPS_statment[mups_num_].mups_statment.mups_online_err = 5;     // 5 - col_3
             MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
             MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
             continue;
         }
@@ -1471,7 +1593,8 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
             continue;
         }
         unsigned short ch_num_;
-        for(ch_num_ = 0; ch_num_ <= 3; ch_num_++)   // start of the verification cycle for each channel
+        size_t ch_num = sizeof(MUPS_statment[mups_num_].mups_current_ch_status)/sizeof(MUPS_statment[mups_num_].mups_current_ch_status[0]);
+        for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
         {
             if(MUPS_statment[mups_num_].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
             {
