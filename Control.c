@@ -1431,7 +1431,35 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
         }
         if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] > 0)   // ActivMUPS == 1 && connection with modul == 0
         {
-            MUPS_statment[mups_num_].mups_statment.mups_online_err = 1;
+            MUPS_statment[mups_num_].mups_statment.mups_online_err = 1;     // 1 - timeout
+            MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mups[mups_num_] > 0 && Stand.mups_crc_err[mups_num_] > 0)   // ActivMUPS == 1 && crc error
+        {
+            MUPS_statment[mups_num_].mups_statment.mups_online_err = 2;     // 1 - crc
+            MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_1_err[mups_num_] > 0)   // ActivMUPS == 1 && col_1 error
+        {
+            MUPS_statment[mups_num_].mups_statment.mups_online_err = 3;     // 3 - col_1
+            MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_2_err[mups_num_] > 0)   // ActivMUPS == 1 && col_2 error
+        {
+            MUPS_statment[mups_num_].mups_statment.mups_online_err = 4;     // 4 - col_2
+            MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+            MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+            continue;
+        }
+        if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_3_err[mups_num_] > 0)   // ActivMUPS == 1 && col_3 error
+        {
+            MUPS_statment[mups_num_].mups_statment.mups_online_err = 5;     // 5 - col_3
             MUPS_statment[mups_num_].mups_statment.mups_online = 0;
             MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
             continue;
@@ -1534,11 +1562,11 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
         case TEST_READ_MODULES:
         {
             start_var_sec_timer = 1;
-            _var_sec(2000);
+            _var_sec(1000);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
-            }else {read_mups_conf = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; /*check_mups_online_status(1, 1)*/; break;}
+            }else {read_mups_conf = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; /*check_mups_online_status(1, 1);*/ break;}
             mups_service_stages = TEST_READ_MODULES; 
             break;
         }
