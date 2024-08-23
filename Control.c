@@ -904,8 +904,8 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     //==//
     
     // vars for cycles
-    //unsigned short mops_num_;           // for mops
-    //unsigned short ch_num_;             // for chnl in mops
+    size_t mops_size_buf = sizeof(MOPS_statment)/sizeof(MOPS_statment[0]);  // size == 10
+    size_t mops_size_main_buf = sizeof(MOPS_statment_sw[0].main_buff)/sizeof(MOPS_statment_sw[0].main_buff[0]); // size == 56
     
     switch(mops_service_check_stages)
     {
@@ -1320,24 +1320,20 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             // EXITE
             if(power_cycle > 2) // end if power supply == 28v
             {
-                int j, jj;
+                unsigned short j;
                 // copy supply errors to main struct
-                for(j = 0; j <= 10; j++)
+                for(j = 0; j < mops_size_buf; j++)
                 {
                     memcpy(&MOPS_statment[j].mops_power_supply_error, &supply_err_buff[j], sizeof(supply_err_buff[j]));
-                }
-                // clearning supply error buffer
-                for(jj = 0; jj <= 10; jj++)
-                {
-                    memset(&supply_err_buff[jj], 0, sizeof(supply_err_buff[jj]));
+                    memset(&supply_err_buff[j], 0, sizeof(supply_err_buff[j]));
                 }
                 mops_service_check_stages = CHECK_START_BUTTON; // end
                 power_cycle = 0;
                 int i, ii;
                 // copy the buffer for data swap to transfer to the top
-                for(i = 0; i <= 10; i++)    
+                for(i = 0; i < mops_size_buf; i++)    
                 {
-                    for(ii = 0; ii <= 56; ii++)
+                    for(ii = 0; ii <= mops_size_main_buf; ii++)
                     {
                         MOPS_statment_sw[i].main_buff[ii] = swapshort(MOPS_statment[i].main_buff[ii]);
                     }
