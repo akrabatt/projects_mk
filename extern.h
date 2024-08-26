@@ -617,6 +617,10 @@ unsigned short _530_board_just_18v[8];
 unsigned short _530_board_just_24v[8];
 // 530 board 28v
 unsigned short _530_board_just_28v[8];
+//530 board all releys off for break
+unsigned short _530_board_all_releys_off_for_break[8];
+// 530 test turne on all
+unsigned short _530_test_turne_on_all[8];
 
 //var for function _1_sec
 extern unsigned short _1_sec_counter;

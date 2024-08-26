@@ -1495,9 +1495,13 @@ unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
 void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, struct tag_usartm* usart_f)
 {
     static unsigned short read_mups_conf = 0;
-    static unsigned short mups_mbm_flag = 0;
+    static unsigned short mups_mbm_flag_d = 0;
+    static unsigned short mups_mbm_flag_e = 0;
+    static unsigned short mups_mbm_flag_f = 0;
     static unsigned short mups_id = 0;
     static unsigned short _530_board_supply_id = 3;
+    static unsigned short _530_board_u5 = 1;
+    static unsigned short _530_board_u4 = 4;
     
     switch(mups_service_stages) 
     {
@@ -1516,10 +1520,11 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         }
         case TURNE_ON_18V:
         {
-            mbm_16_flag(usart_d, _530_board_supply_id, 0, 8, _530_board_just_28v, 115200, &mups_mbm_flag);
-            if(mups_mbm_flag != 0)
-                {mups_mbm_flag = 0; mups_service_stages = TEST_READING_MODULES; break;}
-            else if(mups_mbm_flag == 0)
+            mups_mbm_flag_d = 0;
+            mbm_16_flag(usart_d, _530_board_supply_id, 0, 8, _530_board_just_18v, 115200, &mups_mbm_flag_d);
+            if(mups_mbm_flag_d != 0)
+                {mups_mbm_flag_d = 0; mups_service_stages = TEST_READING_MODULES; break;}
+            else if(mups_mbm_flag_d == 0)
                 {mups_service_stages = TURNE_ON_18V; break;}
             break;
         }
@@ -1539,10 +1544,10 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             check_mups_online_status(0, 0); 
             if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READING_MODULES_2; break;}
             if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
-                {mups_mbm_flag = 0; mbm_16_flag(usart_e, (mups_id + 1), 212, 4, mups_strat_buff, 115200, &mups_mbm_flag);} 
+                {mups_mbm_flag_e = 0; mbm_16_flag(usart_e, (mups_id + 1), 212, 4, mups_strat_buff, 115200, &mups_mbm_flag_e);} 
             else 
                 {mups_id++;}
-            if(mups_mbm_flag > 0)
+            if(mups_mbm_flag_e > 0)
                 {mups_id++; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
             break;
         }
@@ -1553,12 +1558,18 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
-            }else {read_mups_conf = 0; mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            }else {read_mups_conf = 0; mups_service_stages = TURNE_OFF_ALL_REALAYS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
         case TURNE_OFF_ALL_REALAYS:
         {
-            
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_test_turne_on_all, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_test_turne_on_all, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = TURNE_OFF_ALL_REALAYS; break;}
+            break;
         }
     }
 }

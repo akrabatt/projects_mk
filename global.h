@@ -655,13 +655,20 @@ unsigned short _530_board_mode_mops[8];
 
 // 530 board 18v
 unsigned short _530_board_just_18v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
-                                        SW_JUST_TURNE_ON_18V_1, SW_JUST_TURNE_ON_18V_2, NONE_530, NONE_530};
+                                         SW_JUST_TURNE_ON_18V_1, SW_JUST_TURNE_ON_18V_2, NONE_530, NONE_530};
 // 530 board 24v
 unsigned short _530_board_just_24v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
-                                        SW_JUST_TURNE_ON_24V_1, SW_JUST_TURNE_ON_24V_2, NONE_530, NONE_530};
+                                         SW_JUST_TURNE_ON_24V_1, SW_JUST_TURNE_ON_24V_2, NONE_530, NONE_530};
 // 530 board 28v
 unsigned short _530_board_just_28v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
-                                        SW_JUST_TURNE_ON_28V_1, SW_JUST_TURNE_ON_28V_2, NONE_530, NONE_530};
+                                         SW_JUST_TURNE_ON_28V_1, SW_JUST_TURNE_ON_28V_2, NONE_530, NONE_530};
+
+// 530 board reley off for break
+unsigned short _530_board_all_releys_off_for_break[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                         NONE_530, NONE_530, NONE_530, NONE_530};
+// 530 test turne on all
+unsigned short _530_test_turne_on_all[8] = {0xffff, 0xffff, 0xffff, 0xffff,
+                                            0xffff, 0xffff, 0xffff, 0xffff};
 
 
 //var for function _1_sec
