@@ -188,6 +188,14 @@
 #define RELEY_OFF_530_1             0x0000
 #define RELEY_OFF_530_2             0x0000
 
+// mups main reley on
+#define MUPS_MAIN_RELEY_ON_1        0x9249
+#define MUPS_MAIN_RELEY_ON_2        0x0024
+
+// swapped mups main reley on
+#define SW_MUPS_MAIN_RELEY_ON_1     0x4992
+#define SW_MUPS_MAIN_RELEY_ON_2     0x2400
+
 // none
 #define NONE_530                 0x0000
 

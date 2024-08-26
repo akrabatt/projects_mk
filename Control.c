@@ -1481,7 +1481,8 @@ enum
     TEST_READING_MODULES_2,                         // read again all modules
     TURNE_OFF_ALL_REALAYS,                          // Turn off all relays to check the status (1) breakage
     ONE_SEC_DELAY_INIT_BREAK,                       // a delay of 1 second before reading the status break
-    READ_MODULS_BREAK                               // reading the status of the modules for 1 second
+    READ_MODULS_BREAK,                              // reading the status of the modules for 1 second
+    DATA_ANALYSIS_BREAK                             // subtraction of breakage states on channels
 }mups_service_stages;
 
 
@@ -1587,7 +1588,13 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
-            }else {read_mups_conf = 0; mups_service_stages = TURNE_OFF_ALL_REALAYS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_BREAK; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_BREAK:
+        {
+            check_mups_online_status(1, 1);
+            mups_service_stages = 0;
             break;
         }
     }
