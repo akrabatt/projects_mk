@@ -1295,7 +1295,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         {
             // check errors on current power level
             int check_power;
-            for(check_power = 0; check_power <=10; check_power++)
+            for(check_power = 0; check_power < mops_size_buf; check_power++)
             {
                 if(MOPS_statment[check_power].mops_statment.mops_not_operable == 1)
                 {
@@ -1356,7 +1356,6 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 /**
  * @brief this function checks the status of the connection to the module, as 
  * well as the status of the channels
- * @param mups_num_ mupses id 
  * @param ch_strategy it is necessary to substitute the channel strategy number
  * @param just_check_online (0 - The function is just to check whether the module 
  * is online or not) (1 - full-fledged verification with channels)
@@ -1477,7 +1476,7 @@ enum
 {
     CHECK_BUTTON_MUPS,              // start check service cycle if button turned on
     TEST_READ_MODULES,              // read mupses configurations
-    WRITE_STR_2,                    // write to all mups strategy 2
+    WRITE_STR_2,                    // write to all mups strategy 2 fire fighting
     TEST_READ_MODULES_2             // read again all modules
 }mups_service_stages;
 
@@ -1497,7 +1496,7 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
     static unsigned short mups_mbm_flag = 0;
     static unsigned short mups_id = 0;
     
-    switch(mups_service_stages)
+    switch(mups_service_stages) 
     {
         case CHECK_BUTTON_MUPS:
         {
@@ -1525,14 +1524,14 @@ void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e
         }
         case WRITE_STR_2:
         {
-            check_mups_online_status(2, 1); 
+            check_mups_online_status(0, 0); 
             if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READ_MODULES_2; break;}
             if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
                 {mups_mbm_flag = 0; mbm_16_flag(usart_e, (mups_id + 1), 212, 4, mups_strat_buff, 115200, &mups_mbm_flag);} 
             else 
                 {mups_id++; /*mups_service_stages = WRITE_STR_2; break;*/}
             if(mups_mbm_flag > 0)
-            {mups_id++; mups_service_stages = WRITE_STR_2; break;}
+                {mups_id++; mups_service_stages = WRITE_STR_2; break;}
             break;
         }
         case TEST_READ_MODULES_2:
