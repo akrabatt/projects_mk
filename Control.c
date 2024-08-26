@@ -1479,7 +1479,9 @@ enum
     TEST_READING_MODULES,                           // read mupses configurations
     WRITE_DOWN_THE_DEFAULT_STRATEGY,                // write to all mups strategy 2 fire fighting
     TEST_READING_MODULES_2,                         // read again all modules
-    TURNE_OFF_ALL_REALAYS                           // Turn off all relays to check the status (1) breakage
+    TURNE_OFF_ALL_REALAYS,                          // Turn off all relays to check the status (1) breakage
+    ONE_SEC_DELAY_INIT_BREAK,                       // a delay of 1 second before reading the status break
+    READ_MODULS_BREAK                               // reading the status of the modules for 1 second
 }mups_service_stages;
 
 
@@ -1563,12 +1565,29 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         }
         case TURNE_OFF_ALL_REALAYS:
         {
-            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_test_turne_on_all, 115200, &mups_mbm_flag_d);
-            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_test_turne_on_all, 115200, &mups_mbm_flag_f);
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
             if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
-                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; break;}
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
             else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
                 {mups_service_stages = TURNE_OFF_ALL_REALAYS; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_BREAK:
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages++; break;}
+            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
+        }
+        case READ_MODULS_BREAK:
+        {
+            start_var_sec_timer = 1;
+            _var_sec(1000);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = TURNE_OFF_ALL_REALAYS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
     }
