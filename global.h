@@ -595,6 +595,8 @@ unsigned short DINPUT1;
 unsigned short DINPUT2;
 unsigned short DINPUT3;
 
+                                        // MOPS AREA
+
 //530 board arr for mods
 
                                             //===normal===//
@@ -646,6 +648,20 @@ unsigned short _530_board_none_mops[8] = {NONE_530, NONE_530, NONE_530, NONE_530
 
                                             //===main array===//
 unsigned short _530_board_mode_mops[8];
+
+
+
+                                                // MUPS AREA
+
+// 530 board 18v
+unsigned short _530_board_just_18v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
+                                        SW_JUST_TURNE_ON_18V_1, SW_JUST_TURNE_ON_18V_2, NONE_530, NONE_530};
+// 530 board 24v
+unsigned short _530_board_just_24v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
+                                        SW_JUST_TURNE_ON_24V_1, SW_JUST_TURNE_ON_24V_2, NONE_530, NONE_530};
+// 530 board 28v
+unsigned short _530_board_just_28v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
+                                        SW_JUST_TURNE_ON_28V_1, SW_JUST_TURNE_ON_28V_2, NONE_530, NONE_530};
 
 
 //var for function _1_sec

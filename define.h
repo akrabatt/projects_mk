@@ -132,6 +132,30 @@
 #define SW_RELEY_ON_START_4_001_1   0xf9ff
 #define SW_RELEY_ON_START_4_001_2   0xff00
 
+// just turne on 18v
+#define JUST_TURNE_ON_18V_1         0x0001
+#define JUST_TURNE_ON_18V_2         0x0000
+
+// swapped just turne on 18v
+#define SW_JUST_TURNE_ON_18V_1      0x0100
+#define SW_JUST_TURNE_ON_18V_2      0x0000
+
+// just turne on 24v
+#define JUST_TURNE_ON_24V_1         0x0003
+#define JUST_TURNE_ON_24V_2         0x0000
+
+// swapped just turne on 24v
+#define SW_JUST_TURNE_ON_24V_1      0x0300
+#define SW_JUST_TURNE_ON_24V_2      0x0000
+
+// just turne on 28v
+#define JUST_TURNE_ON_28V_1         0x0007
+#define JUST_TURNE_ON_28V_2         0x0000
+
+// swapped just turne on 28v
+#define SW_JUST_TURNE_ON_28V_1      0x0700
+#define SW_JUST_TURNE_ON_28V_2      0x0000
+
 // reley on start 4 reley 011 24v
 #define RELEY_ON_START_4_011_1      0xfffb
 #define RELEY_ON_START_4_011_2      0x00ff

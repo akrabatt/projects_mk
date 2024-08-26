@@ -611,6 +611,13 @@ extern unsigned short _530_board_84_reley_on_mops[8];
 // reley on start from 4th without strategy
 extern unsigned short _530_board_only_reley_on_start_4_mops[8];
 
+// 530 board 18v
+unsigned short _530_board_just_18v[8];
+// 530 board 24v
+unsigned short _530_board_just_24v[8];
+// 530 board 28v
+unsigned short _530_board_just_28v[8];
+
 //var for function _1_sec
 extern unsigned short _1_sec_counter;
 extern short start_1_sec_timer;        //

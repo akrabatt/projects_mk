@@ -1474,10 +1474,12 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
 // vars for mups check
 enum 
 {
-    CHECK_BUTTON_MUPS,              // start check service cycle if button turned on
-    TEST_READ_MODULES,              // read mupses configurations
-    WRITE_STR_2,                    // write to all mups strategy 2 fire fighting
-    TEST_READ_MODULES_2             // read again all modules
+    CHECK_BUTTON_TO_START_CHECK_MUPS,               // start check service cycle if button turned on
+    TURNE_ON_18V,                                   // apply a reduced power supply of 18 volts
+    TEST_READING_MODULES,                           // read mupses configurations
+    WRITE_DOWN_THE_DEFAULT_STRATEGY,                // write to all mups strategy 2 fire fighting
+    TEST_READING_MODULES_2,                         // read again all modules
+    TURNE_OFF_ALL_REALAYS                           // Turn off all relays to check the status (1) breakage
 }mups_service_stages;
 
 
@@ -1490,59 +1492,73 @@ unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
  * @param usart_d
  * @param usart_e
  */
-void mups_service_check(struct tag_usartm * usart_d, struct tag_usartm * usart_e)
+void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, struct tag_usartm* usart_f)
 {
     static unsigned short read_mups_conf = 0;
     static unsigned short mups_mbm_flag = 0;
     static unsigned short mups_id = 0;
+    static unsigned short _530_board_supply_id = 3;
     
     switch(mups_service_stages) 
     {
-        case CHECK_BUTTON_MUPS:
+        case CHECK_BUTTON_TO_START_CHECK_MUPS:
         {
             if(conf_stand.stand_commands.start_check_mups > 0)
             {
-                mups_service_stages++; 
+                mups_service_stages = TURNE_ON_18V; 
                 conf_stand.stand_commands.mups_diagnostics_in_progress = 1;
                 conf_stand_sw.stand_commands.mups_diagnostics_in_progress= 0x0100;
                 conf_stand.stand_commands.start_check_mups = 0; 
                 conf_stand_sw.stand_commands.start_check_mups = 0;
                 break;
             }
-            else{mups_service_stages = 0; break;}
+            else{mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; break;}
         }
-        case TEST_READ_MODULES:
+        case TURNE_ON_18V:
+        {
+            mbm_16_flag(usart_d, _530_board_supply_id, 0, 8, _530_board_just_28v, 115200, &mups_mbm_flag);
+            if(mups_mbm_flag != 0)
+                {mups_mbm_flag = 0; mups_service_stages = TEST_READING_MODULES; break;}
+            else if(mups_mbm_flag == 0)
+                {mups_service_stages = TURNE_ON_18V; break;}
+            break;
+        }
+        case TEST_READING_MODULES:
         {
             start_var_sec_timer = 1;
             _var_sec(1000);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
-            }else {read_mups_conf = 0; mups_service_stages++; start_var_sec_timer = 0; end_var_sec_timer = 0; /*check_mups_online_status(1, 1);*/ break;}
-            mups_service_stages = TEST_READ_MODULES; 
+            }else {read_mups_conf = 0; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            mups_service_stages = TEST_READING_MODULES; 
             break;
         }
-        case WRITE_STR_2:
+        case WRITE_DOWN_THE_DEFAULT_STRATEGY:
         {
             check_mups_online_status(0, 0); 
-            if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READ_MODULES_2; break;}
+            if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READING_MODULES_2; break;}
             if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
                 {mups_mbm_flag = 0; mbm_16_flag(usart_e, (mups_id + 1), 212, 4, mups_strat_buff, 115200, &mups_mbm_flag);} 
             else 
-                {mups_id++; /*mups_service_stages = WRITE_STR_2; break;*/}
+                {mups_id++;}
             if(mups_mbm_flag > 0)
-                {mups_id++; mups_service_stages = WRITE_STR_2; break;}
+                {mups_id++; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
             break;
         }
-        case TEST_READ_MODULES_2:
+        case TEST_READING_MODULES_2:
         {
             start_var_sec_timer = 1;
             _var_sec(1000);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
-            }else {read_mups_conf = 0; mups_service_stages = 0; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            }else {read_mups_conf = 0; mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
+        }
+        case TURNE_OFF_ALL_REALAYS:
+        {
+            
         }
     }
 }
