@@ -1476,8 +1476,9 @@ enum
 {
     CHECK_BUTTON_TO_START_CHECK_MUPS,               // start check service cycle if button turned on
     TURNE_ON_18V,                                   // apply a reduced power supply of 18 volts
-    TEST_READING_MODULES,                           // read mupses configurations
-    WRITE_DOWN_THE_DEFAULT_STRATEGY,                // write to all mups strategy 2 fire fighting
+//    TEST_READING_MODULES,                           // read mupses configurations
+    WRITE_DOWN_THE_DEFAULT_STRATEGY,                // write to all mups strategy 1 fire fighting
+    WRITE_TURNE_OFF_MUPS_RELEYS,
     TEST_READING_MODULES_2,                         // read again all modules
     TURNE_OFF_ALL_REALAYS,                          // Turn off all relays to check the status (1) breakage
     ONE_SEC_DELAY_INIT_BREAK,                       // a delay of 1 second before reading the status break
@@ -1501,7 +1502,8 @@ enum
 
 
 
-unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
+unsigned short mups_strat_buff[4] = {0x0100, 0x0100, 0x0100, 0x0100};
+unsigned short mups_start_rel_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
 unsigned short mups_com_1_rel_on[4] = {0x0100, 0x0100, 0x0100, 0x0100};
 
 
@@ -1522,6 +1524,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
     static unsigned short _530_board_u5 = 1;    // ap5
     static unsigned short _530_board_u4 = 4;    // ap4
     static unsigned short individual_moduls_num = 1;
+    unsigned short time_delay = 5000;
     
     switch(mups_service_stages) 
     {
@@ -1543,26 +1546,26 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             mups_mbm_flag_d = 0;
             mbm_16_flag(usart_d, _530_board_supply_id, 0, 8, _530_board_just_18v, 115200, &mups_mbm_flag_d);
             if(mups_mbm_flag_d != 0)
-                {mups_mbm_flag_d = 0; mups_service_stages = TEST_READING_MODULES; break;}
+                {mups_mbm_flag_d = 0; mups_service_stages = /*TEST_READING_MODULES*/WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
             else if(mups_mbm_flag_d == 0)
                 {mups_service_stages = TURNE_ON_18V; break;}
             break;
         }
-        case TEST_READING_MODULES:
-        {
-            start_var_sec_timer = 1;
-            _var_sec(1000);
-            if(end_var_sec_timer == 0)
-            {
-                MUPS_S_control_flag(usart_e, &read_mups_conf);
-            }else {read_mups_conf = 0; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-            mups_service_stages = TEST_READING_MODULES; 
-            break;
-        }
+//        case TEST_READING_MODULES:
+//        {
+//            start_var_sec_timer = 1;
+//            _var_sec(1000);
+//            if(end_var_sec_timer == 0)
+//            {
+//                MUPS_S_control_flag(usart_e, &read_mups_conf);
+//            }else {read_mups_conf = 0; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+//            mups_service_stages = TEST_READING_MODULES; 
+//            break;
+//        }
         case WRITE_DOWN_THE_DEFAULT_STRATEGY:
         {
             check_mups_online_status(0, 0); 
-            if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READING_MODULES_2; break;}
+            if(mups_id >= 10){mups_id = 0; mups_service_stages = WRITE_TURNE_OFF_MUPS_RELEYS; break;}
             if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
                 {mups_mbm_flag_e = 0; mbm_16_flag(usart_e, (mups_id + 1), 212, 4, mups_strat_buff, 115200, &mups_mbm_flag_e);} 
             else 
@@ -1571,10 +1574,21 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
                 {mups_id++; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
             break;
         }
+        case WRITE_TURNE_OFF_MUPS_RELEYS:
+        { 
+            if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READING_MODULES_2; break;}
+            if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
+                {mups_mbm_flag_e = 0; mbm_16_flag(usart_e, (mups_id + 1), 208, 4, mups_start_rel_buff, 115200, &mups_mbm_flag_e);} 
+            else 
+                {mups_id++;}
+            if(mups_mbm_flag_e > 0)
+                {mups_id++; mups_service_stages = WRITE_TURNE_OFF_MUPS_RELEYS; break;}
+            break;
+        }
         case TEST_READING_MODULES_2:
         {
             start_var_sec_timer = 1;
-            _var_sec(1000);
+            _var_sec(time_delay);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
@@ -1601,7 +1615,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         case READ_MODULS_BREAK:
         {
             start_var_sec_timer = 1;
-            _var_sec(1000);
+            _var_sec(time_delay);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
@@ -1634,7 +1648,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         case READ_MODULS_NORMA:
         {
             start_var_sec_timer = 1;
-            _var_sec(1000);
+            _var_sec(time_delay);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
@@ -1667,7 +1681,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         case READ_MODULS_SC:
         {
             start_var_sec_timer = 1;
-            _var_sec(1000);
+            _var_sec(time_delay);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
@@ -1720,7 +1734,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         case READ_SEPARATE_MODULE_BREAK:
         {
             start_var_sec_timer = 1;
-            _var_sec(1000);
+            _var_sec(time_delay);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
