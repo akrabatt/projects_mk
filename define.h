@@ -196,13 +196,21 @@
 #define SW_MUPS_88_91_94_RELEY_ON_1     0x4992
 #define SW_MUPS_88_91_94_RELEY_ON_2     0x2400
 
-// mups 89-92-95... reley on sc
+// mups 89-92-95... reley on 
 #define MUPS_89_92_95_RELEY_ON_1        0x2492    
 #define MUPS_89_92_95_RELEY_ON_2        0x0049 
 
-// swapped mups 89-92-95... reley on sc
+// swapped mups 89-92-95... reley on 
 #define SW_MUPS_89_92_95_RELEY_ON_1        0x9224    
-#define SW_MUPS_89_92_95_RELEY_ON_2        0x4900    
+#define SW_MUPS_89_92_95_RELEY_ON_2        0x4900 
+
+// mups 88 89 - 91 92 - 94 95 - 97 98...
+#define MUPS_88_89_SC_RELEY_ON_1           0xb6db
+#define MUPS_88_89_SC_RELEY_ON_2           0x006d
+
+// swapped mups 88 89 - 91 92 - 94 95 - 97 98...
+#define SW_MUPS_88_89_SC_RELEY_ON_1           0xdbb6
+#define SW_MUPS_88_89_SC_RELEY_ON_2           0x6d00
 
 // none
 #define NONE_530                    0x0000

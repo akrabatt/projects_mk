@@ -677,12 +677,12 @@ unsigned short _530_mups_88_91_94_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_53
 // 530 board mups reley turne on(88 - 91 - 94...) for AP5 norm
 unsigned short _530_mups_88_91_94_reley_on_ap5[8] = {SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2,
                                                      SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2};
-// 530 board mups reley turne on (89 - 92 - 95...) for AP4 sc
-unsigned short _530_mups_89_92_95_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
-                                                     SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2, NONE_530, NONE_530};
-// 530 board mups reley turne on (89 - 92 - 95...) for AP5 sc
-unsigned short _530_mups_89_92_95_reley_on_ap5[8] = {SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2, SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2,
-                                                     SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2, SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2};
+// 530 board mups reley turne on (88/89 - 91/92 - 94/95...) for AP4 sc
+unsigned short _530_mups_88_89_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                     SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, NONE_530, NONE_530};
+// 530 board mups reley turne on (88/89 - 91/92 - 94/95...) for AP5 sc
+unsigned short _530_mups_88_89_reley_on_ap5[8] = {SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2,
+                                                     SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2};
 
 
 //mups_1 load

@@ -1649,8 +1649,8 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         }
         case TURNE_ON_RELEY_SC:
         {
-            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_mups_89_92_95_reley_on_ap4, 115200, &mups_mbm_flag_d);
-            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_mups_89_92_95_reley_on_ap5, 115200, &mups_mbm_flag_f);
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_mups_88_89_reley_on_ap4, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_mups_88_89_reley_on_ap5, 115200, &mups_mbm_flag_f);
             if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
                 {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
             else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
@@ -1708,6 +1708,23 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
                 {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK; break;}
             else if(mups_mbm_flag_e == 0)
                 {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK:
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_BREAK; break;}
+            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK; break;}
+        }
+        case READ_SEPARATE_MODULE_BREAK:
+        {
+            start_var_sec_timer = 1;
+            _var_sec(1000);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = 0; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
     }
