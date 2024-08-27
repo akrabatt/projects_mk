@@ -670,6 +670,13 @@ unsigned short _530_board_all_releys_off_for_break[8] = {NONE_530, NONE_530, NON
 unsigned short _530_test_turne_on_all[8] = {0xffff, 0xffff, 0xffff, 0xffff,
                                             0xffff, 0xffff, 0xffff, 0xffff};
 
+// 530 board mups main reley turne on(88 - 91 - 94...) for AP4
+unsigned short _530_mups_88_91_94_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                     SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, NONE_530, NONE_530};
+// 530 board mups main reley turne on(88 - 91 - 94...) for AP5
+unsigned short _530_mups_88_91_94_reley_on_ap5[8] = {SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2,
+                                                     SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2};
+
 
 //var for function _1_sec
 unsigned short _1_sec_counter;
