@@ -627,6 +627,7 @@ unsigned short _530_board_fire_start_reley_4_mops[8] = {SW_FIRE_530_1, SW_FIRE_5
 // 1-4 attantion
 unsigned short _530_board_attantion_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
                                                SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};
+
 // 1 - attantion, 2 - attantion, 3 - reley on starting from 4th, 4 - reley on
 unsigned short _530_board_attantion_start_reley_4_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
                                                              SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
@@ -682,6 +683,10 @@ unsigned short _530_mups_89_92_95_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_53
 // 530 board mups reley turne on (89 - 92 - 95...) for AP5 sc
 unsigned short _530_mups_89_92_95_reley_on_ap5[8] = {SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2, SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2,
                                                      SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2, SW_MUPS_89_92_95_RELEY_ON_1, SW_MUPS_89_92_95_RELEY_ON_2};
+
+
+//mups_1 load
+unsigned short _1_mups_load[8] = {0x2409, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
 
 //var for function _1_sec

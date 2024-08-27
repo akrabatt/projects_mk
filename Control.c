@@ -1487,15 +1487,22 @@ enum
     ONE_SEC_DELAY_INIT_NORMA,                       //
     READ_MODULS_NORMA,                              //
     DATA_ANALYSIS_NORMA,                            //
-    TURNE_ON_RELEY_SC,                           //
-    ONE_SEC_DELAY_INIT_SC,                       //
-    READ_MODULS_SC,                              //
-    DATA_ANALYSIS_SC                             //
+    TURNE_ON_RELEY_SC,                              //
+    ONE_SEC_DELAY_INIT_SC,                          //
+    READ_MODULS_SC,                                 //
+    DATA_ANALYSIS_SC,                               //
+    ALL_RELEYS_TURNE_OFF,                           //
+    CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD,          //
+    TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE,            //
+    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK,
+    READ_SEPARATE_MODULE_BREAK,
+    DATA_ANALYSIS_SEPARATE_MODULE_BREAK
 }mups_service_stages;
 
 
 
 unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
+unsigned short mups_com_1_rel_on[4] = {0x0100, 0x0100, 0x0100, 0x0100};
 
 
 /**
@@ -1505,14 +1512,16 @@ unsigned short mups_strat_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
  */
 void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, struct tag_usartm* usart_f)
 {
+    // vars for funcktion
     static unsigned short read_mups_conf = 0;
     static unsigned short mups_mbm_flag_d = 0;
     static unsigned short mups_mbm_flag_e = 0;
     static unsigned short mups_mbm_flag_f = 0;
     static unsigned short mups_id = 0;
     static unsigned short _530_board_supply_id = 3;
-    static unsigned short _530_board_u5 = 1;
-    static unsigned short _530_board_u4 = 4;
+    static unsigned short _530_board_u5 = 1;    // ap5
+    static unsigned short _530_board_u4 = 4;    // ap4
+    static unsigned short individual_moduls_num = 1;
     
     switch(mups_service_stages) 
     {
@@ -1607,8 +1616,8 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         }
         case TURNE_ON_RELEY_NORMA:
         {
-            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_mups_88_91_94_reley_on_ap5, 115200, &mups_mbm_flag_d);
-            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_mups_88_91_94_reley_on_ap4, 115200, &mups_mbm_flag_f);
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_mups_88_91_94_reley_on_ap4, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_mups_88_91_94_reley_on_ap5, 115200, &mups_mbm_flag_f);
             if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
                 {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_NORMA; break;}
             else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
@@ -1640,8 +1649,8 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         }
         case TURNE_ON_RELEY_SC:
         {
-            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_mups_89_92_95_reley_on_ap5, 115200, &mups_mbm_flag_d);
-            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_mups_89_92_95_reley_on_ap4, 115200, &mups_mbm_flag_f);
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_mups_89_92_95_reley_on_ap4, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_mups_89_92_95_reley_on_ap5, 115200, &mups_mbm_flag_f);
             if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
                 {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
             else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
@@ -1668,7 +1677,37 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         case DATA_ANALYSIS_SC:
         {
             check_mups_online_status(3, 1);
-            mups_service_stages = 0;
+            mups_service_stages = ALL_RELEYS_TURNE_OFF;
+            break;
+        }
+        case ALL_RELEYS_TURNE_OFF:
+        {
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = ALL_RELEYS_TURNE_OFF; break;}
+            break;
+        }
+        case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD:
+        {
+            mups_mbm_flag_f = 0;
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _1_mups_load, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_f != 0)
+                {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+            else if(mups_mbm_flag_f == 0)
+                {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD; break;}
+            break;
+        }
+        case TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE:
+        {
+            mups_mbm_flag_e = 0;
+            mbm_16_flag(usart_e, individual_moduls_num, 208, 4, mups_com_1_rel_on, 115200, &mups_mbm_flag_e);
+            if(mups_mbm_flag_e != 0)
+                {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK; break;}
+            else if(mups_mbm_flag_e == 0)
+                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
             break;
         }
     }
