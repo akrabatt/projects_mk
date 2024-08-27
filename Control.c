@@ -1476,7 +1476,6 @@ enum
 {
     CHECK_BUTTON_TO_START_CHECK_MUPS,               // start check service cycle if button turned on
     TURNE_ON_18V,                                   // apply a reduced power supply of 18 volts
-//    TEST_READING_MODULES,                           // read mupses configurations
     WRITE_DOWN_THE_DEFAULT_STRATEGY,                // write to all mups strategy 1 fire fighting
     WRITE_TURNE_OFF_MUPS_RELEYS,
     TEST_READING_MODULES_2,                         // read again all modules
@@ -1524,7 +1523,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
     static unsigned short _530_board_u5 = 1;    // ap5
     static unsigned short _530_board_u4 = 4;    // ap4
     static unsigned short individual_moduls_num = 1;
-    unsigned short time_delay = 5000;
+    unsigned short time_delay = 1000;
     
     switch(mups_service_stages) 
     {
@@ -1551,17 +1550,6 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
                 {mups_service_stages = TURNE_ON_18V; break;}
             break;
         }
-//        case TEST_READING_MODULES:
-//        {
-//            start_var_sec_timer = 1;
-//            _var_sec(1000);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-//            mups_service_stages = TEST_READING_MODULES; 
-//            break;
-//        }
         case WRITE_DOWN_THE_DEFAULT_STRATEGY:
         {
             check_mups_online_status(0, 0); 
