@@ -1483,10 +1483,14 @@ enum
     ONE_SEC_DELAY_INIT_BREAK,                       // a delay of 1 second before reading the status break
     READ_MODULS_BREAK,                              // reading the status of the modules for 1 second
     DATA_ANALYSIS_BREAK,                            // subtraction of breakage states on channels
-    TURNE_ON_RELEY_NORMA,                       //
-    ONE_SEC_DELAY_INIT_NORMA,                   //
-    READ_MODULS_NORMA,                          //
-    DATA_ANALYSIS_NORMA                         //
+    TURNE_ON_RELEY_NORMA,                           //
+    ONE_SEC_DELAY_INIT_NORMA,                       //
+    READ_MODULS_NORMA,                              //
+    DATA_ANALYSIS_NORMA,                            //
+    TURNE_ON_RELEY_SC,                           //
+    ONE_SEC_DELAY_INIT_SC,                       //
+    READ_MODULS_SC,                              //
+    DATA_ANALYSIS_SC                             //
 }mups_service_stages;
 
 
@@ -1631,6 +1635,39 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         case DATA_ANALYSIS_NORMA:
         {
             check_mups_online_status(2, 1);
+            mups_service_stages = TURNE_ON_RELEY_SC;
+            break;
+        }
+        case TURNE_ON_RELEY_SC:
+        {
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_mups_89_92_95_reley_on_ap5, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_mups_89_92_95_reley_on_ap4, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = TURNE_ON_RELEY_SC; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_SC:
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_SC; break;}
+            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SC; break;}
+        }
+        case READ_MODULS_SC:
+        {
+            start_var_sec_timer = 1;
+            _var_sec(1000);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SC; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_SC:
+        {
+            check_mups_online_status(3, 1);
             mups_service_stages = 0;
             break;
         }

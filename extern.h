@@ -625,6 +625,10 @@ unsigned short _530_test_turne_on_all[8];
 unsigned short _530_mups_88_91_94_reley_on_ap4[8];
 // 530 board mups main reley turne on(88 - 91 - 94...) for AP5
 unsigned short _530_mups_88_91_94_reley_on_ap5[8];
+// 530 board mups reley turne on (89 - 92 - 95...) for AP4 sc
+unsigned short _530_mups_89_92_95_reley_on_ap4[8];
+// 530 board mups reley turne on (89 - 92 - 95...) for AP5 sc
+unsigned short _530_mups_89_92_95_reley_on_ap5[8];
 
 //var for function _1_sec
 extern unsigned short _1_sec_counter;

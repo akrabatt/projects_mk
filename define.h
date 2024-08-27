@@ -188,13 +188,21 @@
 #define RELEY_OFF_530_1             0x0000
 #define RELEY_OFF_530_2             0x0000
 
-// mups 88-91-94... reley on
+// mups 88-91-94... reley on norm
 #define MUPS_88_91_94_RELEY_ON_1        0x9249
 #define MUPS_88_91_94_RELEY_ON_2        0x0024
 
-// swapped mups 88_91_94... reley on
+// swapped mups 88_91_94... reley on norm
 #define SW_MUPS_88_91_94_RELEY_ON_1     0x4992
 #define SW_MUPS_88_91_94_RELEY_ON_2     0x2400
+
+// mups 89-92-95... reley on sc
+#define MUPS_89_92_95_RELEY_ON_1        0x2492    
+#define MUPS_89_92_95_RELEY_ON_2        0x0049 
+
+// swapped mups 89-92-95... reley on sc
+#define SW_MUPS_89_92_95_RELEY_ON_1        0x9224    
+#define SW_MUPS_89_92_95_RELEY_ON_2        0x4900    
 
 // none
 #define NONE_530                    0x0000
