@@ -693,7 +693,10 @@ unsigned short high_current[8] = {NONE_530, NONE_530, SW_HIGH_CURRENT, NONE_530,
 unsigned short none[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
 //mups_1 load
-unsigned short _1_mups_load_norm[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+unsigned short _1_mups_on_cab_load_norm[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+
+//mups_2 load
+unsigned short _2_mups_on_cab_load_norm[8] = {SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
 
 //var for function _1_sec

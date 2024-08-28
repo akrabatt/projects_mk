@@ -636,7 +636,9 @@ extern unsigned short high_current[8];
 extern unsigned short none[8];
 
 //mups_1 load norm
-extern unsigned short _1_mups_load_norm[8];
+extern unsigned short _1_mups_on_cab_load_norm[8];
+//mups_2 load
+extern unsigned short _2_mups_on_cab_load_norm[8];
 
 
 //var for function _1_sec

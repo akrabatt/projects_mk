@@ -216,10 +216,17 @@
 #define HIGH_CURRENT                    0x7800
 #define SW_HIGH_CURRENT                 0x0078
 
-// mups1 norm lad
-#define MUPS_1_NORM_LOAD                0x0b6d
+// mups1 norm load
+#define MUPS_1_NORM_LOAD                0x0b6d      // 0000 1011 0110 1101
 // swapped mups1 norm load
 #define SW_MUPS_1_NORM_LOAD             0x6d0b
+
+// mups2 norm load
+#define MUPS_2_NORM_LOAD_1              0xd000      // 1101 0000 0000 0000 
+#define MUPS_2_NORM_LOAD_2              0x00b6      // 0000 0000 1011 0110       
+// swapped mups2 norm load
+#define SW_MUPS_2_NORM_LOAD_1           0x00d0      // 1101 0000 0000 0000 
+#define SW_MUPS_2_NORM_LOAD_2           0xb600      // 0000 0000 1011 0110 
 
 // none
 #define NONE_530                    0x0000
