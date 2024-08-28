@@ -1648,9 +1648,9 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
     static unsigned short mups_mbm_flag_e = 0;
     static unsigned short mups_mbm_flag_f = 0;
     static unsigned short mups_id = 0;
-    static unsigned short _530_board_supply_id = 3;
-    static unsigned short _530_board_u5 = 1;    // ap5
-    static unsigned short _530_board_u4 = 4;    // ap4
+    unsigned short _530_board_supply_id = 3;
+    unsigned short _530_board_u5 = 1;    // ap5
+    unsigned short _530_board_u4 = 4;    // ap4
     static unsigned short individual_moduls_num = 1;
     unsigned short time_delay = 1000;
     
