@@ -1588,6 +1588,22 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
     }
     return;
 }
+
+/**
+ * @brief
+ * @param
+ */
+inline void mbm_16_write_mups(struct tag_usartm* port, unsigned short address, unsigned short source_buffer, unsigned short end_flag)
+{
+    mups_mbm_flag_f = 0;
+    mbm_16_flag(usart_f, _530_board_u5, 0, 8, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+    if(mups_mbm_flag_f != 0)
+        {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+    else if(mups_mbm_flag_f == 0)
+        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+    break;
+}
+
 // vars for mups check
 enum 
 {
@@ -1621,7 +1637,8 @@ enum
     DATA_ANALYSIS_SEPARATE_HIGH_CURRENT,
     TURNE_OFF_RELEYS_HIGH_CURRENT,
     TURNE_OFF_RELEYS_IN_SEPARATE_MODULE,
-    TURNE_OFF_LOAS_RELEYS_FOR_MODULE
+    TURNE_OFF_LOAS_RELEYS_FOR_MODULE,
+    CHECK
 }mups_service_stages;
 
 
@@ -1632,9 +1649,10 @@ unsigned short mups_com_1_rel_on[4] = {0x0100, 0x0100, 0x0100, 0x0100};
 
 
 /**
- * 
+ * @brief
  * @param usart_d
  * @param usart_e
+ * @param usart_f
  */
 void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, struct tag_usartm* usart_f)
 {
@@ -1670,7 +1688,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             mups_mbm_flag_d = 0;
             mbm_16_flag(usart_d, _530_board_supply_id, 0, 8, _530_board_just_18v, 115200, &mups_mbm_flag_d);
             if(mups_mbm_flag_d != 0)
-                {mups_mbm_flag_d = 0; mups_service_stages = /*TEST_READING_MODULES*/WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
+                {mups_mbm_flag_d = 0; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
             else if(mups_mbm_flag_d == 0)
                 {mups_service_stages = TURNE_ON_18V; break;}
             break;
@@ -1817,7 +1835,10 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
                 {mups_service_stages = ALL_RELEYS_TURNE_OFF; break;}
             break;
         }
-        case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM:
+        //
+///////////////////////////////////////////////////////////////////////SEPARATE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM:    // turne on releys to load for mups
         {
             mups_mbm_flag_f = 0;
             mbm_16_flag(usart_f, _530_board_u5, 0, 8, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
@@ -1918,10 +1939,14 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             mups_mbm_flag_f = 0;
             mbm_16_flag(usart_f, _530_board_u5, 0, 8, none, 115200, &mups_mbm_flag_f);
             if(mups_mbm_flag_f != 0)
-                {mups_mbm_flag_f= 0; mups_service_stages = 0; break;}
+                {mups_mbm_flag_f= 0; mups_service_stages = CHECK; break;}
             else if(mups_mbm_flag_f == 0)
                 {mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
             break;
+        }
+        case CHECK:
+        {
+            
         }
     }
 }
