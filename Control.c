@@ -1589,20 +1589,6 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
     return;
 }
 
-/**
- * @brief
- * @param
- */
-inline void mbm_16_write_mups(struct tag_usartm* port, unsigned short address, unsigned short source_buffer, unsigned short end_flag)
-{
-    mups_mbm_flag_f = 0;
-    mbm_16_flag(usart_f, _530_board_u5, 0, 8, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
-    if(mups_mbm_flag_f != 0)
-        {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-    else if(mups_mbm_flag_f == 0)
-        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
-    break;
-}
 
 // vars for mups check
 enum 
