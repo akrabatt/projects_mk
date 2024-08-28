@@ -1609,12 +1609,19 @@ enum
     READ_MODULS_SC,                                 //
     DATA_ANALYSIS_SC,                               //
     ALL_RELEYS_TURNE_OFF,                           //
+    /*individual v*/
     CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM,     //
     TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE,            //
     ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM,
     READ_SEPARATE_MODULE_NORM,
     DATA_ANALYSIS_SEPARATE_MODULE_NORM,
-    TURNE_ON_RELEYS_HIGH_CURRENT
+    TURNE_ON_RELEYS_HIGH_CURRENT,
+    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT,
+    READ_SEPARATE_MODULE_HIGH_CURRENT,
+    DATA_ANALYSIS_SEPARATE_HIGH_CURRENT,
+    TURNE_OFF_RELEYS_HIGH_CURRENT,
+    TURNE_OFF_RELEYS_IN_SEPARATE_MODULE,
+    TURNE_OFF_LOAS_RELEYS_FOR_MODULE
 }mups_service_stages;
 
 
@@ -1858,9 +1865,62 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             mups_mbm_flag_d = 0;
             mbm_16_flag(usart_d, _530_board_u4, 0, 8, high_current, 115200, &mups_mbm_flag_d);
             if(mups_mbm_flag_d != 0)
-                {mups_mbm_flag_d = 0; mups_service_stages = 0; break;}
+                {mups_mbm_flag_d = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
             else if(mups_mbm_flag_d == 0)
                 {mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT:
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_HIGH_CURRENT; break;}
+            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
+        }
+        case READ_SEPARATE_MODULE_HIGH_CURRENT:
+        {
+            start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SEPARATE_HIGH_CURRENT; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_SEPARATE_HIGH_CURRENT:
+        {
+            check_mups_online_status(5, 1, 0, 0);
+            mups_service_stages = TURNE_OFF_RELEYS_HIGH_CURRENT;
+            break;
+        }
+        case TURNE_OFF_RELEYS_HIGH_CURRENT:
+        {
+            mups_mbm_flag_d = 0;
+            mbm_16_flag(usart_d,_530_board_u4, 0, 8, none, 115200, &mups_mbm_flag_d);
+            if(mups_mbm_flag_d != 0)
+                {mups_mbm_flag_d = 0; mups_service_stages = TURNE_OFF_RELEYS_IN_SEPARATE_MODULE; break;}
+            else if(mups_mbm_flag_d == 0)
+                {mups_service_stages = TURNE_OFF_RELEYS_HIGH_CURRENT; break;}
+            break;
+        }
+        case TURNE_OFF_RELEYS_IN_SEPARATE_MODULE:
+        {
+            mups_mbm_flag_e = 0;
+            mbm_16_flag(usart_e, 1, 208, 4, mups_start_rel_buff, 115200, &mups_mbm_flag_e);
+            if(mups_mbm_flag_e != 0)
+                {mups_mbm_flag_e= 0; mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
+            else if(mups_mbm_flag_e == 0)
+                {mups_service_stages = TURNE_OFF_RELEYS_IN_SEPARATE_MODULE; break;}
+            break;
+        }
+        case TURNE_OFF_LOAS_RELEYS_FOR_MODULE:
+        {
+            mups_mbm_flag_f = 0;
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, none, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_f != 0)
+                {mups_mbm_flag_f= 0; mups_service_stages = 0; break;}
+            else if(mups_mbm_flag_f == 0)
+                {mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
             break;
         }
     }

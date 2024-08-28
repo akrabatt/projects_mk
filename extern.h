@@ -632,6 +632,8 @@ extern unsigned short _530_mups_88_89_reley_on_ap5[8];
 
 // high current 
 extern unsigned short high_current[8];
+// none
+extern unsigned short none[8];
 
 //mups_1 load norm
 extern unsigned short _1_mups_load_norm[8];

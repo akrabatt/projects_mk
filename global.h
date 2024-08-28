@@ -689,6 +689,9 @@ unsigned short _530_mups_88_89_reley_on_ap5[8] = {SW_MUPS_88_89_SC_RELEY_ON_1, S
 // load for high current
 unsigned short high_current[8] = {NONE_530, NONE_530, SW_HIGH_CURRENT, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
+// none
+unsigned short none[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+
 //mups_1 load
 unsigned short _1_mups_load_norm[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
