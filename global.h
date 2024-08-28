@@ -1,472 +1,801 @@
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
 #include "define.h"
 
-/* Provide C++ Compatibility */
-#ifdef __cplusplus
-extern "C"
+// buffers for uart
+unsigned char __attribute__((coherent)) buf_tx5[300];
+unsigned char __attribute__((coherent)) buf_tx4[300];
+unsigned char __attribute__((coherent)) buf_tx3[300];
+unsigned char __attribute__((coherent)) buf_tx2[300];
+unsigned char __attribute__((coherent)) buf_tx1[300];
+
+// speed for uart
+unsigned short U1_speed;
+unsigned short U2_speed;
+unsigned short U3_speed;
+unsigned short U4_speed;
+unsigned short U5_speed;
+
+// help vars
+unsigned short help_strobe;
+unsigned short help_reset;
+unsigned short help_load;
+
+union tag_direct
 {
-#endif
 
-	unsigned char __attribute__((coherent)) buf_tx5[300];
-	unsigned char __attribute__((coherent)) buf_tx4[300];
-	unsigned char __attribute__((coherent)) buf_tx3[300];
-	unsigned char __attribute__((coherent)) buf_tx2[300];
-	unsigned char __attribute__((coherent)) buf_tx1[300];
+    struct
+    {
 
-	unsigned short U1_speed;
-	unsigned short U2_speed;
-	unsigned short U3_speed;
-	unsigned short U4_speed;
-	unsigned short U5_speed;
+        union
+        {
 
-	unsigned short help_strobe;
-	unsigned short help_reset;
-	unsigned short help_load;
+            struct
+            {
+                unsigned short sensor1; // data channel 1
+                unsigned short sensor2; // data channel 2
+                unsigned short sensor3; // data channel 3
+                unsigned short sensor4; // data channel 4
+                unsigned short sensor5; // data channel 5
+                unsigned short sensor6; // data channel 6
+                unsigned short sensor7; //  7
+                unsigned short sensor8; //  8
+                float angle_1;          //  9
+                float angle_2;          //  11
+                float angle_3;          //  13
+                float angle_4;          //  15
+                float angle_5;          //  17
+                float angle_6;          //  19
+                float angle_7;          //  21
+                float angle_8;          //  23
+                float angle_9;          //  25
+                float angle_10;         //  27
+                float angle_11;         //  29
+                float angle_12;         //  31
+                unsigned long par1;     //  33
+                unsigned long par2;     //  35
+                unsigned long par3;     //  37
+                unsigned long par4;     //  39
+                unsigned long par5;     //  41
+                unsigned long par6;     //  43
+                unsigned long par7;     //  45
+                unsigned long par8;     //  47
+                unsigned long par9;     //  49
+                unsigned long par10;    //  51
 
-	union tag_direct
-	{
-		struct
-		{
-			union
-			{
-				struct
-				{
-					unsigned short sensor1; // data channel 1
-					unsigned short sensor2; // data channel 2
-					unsigned short sensor3; // data channel 3
-					unsigned short sensor4; // data channel 4
-					unsigned short sensor5; // data channel 5
-					unsigned short sensor6; // data channel 6
-					unsigned short sensor7; //  7
-					unsigned short sensor8; //  8
-					float angle_1;			//  9
-					float angle_2;			//  11
-					float angle_3;			//  13
-					float angle_4;			//  15
-					float angle_5;			//  17
-					float angle_6;			//  19
-					float angle_7;			//  21
-					float angle_8;			//  23
-					float angle_9;			//  25
-					float angle_10;			//  27
-					float angle_11;			//  29
-					float angle_12;			//  31
-					unsigned long par1;		//  33
-					unsigned long par2;		//  35
-					unsigned long par3;		//  37
-					unsigned long par4;		//  39
-					unsigned long par5;		//  41
-					unsigned long par6;		//  43
-					unsigned long par7;		//  45
-					unsigned long par8;		//  47
-					unsigned long par9;		//  49
-					unsigned long par10;	//  51
-					struct
-					{
-						unsigned break_sin1 : 1;	  // Status DBSKT sin1 ch1: 0 - OK, 1 - NOK
-						unsigned break_cos1 : 1;	  // Status DBSKT sos1 ch1: 0 - OK, 1 - NOK
-						unsigned break_sin2 : 1;	  // Status DBSKT sin2 ch2: 0 - OK, 1 - NOK
-						unsigned break_cos2 : 1;	  // Status DBSKT cos2 ch1: 0 - OK, 1 - NOK
-						unsigned break_sens1 : 1;	  // Status DBSKT sensor ch1: 0 - OK, 1 - NOK
-						unsigned break_sens2 : 1;	  // Status DBSKT sensor ch2: 0 - OK, 1 - NOK
-						unsigned coil_1_res_high : 1; // Coil 1 resistance: 0 - OK, 1 - too high resistance
-						unsigned coil_1_res_low : 1;  // Coil 1 resistance: 0 - OK, 1 - too low resistance
-						unsigned coil_2_res_high : 1; // Coil 2 resistance: 0 - OK, 1 - too high resistance
-						unsigned coil_2_res_low : 1;  // Coil 2 resistance: 0 - OK, 1 - too low resistance
-						unsigned I_1_fault : 1;		  // analog out 1 fault: 0 - OK, 1 - fault
-						unsigned I_2_fault : 1;		  // analog out 2 fault: 0 - OK, 1 - fault
-						unsigned I_in_fault : 1;	  // analog out 2 fault: 0 - OK, 1 - fault
-						unsigned : 19;
-					};
-				};
-				unsigned short output[54];
-			};
-			union
-			{
-				struct
-				{
-					float fl_1;				 //  55
-					float fl_2;				 //  57
-					float fl_3;				 //  59
-					float fl_4;				 //  61
-					float fl_5;				 //  63
-					float fl_6;				 //  65
-					float fl_7;				 //  67
-					unsigned short command1; //  69
-					unsigned short command2; //  70
-					unsigned short command3; //  71
-					unsigned short command4; //  72
-					unsigned short command5; //  73
-					unsigned short command6; //  74
-					unsigned short command7; //  75
-					unsigned short command8; //  76
-					struct
-					{
-						unsigned command_On : 1;	   //  Command ON! "Semicrone" unit
-						unsigned command_Off : 1;	   //  Command OFF! "Semicrone" unit
-						unsigned command_Istab_On : 1; // Comman ON current stabilization function
-						unsigned command_Integ_ON : 1; // Comman ON I-unit into the PI-regulator (current current stabilization function)
-						unsigned : 28;				   // Last 12 bits = byte for value of Kp regulator (current current stabilization function)
-					};
-				};
-				unsigned short input[24];
-			};
-		};
-		unsigned short buf[78];
-	} MB, MB_swap, calibr, calibr_swap; // ???????? ?????? MODBUS_READ_ = 2000 ... 2078   MODBUS_WRITE = 0 ... 8
+                struct
+                {
+                    unsigned break_sin1 : 1;      // Status DBSKT sin1 ch1: 0 - OK, 1 - NOK
+                    unsigned break_cos1 : 1;      // Status DBSKT sos1 ch1: 0 - OK, 1 - NOK
+                    unsigned break_sin2 : 1;      // Status DBSKT sin2 ch2: 0 - OK, 1 - NOK
+                    unsigned break_cos2 : 1;      // Status DBSKT cos2 ch1: 0 - OK, 1 - NOK
+                    unsigned break_sens1 : 1;     // Status DBSKT sensor ch1: 0 - OK, 1 - NOK
+                    unsigned break_sens2 : 1;     // Status DBSKT sensor ch2: 0 - OK, 1 - NOK
+                    unsigned coil_1_res_high : 1; // Coil 1 resistance: 0 - OK, 1 - too high resistance
+                    unsigned coil_1_res_low : 1;  // Coil 1 resistance: 0 - OK, 1 - too low resistance
+                    unsigned coil_2_res_high : 1; // Coil 2 resistance: 0 - OK, 1 - too high resistance
+                    unsigned coil_2_res_low : 1;  // Coil 2 resistance: 0 - OK, 1 - too low resistance
+                    unsigned I_1_fault : 1;       // analog out 1 fault: 0 - OK, 1 - fault
+                    unsigned I_2_fault : 1;       // analog out 2 fault: 0 - OK, 1 - fault
+                    unsigned I_in_fault : 1;      // analog out 2 fault: 0 - OK, 1 - fault
+                    unsigned : 19;
+                };
+            };
+            unsigned short output[54];
+        };
 
-	struct tag_usart
-	{
-		unsigned char out_buffer[OUT_SIZE]; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ).
-		unsigned char in_buffer[IN_SIZE];	// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ).
-		unsigned short out_buffer_count;	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short in_buffer_count;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short in_buffer_count2;	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
-		unsigned short number_send;			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short port_type;			// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
-		unsigned short mbm_status;			// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS.
-		unsigned short mbm_err;				// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS.
-		unsigned short mbm_err16;			// пїЅпїЅпїЅпїЅпїЅпїЅ 16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-		unsigned short mbm_status_hl;		// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short mbm_status16;		// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short repeat_05;			// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 05.
-		unsigned short repeat_05_;			// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 05.
-		unsigned short mbm_timeout_counter; // пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS. //
-		unsigned short answer_count;		//
+        union
+        {
 
-		struct tag_mb_statusBITS
-		{
-			unsigned modb_mode : 1;			  // 1 пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned term_mode : 1;			  // 1 пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned modb_received : 1;		  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned modb_transmited : 1;	  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned modb_receiving : 1;	  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned modb_transmiting : 1;	  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned tx_mode : 1;			  // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (USART TX mode)
-			unsigned mbm_data_rdy : 1;		  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned master_error : 1;		  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned bussy1 : 1;			  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-			unsigned bussy2 : 1;			  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-			unsigned last_byte : 1;			  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-			unsigned byte_missing : 1;		  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-			unsigned coll_1 : 1;			  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
-			unsigned coll_2 : 1;			  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2
-			unsigned coll_3 : 1;			  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-			unsigned start16 : 1;			  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned master_start : 1;		  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned master_timeout_flag : 1; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ
-			unsigned tm_on : 1;				  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned device_error : 1;		  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned crc_error : 1;			  // пїЅпїЅпїЅпїЅпїЅпїЅ CRC
-			unsigned : 10;					  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (19-32)
-		} mb_status;
-	} usart1, usart2, usart3, usart4, usart5;
+            struct
+            {
+                float fl_1;              //  55
+                float fl_2;              //  57
+                float fl_3;              //  59
+                float fl_4;              //  61
+                float fl_5;              //  63
+                float fl_6;              //  65
+                float fl_7;              //  67
+                unsigned short command1; //  69
+                unsigned short command2; //  70
+                unsigned short command3; //  71
+                unsigned short command4; //  72
+                unsigned short command5; //  73
+                unsigned short command6; //  74
+                unsigned short command7; //  75
+                unsigned short command8; //  76
 
-	struct tag_usartm
-	{
-		unsigned char out_buffer[OUT_SIZE]; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ).
-		unsigned char in_buffer[IN_SIZE];	// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ).
-		unsigned short out_buffer_count;	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short in_buffer_count;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short in_buffer_count2;	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ).
-		unsigned short number_send;			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short mbm_status03;		// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS.
-		unsigned short mbm_status16;		// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
-		unsigned short mbm03_tm_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-		unsigned short mbm03_c01_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-		unsigned short mbm03_c02_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-		unsigned short mbm03_c03_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-		unsigned short mbm03_crc_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ CRC16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-		unsigned short mbm16_tm_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 16
-		unsigned short mbm16_c01_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 16
-		unsigned short mbm16_c02_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 16
-		unsigned short mbm16_c03_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 16
-		unsigned short mbm16_crc_err;		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ CRC16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 16
-		unsigned short repeat_05;			// пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 05.
-		unsigned short repeat_05_;			// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS 05.
-		unsigned short mbm_timeout_counter; // пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS. //
-		unsigned short answer_count;		//
+                struct
+                {
+                    unsigned command_On : 1;       //  Command ON! "Semicrone" unit
+                    unsigned command_Off : 1;      //  Command OFF! "Semicrone" unit
+                    unsigned command_Istab_On : 1; // Comman ON current stabilization function
+                    unsigned command_Integ_ON : 1; // Comman ON I-unit into the PI-regulator (current current stabilization function)
+                    unsigned : 28;                 // Last 12 bits = byte for value of Kp regulator (current current stabilization function)
+                };
+            };
+            unsigned short input[24];
+        };
+    };
+    unsigned short buf[78];
+} MB, MB_swap, calibr, calibr_swap; // MODBUS_READ_ = 2000 ... 2078   MODBUS_WRITE = 0 ... 8
 
-		struct stag_mb_statusBITS
-		{
-			unsigned modb_mode : 1;			  // 1 пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned term_mode : 1;			  // 2 пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned modb_received : 1;		  // 3 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned modb_transmited : 1;	  // 4 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned modb_receiving : 1;	  // 5 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned modb_transmiting : 1;	  // 6 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MODBUS
-			unsigned tx_mode : 1;			  // 7 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (USART TX mode) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ
-			unsigned mbm_data_rdy : 1;		  // 8 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned master_error : 1;		  // 9 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned bussy1 : 1;			  // 10 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-			unsigned bussy2 : 1;			  // 11 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-			unsigned last_byte : 1;			  // 12 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-			unsigned byte_missing : 1;		  // 13 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-			unsigned coll_1 : 1;			  // 14 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
-			unsigned coll_2 : 1;			  // 15 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2
-			unsigned coll_3 : 1;			  // 16 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3
-			unsigned start16 : 1;			  // 17 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned master_start : 1;		  // 18 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned master_timeout_flag : 1; // 19 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ
-			unsigned tm_on : 1;				  // 20 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned device_error : 1;		  // 21 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned crc_error : 1;			  // 22 пїЅпїЅпїЅпїЅпїЅпїЅ CRC
-			unsigned : 10;					  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (23-32)
-		} mb_status;
-	} usart1m, usart2m, usart3m, usart4m, usart5m;
+// struct full usart
+struct tag_usart
+{
+    unsigned char out_buffer[OUT_SIZE]; //
+    unsigned char in_buffer[IN_SIZE];   //
+    unsigned short out_buffer_count;    //
+    unsigned short in_buffer_count;     //
+    unsigned short in_buffer_count2;    //
+    unsigned short number_send;         //
+    unsigned short port_type;           //
+    unsigned short mbm_status;          //
+    unsigned short mbm_err;             //
+    unsigned short mbm_err16;           //
+    unsigned short mbm_status_hl;       //
+    unsigned short mbm_status16;        //
+    unsigned short repeat_05;           //
+    unsigned short repeat_05_;          //
+    unsigned short mbm_timeout_counter; //
+    unsigned short answer_count;        //
 
-	unsigned short mbm_sync;
+    struct tag_mb_statusBITS
+    {
+        unsigned modb_mode : 1;           //
+        unsigned term_mode : 1;           //
+        unsigned modb_received : 1;       //
+        unsigned modb_transmited : 1;     //
+        unsigned modb_receiving : 1;      //
+        unsigned modb_transmiting : 1;    //
+        unsigned tx_mode : 1;             //
+        unsigned mbm_data_rdy : 1;        //
+        unsigned master_error : 1;        //
+        unsigned bussy1 : 1;              //
+        unsigned bussy2 : 1;              //
+        unsigned last_byte : 1;           //
+        unsigned byte_missing : 1;        //
+        unsigned coll_1 : 1;              //
+        unsigned coll_2 : 1;              //
+        unsigned coll_3 : 1;              //
+        unsigned start16 : 1;             //
+        unsigned master_start : 1;        //
+        unsigned master_timeout_flag : 1; //
+        unsigned tm_on : 1;               //
+        unsigned device_error : 1;        //
+        unsigned crc_error : 1;           //
+        unsigned : 10;                    //
+    } mb_status;
+} usart1, usart2, usart3, usart4, usart5;
 
-	union tag_mops
-	{
-		struct
-		{
-			union
-			{
-				struct
-				{
-					unsigned short info[3];				   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-					unsigned short status[num_zones];	   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short hold_status[num_zones]; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short current[num_zones + 1]; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-				};
-				unsigned short read[num_zones * 3 + 4]; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-			};
-			union
-			{
-				struct
-				{
-					unsigned short command[num_zones]; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short type[num_zones];	   // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ
-					unsigned short limit1[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short limit2[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short limit3[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short limit4[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short timer1[num_zones];  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned short timer2[num_zones];
-					unsigned short timer3[num_zones];
-					unsigned short timer4[num_zones];
-					unsigned short stat_hysteresis;
-				};
-				unsigned short write[num_zones * 10 + 1];
-			};
-			unsigned short mod_stat[5];
-		};
-		unsigned short main_area[num_zones * 13 + 10];
-	};
+// struct full usart master
+struct tag_usartm
+{
+    unsigned char out_buffer[OUT_SIZE]; //
+    unsigned char in_buffer[IN_SIZE];   //
+    unsigned short out_buffer_count;    //
+    unsigned short in_buffer_count;     //
+    unsigned short in_buffer_count2;    //
+    unsigned short number_send;         //
+    unsigned short mbm_status03;        //
+    unsigned short mbm_status16;        //
+    unsigned short mbm03_tm_err;        //
+    unsigned short mbm03_c01_err;       //
+    unsigned short mbm03_c02_err;       //
+    unsigned short mbm03_c03_err;       //
+    unsigned short mbm03_crc_err;       //
+    unsigned short mbm16_tm_err;        //
+    unsigned short mbm16_c01_err;       //
+    unsigned short mbm16_c02_err;       //
+    unsigned short mbm16_c03_err;       //
+    unsigned short mbm16_crc_err;       //
+    unsigned short repeat_05;           //
+    unsigned short repeat_05_;          //
+    unsigned short mbm_timeout_counter; //
+    unsigned short answer_count;        //
+    unsigned short mbm16_counter_start; //
 
-	union tag_mops MOPS_arr[10];
+    struct stag_mb_statusBITS
+    {
+        unsigned modb_mode : 1;           // 1
+        unsigned term_mode : 1;           // 2
+        unsigned modb_received : 1;       // 3
+        unsigned modb_transmited : 1;     // 4
+        unsigned modb_receiving : 1;      // 5
+        unsigned modb_transmiting : 1;    // 6
+        unsigned tx_mode : 1;             // 7
+        unsigned mbm_data_rdy : 1;        // 8
+        unsigned master_error : 1;        // 9
+        unsigned bussy1 : 1;              // 10
+        unsigned bussy2 : 1;              // 11
+        unsigned last_byte : 1;           // 12
+        unsigned byte_missing : 1;        // 13
+        unsigned coll_1 : 1;              // 14
+        unsigned coll_2 : 1;              // 15
+        unsigned coll_3 : 1;              // 16
+        unsigned start16 : 1;             // 17
+        unsigned master_start : 1;        // 18
+        unsigned master_timeout_flag : 1; // 19
+        unsigned tm_on : 1;               // 20
+        unsigned device_error : 1;        // 21
+        unsigned crc_error : 1;           // 22
+        unsigned : 10;                    // (23-32)
+    } mb_status;
+} usart1m, usart2m, usart3m, usart4m, usart5m;
 
-	unsigned short ign_time;
-	const unsigned short cyl_order[] = {0, 2, 9, 10, 3, 4, 5, 6, 7, 8, 1};
-	// const unsigned short cyl_order [] = {0,3,8,5,4,2,6,7,1};
-	// float UOZ;
-	extern float koeff_UOZ;
-	unsigned short cyl_num;
-	unsigned short sync_pulse;
-	unsigned short sync_counter_11;
-	unsigned short sync_counter_40;
-	unsigned short counter_11;
-	unsigned short counter_40;
-	unsigned short start_ign_distrib;
-	unsigned short sync_status;
-	unsigned short success_sync_counter;
-	unsigned short pulse_started;
-	unsigned short pulse_started1;
-	unsigned short pulse_started2;
-	unsigned long ign_timer8;
-	unsigned long ign_timer7;
-	unsigned long temp_timer;
-	unsigned long discharge_capt[10];
-	unsigned short ign_stat_odd;
-	unsigned short ign_stat_even;
-	unsigned short ign_stat1;
-	unsigned short ign_stat2;
-	unsigned short ign_stat3;
-	unsigned short ign_stat4;
-	unsigned short ign_alowed;
-	unsigned short uoz_etap;
-	unsigned short work_status;
+// help var for strob and sync
+unsigned short mbm_sync;
 
-	unsigned short rpm_count;
-	unsigned short total_err_count1;
-	unsigned short total_err_count2;
-	unsigned short delay_before_start;
+// struct full mops
+union tag_mops
+{
 
-	float middle_buf40[FILT_CRPM * 40];
-	float middle_buf11[FILT_CRPM * 11];
-	float middle_11;
-	float hold_current;
-	unsigned short middle_count40;
-	unsigned short middle_count11;
-	unsigned short lock11;
+    struct
+    {
 
-	unsigned short AO_ignit_error;
-	unsigned short AO_ignit_br_low;
-	unsigned short AO_ignit_sc_low;
-	unsigned short AO_ignit_br_high;
-	unsigned short unsync_error;
-	unsigned short CV_regul_on;
-	unsigned short charge_fail;
+        union
+        {
 
-	union tag_Modbus
-	{
-		struct
-		{
-			union
-			{
-				struct
-				{
-					unsigned flap_On : 1;			// 1
-					unsigned start : 1;				// 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-					unsigned ignit_allow : 1;		// 4 Comman ON current stabilization function
-					unsigned CV_dir_ctrl : 1;		// 8 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned PWM_dir_ctrl : 1;		// 16 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned ign_ctrl : 1;			// 32 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned unlock : 1;			// 64 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned AO : 1;				// 128 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned clr_err_cnt : 1;		// 256 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned stop : 1;				// 512 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned press_mode_int : 1;	// 1024 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned press_mode_analog : 1; // 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned deep_on : 1;			// 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned NO : 1;				// 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned stop_pid_on : 1;		// 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned stop_pid_off : 1;		// 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned forced_pid_on : 1;		// 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned forced_pid_off : 1;	// 131072 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned : 14;					// Last 8 bits = byte for value of Kp regulator (current current stabilization function)
-				};
-				unsigned long cmd1; // 1
-			};
-			unsigned short num_check_cyl; // 3
-			unsigned short cyl_mask;	  // 4
-			float RPM_set;				  // 5      setting the ngine speed
-			float CV_dir_set;			  // 7      setting the ngine speed
-			float work_status;			  // 9      status BUD
-			float RPM11;				  // 11      rpm, measured via sinchro 11-teeth-channel
-			float RPM40;				  // 13      rpm, measured via rpm 40-teeth-channel
-			float CV_set;				  // 15      fuel valve setting
-			float CV_pos;				  // 17      actual fuel valve position
-			float CV_current;			  // 19      actual valve currrent
-			float actual_UOZ;			  // 21      ignition angle
-			unsigned short AO_reason;	  // 23
-			unsigned short AO_cyl_num;	  // 24
-			unsigned short ADC_CV_pos;	  // 25
-			unsigned short ADC_CV_curr;	  // 26
-			unsigned short pulses_11;	  // 27    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			unsigned short pulses_40;	  // 28	пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-			float err_rpm;				  // 29
-			union
-			{
-				struct
-				{
-					unsigned CV_locked : 1;		   // 1 "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅ
-					unsigned press_via_analog : 1; // 2 1 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ; 0 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned CV_magnet_brake : 1;  // 4 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned CV_sensor_err : 1;	   // 8 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned deep_mode : 1;		   // 16 Command ON
-					unsigned Protect_unswitch : 1; // 32 Command ON
-					unsigned DI1_ctrl : 1;		   // 64 Command ON
-					unsigned CONTROL1 : 1;		   // 128
-					unsigned CONTROL2 : 1;		   // 256
-					unsigned CONTROL3 : 1;		   // 512
-					unsigned CONTROL4 : 1;		   // 1024
-					unsigned s12 : 1;			   // 2048 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned deep_is_on : 1;	   // 4096 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned stop_pid : 1;		   // 8192 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned miss_sync : 1;		   // 16384 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned miss_rpm : 1;		   // 32768 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					unsigned forced_pid : 1;	   // 65536 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
-					unsigned : 15;				   // Last 16 bits = byte for value of Kp regulator (current current stabilization function)
-				};
-				unsigned long statuses; // 31
-			};
-			float ign_err_num1; // 33
-			float ign_err_num2; // 35
-		};
-		unsigned short buf[82]; // MB_READ_ MB_WRITE_  0 ... 80
-	} Modbus, Modbus_sw;
+            struct
+            {
+                unsigned short info[3];                //
+                unsigned short status[num_zones];      //
+                unsigned short hold_status[num_zones]; //
+                unsigned short current[num_zones + 1]; //
+            };
+            unsigned short read[num_zones * 3 + 4]; //
+        };
 
-	union tag_MB_diag
-	{
-		struct
-		{
-			unsigned short break_low[10];  //      event counter of break low voltage wire for every of 10 cylinders
-			unsigned short short_low[10];  //      event counter of short circuit low voltage wire for every of 10 cylinders
-			unsigned short break_high[10]; //      event counter of break high voltage wire for every of 10 cylinders
-			float discharge_hold[10];	   //  -   momental discharge time captured for 10 cylinders
-			float discharge_middle[10];	   //  -   middle discharge time capture for 10 cylinders
-		};
-		unsigned short buf[70];
-	} MB_diag, MB_diag_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270
+        union
+        {
 
-	union tag_diag
-	{
-		struct
-		{
-			unsigned short break_low[CYLINDERS_NUM];  //      event counter of break low voltage wire for every of 10 cylinders
-			unsigned short short_low[CYLINDERS_NUM];  //      event counter of short circuit low voltage wire for every of 10 cylinders
-			unsigned short break_high[CYLINDERS_NUM]; //      event counter of break high voltage wire for every of 10 cylinders
-			float discharge_hold[CYLINDERS_NUM];	  //  -   momental discharge time captured for 10 cylinders
-			float charge_hold[CYLINDERS_NUM];		  //  -   middle discharge time capture for 10 cylinders
-		};
-		unsigned short buf[112];
-	} MB_diagn, MB_diagn_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270
+            struct
+            {
+                unsigned short command[num_zones]; //
+                unsigned short type[num_zones];    //
+                unsigned short limit1[num_zones];  //
+                unsigned short limit2[num_zones];  //
+                unsigned short limit3[num_zones];  //
+                unsigned short limit4[num_zones];  //
+                unsigned short timer1[num_zones];  //
+                unsigned short timer2[num_zones];
+                unsigned short timer3[num_zones];
+                unsigned short timer4[num_zones];
+                unsigned short stat_hysteresis;
+            };
+            unsigned short write[num_zones * 10 + 1];
+        };
+        unsigned short break_err;
+        unsigned short norma_err;
+        unsigned short att_err;
+        unsigned short fire_err;
+        unsigned short short_err;
+        unsigned short current_err;
+        unsigned short timeout_err;
+        unsigned short crc_err;
+        unsigned short coll_1_err;
+        unsigned short coll_2_err;
+        unsigned short coll_3_err;
+    };
+    unsigned short main_area[num_zones * 13 + 16];
+};
 
-	unsigned short dir_sc_low[CYLINDERS_NUM];
-	unsigned short dir_br_low[CYLINDERS_NUM];
-	unsigned short dir_br_high[CYLINDERS_NUM];
-	unsigned short bit_sc_low;
-	unsigned short bit_br_low;
-	unsigned short bit_br_high;
+// short struct mops
+union tag_mops_short
+{
+    struct
+    {
+        union
+        {
+            struct
+            {
+                unsigned short info[3];                //
+                unsigned short status[num_zones];      //
+                unsigned short hold_status[num_zones]; //
+                unsigned short current[num_zones + 1]; //
+            };
+            unsigned short read[num_zones * 3 + 4]; //
+        };
+        union
+        {
+            struct
+            {
+                unsigned short command[num_zones];
+                unsigned short type[num_zones]; //
+            };
+            unsigned short write[num_zones * 2];
+        };
+        unsigned short break_err;
+        unsigned short norma_err;
+        unsigned short att_err;
+        unsigned short fire_err;
+        unsigned short short_err;
+        unsigned short current_err;
+        unsigned short timeout_err;
+        unsigned short crc_err;
+        unsigned short coll_1_err;
+        unsigned short coll_2_err;
+        unsigned short coll_3_err;
+    };
+    unsigned short main_area[num_zones * 6 + 15];
+};
 
-	union tag_MB_conf
-	{
-		struct
-		{
-			float max_RPM;						// 1     max speed of engine RPM for emergecy stop
-			float min_RPM;						// 3     min speed of engine RPM for emergecy stop
-			float UOZ_high;						// 5     UOZ nominal speed of engine
-			float UOZ_low;						// 7     UOZ low speed of engine
-			float UOZ_global_shift;				// 9     main UOZ correction for all cylinders
-			float UOZ_RPM_max;					// 11    enginae speed when UOZ bekomes UOZ_high
-			float UOZ_RPM_min;					// 13    enginae speed when UOZ bekomes UOZ_low
-			float discharge_sc_low;				// 15    discharge time for detection SC low voltage wire
-			float discharge_br_high;			// 17    discharge time for detection break high voltage wire
-			float constructive_UOZ;				// 19    constructive angle sinchro point and ignition point (18 degreece)
-			float CV_start_val;					// 21    start value of valve opening during the engine start
-			float CV_start_spd;					// 23    speed of valve opening to start value
-			float CV_open_spd;					// 25    speed of valve opening during the engine start to PID RPM
-			float PID_spd;						// 27    RPM when starts the engine PI regulator
-			float Ignit_spd;					// 29    RPM when ignition start is possible
-			float CV_pos_min;					// 31    min valve adc code
-			float CV_pos_max;					// 33    max valve adc code
-			float CV_curr_min;					// 35    min valve current adc code
-			float CV_curr_max;					// 37    max valve current adc code
-			float CV_curr_scale;				// 39    valve current scale between min and max codes
-			float CV_KP;						// 41
-			float CV_KD;						// 43
-			float CV_KI;						// 45
-			float NUM_ERR_AO;					// 47    reserve
-			float KP_mpid;						// 49    reserve
-			float KI_mpid;						// 51    reserve
-			float KD_mpid;						// 53    reserve
-			float Timer_to_PID;					// 55    reserve
-			float PID_deadband;					// 57    reserve
-			float KP_res_limit;					// 59    reserve
-			float CV_check_level;				// 61    reserve
-			float UOZ_shift_ind[CYLINDERS_NUM]; // 63 - 82    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅпїЅпїЅпїЅ
-		};
-		//    unsigned short buf [168];
-		unsigned short buf[90];
-	} MB_conf, MB_sw_conf;
+// full arrs for mops
+union tag_mops MOPS_arr[10];
+union tag_mops MOPS_arr_sw[10];
 
-	unsigned short DINPUT1;
-	unsigned short DINPUT2;
-	unsigned short DINPUT3;
+// short arrs for mops
+union tag_mops_short MOPS_S_arr[10];
+union tag_mops_short MOPS_S_arr_sw[10];
 
-	/* Provide C++ Compatibility */
-#ifdef __cplusplus
-}
-#endif
+// full struct for mups
+union tag_mups
+{
+
+    struct
+    {
+
+        union
+        {
+
+            struct
+            {
+                unsigned short info[3];         // 1
+                unsigned short Int_Voltage;     // 4
+                unsigned short Ch_State[4];     // 5
+                unsigned short Ch_Cmd[4];       // 9
+                unsigned short Ch_Strategy[4];  // 13
+                unsigned short Ch_Res[4];       // 17
+                unsigned short Ch_Current[4];   // 21 //
+                unsigned short Ch_P1[4];        // 25
+                unsigned short Ch_P2[4];        // 29
+                unsigned short Ch_P3[4];        // 33
+                unsigned short Ch_P4[4];        // 37
+                unsigned short Blinc_param1[2]; // 41
+                unsigned short Blinc_param2[2]; // 43
+                unsigned short Blinc_param3[2]; // 45
+                unsigned short Blinc_param4[2]; // 47
+                signed short Res_Coef[4];       // 49
+                signed short Cur_ZCoef[4];      // 53
+                signed short Cur_MaxCoef[4];    // 57
+                unsigned short LineChDelay;     // 61
+                unsigned short ADC[16];         // 62
+                unsigned short relay;           // 78
+                unsigned short AD_RES[4];       // 79
+                float AD_F_RES[4];              // 83 ... 90    //
+                unsigned short timeout_err;     // 91
+                unsigned short crc_err;         // 92
+                unsigned short coll_1_err;      // 93
+                unsigned short coll_2_err;      // 94
+                unsigned short coll_3_err;      // 95
+            };
+            unsigned short read[96];
+        };
+    };
+};
+
+// short struct for mups
+union tag_mups_short
+{
+
+    union
+    {
+
+        struct
+        {
+            unsigned short info[3];        // 1
+            unsigned short Int_Voltage;    // 4
+            unsigned short Ch_State[4];    // 5
+            unsigned short Ch_Cmd[4];      // 9
+            unsigned short Ch_Strategy[4]; // 13
+            unsigned short Ch_Res[4];      // 17
+            unsigned short Ch_Current[4];  // 21
+            unsigned short timeout_err;    // 25
+            unsigned short crc_err;        // 26
+            unsigned short coll_1_err;     // 27
+            unsigned short coll_2_err;     // 28
+            unsigned short coll_3_err;     // 29
+        };
+        unsigned short read[29]; // выровнять
+    };
+    unsigned short main_area[29];
+} mups_short;
+
+// full arrs for mups
+union tag_mups MUPS_arr[10];
+union tag_mups MUPS_arr_sw[10];
+
+// short arrs for mups
+union tag_mups_short MUPS_S_arr[10];
+union tag_mups_short MUPS_S_arr_sw[10];
+
+// mups strategy for all chanels
+unsigned short mups_strategy[4];
+unsigned short mups_1_strategy[4] = {0x0100, 0x0100, 0x0100, 0x0100};
+unsigned short mups_2_strategy[4] = {0x0200, 0x0200, 0x0200, 0x0200};
+unsigned short mups_3_strategy[4] = {0x0300, 0x0300, 0x0300, 0x0300};
+
+// strategy buffer
+unsigned short mups_strategy_sep[4];
+
+// relay buffer
+// relay buffer
+unsigned short relay_toggle[4];
+
+// flag for a low-level function mbm_16
+unsigned short mbm_16_end_flag;
+
+// flag for the order of high-level functions
+unsigned short mbm_fun_in_work = 0;
+
+// help vars for mops&mups
+unsigned short mops_stat;
+unsigned short mups_stat;
+unsigned short mops_done;
+unsigned short mups_done;
+unsigned short mops_num;
+unsigned short mups_num;
+
+// modbus struct
+// modbus struct
+union tag_Modbus
+{
+
+    struct
+    {
+
+        union
+        {
+
+            struct
+            {
+                unsigned flap_On : 1;           // 1
+                unsigned start : 1;             // 2
+                unsigned ignit_allow : 1;       // 4
+                unsigned CV_dir_ctrl : 1;       // 8
+                unsigned PWM_dir_ctrl : 1;      // 16
+                unsigned ign_ctrl : 1;          // 32
+                unsigned unlock : 1;            // 64
+                unsigned AO : 1;                // 128
+                unsigned clr_err_cnt : 1;       // 256
+                unsigned stop : 1;              // 512
+                unsigned press_mode_int : 1;    // 1024
+                unsigned press_mode_analog : 1; // 2048
+                unsigned deep_on : 1;           // 4096
+                unsigned NO : 1;                // 8192
+                unsigned stop_pid_on : 1;       // 16384
+                unsigned stop_pid_off : 1;      // 32768
+                unsigned forced_pid_on : 1;     // 65536
+                unsigned forced_pid_off : 1;    // 131072
+                unsigned : 14;                  // Last 8 bits = byte for value of Kp regulator (current current stabilization function)
+            };
+            unsigned long cmd1; // 1
+        };
+        unsigned short num_check_cyl; // 3
+        unsigned short cyl_mask;      // 4
+        float RPM_set;                // 5      setting the ngine speed
+        float CV_dir_set;             // 7      setting the ngine speed
+        float work_status;            // 9      status BUD
+        float RPM11;                  // 11      rpm, measured via sinchro 11-teeth-channel
+        float RPM40;                  // 13      rpm, measured via rpm 40-teeth-channel
+        float CV_set;                 // 15      fuel valve setting
+        float CV_pos;                 // 17      actual fuel valve position
+        float CV_current;             // 19      actual valve currrent
+        float actual_UOZ;             // 21      ignition angle
+        unsigned short AO_reason;     // 23
+        unsigned short AO_cyl_num;    // 24
+        unsigned short ADC_CV_pos;    // 25
+        unsigned short ADC_CV_curr;   // 26
+        unsigned short pulses_11;     // 27
+        unsigned short pulses_40;     // 28
+        float err_rpm;                // 29
+
+        union
+        {
+
+            struct
+            {
+                unsigned CV_locked : 1;        // 1
+                unsigned press_via_analog : 1; // 2
+                unsigned CV_magnet_brake : 1;  // 4
+                unsigned CV_sensor_err : 1;    // 8
+                unsigned deep_mode : 1;        // 16 Command ON
+                unsigned Protect_unswitch : 1; // 32 Command ON
+                unsigned DI1_ctrl : 1;         // 64 Command ON
+                unsigned CONTROL1 : 1;         // 128
+                unsigned CONTROL2 : 1;         // 256
+                unsigned CONTROL3 : 1;         // 512
+                unsigned CONTROL4 : 1;         // 1024
+                unsigned s12 : 1;              // 2048
+                unsigned deep_is_on : 1;       // 4096
+                unsigned stop_pid : 1;         // 8192
+                unsigned miss_sync : 1;        // 16384
+                unsigned miss_rpm : 1;         // 32768
+                unsigned forced_pid : 1;       // 65536
+                unsigned : 15;                 // Last 16 bits = byte for value of Kp regulator (current current stabilization function)
+            };
+            unsigned long statuses; // 31
+        };
+        float ign_err_num1; // 33
+        float ign_err_num2; // 35
+    };
+    unsigned short buf[82]; // MB_READ_ MB_WRITE_  0 ... 80
+} Modbus, Modbus_sw;
+
+//
+union tag_MB_diag
+{
+
+    struct
+    {
+        unsigned short break_low[10];  //      event counter of break low voltage wire for every of 10 cylinders
+        unsigned short short_low[10];  //      event counter of short circuit low voltage wire for every of 10 cylinders
+        unsigned short break_high[10]; //      event counter of break high voltage wire for every of 10 cylinders
+        float discharge_hold[10];      //  -   momental discharge time captured for 10 cylinders
+        float discharge_middle[10];    //  -   middle discharge time capture for 10 cylinders
+    };
+    unsigned short buf[70];
+} MB_diag, MB_diag_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270
+
+//
+union tag_diag
+{
+
+    struct
+    {
+        unsigned short break_low[CYLINDERS_NUM];  //      event counter of break low voltage wire for every of 10 cylinders
+        unsigned short short_low[CYLINDERS_NUM];  //      event counter of short circuit low voltage wire for every of 10 cylinders
+        unsigned short break_high[CYLINDERS_NUM]; //      event counter of break high voltage wire for every of 10 cylinders
+        float discharge_hold[CYLINDERS_NUM];      //  -   momental discharge time captured for 10 cylinders
+        float charge_hold[CYLINDERS_NUM];         //  -   middle discharge time capture for 10 cylinders
+    };
+    unsigned short buf[112];
+} MB_diagn, MB_diagn_sw; // MB_DIAGN_READ_ MB_DIAGN_WRITE_  200 ... 270
+
+//
+unsigned short dir_sc_low[CYLINDERS_NUM];
+unsigned short dir_br_low[CYLINDERS_NUM];
+unsigned short dir_br_high[CYLINDERS_NUM];
+unsigned short bit_sc_low;
+unsigned short bit_br_low;
+unsigned short bit_br_high;
+
+// struct for stand
+union tag_stand
+{
+
+    struct
+    {
+        unsigned short active_mops[10];      // 1
+        unsigned short active_mups[10];      // 11
+        unsigned short mops_timeout_err[10]; // 21
+        unsigned short mops_crc_err[10];     // 31
+        unsigned short mops_coll_1_err[10];  // 41
+        unsigned short mops_coll_2_err[10];  // 51
+        unsigned short mops_coll_3_err[10];  // 61
+        unsigned short mups_timeout_err[10]; // 71
+        unsigned short mups_crc_err[10];     // 81
+        unsigned short mups_coll_1_err[10];  // 91
+        unsigned short mups_coll_2_err[10];  // 101
+        unsigned short mups_coll_3_err[10];  // 111
+        unsigned short break_err[10];         // 121
+        unsigned short norma_err[10];        // 131
+        unsigned short att_err[10];          // 141
+        unsigned short fire_err[10];         // 151
+        unsigned short short_err[10];        // 161
+        unsigned short current_err[10];      // 171
+    };
+    //    unsigned short buf [168];
+    unsigned short buf[180];
+} Stand, Stand_sw;
+
+// help vars
+unsigned short DINPUT1;
+unsigned short DINPUT2;
+unsigned short DINPUT3;
+
+/* {XP1_1(16 bit), XP1_2(8 bit), XP2_1, XP2_2, XP3_1, XP3_2, XP4_1, XP4_2}*/
+
+                                        // MOPS AREA
+
+//530 board arr for mods
+
+                                            //===normal===//
+// 1-4 normal
+unsigned short _530_board_normal_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2, 
+                                            NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2};
+// 1 - normal, 2 - normal, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_normal_start_reley_4_mops[8] = {NORMAL_530_1, NORMAL_530_2, NORMAL_530_1, NORMAL_530_2,
+                                                          SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+
+                                            //===short current===//
+//1-4 short current
+unsigned short _530_board_short_current_mops[8] = {SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, 
+                                                   SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2};
+// 1 - sc, 2 - sc, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_short_current_start_reley_4_mops[8] = {SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2, SW_SHORT_CURRENT_530_1, SW_SHORT_CURRENT_530_2,
+                                                                 SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+
+                                                //===fire===//
+// 1-4 fire
+unsigned short _530_board_fire_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
+                                          SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2};
+// 1 - fire, 2 - fire, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_fire_start_reley_4_mops[8] = {SW_FIRE_530_1, SW_FIRE_530_2, SW_FIRE_530_1, SW_FIRE_530_2, 
+                                                        SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+
+                                            //===attantion===//
+// 1-4 attantion
+unsigned short _530_board_attantion_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
+                                               SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2};
+
+// 1 - attantion, 2 - attantion, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_attantion_start_reley_4_mops[8] = {SW_ATTANTION_530_1, SW_ATTANTION_530_2, SW_ATTANTION_530_1, SW_ATTANTION_530_2, 
+                                                             SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+
+                                        //===end on with 84 reley===//
+// 1 - reley on, 2 - end 84 reley on, 3 - none, 4 - none
+unsigned short _530_board_84_reley_on_mops[8] = {SW_RELEY_ON_530_1, SW_RELEY_ON_530_2, SW_RELEY_ON_END_84_530_1, SW_RELEY_ON_END_84_530_2,
+                                                 NONE_530, NONE_530, NONE_530, NONE_530};
+
+                                    //===just reley on without strategy===//
+// 1 - none, 2 - none, 3 - reley on starting from 4th, 4 - reley on
+unsigned short _530_board_only_reley_on_start_4_mops[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                           SW_RELEY_ON_START_4_530_1, SW_RELEY_ON_START_4_530_2, SW_RELEY_ON_530_1, SW_RELEY_ON_530_2};
+
+
+                                            //===none===//
+unsigned short _530_board_none_mops[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                          NONE_530, NONE_530, NONE_530, NONE_530};
+
+                                            //===main array===//
+unsigned short _530_board_mode_mops[8];
+
+
+
+                                                // MUPS AREA
+
+// 530 board 18v
+unsigned short _530_board_just_18v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
+                                         SW_JUST_TURNE_ON_18V_1, SW_JUST_TURNE_ON_18V_2, NONE_530, NONE_530};
+// 530 board 24v
+unsigned short _530_board_just_24v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
+                                         SW_JUST_TURNE_ON_24V_1, SW_JUST_TURNE_ON_24V_2, NONE_530, NONE_530};
+// 530 board 28v
+unsigned short _530_board_just_28v[8] = {NONE_530, NONE_530, NONE_530, NONE_530, 
+                                         SW_JUST_TURNE_ON_28V_1, SW_JUST_TURNE_ON_28V_2, NONE_530, NONE_530};
+
+// 530 board reley off for break
+unsigned short _530_board_all_releys_off_for_break[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                         NONE_530, NONE_530, NONE_530, NONE_530};
+// 530 test turne on all
+unsigned short _530_test_turne_on_all[8] = {0xffff, 0xffff, 0xffff, 0xffff,
+                                            0xffff, 0xffff, 0xffff, 0xffff};
+
+// 530 board mups reley turne on(88 - 91 - 94...) for AP4 norm
+unsigned short _530_mups_88_91_94_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                     SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, NONE_530, NONE_530};
+// 530 board mups reley turne on(88 - 91 - 94...) for AP5 norm
+unsigned short _530_mups_88_91_94_reley_on_ap5[8] = {SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2,
+                                                     SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2, SW_MUPS_88_91_94_RELEY_ON_1, SW_MUPS_88_91_94_RELEY_ON_2};
+// 530 board mups reley turne on (88/89 - 91/92 - 94/95...) for AP4 sc
+unsigned short _530_mups_88_89_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_530, NONE_530,
+                                                     SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, NONE_530, NONE_530};
+// 530 board mups reley turne on (88/89 - 91/92 - 94/95...) for AP5 sc
+unsigned short _530_mups_88_89_reley_on_ap5[8] = {SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2,
+                                                     SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2};
+
+// load for high current
+unsigned short high_current[8] = {NONE_530, NONE_530, SW_HIGH_CURRENT, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+
+// none
+unsigned short none[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+
+//mups_1 load
+unsigned short _1_mups_load_norm[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+
+
+//var for function _1_sec
+unsigned short _1_sec_counter;
+short start_1_sec_timer; 
+
+// var for function _var_sec
+unsigned short _var_sec_conunter;
+short start_var_sec_timer;
+
+//var for function _500_msec
+unsigned short _500_msec_counter;
+
+
+// mops statement struct, show mops statements
+union tag_mops_stand_statment
+{
+    struct
+    {
+        struct 
+        {
+            unsigned short mops_online;                 // is there connection with module
+            unsigned short mops_online_err;             // connection error
+            unsigned short mops_offline;                // mops not connected special
+            unsigned short mops_operable;               // is the module working properly or not
+            unsigned short mops_not_operable;           // the module is not working properly
+        }mops_statment;
+        unsigned short mops_current_ch_status[8];                   // buffer for the value of the states
+        struct
+        {
+            unsigned short mops_ch_err_break[8];                   // break(1)
+            unsigned short mops_ch_err_normal[8];                  // normal(2)
+            unsigned short mops_ch_err_attantion[8];               // attantion(4)
+            unsigned short mops_ch_err_fire[8];                    // fire(5)
+            unsigned short mops_ch_err_sc[8];                      // short current(6)
+        }mops_ch_statement;
+        struct
+        {
+            unsigned short mops_18v_error;
+            unsigned short mops_24v_error;
+            unsigned short mops_28v_error;
+        }mops_power_supply_error;
+    };
+    unsigned short main_buff[56];
+}mops_stand_statment;
+
+//struct mups array
+union tag_mops_stand_statment MOPS_statment[10];
+union tag_mops_stand_statment MOPS_statment_sw[10];
+
+//union for configuration stand
+union tag_conf_stand
+{
+    struct
+    {
+       unsigned short start_check_mops;
+       unsigned short mops_diagnostics_in_progress;
+       unsigned short start_check_mups;
+       unsigned short mups_diagnostics_in_progress;
+       unsigned short not_usable[96];
+    }stand_commands;
+    unsigned short comm_buff[100];
+}conf_stand, conf_stand_sw;     // conf_stand - normal data
+
+
+//MUPS area
+// mups statement struct, show mops statements
+union tag_mups_stand_statment
+{
+    struct
+    {
+        struct 
+        {
+            unsigned short mups_online;                 // is there connection with module
+            unsigned short mups_online_err;             // connection error
+            unsigned short mups_offline;                // mops not connected special
+            unsigned short mups_operable;               // is the module working properly or not
+            unsigned short mups_not_operable;           // the module is not working properly
+        }mups_statment;
+        unsigned short mups_current_ch_status[4];                   // buffer for the value of the states
+        struct
+        {
+            unsigned short mups_ch_err_break_ch_off[4];                     // the line is broken, the channel is turned off(1)
+            unsigned short mups_ch_err_norm_ch_off[4];                      // channel norm, the channel is off(2)
+            unsigned short mups_ch_err_sc_ch_off[4];                        // short circuit of the channel, the channel is turned off(3)
+            unsigned short mups_ch_err_norm_ch_on[4];                       // channel norm, the channel is on(4)
+            unsigned short mups_ch_err_cur_up_ch_off_force[4];              // exceeding the channel current, the channel is forcibly turned off(5)
+            unsigned short mups_ch_err_break_ch_on[4];                      // The channel is open, the channel is on(6)
+        }mups_ch_statement;
+        struct
+        {
+            unsigned short mups_18v_error;
+            unsigned short mups_24v_error;
+            unsigned short mups_28v_error;
+        }mups_power_supply_error;
+    };
+    unsigned short main_buff[36];
+}mups_stand_statment;
+
+//struct mups array
+union tag_mups_stand_statment MUPS_statment[10];
+union tag_mups_stand_statment MUPS_statment_sw[10];
+
+
+#endif // GLOBAL_H

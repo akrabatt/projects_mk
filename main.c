@@ -1,44 +1,40 @@
+#include <stdio.h>
+#include <string.h>
 #include <xc.h>
-#include <sys/attribs.h> /* contains __ISR() Macros */
-// #include "extern.h"
+#include <sys/attribs.h>    /* contains __ISR() Macros */
 #include "global.h"
 #include "define.h"
+
 
 int main(void)
 {
     InitializeSystem();
-
-    help_reset = 1;
-    ENAB_RX5;
-    ENAB_RX4;
-    //    TAP_ON = 1;
-    //    close_mbs ( &usart1);
-    //    usart5.mb_status.tx_mode = DMA_type;
-    usart4.mb_status.tx_mode = DMA_type;
-    usart5.mb_status.tx_mode = INT_type;
-    usart5m.mb_status.tx_mode = INT_type;
-    //    usart4.mb_status.tx_mode = INT_type;
-
-    //    load_config ();
-    //    IC1CONbits.ON = 1;
-    //    IC6CONbits.ON = 1;
-    //    load_config ();
-    while (1)
-
+    while(1)
     {
-        mbs(&usart4, 1); // порт  1
-        stop_uart_tx_dma();
-        //    mbs (&usart4, 1);				//4
-        if (mbm_sync == 1)
-        {
-            // mbm_03 (&usart5, 1, 0, 28, (unsigned short * ) &MOPS_arr [1], 115200);
-            // mbm_03_str(&usart5m, 1, 0, 108, (unsigned short *)&MOPS_arr[1], 115200);
-            MM_control(&usart5m);
+        mbs (&usart3, 1);
+        stop_uart_tx_dma();   
+        if ( mbm_sync ==  1 ) 
+        {  
+            // u2
+//            change_mups_strategy_separately(&usart2m);
+//            control_mups_reley(&usart2m);
+            mups_service_check(&usart4m, &usart2m, &usart5m);
+//            MUPS_S_control_flag(&usart2m, &iiii);
+//            MOPS_S_control(&usart1m);
+            // u1
+//            MOPS_S_control(&usart1m);
+            // u4
+//            board_530_mode_common(&usart4m);
+            // u5
+//            board_530_mode_common(&usart5m);
+//            mops_service_check(&usart4m, &usart5m, &usart1m);
+            
             mbm_sync = 0;
         }
-        stop_uart_tx();
-        PORTGbits.RG7 = help_strobe;
-
-        LED_8 = help_strobe;
+    stop_uart_tx();
+    
+    LED_8 = help_strobe;
     }
-}
+} 
+
+
