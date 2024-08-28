@@ -1826,13 +1826,31 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         //
         case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM:    // turne on releys to load for mups
         {
-            mups_mbm_flag_f = 0;
-            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
-            if(mups_mbm_flag_f != 0)
-                {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-            else if(mups_mbm_flag_f == 0)
-                {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
-            break;
+            switch(individual_moduls_num)
+            {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 9:
+                {
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f, individual_moduls_num, 0, 8, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+                    if(mups_mbm_flag_f != 0)
+                        {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+                    else if(mups_mbm_flag_f == 0)
+                        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    break;
+                }
+                case 2:
+                case 4:
+                case 6:
+                case 8:
+                case 10:
+                {
+                    
+                }
+            }
         }
         case TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE:
         {
