@@ -686,7 +686,7 @@ unsigned short _530_mups_88_89_reley_on_ap5[8] = {SW_MUPS_88_89_SC_RELEY_ON_1, S
 
 
 //mups_1 load
-unsigned short _1_mups_load[8] = {0x2409, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+unsigned short _1_mups_load_norm[8] = {0x6d0b, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
 
 //var for function _1_sec

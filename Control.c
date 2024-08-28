@@ -1472,6 +1472,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
                         }
                     }
                 }
+                break;
         }
         case 1:
         {
@@ -1582,6 +1583,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
                     }
                 }
             }
+            break;
         }
     }
     return;
@@ -1607,11 +1609,11 @@ enum
     READ_MODULS_SC,                                 //
     DATA_ANALYSIS_SC,                               //
     ALL_RELEYS_TURNE_OFF,                           //
-    CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD,          //
+    CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM,     //
     TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE,            //
-    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK,
-    READ_SEPARATE_MODULE_BREAK,
-    DATA_ANALYSIS_SEPARATE_MODULE_BREAK
+    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM,
+    READ_SEPARATE_MODULE_NORM,
+    DATA_ANALYSIS_SEPARATE_MODULE_NORM
 }mups_service_stages;
 
 
@@ -1802,19 +1804,19 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             mbm_16_flag(usart_d, _530_board_u4, 0, 8, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
             mbm_16_flag(usart_f, _530_board_u5, 0, 8, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
             if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
-                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD; break;}
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
             else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
                 {mups_service_stages = ALL_RELEYS_TURNE_OFF; break;}
             break;
         }
-        case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD:
+        case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM:
         {
             mups_mbm_flag_f = 0;
-            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _1_mups_load, 115200, &mups_mbm_flag_f);
+            mbm_16_flag(usart_f, _530_board_u5, 0, 8, _1_mups_load_norm, 115200, &mups_mbm_flag_f);
             if(mups_mbm_flag_f != 0)
                 {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
             else if(mups_mbm_flag_f == 0)
-                {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD; break;}
+                {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
             break;
         }
         case TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE:
@@ -1822,26 +1824,32 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
             mups_mbm_flag_e = 0;
             mbm_16_flag(usart_e, individual_moduls_num, 208, 4, mups_com_1_rel_on, 115200, &mups_mbm_flag_e);
             if(mups_mbm_flag_e != 0)
-                {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK; break;}
+                {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
             else if(mups_mbm_flag_e == 0)
                 {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
             break;
         }
-        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK:
+        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM:
         {
             start_1_sec_timer = 1;
             _1_sec();
-            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_BREAK; break;}
-            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_BREAK; break;}
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_NORM; break;}
+            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
         }
-        case READ_SEPARATE_MODULE_BREAK:
+        case READ_SEPARATE_MODULE_NORM:
         {
             start_var_sec_timer = 1;
             _var_sec(time_delay);
             if(end_var_sec_timer == 0)
             {
                 MUPS_S_control_flag(usart_e, &read_mups_conf);
-            }else {read_mups_conf = 0; mups_service_stages = 0; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SEPARATE_MODULE_NORM; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_SEPARATE_MODULE_NORM:
+        {
+            check_mups_online_status(4, 1, 0, 0);
+            mups_service_stages = 0;
             break;
         }
     }

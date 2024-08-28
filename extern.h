@@ -631,8 +631,8 @@ unsigned short _530_mups_88_89_reley_on_ap4[8];
 unsigned short _530_mups_88_89_reley_on_ap5[8];
 
 
-//mups_1 load
-extern unsigned short _1_mups_load[8];
+//mups_1 load norm
+extern unsigned short _1_mups_load_norm[8];
 
 
 //var for function _1_sec
