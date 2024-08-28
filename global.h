@@ -595,6 +595,8 @@ unsigned short DINPUT1;
 unsigned short DINPUT2;
 unsigned short DINPUT3;
 
+/* {XP1_1(16 bit), XP1_2(8 bit), XP2_1, XP2_2, XP3_1, XP3_2, XP4_1, XP4_2}*/
+
                                         // MOPS AREA
 
 //530 board arr for mods
@@ -684,9 +686,11 @@ unsigned short _530_mups_88_89_reley_on_ap4[8] = {NONE_530, NONE_530, NONE_530, 
 unsigned short _530_mups_88_89_reley_on_ap5[8] = {SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2,
                                                      SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2, SW_MUPS_88_89_SC_RELEY_ON_1, SW_MUPS_88_89_SC_RELEY_ON_2};
 
+// load for high current
+unsigned short high_current[8] = {NONE_530, NONE_530, SW_HIGH_CURRENT, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
 //mups_1 load
-unsigned short _1_mups_load_norm[8] = {0x6d0b, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+unsigned short _1_mups_load_norm[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
 
 //var for function _1_sec

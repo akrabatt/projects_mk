@@ -201,16 +201,25 @@
 #define MUPS_89_92_95_RELEY_ON_2        0x0049 
 
 // swapped mups 89-92-95... reley on 
-#define SW_MUPS_89_92_95_RELEY_ON_1        0x9224    
-#define SW_MUPS_89_92_95_RELEY_ON_2        0x4900 
+#define SW_MUPS_89_92_95_RELEY_ON_1     0x9224    
+#define SW_MUPS_89_92_95_RELEY_ON_2     0x4900 
 
 // mups 88 89 - 91 92 - 94 95 - 97 98...
-#define MUPS_88_89_SC_RELEY_ON_1           0xb6db
-#define MUPS_88_89_SC_RELEY_ON_2           0x006d
+#define MUPS_88_89_SC_RELEY_ON_1        0xb6db
+#define MUPS_88_89_SC_RELEY_ON_2        0x006d
 
 // swapped mups 88 89 - 91 92 - 94 95 - 97 98...
-#define SW_MUPS_88_89_SC_RELEY_ON_1           0xdbb6
-#define SW_MUPS_88_89_SC_RELEY_ON_2           0x6d00
+#define SW_MUPS_88_89_SC_RELEY_ON_1     0xdbb6
+#define SW_MUPS_88_89_SC_RELEY_ON_2     0x6d00
+
+// high current
+#define HIGH_CURRENT                    0x7800
+#define SW_HIGH_CURRENT                 0x0078
+
+// mups1 norm lad
+#define MUPS_1_NORM_LOAD                0x0b6d
+// swapped mups1 norm load
+#define SW_MUPS_1_NORM_LOAD             0x6d0b
 
 // none
 #define NONE_530                    0x0000

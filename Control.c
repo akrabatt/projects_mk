@@ -1613,7 +1613,8 @@ enum
     TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE,            //
     ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM,
     READ_SEPARATE_MODULE_NORM,
-    DATA_ANALYSIS_SEPARATE_MODULE_NORM
+    DATA_ANALYSIS_SEPARATE_MODULE_NORM,
+    TURNE_ON_RELEYS_HIGH_CURRENT
 }mups_service_stages;
 
 
@@ -1849,7 +1850,17 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
         case DATA_ANALYSIS_SEPARATE_MODULE_NORM:
         {
             check_mups_online_status(4, 1, 0, 0);
-            mups_service_stages = 0;
+            mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT;
+            break;
+        }
+        case TURNE_ON_RELEYS_HIGH_CURRENT:
+        {
+            mups_mbm_flag_d = 0;
+            mbm_16_flag(usart_d, _530_board_u4, 0, 8, high_current, 115200, &mups_mbm_flag_d);
+            if(mups_mbm_flag_d != 0)
+                {mups_mbm_flag_d = 0; mups_service_stages = 0; break;}
+            else if(mups_mbm_flag_d == 0)
+                {mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT; break;}
             break;
         }
     }
