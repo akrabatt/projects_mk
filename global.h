@@ -692,11 +692,23 @@ unsigned short high_current[8] = {NONE_530, NONE_530, SW_HIGH_CURRENT, NONE_530,
 // none
 unsigned short none[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
-//mups_1 load
-unsigned short _1_mups_on_cab_load_norm[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp1
+unsigned short _1_mups_on_cab_load_norm_xp_1[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp2
+unsigned short _1_mups_on_cab_load_norm_xp_2[8] = {NONE_530, NONE_530, SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp3
+unsigned short _1_mups_on_cab_load_norm_xp_3[8] = {NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp4
+unsigned short _1_mups_on_cab_load_norm_xp_4[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_1_NORM_LOAD, NONE_530};
 
-//mups_2 load
-unsigned short _2_mups_on_cab_load_norm[8] = {SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_2 load xp1
+unsigned short _2_mups_on_cab_load_norm_xp_1[8] = {SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_2 load xp2
+unsigned short _2_mups_on_cab_load_norm_xp_2[8] = {NONE_530, NONE_530, SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_2 load xp3
+unsigned short _2_mups_on_cab_load_norm_xp_3[8] = {NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530};
+//mups_2 load xp4
+unsigned short _2_mups_on_cab_load_norm_xp_4[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2};
 
 
 //var for function _1_sec

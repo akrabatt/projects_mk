@@ -1658,7 +1658,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
     unsigned short mups_reley_quant_reg = 4;
     unsigned short mups_strat_start_reg = 212;          // strategy
     unsigned short mups_strat_quant_reg = 4;
-    static unsigned short individual_moduls_num = 1;
+    static unsigned short individual_moduls_num = 9;
     unsigned short time_delay = 1000;
     
     switch(mups_service_stages) 
@@ -1845,35 +1845,65 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         {
             switch(individual_moduls_num)
             {
-                case 1:             //
-                case 3:             //
-                case 5:             // 1 - 3 - 5 - 7 } _1_mups_on_cab_load_norm
-                case 7:             //
+                case 1:  
                 {
                     mups_mbm_flag_f = 0;
-                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
                     break;
                 }
-                case 9:             // 9 } _1_mups_on_cab_load_norm
+                case 3: 
+                {
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
+                    break;
+                }
+                case 5:  
+                {
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
+                    break;
+                }
+                case 7:             
+                {
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
+                    break;
+                }
+                case 9:
                 {
                     mups_mbm_flag_d = 0;
-                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
                     break;
                 }
-                case 2:             //
-                case 4:             //
-                case 6:             // 2 - 4 - 6 - 8 } _2_mups_on_cab_load_norm
-                case 8:             //
+                case 2:   
+                {
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
+                    break;
+                }
+                case 4:
+                {
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
+                    break;
+                }
+                case 6:  
+                {
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
+                    break;
+                }
+                case 8:             
                 
                 {
                     mups_mbm_flag_f = 0;
-                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+                    mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
                     break;
                 }
                 case 10:            // 10 } _2_mups_on_cab_load_norm
                 {
                     mups_mbm_flag_d = 0;
-                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
                     break;
                 }
             }
@@ -1885,6 +1915,14 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 else if(mups_mbm_flag_f == 0)
                     {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
                 break;
+            }
+            if(individual_moduls_num == 9 || individual_moduls_num == 10)
+            {
+               if(mups_mbm_flag_d != 0)
+                    {mups_mbm_flag_d = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+                else if(mups_mbm_flag_d == 0)
+                    {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                break; 
             }
         }
         case TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE:           // turne on channels IN THE CURRENT mups to com. 1 - reley turne on
