@@ -1651,7 +1651,9 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
     unsigned short _530_board_supply_id = 3;
     unsigned short _530_board_u5 = 1;    // ap5
     unsigned short _530_board_u4 = 4;    // ap4
-    static unsigned short individual_moduls_num = 1;
+    unsigned short _530_board_start_register = 0;
+    unsigned short _530_board_quant = 8;
+    static unsigned short individual_moduls_num = 2;
     unsigned short time_delay = 1000;
     
     switch(mups_service_stages) 
@@ -1835,7 +1837,7 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
                 case 9:
                 {
                     mups_mbm_flag_f = 0;
-                    mbm_16_flag(usart_f, individual_moduls_num, 0, 8, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+                    mbm_16_flag(usart_f, individual_moduls_num, _530_board_start_register, _530_board_quant, _1_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
                     if(mups_mbm_flag_f != 0)
                         {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
                     else if(mups_mbm_flag_f == 0)
@@ -1848,9 +1850,16 @@ void mups_service_check(struct tag_usartm* usart_d, struct tag_usartm* usart_e, 
                 case 8:
                 case 10:
                 {
-                    
+                    mups_mbm_flag_f = 0;
+                    mbm_16_flag(usart_f, individual_moduls_num, _530_board_start_register, _530_board_quant, _2_mups_on_cab_load_norm, 115200, &mups_mbm_flag_f);
+                    if(mups_mbm_flag_f != 0)
+                        {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+                    else if(mups_mbm_flag_f == 0)
+                        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    break;
                 }
             }
+            break;
         }
         case TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE:
         {
