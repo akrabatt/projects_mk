@@ -1658,7 +1658,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
     unsigned short mups_reley_quant_reg = 4;
     unsigned short mups_strat_start_reg = 212;          // strategy
     unsigned short mups_strat_quant_reg = 4;
-    static unsigned short individual_moduls_num = 9;
+    static unsigned short individual_moduls_num = 1;
     unsigned short time_delay = 1000;
     
     switch(mups_service_stages) 
@@ -1872,7 +1872,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 case 9:
                 {
                     mups_mbm_flag_d = 0;
-                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
+                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
                     break;
                 }
                 case 2:   
@@ -1903,7 +1903,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 case 10:            // 10 } _2_mups_on_cab_load_norm
                 {
                     mups_mbm_flag_d = 0;
-                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
+                    mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
                     break;
                 }
             }
@@ -2004,7 +2004,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         case TURNE_OFF_RELEYS_IN_SEPARATE_MODULE:               // turne off releys IN THE CURRENT mups module com.1 - releys off
         {
             mups_mbm_flag_e = 0;
-            mbm_16_flag(usart_e_2, 1, mups_reley_start_reg, mups_reley_quant_reg, mups_start_rel_buff, 115200, &mups_mbm_flag_e);
+            mbm_16_flag(usart_e_2, individual_moduls_num, mups_reley_start_reg, mups_reley_quant_reg, mups_start_rel_buff, 115200, &mups_mbm_flag_e);
             if(mups_mbm_flag_e != 0)
                 {mups_mbm_flag_e= 0; mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
             else if(mups_mbm_flag_e == 0)
