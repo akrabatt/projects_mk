@@ -1660,6 +1660,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
     unsigned short mups_strat_quant_reg = 4;
     static unsigned short individual_moduls_num = 1;
     unsigned short time_delay = 1000;
+    static unsigned short try_again = 0;            // var for CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM
     
     // struct for supplys err
     static union 
@@ -1931,16 +1932,20 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 if(individual_moduls_num == 1 || individual_moduls_num == 2 || individual_moduls_num == 3 || individual_moduls_num == 4 ||
                    individual_moduls_num == 5 || individual_moduls_num == 6 || individual_moduls_num == 7 || individual_moduls_num == 8)
                 {
-                    if(mups_mbm_flag_f != 0)
-                        {mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+                    if(mups_mbm_flag_f != 0 && try_again <= 2)
+                        {try_again++; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    else if(mups_mbm_flag_f != 0 && try_again > 2)
+                        {try_again = 0; mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
                     else if(mups_mbm_flag_f == 0)
                         {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
                     break;
                 }
                 if(individual_moduls_num == 9 || individual_moduls_num == 10)
                 {
-                   if(mups_mbm_flag_d != 0)
-                        {mups_mbm_flag_d = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+                    if(mups_mbm_flag_d != 0 && try_again <= 2)
+                        {try_again++; mups_mbm_flag_d = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    else if(mups_mbm_flag_d != 0 && try_again > 2)
+                        {try_again = 0; mups_mbm_flag_d = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
                     else if(mups_mbm_flag_d == 0)
                         {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
                     break; 
