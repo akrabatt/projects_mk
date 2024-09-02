@@ -1659,7 +1659,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
     unsigned short mups_strat_start_reg = 212;          // strategy
     unsigned short mups_strat_quant_reg = 4;
     static unsigned short individual_moduls_num = 1;
-    unsigned short time_delay = 1000;
+    unsigned short time_delay = 2000;
     static unsigned short try_again = 0;            // var for CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM
     
     // struct for supplys err
@@ -1932,7 +1932,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 if(individual_moduls_num == 1 || individual_moduls_num == 2 || individual_moduls_num == 3 || individual_moduls_num == 4 ||
                    individual_moduls_num == 5 || individual_moduls_num == 6 || individual_moduls_num == 7 || individual_moduls_num == 8)
                 {
-                    if(mups_mbm_flag_f != 0 && try_again <= 2)
+                    if(mups_mbm_flag_f != 0 && try_again <= 2)      // turne again
                         {try_again++; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
                     else if(mups_mbm_flag_f != 0 && try_again > 2)
                         {try_again = 0; mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
@@ -1942,7 +1942,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 }
                 if(individual_moduls_num == 9 || individual_moduls_num == 10)
                 {
-                    if(mups_mbm_flag_d != 0 && try_again <= 2)
+                    if(mups_mbm_flag_d != 0 && try_again <= 2)      // turne again
                         {try_again++; mups_mbm_flag_d = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
                     else if(mups_mbm_flag_d != 0 && try_again > 2)
                         {try_again = 0; mups_mbm_flag_d = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
@@ -1961,11 +1961,21 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         {
             mups_mbm_flag_e = 0;
             mbm_16_flag(usart_e_2, individual_moduls_num, mups_reley_start_reg, mups_reley_quant_reg, mups_com_1_rel_on, 115200, &mups_mbm_flag_e);
+            
+            
             if(mups_mbm_flag_e != 0)
                 {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
             else if(mups_mbm_flag_e == 0)
                 {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
             break;
+            
+//            if(mups_mbm_flag_e != 0 && try_again <= 2)
+//                {try_again++; mups_mbm_flag_e = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+//            else if(mups_mbm_flag_e != 0 && try_again > 2)
+//                {try_again = 0; mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
+//            else if(mups_mbm_flag_e == 0)
+//                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+//            break; 
         }
         case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM:       // just delay during 1 sec to init
         {
