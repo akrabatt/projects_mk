@@ -1659,7 +1659,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
     unsigned short mups_strat_start_reg = 212;          // strategy
     unsigned short mups_strat_quant_reg = 4;
     static unsigned short individual_moduls_num = 1;
-    unsigned short time_delay = 2000;
+    unsigned short time_delay = 1000;
     static unsigned short try_again = 0;            // var for CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM
     static unsigned short power_toggle = 0;         // toggle for power suply 18v 24v 28v
     
@@ -2071,6 +2071,29 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         }
         case CHECK:
         {
+            // check errors on current power level
+            int check_power;
+            for(check_power = 0; check_power < mups_size_buf; check_power++)
+            {
+                if(MUPS_statment[check_power].mups_statment.mups_not_operable == 1)
+                {
+                    switch(power_toggle)
+                    {
+                        case 0:{supply_err_buff[check_power]._18v_err = 1; break;}
+                        case 1:{supply_err_buff[check_power]._24v_err = 1; break;}
+                        case 2:{supply_err_buff[check_power]._28v_err = 1; break;}
+                    }
+                }
+                if(MUPS_statment[check_power].mups_statment.mups_not_operable == 0)
+                {
+                    switch(power_toggle)
+                    {
+                        case 0:{supply_err_buff[check_power]._18v_err = 0; break;}
+                        case 1:{supply_err_buff[check_power]._24v_err = 0; break;}
+                        case 2:{supply_err_buff[check_power]._28v_err = 0; break;}
+                    }
+                }
+            }
             ++individual_moduls_num;    // incr mups id
             
             // EXITE
@@ -2079,7 +2102,26 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 individual_moduls_num = 0;
                 power_toggle = 0;
                 mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS;
-                // copy data...VVV
+                
+                // copy supply errors to mups struct
+                unsigned short j;
+                for(j = 0; j < mups_size_buf; j++)
+                {
+                    memcpy(&MUPS_statment[j].mups_power_supply_error, &supply_err_buff[j], sizeof(supply_err_buff[j]));
+                    memset(&supply_err_buff[j], 0, sizeof(supply_err_buff[j]));
+                }
+                
+                int i, ii;
+                // copy the buffer for data swap to transfer to the top
+                for(i = 0; i < mups_size_buf; i++)    
+                {
+                    for(ii = 0; ii <= mups_size_main_buf; ii++)
+                    {
+                        MUPS_statment_sw[i].main_buff[ii] = swapshort(MUPS_statment[i].main_buff[ii]);
+                    }
+                }
+                conf_stand.stand_commands.mups_diagnostics_in_progress = 0;
+                conf_stand_sw.stand_commands.mups_diagnostics_in_progress = 0;
                 
                 break;
             }
