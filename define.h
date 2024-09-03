@@ -244,6 +244,11 @@
 #define START_READ_STAND_MOPS_AREA      10000
 #define END_READ_STAND_MOPS_AREA        10900
 #define READ_STAND_MOPS_AREA            ((start_reg>=START_READ_STAND_MOPS_AREA)&&(last_reg<=END_READ_STAND_MOPS_AREA))
+
+/*stand read mups area*/
+#define START_READ_STAND_MUPS_AREA      11000
+#define END_READ_STAND_MUPS_AREA        11900
+#define READ_STAND_MUPS_AREA            ((start_reg>=START_READ_STAND_MUPS_AREA)&&(last_reg<=END_READ_STAND_MUPS_AREA))
     
 /*read MOPS*/
 #define START_READ_MUPS     5000

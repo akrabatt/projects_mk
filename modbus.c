@@ -752,6 +752,7 @@ void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres)
                         if (READ_MOPS_SHORT){ mbs_03 (usart, (unsigned short*)MOPS_S_arr_sw, (start_reg - START_READ_MOPS_SHORT), num_reg); break;} //8000 ... 8900
                         if (READ_STAND_CONF_AREA) {mbs_03 (usart, conf_stand_sw.comm_buff, (start_reg - START_READ_STAND_CONF_AREA), num_reg); break;} //9000 ... 9900
                         if (READ_STAND_MOPS_AREA) {mbs_03 (usart, (unsigned short*)MOPS_statment_sw, (start_reg - START_READ_STAND_MOPS_AREA), num_reg); break;} //10000 ... 10900
+                        if (READ_STAND_MUPS_AREA) {mbs_03 (usart, (unsigned short*)MUPS_statment_sw, (start_reg - START_READ_STAND_MUPS_AREA), num_reg); break;} //11000 ... 11900
                         answer_illegal_data_addr (usart);
                         break; 
                     }			

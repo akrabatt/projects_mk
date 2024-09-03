@@ -2108,6 +2108,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 for(j = 0; j < mups_size_buf; j++)
                 {
                     memcpy(&MUPS_statment[j].mups_power_supply_error, &supply_err_buff[j], sizeof(supply_err_buff[j]));
+                    //clear local sup err 
                     memset(&supply_err_buff[j], 0, sizeof(supply_err_buff[j]));
                 }
                 
@@ -2122,6 +2123,10 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 }
                 conf_stand.stand_commands.mups_diagnostics_in_progress = 0;
                 conf_stand_sw.stand_commands.mups_diagnostics_in_progress = 0;
+                
+                // clear timeout errors 
+                //timeout
+                memset(&Stand.mups_timeout_err, 0, sizeof(Stand.mups_timeout_err));
                 
                 break;
             }
