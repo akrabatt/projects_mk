@@ -1661,6 +1661,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
     static unsigned short individual_moduls_num = 1;
     unsigned short time_delay = 2000;
     static unsigned short try_again = 0;            // var for CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM
+    static unsigned short power_toggle = 0;         // toggle for power suply 18v 24v 28v
     
     // struct for supplys err
     static union 
