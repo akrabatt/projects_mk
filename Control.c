@@ -1700,7 +1700,12 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         case TURNE_ON_18V:                              // AP3 CAB11
         {
             mups_mbm_flag_d = 0;
-            mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, _530_board_just_18v, 115200, &mups_mbm_flag_d);
+            switch(power_toggle)
+            {
+                case 0:{mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, _530_board_just_18v, 115200, &mups_mbm_flag_d); break;}
+                case 1:{mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, _530_board_just_24v, 115200, &mups_mbm_flag_d); break;}
+                case 2:{mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, _530_board_just_28v, 115200, &mups_mbm_flag_d); break;}
+            }
             if(mups_mbm_flag_d != 0)
                 {mups_mbm_flag_d = 0; mups_service_stages = TEST_READING_MODULES; break;}
             else if(mups_mbm_flag_d == 0)
@@ -2069,15 +2074,25 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             ++individual_moduls_num;    // incr mups id
             
             // EXITE
-            if(individual_moduls_num > mups_size_buf)
+            if(individual_moduls_num > mups_size_buf && power_toggle == 2)
             {
                 individual_moduls_num = 0;
+                power_toggle = 0;
                 mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS;
+                // copy data...VVV
+                
                 break;
             }
-            
+            // UP SUPPLY
+            else if(individual_moduls_num > mups_size_buf && power_toggle < 2)
+            {
+                individual_moduls_num = 0;
+                power_toggle++;
+                mups_service_stages = TURNE_ON_18V;
+                break;
+            }
             // NEXT MUPS
-            if(individual_moduls_num <= mups_size_buf)
+            else if(individual_moduls_num <= mups_size_buf)
             {
                 mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM;
                 break;
