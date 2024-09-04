@@ -2124,9 +2124,17 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 conf_stand.stand_commands.mups_diagnostics_in_progress = 0;
                 conf_stand_sw.stand_commands.mups_diagnostics_in_progress = 0;
                 
-                // clear timeout errors 
-                //timeout
-                memset(&Stand.mups_timeout_err, 0, sizeof(Stand.mups_timeout_err));
+//                // clear timeout errors 
+//                // timeout
+//                memset(&Stand.mups_timeout_err, 0, sizeof(Stand.mups_timeout_err));
+//                // crc
+//                memset(&Stand.mups_crc_err, 0, sizeof(Stand.mups_crc_err));
+//                // col_1
+//                memset(&Stand.mups_coll_1_err, 0, sizeof(Stand.mups_coll_1_err));
+//                // col_2
+//                memset(&Stand.mups_coll_2_err, 0, sizeof(Stand.mups_coll_2_err));
+//                // col_3
+//                memset(&Stand.mups_coll_3_err, 0, sizeof(Stand.mups_coll_3_err));
                 
                 break;
             }
