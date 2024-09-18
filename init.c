@@ -468,7 +468,8 @@ void InitializeSystem(void)
     __builtin_enable_interrupts();
     
     // uart operating mode
-    usart3.mb_status.tx_mode = DMA_type;
+    //usart3.mb_status.tx_mode = DMA_type;
+    usart3.mb_status.tx_mode = INT_type;
     usart5m.mb_status.tx_mode = INT_type;
     usart4m.mb_status.tx_mode = INT_type;
     usart2m.mb_status.tx_mode = INT_type;
