@@ -1770,7 +1770,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             start_1_sec_timer = 1;
             _1_sec();
             if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_BREAK; break;}
-            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
         }
         case READ_MODULS_BREAK:                     // just read ALL mups modules
         {
@@ -1803,7 +1803,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             start_1_sec_timer = 1;
             _1_sec();
             if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_NORMA; break;}
-            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_NORMA; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_NORMA; break;}
         }
         case READ_MODULS_NORMA:                     // just read ALL mups modules
         {
@@ -1836,7 +1836,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             start_1_sec_timer = 1;
             _1_sec();
             if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_SC; break;}
-            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SC; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
         }
         case READ_MODULS_SC:                        // just read ALL mups modules
         {
@@ -1988,7 +1988,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             start_1_sec_timer = 1;
             _1_sec();
             if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_NORM; break;}
-            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
         }
         case READ_SEPARATE_MODULE_NORM:                     // just read ALL mups modules
         {
@@ -2021,7 +2021,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             start_1_sec_timer = 1;
             _1_sec();
             if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_HIGH_CURRENT; break;}
-            else{mops_service_check_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
         }
         case READ_SEPARATE_MODULE_HIGH_CURRENT:                 // just read ALL mups modules
         {
