@@ -731,7 +731,7 @@ void _1_sec()
 {
     if(start_1_sec_timer > 0)
     {
-        if(++_1_sec_counter > 1000)
+        if(++_1_sec_counter > 1500)
         {
             end_1_sec_timer = 1;             // timer off
             _1_sec_counter = 0;              // reset
@@ -1755,7 +1755,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             }else {read_mups_conf = 0; mups_service_stages = TURNE_OFF_ALL_REALAYS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
-        case TURNE_OFF_ALL_REALAYS:                 // AP4(id4) CAB13-14-19 turne off releys // AP5 (id1) CAB15-16-17-18 turne off releys
+        case TURNE_OFF_ALL_REALAYS:                 // AP4(id4) CAB13-14-19 turne off releys // AP5 (id1) CAB15-16-17-18 turne off releys for break status
         {
             mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
             mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
@@ -1788,7 +1788,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             mups_service_stages = TURNE_ON_RELEY_NORMA;
             break;
         }
-        case TURNE_ON_RELEY_NORMA:                  // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status norm
+        case TURNE_ON_RELEY_NORMA:                  // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status norm ch off
         {
             mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_mups_88_91_94_reley_on_ap4, 115200, &mups_mbm_flag_d);
             mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_mups_88_91_94_reley_on_ap5, 115200, &mups_mbm_flag_f);
@@ -1815,13 +1815,13 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_NORMA; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
             break;
         }
-        case DATA_ANALYSIS_NORMA:                   // analysis norm status in ALL mups modules
+        case DATA_ANALYSIS_NORMA:                   // analysis norm ch off status in ALL mups modules
         {
             check_mups_online_status(2, 1, 0, 1);
             mups_service_stages = TURNE_ON_RELEY_SC;
             break;
         }
-        case TURNE_ON_RELEY_SC:                     // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status sc
+        case TURNE_ON_RELEY_SC:                     // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status sc ch off
         {
             mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_mups_88_89_reley_on_ap4, 115200, &mups_mbm_flag_d);
             mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_mups_88_89_reley_on_ap5, 115200, &mups_mbm_flag_f);
@@ -1969,19 +1969,19 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             mbm_16_flag(usart_e_2, individual_moduls_num, mups_reley_start_reg, mups_reley_quant_reg, mups_com_1_rel_on, 115200, &mups_mbm_flag_e);
             
             
-            if(mups_mbm_flag_e != 0)
-                {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
-            else if(mups_mbm_flag_e == 0)
-                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-            break;
-            
-//            if(mups_mbm_flag_e != 0 && try_again <= 2)
-//                {try_again++; mups_mbm_flag_e = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-//            else if(mups_mbm_flag_e != 0 && try_again > 2)
-//                {try_again = 0; mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
+//            if(mups_mbm_flag_e != 0)
+//                {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
 //            else if(mups_mbm_flag_e == 0)
 //                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-//            break; 
+//            break;
+            
+            if(mups_mbm_flag_e != 0 && try_again <= 2)
+                {try_again++; mups_mbm_flag_e = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+            else if(mups_mbm_flag_e != 0 && try_again > 2)
+                {try_again = 0; mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
+            else if(mups_mbm_flag_e == 0)
+                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+            break; 
         }
         case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM:       // just delay during 1 sec to init
         {
