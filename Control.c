@@ -731,7 +731,7 @@ void _1_sec()
 {
     if(start_1_sec_timer > 0)
     {
-        if(++_1_sec_counter > 1500)
+        if(++_1_sec_counter > 2000)
         {
             end_1_sec_timer = 1;             // timer off
             _1_sec_counter = 0;              // reset
@@ -1659,7 +1659,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
     unsigned short mups_strat_start_reg = 212;          // strategy
     unsigned short mups_strat_quant_reg = 4;
     static unsigned short individual_moduls_num = 1;
-    unsigned short time_delay = 1000;
+    unsigned short time_delay = 2000;
     static unsigned short try_again = 0;            // var for CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM
     static unsigned short power_toggle = 0;         // toggle for power suply 18v 24v 28v
     
@@ -1975,9 +1975,9 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
 //                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
 //            break;
             
-            if(mups_mbm_flag_e != 0 && try_again <= 2)
+            if(mups_mbm_flag_e != 0 && try_again <= 3)
                 {try_again++; mups_mbm_flag_e = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-            else if(mups_mbm_flag_e != 0 && try_again > 2)
+            else if(mups_mbm_flag_e != 0 && try_again > 3)
                 {try_again = 0; mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
             else if(mups_mbm_flag_e == 0)
                 {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
