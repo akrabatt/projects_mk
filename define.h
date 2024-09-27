@@ -240,15 +240,35 @@
 #define READ_STAND_CONF_AREA           ((start_reg>=START_READ_STAND_CONF_AREA)&&(last_reg<=END_READ_STAND_CONF_AREA))
 #define WRITE_STAND_CONF_AREA          ((start_reg>=START_WRITE_STAND_CONF_AREA)&&(last_reg<=END_WRITE_STAND_CONF_AREA))
 
-/*stand read mops area*/
-#define START_READ_STAND_MOPS_AREA      10000
-#define END_READ_STAND_MOPS_AREA        10900
-#define READ_STAND_MOPS_AREA            ((start_reg>=START_READ_STAND_MOPS_AREA)&&(last_reg<=END_READ_STAND_MOPS_AREA))
+/*stand read mops area 18v*/
+#define START_READ_STAND_MOPS_AREA_18V  10000
+#define END_READ_STAND_MOPS_AREA_18V    10900
+#define READ_STAND_MOPS_AREA_18V        ((start_reg>=START_READ_STAND_MOPS_AREA_18V)&&(last_reg<=END_READ_STAND_MOPS_AREA_18V))
 
-/*stand read mups area*/
-#define START_READ_STAND_MUPS_AREA      11000
-#define END_READ_STAND_MUPS_AREA        11900
-#define READ_STAND_MUPS_AREA            ((start_reg>=START_READ_STAND_MUPS_AREA)&&(last_reg<=END_READ_STAND_MUPS_AREA))
+/*stand read mups area 18v*/
+#define START_READ_STAND_MUPS_AREA_18V  11000
+#define END_READ_STAND_MUPS_AREA_18V    11900
+#define READ_STAND_MUPS_AREA_18V        ((start_reg>=START_READ_STAND_MUPS_AREA_18V)&&(last_reg<=END_READ_STAND_MUPS_AREA_18V)) 
+    
+/*stand read mops area 24v*/
+#define START_READ_STAND_MOPS_AREA_24V  12000
+#define END_READ_STAND_MOPS_AREA_24V    12900
+#define READ_STAND_MOPS_AREA_24V        ((start_reg>=START_READ_STAND_MOPS_AREA_24V)&&(last_reg<=END_READ_STAND_MOPS_AREA_24V))
+
+/*stand read mups area 24v*/
+#define START_READ_STAND_MUPS_AREA_24V  13000
+#define END_READ_STAND_MUPS_AREA_24V    13900
+#define READ_STAND_MUPS_AREA_24V        ((start_reg>=START_READ_STAND_MUPS_AREA_24V)&&(last_reg<=END_READ_STAND_MUPS_AREA_24V)) 
+    
+/*stand read mops area 28v*/
+#define START_READ_STAND_MOPS_AREA_28V  14000
+#define END_READ_STAND_MOPS_AREA_28V    14900
+#define READ_STAND_MOPS_AREA_28V        ((start_reg>=START_READ_STAND_MOPS_AREA_28V)&&(last_reg<=END_READ_STAND_MOPS_AREA_28V))
+
+/*stand read mups area 28v*/
+#define START_READ_STAND_MUPS_AREA_28V  15000
+#define END_READ_STAND_MUPS_AREA_28V    15900
+#define READ_STAND_MUPS_AREA_28V        ((start_reg>=START_READ_STAND_MUPS_AREA_28V)&&(last_reg<=END_READ_STAND_MUPS_AREA_28V)) 
     
 /*read MOPS*/
 #define START_READ_MUPS     5000
@@ -480,5 +500,28 @@
 #define AO_5CYL_ERROR_ODD       15
 
     
+
+// MACROS
+
+/**
+ * @brief macros to set mops statment
+ */
+#define MACRO_SET_MOPS_STATMENT(mops, online, online_err, offline, not_operable, operable) \
+    do { \
+        (mops).mops_online = (online); \
+        (mops).mops_online_err = (online_err); \
+        (mops).mops_offline = (offline); \
+        (mops).mops_not_operable = (not_operable); \
+        (mops).mops_operable = (operable); \
+    } while(0)
+
+
+/**
+ * @brief macros to set mops arr
+ */
+#define MACRO_SELECT_MOPS_STATMENT(power_cycle_mops) \
+    ((power_cycle_mops) == 0 ? MOPS_statment_18 : \
+     (power_cycle_mops) == 1 ? MOPS_statment_24 : \
+                               MOPS_statment_28v)
     
 #endif //DEFINE_H

@@ -762,12 +762,12 @@ void _var_sec(unsigned short time)
 /**
  * @brief this function checks the status of the connection to the module, as 
  * well as the status of the channels
- * @param mups_num_ mupses id 
- * @param ch_strategy it is necessary to substitute the channel strategy number
+ * @param ch_statment it is necessary to substitute the channel strategy number
  * @param just_check_online (0 - The function is just to check whether the module 
  * is online or not) (1 - full-fledged verification with channels)
+ * @param power_cycle_mops  18v/24v/28v
  */
-void check_mops_online_status(unsigned short ch_statment, unsigned short just_check_online)
+void check_mops_online_status(unsigned short ch_statment, unsigned short just_check_online, unsigned short power_cycle_mops)
 {
     unsigned short mops_num_ = 0;
     size_t mops_num = sizeof(Stand.active_mops)/sizeof(Stand.active_mops[0]);
@@ -777,92 +777,76 @@ void check_mops_online_status(unsigned short ch_statment, unsigned short just_ch
         {
             Stand.mops_timeout_err[mops_num_] = 0;
             Stand_sw.mops_timeout_err[mops_num_] = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_online = 1;
+            MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment.mops_online = 1;
             if(just_check_online == 0){continue;}  // just check online end function
-            memcpy(MOPS_statment[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
+            memcpy(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8); break;
         }
-        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0 // 1 - timeout
         {
-            MOPS_statment[mops_num_].mops_statment.mops_online_err = 1;     // 1 - timeout
-            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            MACRO_SET_MOPS_STATMENT(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment, 0, 1, 0, 1, 0);
             continue;
         }
-        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_crc_err[mops_num_] > 0)   // ActivMOPS == 1 && crc error
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_crc_err[mops_num_] > 0)   // ActivMOPS == 1 && crc error // 2 - crc error
         {
-            MOPS_statment[mops_num_].mops_statment.mops_online_err = 2;     // 1 - crc
-            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            MACRO_SET_MOPS_STATMENT(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment, 0, 2, 0, 1, 0);
             continue;
         }
-        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_1_err[mops_num_] > 0)   // ActivMOPS == 1 && col_1 error
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_1_err[mops_num_] > 0)   // ActivMOPS == 1 && col_1 error // 3 - col_1
         {
-            MOPS_statment[mops_num_].mops_statment.mops_online_err = 3;     // 3 - col_1
-            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            MACRO_SET_MOPS_STATMENT(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment, 0, 3, 0, 1, 0);
             continue;
         }
-        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_2_err[mops_num_] > 0)   // ActivMOPS == 1 && col_2 error
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_2_err[mops_num_] > 0)   // ActivMOPS == 1 && col_2 error // 4 - col_2
         {
-            MOPS_statment[mops_num_].mops_statment.mops_online_err = 4;     // 4 - col_2
-            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            MACRO_SET_MOPS_STATMENT(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment, 0, 4, 0, 1, 0);
             continue;
         }
-        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_3_err[mops_num_] > 0)   // ActivMUPS == 1 && col_3 error
+        if(Stand.active_mops[mops_num_] > 0 && Stand.mops_coll_3_err[mops_num_] > 0)   // ActivMUPS == 1 && col_3 error // 5 - col_3
         {
-            MOPS_statment[mops_num_].mops_statment.mops_online_err = 5;     // 5 - col_3
-            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_offline = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+            MACRO_SET_MOPS_STATMENT(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment, 0, 5, 0, 1, 0);
             continue;
         }
-        if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0
+        if(Stand.active_mops[mops_num_] == 0)       // ActivMOPS == 0 // offline = 1
         {
-            MOPS_statment[mops_num_].mops_statment.mops_online = 0;
-            MOPS_statment[mops_num_].mops_statment.mops_offline = 1;
+            MACRO_SET_MOPS_STATMENT(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment, 0, 0, 1, 0, 0);
             continue;
         }
         unsigned short ch_num_;
-        size_t ch_num = sizeof(MOPS_statment[mops_num_].mops_current_ch_status)/sizeof(MOPS_statment[mops_num_].mops_current_ch_status[0]);
+        size_t ch_num = sizeof(MOPS_statment_18v[mops_num_].mops_current_ch_status)/sizeof(MOPS_statment_18v[mops_num_].mops_current_ch_status[0]);
         for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
         {
-            if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != ch_statment)    //check ch status //
+            if(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_current_ch_status[ch_num_] != ch_statment)    //check ch status //
             {
                 switch(ch_statment)
                 {
                     case 1: 
                     {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_break[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_ch_statement.mops_ch_err_break[ch_num_] = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
                     case 2: 
                     {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_normal[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_ch_statement.mops_ch_err_normal[ch_num_] = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
                     case 4: 
                     {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_ch_statement.mops_ch_err_attantion[ch_num_] = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
                     case 5: 
                     {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_ch_statement.mops_ch_err_fire[ch_num_] = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
                     case 6: 
                     {
-                        MOPS_statment[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 1;
-                        MOPS_statment[mops_num_].mops_statment.mops_not_operable = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_ch_statement.mops_ch_err_sc[ch_num_] = 1;
+                        MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment.mops_not_operable = 1;
                         break;
                     }
                 }
@@ -904,8 +888,8 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
     //==//
     
     // vars for cycles
-    size_t mops_size_buf = sizeof(MOPS_statment)/sizeof(MOPS_statment[0]);  // size == 10
-    size_t mops_size_main_buf = sizeof(MOPS_statment_sw[0].main_buff)/sizeof(MOPS_statment_sw[0].main_buff[0]); // size == 56
+    size_t mops_size_buf = sizeof(MOPS_statment_18v)/sizeof(MOPS_statment_18v[0]);  // size == 10
+    size_t mops_size_main_buf = sizeof(MOPS_statment_sw_18v[0].main_buff)/sizeof(MOPS_statment_sw_18v[0].main_buff[0]); // size == 56
     
     switch(mops_service_check_stages)
     {
@@ -988,8 +972,8 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_CONNACTION_STATMENT:     // check connection module and normal statment
         {
-            memset(MOPS_statment, 0, sizeof(MOPS_statment));    //clear MOPS_statment
-            check_mops_online_status(2, 1); // check normal
+            memset(MACRO_SELECT_MOPS_STATMENT(power_cycle), 0, sizeof(MACRO_SELECT_MOPS_STATMENT(power_cycle)));    //clear MOPS_statment
+            check_mops_online_status(2, 1, power_cycle); // check normal
             mops_service_check_stages++;     // next step
             break;
         }
@@ -1059,7 +1043,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_ATTANTION_STATMENT:  // check attantion statment 
         {
-            check_mops_online_status(4, 1); // check attantion
+            check_mops_online_status(4, 1, power_cycle); // check attantion
             mops_service_check_stages++;     // next step
             break;
         }
@@ -1129,7 +1113,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_FIRE_STATMENT:
         {
-            check_mops_online_status(5, 1); // check fire
+            check_mops_online_status(5, 1, power_cycle); // check fire
             mops_service_check_stages = WRITE_SC_STATMENT;     // next step
             break;
         }
@@ -1199,7 +1183,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_SC_STATMENT:
         {
-            check_mops_online_status(6, 1); // check sc
+            check_mops_online_status(6, 1, power_cycle); // check sc
             mops_service_check_stages++;     // next step
             break;
         }
@@ -1287,7 +1271,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_BREAK_STATMENT:
         {
-            check_mops_online_status(1, 1); // check break
+            check_mops_online_status(1, 1, power_cycle); // check break
             mops_service_check_stages++;     // next step
             break;
         }

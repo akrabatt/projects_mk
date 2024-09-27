@@ -755,9 +755,17 @@ union tag_mops_stand_statment
     unsigned short main_buff[56];
 }mops_stand_statment;
 
-//struct mups array
-union tag_mops_stand_statment MOPS_statment[10];
-union tag_mops_stand_statment MOPS_statment_sw[10];
+//struct mups array 18v
+union tag_mops_stand_statment MOPS_statment_18v[10];
+union tag_mops_stand_statment MOPS_statment_sw_18v[10];
+
+//struct mups array 24v
+union tag_mops_stand_statment MOPS_statment_24v[10];
+union tag_mops_stand_statment MOPS_statment_sw_24v[10];
+
+//struct mups array 28v
+union tag_mops_stand_statment MOPS_statment_28v[10];
+union tag_mops_stand_statment MOPS_statment_sw_28v[10];
 
 //union for configuration stand
 union tag_conf_stand
@@ -808,9 +816,17 @@ union tag_mups_stand_statment
     unsigned short main_buff[36];
 }mups_stand_statment;
 
-//struct mups array
-union tag_mups_stand_statment MUPS_statment[10];
-union tag_mups_stand_statment MUPS_statment_sw[10];
+//struct mups array 18v
+union tag_mups_stand_statment MUPS_statment_18v[10];
+union tag_mups_stand_statment MUPS_statment_sw_18v[10];
+
+//struct mups array 24v 
+union tag_mups_stand_statment MUPS_statment_24v[10];
+union tag_mups_stand_statment MUPS_statment_sw_24v[10];
+
+//struct mups array 28v
+union tag_mups_stand_statment MUPS_statment_28v[10];
+union tag_mups_stand_statment MUPS_statment_sw_28v[10];
 
 
 #endif // GLOBAL_H
