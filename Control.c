@@ -831,7 +831,7 @@ void check_mops_online_status(unsigned short ch_statment, unsigned short just_ch
         size_t ch_num = sizeof(MOPS_statment[mops_num_].mops_current_ch_status)/sizeof(MOPS_statment[mops_num_].mops_current_ch_status[0]);
         for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
         {
-            if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != ch_statment)    //check ch status
+            if(MOPS_statment[mops_num_].mops_current_ch_status[ch_num_] != ch_statment)    //check ch status //
             {
                 switch(ch_statment)
                 {
