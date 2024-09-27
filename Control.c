@@ -972,7 +972,7 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_CONNACTION_STATMENT:     // check connection module and normal statment
         {
-            memset(MACRO_SELECT_MOPS_STATMENT(power_cycle), 0, sizeof(MACRO_SELECT_MOPS_STATMENT(power_cycle)));    //clear MOPS_statment
+            memset(MACRO_SELECT_MOPS_STATMENT(power_cycle), 0, sizeof(MACRO_SELECT_MOPS_STATMENT(power_cycle)));    //clear MOPS_statment 18 24 28
             check_mops_online_status(2, 1, power_cycle); // check normal
             mops_service_check_stages++;     // next step
             break;
