@@ -520,8 +520,87 @@
  * @brief macros to set mops arr
  */
 #define MACRO_SELECT_MOPS_STATMENT(power_cycle_mops) \
-    ((power_cycle_mops) == 0 ? MOPS_statment_18 : \
-     (power_cycle_mops) == 1 ? MOPS_statment_24 : \
+    ((power_cycle_mops) == 0 ? MOPS_statment_18v :   \
+     (power_cycle_mops) == 1 ? MOPS_statment_24v :   \
                                MOPS_statment_28v)
+
+
+/**
+ * @brief macros to set mops arr swapped
+ */
+#define MACRO_SELECT_MOPS_STATMENT_SW(power_cycle_mops) \
+    ((power_cycle_mops) == 0 ? MOPS_statment_sw_18v :   \
+     (power_cycle_mops) == 1 ? MOPS_statment_sw_24v :   \
+                               MOPS_statment_sw_28v)
+
+
+/**
+ * @brief macros to select powersupply
+ */
+#define MACRO_SELECT_SW_RELEY_ON_START_4(power_cycle) \
+    ((power_cycle) == 0 ? SW_RELEY_ON_START_4_001_1 : \
+     (power_cycle) == 1 ? SW_RELEY_ON_START_4_011_1 : \
+                          SW_RELEY_ON_START_4_111_1)  \
+                          
+
+/**
+ * @brief macros to select vars 3id 530 board
+ */
+#define MACRO_SELECT_VAR_3ID_530(power_cycle) \
+    ((power_cycle) == 0 ? 0x0100 : \
+     (power_cycle) == 1 ? 0x0300 : \
+                          0x0700)  \
     
+
+/**
+ * @brief macros if mbm send
+ */
+#define MACRO_MBM_END_SEND(a, b, c, d) ((a) > 0 && (b) > 0 && (c) > 0 && (d) > 0)
+
+
+/**
+ * @brief macros reset flags
+ */
+#define MACRO_MBM_RESET_FLAGS(a, b, c, d) \
+    do {                                  \
+        (a) = 0;                          \
+        (b) = 0;                          \
+        (c) = 0;                          \
+        (d) = 0;                          \
+    } while(0)
+
+
+/**
+ * @brief Select 18v, 24v, or 28v error field
+ * @param power_cycle - Select between 18v, 24v, 28v error fields
+ * @param statment - the mops_statment structure to access the error field
+ */
+#define MACRO_SELECT_SUPPLY(statment, power_cycle)    \
+    (((power_cycle) == 0) ? (statment).mops_power_supply_error.mops_18v_error :    \
+     ((power_cycle) == 1) ? (statment).mops_power_supply_error.mops_24v_error :    \
+                            (statment).mops_power_supply_error.mops_28v_error)
+
+
+
+ 
+
+/**
+ * @brief Set mops supply error flag up or down
+ * @param statment - mops buffer structure (union tag_mops_stand_statment)
+ * @param power_cycle - Select between 18v, 24v, or 28v error field
+ * @param value - Set error flag up (1) or down (0)
+ */
+#define MACRO_SET_SUPPLY_FLAG(statment, power_cycle, value)  \
+     do {                                                       \
+        if ((power_cycle) == 0)                                \
+            (statment).mops_power_supply_error.mops_18v_error = (value); \
+        else if ((power_cycle) == 1)                           \
+            (statment).mops_power_supply_error.mops_24v_error = (value); \
+        else                                                   \
+            (statment).mops_power_supply_error.mops_28v_error = (value); \
+    } while (0)
+
+
+
+
 #endif //DEFINE_H
