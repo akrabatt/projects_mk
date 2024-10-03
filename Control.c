@@ -1235,11 +1235,11 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
             {
                 if(MACRO_SELECT_MOPS_STATMENT(power_cycle)[check_power].mops_statment.mops_not_operable == 1)
                 {
-                    MACRO_SET_SUPPLY_FLAG(MACRO_SELECT_MOPS_STATMENT(power_cycle)[mops_num], power_cycle, 1);
+                    MACRO_SET_SUPPLY_FLAG(MACRO_SELECT_MOPS_STATMENT(power_cycle)[check_power], power_cycle, 1);
                 }
                 if(MACRO_SELECT_MOPS_STATMENT(power_cycle)[check_power].mops_statment.mops_not_operable == 0)
                 {
-                    MACRO_SET_SUPPLY_FLAG(MACRO_SELECT_MOPS_STATMENT(power_cycle)[mops_num], power_cycle, 0);
+                    MACRO_SET_SUPPLY_FLAG(MACRO_SELECT_MOPS_STATMENT(power_cycle)[check_power], power_cycle, 0);
                 }
             }
             
