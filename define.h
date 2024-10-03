@@ -501,7 +501,7 @@
 
     
 
-// MACROS
+// MACROS MOPS
 
 /**
  * @brief macros to set mops statment
@@ -602,5 +602,44 @@
 
 
 
+// MACROS MUPS
+
+/**
+ * @brief macros to set mops statment
+ */
+#define MACRO_SET_MUPS_STATMENT(mups, online, online_err, offline, not_operable, operable) \
+    do { \
+        (mups).mups_online = (online); \
+        (mups).mups_online_err = (online_err); \
+        (mups).mups_offline = (offline); \
+        (mups).mups_not_operable = (not_operable); \
+        (mups).mups_operable = (operable); \
+    } while(0)
+
+
+/**
+ * @brief macros to set mups arr
+ */
+#define MACRO_SELECT_MUPS_STATMENT(power_cycle_mups) \
+    ((power_cycle_mups) == 0 ? MUPS_statment_18v :   \
+     (power_cycle_mups) == 1 ? MUPS_statment_24v :   \
+                               MUPS_statment_28v)
+
+/**
+ * @brief macros to set mups arr swapped
+ */
+#define MACRO_SELECT_MUPS_STATMENT_SW(power_cycle_mups) \
+    ((power_cycle_mups) == 0 ? MUPS_statment_sw_18v :   \
+     (power_cycle_mups) == 1 ? MUPS_statment_sw_24v :   \
+                               MUPS_statment_sw_28v)
+
+
+/**
+ * @brief macros return 530 board mups supply
+ */
+#define MACRO_530_SUPPLY(power_cycle_mups) \
+    ((power_cycle_mups) == 0 ? _530_board_just_18v :   \
+     (power_cycle_mups) == 1 ? _530_board_just_24v :   \
+                               _530_board_just_28v)
 
 #endif //DEFINE_H

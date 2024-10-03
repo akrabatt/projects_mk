@@ -1274,807 +1274,807 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
     }
 }
-////====== MUPS AREA ======//
-///**
-// * @brief this function checks the status of the connection to the module, as 
-// * well as the status of the channels
-// * @param ch_strategy it is necessary to substitute the channel strategy number
-// * @param just_check_online (0 - The function is just to check whether the module 
-// * @param id_mups it is used only when checking one module if just_check_online 
-// * is set to 0, if not used then set the value to 0
-// * @param single_module_mode set 0 if you want to test one module, set 1 if you 
-// * want to test all modules
-// * is online or not) (1 - full-fledged verification with channels)
-// */
-//void check_mups_online_status(unsigned short ch_statment, unsigned short just_check_online, unsigned short id_mups, unsigned short single_module_mode)
-//{
-//    switch(single_module_mode)
-//    {
-//        case 0:
-//        {
-//                if(Stand.active_mups[id_mups] > 0 && Stand.mups_timeout_err[id_mups] <= 1)  // ActivMUPS == 1 && connection with modul == 1
-//                {
-//                    Stand.mups_timeout_err[id_mups] = 0;
-//                    Stand_sw.mups_timeout_err[id_mups] = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_online = 1;
-//                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
-//                    if(just_check_online == 0){return;}  // just check online end function
-//                    memcpy(MUPS_statment[id_mups].mups_current_ch_status, MUPS_S_arr[id_mups].Ch_State, sizeof(unsigned short)*4);
-//                }
-//                if(Stand.active_mups[id_mups] > 0 && Stand.mups_timeout_err[id_mups] > 0)   // ActivMUPS == 1 && connection with modul == 0
-//                {
-//                    MUPS_statment[id_mups].mups_statment.mups_online_err = 1;     // 1 - timeout
-//                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                    return;
-//                }
-//                if(Stand.active_mups[id_mups] > 0 && Stand.mups_crc_err[id_mups] > 0)   // ActivMUPS == 1 && crc error
-//                {
-//                    MUPS_statment[id_mups].mups_statment.mups_online_err = 2;     // 1 - crc
-//                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                    return;
-//                }
-//                if(Stand.active_mups[id_mups] > 0 && Stand.mups_coll_1_err[id_mups] > 0)   // ActivMUPS == 1 && col_1 error
-//                {
-//                    MUPS_statment[id_mups].mups_statment.mups_online_err = 3;     // 3 - col_1
-//                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                    return;
-//                }
-//                if(Stand.active_mups[id_mups] > 0 && Stand.mups_coll_2_err[id_mups] > 0)   // ActivMUPS == 1 && col_2 error
-//                {
-//                    MUPS_statment[id_mups].mups_statment.mups_online_err = 4;     // 4 - col_2
-//                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                    return;
-//                }
-//                if(Stand.active_mups[id_mups] > 0 && Stand.mups_coll_3_err[id_mups] > 0)   // ActivMUPS == 1 && col_3 error
-//                {
-//                    MUPS_statment[id_mups].mups_statment.mups_online_err = 5;     // 5 - col_3
-//                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                    return;
-//                }
-//                if(Stand.active_mups[id_mups] == 0)       // ActivMOPS == 0
-//                {
-//                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
-//                    MUPS_statment[id_mups].mups_statment.mups_offline = 1;
-//                    return;
-//                }
-//                unsigned short ch_num_;
-//                size_t ch_num = sizeof(MUPS_statment[id_mups].mups_current_ch_status)/sizeof(MUPS_statment[id_mups].mups_current_ch_status[0]);
-//                for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
-//                {
-//                    if(MUPS_statment[id_mups].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
-//                    {
-//                        switch(ch_statment)
-//                        {
-//                            case 1: 
-//                            {
-//                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_break_ch_off[ch_num_] = 1;
-//                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 2: 
-//                            {
-//                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_norm_ch_off[ch_num_] = 1;
-//                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 3: 
-//                            {
-//                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_sc_ch_off[ch_num_] = 1;
-//                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 4: 
-//                            {
-//                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_norm_ch_on[ch_num_] = 1;
-//                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 5: 
-//                            {
-//                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[ch_num_] = 1;
-//                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 6: 
-//                            {
-//                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_break_ch_on[ch_num_] = 1;
-//                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//                break;
-//        }
-//        case 1:
-//        {
-//            unsigned short mups_num_ = 0;
-//            size_t mups_num = sizeof(Stand.active_mups)/sizeof(Stand.active_mups[0]);
-//            for(mups_num_ = 0; mups_num_ < mups_num; mups_num_++)
-//            {
-//                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] <= 1)  // ActivMUPS == 1 && connection with modul == 1
-//                {
-//                    Stand.mups_timeout_err[mups_num_] = 0;
-//                    Stand_sw.mups_timeout_err[mups_num_] = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_online = 1;
-//                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-//                    if(just_check_online == 0){continue;}  // just check online end function
-//                    memcpy(MUPS_statment[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
-//                }
-//                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] > 0)   // ActivMUPS == 1 && connection with modul == 0
-//                {
-//                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 1;     // 1 - timeout
-//                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                    continue;
-//                }
-//                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_crc_err[mups_num_] > 0)   // ActivMUPS == 1 && crc error
-//                {
-//                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 2;     // 1 - crc
-//                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                    continue;
-//                }
-//                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_1_err[mups_num_] > 0)   // ActivMUPS == 1 && col_1 error
-//                {
-//                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 3;     // 3 - col_1
-//                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                    continue;
-//                }
-//                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_2_err[mups_num_] > 0)   // ActivMUPS == 1 && col_2 error
-//                {
-//                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 4;     // 4 - col_2
-//                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                    continue;
-//                }
-//                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_3_err[mups_num_] > 0)   // ActivMUPS == 1 && col_3 error
-//                {
-//                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 5;     // 5 - col_3
-//                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                    continue;
-//                }
-//                if(Stand.active_mups[mups_num_] == 0)       // ActivMOPS == 0
-//                {
-//                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-//                    MUPS_statment[mups_num_].mups_statment.mups_offline = 1;
-//                    continue;
-//                }
-//                unsigned short ch_num_;
-//                size_t ch_num = sizeof(MUPS_statment[mups_num_].mups_current_ch_status)/sizeof(MUPS_statment[mups_num_].mups_current_ch_status[0]);
-//                for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
-//                {
-//                    if(MUPS_statment[mups_num_].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
-//                    {
-//                        switch(ch_statment)
-//                        {
-//                            case 1: 
-//                            {
-//                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_off[ch_num_] = 1;
-//                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 2: 
-//                            {
-//                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_off[ch_num_] = 1;
-//                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 3: 
-//                            {
-//                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_sc_ch_off[ch_num_] = 1;
-//                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 4: 
-//                            {
-//                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_on[ch_num_] = 1;
-//                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 5: 
-//                            {
-//                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[ch_num_] = 1;
-//                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                            case 6: 
-//                            {
-//                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_on[ch_num_] = 1;
-//                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            break;
-//        }
-//    }
-//    return;
-//}
-//
-//
-//// vars for mups check
-//enum 
-//{
-//    CHECK_BUTTON_TO_START_CHECK_MUPS,               // start check service cycle if button turned on
-//    TURNE_ON_18V,                                   // apply a reduced power supply of 18 volts
-//    WRITE_DOWN_THE_DEFAULT_STRATEGY,                // write to all mups strategy 1 fire fighting
-//    TEST_READING_MODULES,
-//    WRITE_TURNE_OFF_MUPS_RELEYS,
-//    TEST_READING_MODULES_2,                         // read again all modules
-//    TURNE_OFF_ALL_REALAYS,                          // Turn off all relays to check the status (1) breakage
-//    ONE_SEC_DELAY_INIT_BREAK,                       // a delay of 1 second before reading the status break
-//    READ_MODULS_BREAK,                              // reading the status of the modules for 1 second
-//    DATA_ANALYSIS_BREAK,                            // subtraction of breakage states on channels
-//    TURNE_ON_RELEY_NORMA,                           //
-//    ONE_SEC_DELAY_INIT_NORMA,                       //
-//    READ_MODULS_NORMA,                              //
-//    DATA_ANALYSIS_NORMA,                            //
-//    TURNE_ON_RELEY_SC,                              //
-//    ONE_SEC_DELAY_INIT_SC,                          //
-//    READ_MODULS_SC,                                 //
-//    DATA_ANALYSIS_SC,                               //
-//    ALL_RELEYS_TURNE_OFF,                           //
-//    /*individual v*/
-//    CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM,     //
-//    TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE,            //
-//    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM,
-//    READ_SEPARATE_MODULE_NORM,
-//    DATA_ANALYSIS_SEPARATE_MODULE_NORM,
-//    TURNE_ON_RELEYS_HIGH_CURRENT,
-//    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT,
-//    READ_SEPARATE_MODULE_HIGH_CURRENT,
-//    DATA_ANALYSIS_SEPARATE_HIGH_CURRENT,
-//    TURNE_OFF_RELEYS_HIGH_CURRENT,
-//    TURNE_OFF_RELEYS_IN_SEPARATE_MODULE,
-//    TURNE_OFF_LOAS_RELEYS_FOR_MODULE,
-//    CHECK
-//}mups_service_stages;
-//
-//
-//
-//unsigned short mups_strat_buff[4] = {0x0100, 0x0100, 0x0100, 0x0100};
-//unsigned short mups_start_rel_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
-//unsigned short mups_com_1_rel_on[4] = {0x0100, 0x0100, 0x0100, 0x0100};
-//
-//
-///**
-// * @brief
-// * @param usart_d_4
-// * @param usart_e_2
-// * @param usart_f_5
-// */
-//void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e_2, struct tag_usartm* usart_f_5)
-//{
-//    // vars for function
-//    static unsigned short read_mups_conf = 0;       // read mupses status
-//    static unsigned short mups_mbm_flag_d = 0;      // flag port 4
-//    static unsigned short mups_mbm_flag_e = 0;      // flag port 2
-//    static unsigned short mups_mbm_flag_f = 0;      // flag port 5
-//    static unsigned short mups_id = 0;              // mups id counter
-//    unsigned short _530_board_supply_u4_ap3_id3 = 3;    // for ap3    
-//    unsigned short _530_board_u5_ap5_id1 = 1;           // for ap5
-//    unsigned short _530_board_u4_ap4_id4 = 4;           // for ap4
-//    unsigned short _530_board_start_register = 0;
-//    unsigned short _530_board_quant_reg = 8;
-//    unsigned short mups_reley_start_reg = 208;          // reley
-//    unsigned short mups_reley_quant_reg = 4;
-//    unsigned short mups_strat_start_reg = 212;          // strategy
-//    unsigned short mups_strat_quant_reg = 4;
-//    static unsigned short individual_moduls_num = 1;
-//    unsigned short time_delay = 2000;
-//    static unsigned short try_again = 0;            // var for CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM
-//    static unsigned short power_toggle = 0;         // toggle for power suply 18v 24v 28v
-//    
-//    // struct for supplys err
-//    static union 
-//    {
-//        struct
-//        {
-//            unsigned short _18v_err;
-//            unsigned short _24v_err;
-//            unsigned short _28v_err;
-//        };
-//        unsigned short sup_buff[3];
-//    }supply_err_buff[10];
-//    
-//    size_t mups_size_buf = sizeof(MUPS_statment)/sizeof(MUPS_statment[0]);  // size == 10
-//    size_t mups_size_main_buf = sizeof(MUPS_statment_sw[0].main_buff)/sizeof(MUPS_statment_sw[0].main_buff[0]); // size == 36
-//    size_t supply_size_buf = sizeof(supply_err_buff[0].sup_buff)/sizeof(supply_err_buff[0].sup_buff[0]);
-//    
-//    
-//    
-//    switch(mups_service_stages) 
-//    {
-//        case CHECK_BUTTON_TO_START_CHECK_MUPS:          // check button start test
-//        {
-//            if(conf_stand.stand_commands.start_check_mups > 0)
-//            {
-//                mups_service_stages = TURNE_ON_18V; 
-//                conf_stand.stand_commands.mups_diagnostics_in_progress = 1;
-//                conf_stand_sw.stand_commands.mups_diagnostics_in_progress= 0x0100;
-//                conf_stand.stand_commands.start_check_mups = 0; 
-//                conf_stand_sw.stand_commands.start_check_mups = 0;
-//                memset(MUPS_statment, 0, sizeof(MUPS_statment));    //clear MUPS_statment
-//                break;
-//            }
-//            else{mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; break;}
-//        }
-//        case TURNE_ON_18V:                              // AP3 CAB11
-//        {
-//            mups_mbm_flag_d = 0;
-//            switch(power_toggle)
-//            {
-//                case 0:{mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, _530_board_just_18v, 115200, &mups_mbm_flag_d); break;}
-//                case 1:{mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, _530_board_just_24v, 115200, &mups_mbm_flag_d); break;}
-//                case 2:{mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, _530_board_just_28v, 115200, &mups_mbm_flag_d); break;}
-//            }
-//            if(mups_mbm_flag_d != 0)
-//                {mups_mbm_flag_d = 0; mups_service_stages = TEST_READING_MODULES; break;}
-//            else if(mups_mbm_flag_d == 0)
-//                {mups_service_stages = TURNE_ON_18V; break;}
-//            break;
-//        }
-//        case TEST_READING_MODULES:                  // just read mupses online status for next case
-//        {
-//           start_var_sec_timer = 1;
-//            _var_sec(time_delay);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-//            break; 
-//        }
-//        case WRITE_DOWN_THE_DEFAULT_STRATEGY:       // write strategy 1 - oborudovanie
-//        {
-//            check_mups_online_status(0, 0, 0, 1); 
-//            if(mups_id >= 10){mups_id = 0; mups_service_stages = WRITE_TURNE_OFF_MUPS_RELEYS; break;}
-//            if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
-//                {mups_mbm_flag_e = 0; mbm_16_flag(usart_e_2, (mups_id + 1), mups_strat_start_reg, mups_strat_quant_reg, mups_strat_buff, 115200, &mups_mbm_flag_e);} 
-//            else 
-//                {mups_id++;}
-//            if(mups_mbm_flag_e > 0)
-//                {mups_id++; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
-//            break;
-//        }
-//        case WRITE_TURNE_OFF_MUPS_RELEYS:           // releys in all mups turne off
-//        { 
-//            if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READING_MODULES_2; break;}
-//            if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
-//                {mups_mbm_flag_e = 0; mbm_16_flag(usart_e_2, (mups_id + 1), mups_reley_start_reg, mups_reley_quant_reg, mups_start_rel_buff, 115200, &mups_mbm_flag_e);} 
-//            else 
-//                {mups_id++;}
-//            if(mups_mbm_flag_e > 0)
-//                {mups_id++; mups_service_stages = WRITE_TURNE_OFF_MUPS_RELEYS; break;}
-//            break;
-//        }
-//        case TEST_READING_MODULES_2:                // just read mupses online status
-//        {
-//            start_var_sec_timer = 1;
-//            _var_sec(time_delay);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = TURNE_OFF_ALL_REALAYS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-//            break;
-//        }
-//        case TURNE_OFF_ALL_REALAYS:                 // AP4(id4) CAB13-14-19 turne off releys // AP5 (id1) CAB15-16-17-18 turne off releys for break status
-//        {
-//            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
-//            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
-//            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
-//                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
-//            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
-//                {mups_service_stages = TURNE_OFF_ALL_REALAYS; break;}
-//            break;
-//        }
-//        case ONE_SEC_DELAY_INIT_BREAK:              // just delay during 1 sec to init
-//        {
-//            start_1_sec_timer = 1;
-//            _1_sec();
-//            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_BREAK; break;}
-//            else{mups_service_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
-//        }
-//        case READ_MODULS_BREAK:                     // just read ALL mups modules
-//        {
-//            start_var_sec_timer = 1;
-//            _var_sec(time_delay);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_BREAK; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-//            break;
-//        }
-//        case DATA_ANALYSIS_BREAK:                   // analysis break status in ALL mups modules
-//        {
-//            check_mups_online_status(1, 1, 0, 1);
-//            mups_service_stages = TURNE_ON_RELEY_NORMA;
-//            break;
-//        }
-//        case TURNE_ON_RELEY_NORMA:                  // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status norm ch off
-//        {
-//            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_mups_88_91_94_reley_on_ap4, 115200, &mups_mbm_flag_d);
-//            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_mups_88_91_94_reley_on_ap5, 115200, &mups_mbm_flag_f);
-//            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
-//                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_NORMA; break;}
-//            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
-//                {mups_service_stages = TURNE_ON_RELEY_NORMA; break;}
-//            break;
-//        }
-//        case ONE_SEC_DELAY_INIT_NORMA:              // just delay during 1 sec to init
-//        {
-//            start_1_sec_timer = 1;
-//            _1_sec();
-//            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_NORMA; break;}
-//            else{mups_service_stages = ONE_SEC_DELAY_INIT_NORMA; break;}
-//        }
-//        case READ_MODULS_NORMA:                     // just read ALL mups modules
-//        {
-//            start_var_sec_timer = 1;
-//            _var_sec(time_delay);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_NORMA; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-//            break;
-//        }
-//        case DATA_ANALYSIS_NORMA:                   // analysis norm ch off status in ALL mups modules
-//        {
-//            check_mups_online_status(2, 1, 0, 1);
-//            mups_service_stages = TURNE_ON_RELEY_SC;
-//            break;
-//        }
-//        case TURNE_ON_RELEY_SC:                     // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status sc ch off
-//        {
-//            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_mups_88_89_reley_on_ap4, 115200, &mups_mbm_flag_d);
-//            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_mups_88_89_reley_on_ap5, 115200, &mups_mbm_flag_f);
-//            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
-//                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
-//            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
-//                {mups_service_stages = TURNE_ON_RELEY_SC; break;}
-//            break;
-//        }
-//        case ONE_SEC_DELAY_INIT_SC:                 // just delay during 1 sec to init
-//        {
-//            start_1_sec_timer = 1;
-//            _1_sec();
-//            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_SC; break;}
-//            else{mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
-//        }
-//        case READ_MODULS_SC:                        // just read ALL mups modules
-//        {
-//            start_var_sec_timer = 1;
-//            _var_sec(time_delay);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SC; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-//            break;
-//        }
-//        case DATA_ANALYSIS_SC:                      // analysis sc status in ALL mups modules               
-//        {
-//            check_mups_online_status(3, 1, 0, 1);
-//            mups_service_stages = ALL_RELEYS_TURNE_OFF;
-//            break;
-//        }
-//        case ALL_RELEYS_TURNE_OFF:                  // AP4(id4) CAB13-14-19 turne off releys // AP5 (id1) CAB15-16-17-18 turne off releys
-//        {
-//            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
-//            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
-//            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
-//                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
-//            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
-//                {mups_service_stages = ALL_RELEYS_TURNE_OFF; break;}
-//            break;
-//        }
-//        ///////////////////////////////////////////////////////////////        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////SEPARATE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//        ///////////////////////////////////////////////////////////////        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//        case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM:    // connect load for CURRENT mups
-//        {
-//            if(MUPS_statment[(individual_moduls_num - 1)].mups_statment.mups_online == 1)
-//            {
-//                switch(individual_moduls_num)
-//                {
-//                    case 1:  
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 3: 
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 5:  
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 7:             
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 9:
-//                    {
-//                        mups_mbm_flag_d = 0;
-//                        mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
-//                        break;
-//                    }
-//                    case 2:   
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 4:
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 6:  
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 8:             
-//
-//                    {
-//                        mups_mbm_flag_f = 0;
-//                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
-//                        break;
-//                    }
-//                    case 10:            // 10 } _2_mups_on_cab_load_norm
-//                    {
-//                        mups_mbm_flag_d = 0;
-//                        mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
-//                        break;
-//                    }
-//                }
-//                if(individual_moduls_num == 1 || individual_moduls_num == 2 || individual_moduls_num == 3 || individual_moduls_num == 4 ||
-//                   individual_moduls_num == 5 || individual_moduls_num == 6 || individual_moduls_num == 7 || individual_moduls_num == 8)
-//                {
-//                    if(mups_mbm_flag_f != 0 && try_again <= 2)      // turne again
-//                        {try_again++; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
-//                    else if(mups_mbm_flag_f != 0 && try_again > 2)
-//                        {try_again = 0; mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-//                    else if(mups_mbm_flag_f == 0)
-//                        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
-//                    break;
-//                }
-//                if(individual_moduls_num == 9 || individual_moduls_num == 10)
-//                {
-//                    if(mups_mbm_flag_d != 0 && try_again <= 2)      // turne again
-//                        {try_again++; mups_mbm_flag_d = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
-//                    else if(mups_mbm_flag_d != 0 && try_again > 2)
-//                        {try_again = 0; mups_mbm_flag_d = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-//                    else if(mups_mbm_flag_d == 0)
-//                        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
-//                    break; 
-//                }
-//            } 
-//            else    // if mups not operable - skip to next mups
-//            {
-//                mups_service_stages = CHECK;
-//                break;
-//            }
-//        }
-//        case TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE:           // turne on channels IN THE CURRENT mups to com. 1 - reley turne on
-//        {
-//            mups_mbm_flag_e = 0;
-//            mbm_16_flag(usart_e_2, individual_moduls_num, mups_reley_start_reg, mups_reley_quant_reg, mups_com_1_rel_on, 115200, &mups_mbm_flag_e);
-//            
-//            
-////            if(mups_mbm_flag_e != 0)
-////                {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
-////            else if(mups_mbm_flag_e == 0)
-////                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-////            break;
-//            
-//            if(mups_mbm_flag_e != 0 && try_again <= 3)
-//                {try_again++; mups_mbm_flag_e = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-//            else if(mups_mbm_flag_e != 0 && try_again > 3)
-//                {try_again = 0; mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
+//====== MUPS AREA ======//
+/**
+ * @brief this function checks the status of the connection to the module, as 
+ * well as the status of the channels
+ * @param ch_strategy it is necessary to substitute the channel strategy number
+ * @param just_check_online (0 - The function is just to check whether the module 
+ * @param id_mups it is used only when checking one module if just_check_online 
+ * is set to 0, if not used then set the value to 0
+ * @param single_module_mode set 0 if you want to test one module, set 1 if you 
+ * want to test all modules
+ * is online or not) (1 - full-fledged verification with channels)
+ */
+void check_mups_online_status(unsigned short ch_statment, unsigned short just_check_online, unsigned short id_mups, unsigned short single_module_mode, unsigned short power_toggle)
+{
+    switch(single_module_mode)
+    {
+        case 0:
+        {
+                if(Stand.active_mups[id_mups] > 0 && Stand.mups_timeout_err[id_mups] <= 1)  // ActivMUPS == 1 && connection with modul == 1
+                {
+                    Stand.mups_timeout_err[id_mups] = 0;
+                    Stand_sw.mups_timeout_err[id_mups] = 0;
+                    //MACRO_SELECT_MUPS_STATMENT(power_toggle)[id_mups].mups_statment.mups_online = 1;
+                    //MACRO_SELECT_MUPS_STATMENT(power_toggle)[id_mups].mups_statment.mups_offline = 0;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle), 1, 0, 0, 0, 0); // online flag up
+                    if(just_check_online == 0){return;}  // just check online end function
+                    memcpy(MUPS_statment[id_mups].mups_current_ch_status, MUPS_S_arr[id_mups].Ch_State, sizeof(unsigned short)*4);  // copy current ch status
+                }
+                if(Stand.active_mups[id_mups] > 0 && Stand.mups_timeout_err[id_mups] > 0)   // ActivMUPS == 1 && connection with modul == 0
+                {
+                    MUPS_statment[id_mups].mups_statment.mups_online_err = 1;     // 1 - timeout
+                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                    return;
+                }
+                if(Stand.active_mups[id_mups] > 0 && Stand.mups_crc_err[id_mups] > 0)   // ActivMUPS == 1 && crc error
+                {
+                    MUPS_statment[id_mups].mups_statment.mups_online_err = 2;     // 1 - crc
+                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                    return;
+                }
+                if(Stand.active_mups[id_mups] > 0 && Stand.mups_coll_1_err[id_mups] > 0)   // ActivMUPS == 1 && col_1 error
+                {
+                    MUPS_statment[id_mups].mups_statment.mups_online_err = 3;     // 3 - col_1
+                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                    return;
+                }
+                if(Stand.active_mups[id_mups] > 0 && Stand.mups_coll_2_err[id_mups] > 0)   // ActivMUPS == 1 && col_2 error
+                {
+                    MUPS_statment[id_mups].mups_statment.mups_online_err = 4;     // 4 - col_2
+                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                    return;
+                }
+                if(Stand.active_mups[id_mups] > 0 && Stand.mups_coll_3_err[id_mups] > 0)   // ActivMUPS == 1 && col_3 error
+                {
+                    MUPS_statment[id_mups].mups_statment.mups_online_err = 5;     // 5 - col_3
+                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_offline = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                    return;
+                }
+                if(Stand.active_mups[id_mups] == 0)       // ActivMOPS == 0
+                {
+                    MUPS_statment[id_mups].mups_statment.mups_online = 0;
+                    MUPS_statment[id_mups].mups_statment.mups_offline = 1;
+                    return;
+                }
+                unsigned short ch_num_;
+                size_t ch_num = sizeof(MUPS_statment[id_mups].mups_current_ch_status)/sizeof(MUPS_statment[id_mups].mups_current_ch_status[0]);
+                for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
+                {
+                    if(MUPS_statment[id_mups].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
+                    {
+                        switch(ch_statment)
+                        {
+                            case 1: 
+                            {
+                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_break_ch_off[ch_num_] = 1;
+                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 2: 
+                            {
+                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_norm_ch_off[ch_num_] = 1;
+                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 3: 
+                            {
+                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_sc_ch_off[ch_num_] = 1;
+                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 4: 
+                            {
+                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_norm_ch_on[ch_num_] = 1;
+                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 5: 
+                            {
+                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[ch_num_] = 1;
+                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 6: 
+                            {
+                                MUPS_statment[id_mups].mups_ch_statement.mups_ch_err_break_ch_on[ch_num_] = 1;
+                                MUPS_statment[id_mups].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        case 1:
+        {
+            unsigned short mups_num_ = 0;
+            size_t mups_num = sizeof(Stand.active_mups)/sizeof(Stand.active_mups[0]);
+            for(mups_num_ = 0; mups_num_ < mups_num; mups_num_++)
+            {
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] <= 1)  // ActivMUPS == 1 && connection with modul == 1
+                {
+                    Stand.mups_timeout_err[mups_num_] = 0;
+                    Stand_sw.mups_timeout_err[mups_num_] = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_online = 1;
+                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
+                    if(just_check_online == 0){continue;}  // just check online end function
+                    memcpy(MUPS_statment[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
+                }
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] > 0)   // ActivMUPS == 1 && connection with modul == 0
+                {
+                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 1;     // 1 - timeout
+                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_crc_err[mups_num_] > 0)   // ActivMUPS == 1 && crc error
+                {
+                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 2;     // 1 - crc
+                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_1_err[mups_num_] > 0)   // ActivMUPS == 1 && col_1 error
+                {
+                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 3;     // 3 - col_1
+                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_2_err[mups_num_] > 0)   // ActivMUPS == 1 && col_2 error
+                {
+                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 4;     // 4 - col_2
+                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_3_err[mups_num_] > 0)   // ActivMUPS == 1 && col_3 error
+                {
+                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 5;     // 5 - col_3
+                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    continue;
+                }
+                if(Stand.active_mups[mups_num_] == 0)       // ActivMOPS == 0
+                {
+                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
+                    MUPS_statment[mups_num_].mups_statment.mups_offline = 1;
+                    continue;
+                }
+                unsigned short ch_num_;
+                size_t ch_num = sizeof(MUPS_statment[mups_num_].mups_current_ch_status)/sizeof(MUPS_statment[mups_num_].mups_current_ch_status[0]);
+                for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
+                {
+                    if(MUPS_statment[mups_num_].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
+                    {
+                        switch(ch_statment)
+                        {
+                            case 1: 
+                            {
+                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_off[ch_num_] = 1;
+                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 2: 
+                            {
+                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_off[ch_num_] = 1;
+                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 3: 
+                            {
+                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_sc_ch_off[ch_num_] = 1;
+                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 4: 
+                            {
+                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_on[ch_num_] = 1;
+                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 5: 
+                            {
+                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[ch_num_] = 1;
+                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                            case 6: 
+                            {
+                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_on[ch_num_] = 1;
+                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+    return;
+}
+
+
+// vars for mups check
+enum 
+{
+    CHECK_BUTTON_TO_START_CHECK_MUPS,               // start check service cycle if button turned on
+    TURNE_ON_18V,                                   // apply a reduced power supply of 18 volts
+    WRITE_DOWN_THE_DEFAULT_STRATEGY,                // write to all mups strategy 1 fire fighting
+    TEST_READING_MODULES,
+    WRITE_TURNE_OFF_MUPS_RELEYS,
+    TEST_READING_MODULES_2,                         // read again all modules
+    TURNE_OFF_ALL_REALAYS,                          // Turn off all relays to check the status (1) breakage
+    ONE_SEC_DELAY_INIT_BREAK,                       // a delay of 1 second before reading the status break
+    READ_MODULS_BREAK,                              // reading the status of the modules for 1 second
+    DATA_ANALYSIS_BREAK,                            // subtraction of breakage states on channels
+    TURNE_ON_RELEY_NORMA,                           //
+    ONE_SEC_DELAY_INIT_NORMA,                       //
+    READ_MODULS_NORMA,                              //
+    DATA_ANALYSIS_NORMA,                            //
+    TURNE_ON_RELEY_SC,                              //
+    ONE_SEC_DELAY_INIT_SC,                          //
+    READ_MODULS_SC,                                 //
+    DATA_ANALYSIS_SC,                               //
+    ALL_RELEYS_TURNE_OFF,                           //
+    /*individual v*/
+    CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM,     //
+    TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE,            //
+    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM,
+    READ_SEPARATE_MODULE_NORM,
+    DATA_ANALYSIS_SEPARATE_MODULE_NORM,
+    TURNE_ON_RELEYS_HIGH_CURRENT,
+    ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT,
+    READ_SEPARATE_MODULE_HIGH_CURRENT,
+    DATA_ANALYSIS_SEPARATE_HIGH_CURRENT,
+    TURNE_OFF_RELEYS_HIGH_CURRENT,
+    TURNE_OFF_RELEYS_IN_SEPARATE_MODULE,
+    TURNE_OFF_LOAS_RELEYS_FOR_MODULE,
+    CHECK
+}mups_service_stages;
+
+
+
+unsigned short mups_strat_buff[4] = {0x0100, 0x0100, 0x0100, 0x0100};
+unsigned short mups_start_rel_buff[4] = {0x0200, 0x0200, 0x0200, 0x0200};
+unsigned short mups_com_1_rel_on[4] = {0x0100, 0x0100, 0x0100, 0x0100};
+
+
+/**
+ * @brief
+ * @param usart_d_4
+ * @param usart_e_2
+ * @param usart_f_5
+ */
+void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e_2, struct tag_usartm* usart_f_5)
+{
+    // vars for function
+    static unsigned short read_mups_conf = 0;       // read mupses status
+    static unsigned short mups_mbm_flag_d = 0;      // flag port 4
+    static unsigned short mups_mbm_flag_e = 0;      // flag port 2
+    static unsigned short mups_mbm_flag_f = 0;      // flag port 5
+    static unsigned short mups_id = 0;              // mups id counter
+    unsigned short _530_board_supply_u4_ap3_id3 = 3;    // for ap3    
+    unsigned short _530_board_u5_ap5_id1 = 1;           // for ap5
+    unsigned short _530_board_u4_ap4_id4 = 4;           // for ap4
+    unsigned short _530_board_start_register = 0;
+    unsigned short _530_board_quant_reg = 8;
+    unsigned short mups_reley_start_reg = 208;          // reley
+    unsigned short mups_reley_quant_reg = 4;
+    unsigned short mups_strat_start_reg = 212;          // strategy
+    unsigned short mups_strat_quant_reg = 4;
+    static unsigned short individual_moduls_num = 1;
+    unsigned short time_delay = 2000;
+    static unsigned short try_again = 0;            // var for CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM
+    static unsigned short power_toggle = 0;         // toggle for power suply 18v 24v 28v
+    
+    // struct for supplys err
+    static union 
+    {
+        struct
+        {
+            unsigned short _18v_err;
+            unsigned short _24v_err;
+            unsigned short _28v_err;
+        };
+        unsigned short sup_buff[3];
+    }supply_err_buff[10];
+    
+    size_t mups_size_buf = sizeof(MUPS_statment_18v)/sizeof(MUPS_statment_18v[0]);  // size == 10
+    size_t mups_size_main_buf = sizeof(MUPS_statment_sw_18v[0].main_buff)/sizeof(MUPS_statment_sw_18v[0].main_buff[0]); // size == 36
+    size_t supply_size_buf = sizeof(supply_err_buff[0].sup_buff)/sizeof(supply_err_buff[0].sup_buff[0]);
+    
+    
+    
+    switch(mups_service_stages) 
+    {
+        case CHECK_BUTTON_TO_START_CHECK_MUPS:          // check button start test
+        {
+            if(conf_stand.stand_commands.start_check_mups > 0)
+            {
+                mups_service_stages = TURNE_ON_18V; 
+                conf_stand.stand_commands.mups_diagnostics_in_progress = 1;
+                conf_stand_sw.stand_commands.mups_diagnostics_in_progress= 0x0100;
+                conf_stand.stand_commands.start_check_mups = 0; 
+                conf_stand_sw.stand_commands.start_check_mups = 0; 
+                int i = 0;
+                for(i = 0; i < mups_size_buf; i++)
+                {
+                    memset(&MACRO_SELECT_MUPS_STATMENT(power_toggle)[i], 0, sizeof(union tag_mups_stand_statment)); //clear MUPS_statment
+                }
+                break;
+            }
+            else{mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; break;}
+        }
+        case TURNE_ON_18V:                              // AP3 CAB11
+        {
+            mups_mbm_flag_d = 0;
+            mbm_16_flag(usart_d_4, _530_board_supply_u4_ap3_id3, _530_board_start_register, _530_board_quant_reg, MACRO_530_SUPPLY(power_toggle), 115200, &mups_mbm_flag_d);
+            if(mups_mbm_flag_d != 0)
+                {mups_mbm_flag_d = 0; mups_service_stages = TEST_READING_MODULES; break;}
+            else if(mups_mbm_flag_d == 0)
+                {mups_service_stages = TURNE_ON_18V; break;}
+            break;
+        }
+        case TEST_READING_MODULES:                  // just read mupses online status for next case
+        {
+           start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break; 
+        }
+        case WRITE_DOWN_THE_DEFAULT_STRATEGY:       // write strategy 1 - oborudovanie
+        {
+            check_mups_online_status(0, 0, 0, 1); 
+            if(mups_id >= 10){mups_id = 0; mups_service_stages = WRITE_TURNE_OFF_MUPS_RELEYS; break;}
+            if(Stand.active_mups[mups_id] != 0 && MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_id].mups_statment.mups_online == 1)
+                {mups_mbm_flag_e = 0; mbm_16_flag(usart_e_2, (mups_id + 1), mups_strat_start_reg, mups_strat_quant_reg, mups_strat_buff, 115200, &mups_mbm_flag_e);} 
+            else 
+                {mups_id++;}
+            if(mups_mbm_flag_e > 0)
+                {mups_id++; mups_service_stages = WRITE_DOWN_THE_DEFAULT_STRATEGY; break;}
+            break;
+        }
+        case WRITE_TURNE_OFF_MUPS_RELEYS:           // releys in all mups turne off
+        { 
+            if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READING_MODULES_2; break;}
+            if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
+                {mups_mbm_flag_e = 0; mbm_16_flag(usart_e_2, (mups_id + 1), mups_reley_start_reg, mups_reley_quant_reg, mups_start_rel_buff, 115200, &mups_mbm_flag_e);} 
+            else 
+                {mups_id++;}
+            if(mups_mbm_flag_e > 0)
+                {mups_id++; mups_service_stages = WRITE_TURNE_OFF_MUPS_RELEYS; break;}
+            break;
+        }
+        case TEST_READING_MODULES_2:                // just read mupses online status
+        {
+            start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = TURNE_OFF_ALL_REALAYS; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case TURNE_OFF_ALL_REALAYS:                 // AP4(id4) CAB13-14-19 turne off releys // AP5 (id1) CAB15-16-17-18 turne off releys for break status
+        {
+            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = TURNE_OFF_ALL_REALAYS; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_BREAK:              // just delay during 1 sec to init
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_BREAK; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_BREAK; break;}
+        }
+        case READ_MODULS_BREAK:                     // just read ALL mups modules
+        {
+            start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_BREAK; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_BREAK:                   // analysis break status in ALL mups modules
+        {
+            check_mups_online_status(1, 1, 0, 1);
+            mups_service_stages = TURNE_ON_RELEY_NORMA;
+            break;
+        }
+        case TURNE_ON_RELEY_NORMA:                  // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status norm ch off
+        {
+            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_mups_88_91_94_reley_on_ap4, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_mups_88_91_94_reley_on_ap5, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_NORMA; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = TURNE_ON_RELEY_NORMA; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_NORMA:              // just delay during 1 sec to init
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_NORMA; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_NORMA; break;}
+        }
+        case READ_MODULS_NORMA:                     // just read ALL mups modules
+        {
+            start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_NORMA; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_NORMA:                   // analysis norm ch off status in ALL mups modules
+        {
+            check_mups_online_status(2, 1, 0, 1);
+            mups_service_stages = TURNE_ON_RELEY_SC;
+            break;
+        }
+        case TURNE_ON_RELEY_SC:                     // AP4(id4) CAB19 turne on releys // AP5 (id1) CAB15-16-17-18 turne on releys } to status sc ch off
+        {
+            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_mups_88_89_reley_on_ap4, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_mups_88_89_reley_on_ap5, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = TURNE_ON_RELEY_SC; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_SC:                 // just delay during 1 sec to init
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_MODULS_SC; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_SC; break;}
+        }
+        case READ_MODULS_SC:                        // just read ALL mups modules
+        {
+            start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SC; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_SC:                      // analysis sc status in ALL mups modules               
+        {
+            check_mups_online_status(3, 1, 0, 1);
+            mups_service_stages = ALL_RELEYS_TURNE_OFF;
+            break;
+        }
+        case ALL_RELEYS_TURNE_OFF:                  // AP4(id4) CAB13-14-19 turne off releys // AP5 (id1) CAB15-16-17-18 turne off releys
+        {
+            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _530_board_all_releys_off_for_break, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = ALL_RELEYS_TURNE_OFF; break;}
+            break;
+        }
+        ///////////////////////////////////////////////////////////////        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////SEPARATE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM:    // connect load for CURRENT mups
+        {
+            if(MUPS_statment[(individual_moduls_num - 1)].mups_statment.mups_online == 1)
+            {
+                switch(individual_moduls_num)
+                {
+                    case 1:  
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 3: 
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 5:  
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 7:             
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 9:
+                    {
+                        mups_mbm_flag_d = 0;
+                        mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
+                        break;
+                    }
+                    case 2:   
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 4:
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 6:  
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 8:             
+
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 10:            // 10 } _2_mups_on_cab_load_norm
+                    {
+                        mups_mbm_flag_d = 0;
+                        mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
+                        break;
+                    }
+                }
+                if(individual_moduls_num == 1 || individual_moduls_num == 2 || individual_moduls_num == 3 || individual_moduls_num == 4 ||
+                   individual_moduls_num == 5 || individual_moduls_num == 6 || individual_moduls_num == 7 || individual_moduls_num == 8)
+                {
+                    if(mups_mbm_flag_f != 0 && try_again <= 2)      // turne again
+                        {try_again++; mups_mbm_flag_f = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    else if(mups_mbm_flag_f != 0 && try_again > 2)
+                        {try_again = 0; mups_mbm_flag_f = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+                    else if(mups_mbm_flag_f == 0)
+                        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    break;
+                }
+                if(individual_moduls_num == 9 || individual_moduls_num == 10)
+                {
+                    if(mups_mbm_flag_d != 0 && try_again <= 2)      // turne again
+                        {try_again++; mups_mbm_flag_d = 0; mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    else if(mups_mbm_flag_d != 0 && try_again > 2)
+                        {try_again = 0; mups_mbm_flag_d = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+                    else if(mups_mbm_flag_d == 0)
+                        {mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM; break;}
+                    break; 
+                }
+            } 
+            else    // if mups not operable - skip to next mups
+            {
+                mups_service_stages = CHECK;
+                break;
+            }
+        }
+        case TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE:           // turne on channels IN THE CURRENT mups to com. 1 - reley turne on
+        {
+            mups_mbm_flag_e = 0;
+            mbm_16_flag(usart_e_2, individual_moduls_num, mups_reley_start_reg, mups_reley_quant_reg, mups_com_1_rel_on, 115200, &mups_mbm_flag_e);
+            
+            
+//            if(mups_mbm_flag_e != 0)
+//                {mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
 //            else if(mups_mbm_flag_e == 0)
 //                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
-//            break; 
-//        }
-//        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM:       // just delay during 1 sec to init
-//        {
-//            start_1_sec_timer = 1;
-//            _1_sec();
-//            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_NORM; break;}
-//            else{mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
-//        }
-//        case READ_SEPARATE_MODULE_NORM:                     // just read ALL mups modules
-//        {
-//            start_var_sec_timer = 1;
-//            _var_sec(time_delay);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SEPARATE_MODULE_NORM; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
 //            break;
-//        }
-//        case DATA_ANALYSIS_SEPARATE_MODULE_NORM:           // analysis norm status IN THE CURRENT mups modul
-//        {
-//            check_mups_online_status(4, 1, (individual_moduls_num - 1), 0);
-//            mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT;
-//            break;
-//        }
-//        case TURNE_ON_RELEYS_HIGH_CURRENT:                 // turne on high curren turne on releys (84-85-86-87) AP4 CAB14
-//        {
-//            mups_mbm_flag_d = 0;
-//            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, high_current, 115200, &mups_mbm_flag_d);
-//            if(mups_mbm_flag_d != 0)
-//                {mups_mbm_flag_d = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
-//            else if(mups_mbm_flag_d == 0)
-//                {mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT; break;}
-//            break;
-//        }
-//        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT:       // just delay during 1 sec to init
-//        {
-//            start_1_sec_timer = 1;
-//            _1_sec();
-//            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_HIGH_CURRENT; break;}
-//            else{mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
-//        }
-//        case READ_SEPARATE_MODULE_HIGH_CURRENT:                 // just read ALL mups modules
-//        {
-//            start_var_sec_timer = 1;
-//            _var_sec(time_delay);
-//            if(end_var_sec_timer == 0)
-//            {
-//                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
-//            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SEPARATE_HIGH_CURRENT; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
-//            break;
-//        }
-//        case DATA_ANALYSIS_SEPARATE_HIGH_CURRENT:               // analysis high current status IN THE CURRENT mups modul
-//        {
-//            check_mups_online_status(5, 1, (individual_moduls_num - 1), 0);
-//            mups_service_stages = TURNE_OFF_RELEYS_HIGH_CURRENT;
-//            break;
-//        }
-//        case TURNE_OFF_RELEYS_HIGH_CURRENT:                     // turne off high curren turne off releys (84-85-86-87) AP4 CAB14 
-//        {
-//            mups_mbm_flag_d = 0;
-//            mbm_16_flag(usart_d_4,_530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, none, 115200, &mups_mbm_flag_d);
-//            if(mups_mbm_flag_d != 0)
-//                {mups_mbm_flag_d = 0; mups_service_stages = TURNE_OFF_RELEYS_IN_SEPARATE_MODULE; break;}
-//            else if(mups_mbm_flag_d == 0)
-//                {mups_service_stages = TURNE_OFF_RELEYS_HIGH_CURRENT; break;}
-//            break;
-//        }
-//        case TURNE_OFF_RELEYS_IN_SEPARATE_MODULE:               // turne off releys IN THE CURRENT mups module com.1 - releys off
-//        {
-//            mups_mbm_flag_e = 0;
-//            mbm_16_flag(usart_e_2, individual_moduls_num, mups_reley_start_reg, mups_reley_quant_reg, mups_start_rel_buff, 115200, &mups_mbm_flag_e);
-//            if(mups_mbm_flag_e != 0)
-//                {mups_mbm_flag_e= 0; mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
-//            else if(mups_mbm_flag_e == 0)
-//                {mups_service_stages = TURNE_OFF_RELEYS_IN_SEPARATE_MODULE; break;}
-//            break;
-//        }
-//        case TURNE_OFF_LOAS_RELEYS_FOR_MODULE:                  // turne off load 
-//        {
-//            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, none, 115200, &mups_mbm_flag_d);
-//            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, none, 115200, &mups_mbm_flag_f);
-//            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
-//                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CHECK; break;}
-//            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
-//                {mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
-//            break;
-//        }
-//        case CHECK:
-//        {
-//            // check errors on current power level
-//            int check_power;
-//            for(check_power = 0; check_power < mups_size_buf; check_power++)
-//            {
-//                if(MUPS_statment[check_power].mups_statment.mups_not_operable == 1)
-//                {
-//                    switch(power_toggle)
-//                    {
-//                        case 0:{supply_err_buff[check_power]._18v_err = 1; break;}
-//                        case 1:{supply_err_buff[check_power]._24v_err = 1; break;}
-//                        case 2:{supply_err_buff[check_power]._28v_err = 1; break;}
-//                    }
-//                }
-//                if(MUPS_statment[check_power].mups_statment.mups_not_operable == 0)
-//                {
-//                    switch(power_toggle)
-//                    {
-//                        case 0:{supply_err_buff[check_power]._18v_err = 0; break;}
-//                        case 1:{supply_err_buff[check_power]._24v_err = 0; break;}
-//                        case 2:{supply_err_buff[check_power]._28v_err = 0; break;}
-//                    }
-//                }
-//            }
-//            ++individual_moduls_num;    // incr mups id
-//            
-//            // EXITE
-//            if(individual_moduls_num > mups_size_buf && power_toggle == 2)
-//            {
-//                individual_moduls_num = 0;
-//                power_toggle = 0;
-//                mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS;
-//                
-//                // copy supply errors to mups struct
-//                unsigned short j;
-//                for(j = 0; j < mups_size_buf; j++)
-//                {
-//                    memcpy(&MUPS_statment[j].mups_power_supply_error, &supply_err_buff[j], sizeof(supply_err_buff[j]));
-//                    //clear local sup err 
-//                    memset(&supply_err_buff[j], 0, sizeof(supply_err_buff[j]));
-//                }
-//                
-//                int i, ii;
-//                // copy the buffer for data swap to transfer to the top
-//                for(i = 0; i < mups_size_buf; i++)    
-//                {
-//                    for(ii = 0; ii <= mups_size_main_buf; ii++)
-//                    {
-//                        MUPS_statment_sw[i].main_buff[ii] = swapshort(MUPS_statment[i].main_buff[ii]);
-//                    }
-//                }
-//                conf_stand.stand_commands.mups_diagnostics_in_progress = 0;
-//                conf_stand_sw.stand_commands.mups_diagnostics_in_progress = 0;
-//                
-////                // clear timeout errors 
-////                // timeout
-////                memset(&Stand.mups_timeout_err, 0, sizeof(Stand.mups_timeout_err));
-////                // crc
-////                memset(&Stand.mups_crc_err, 0, sizeof(Stand.mups_crc_err));
-////                // col_1
-////                memset(&Stand.mups_coll_1_err, 0, sizeof(Stand.mups_coll_1_err));
-////                // col_2
-////                memset(&Stand.mups_coll_2_err, 0, sizeof(Stand.mups_coll_2_err));
-////                // col_3
-////                memset(&Stand.mups_coll_3_err, 0, sizeof(Stand.mups_coll_3_err));
-//                
-//                break;
-//            }
-//            // UP SUPPLY
-//            else if(individual_moduls_num > mups_size_buf && power_toggle < 2)
-//            {
-//                individual_moduls_num = 0;
-//                power_toggle++;
-//                mups_service_stages = TURNE_ON_18V;
-//                break;
-//            }
-//            // NEXT MUPS
-//            else if(individual_moduls_num <= mups_size_buf)
-//            {
-//                mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM;
-//                break;
-//            }
-//            break;
-//        }
-//    }
-//}
+            
+            if(mups_mbm_flag_e != 0 && try_again <= 3)
+                {try_again++; mups_mbm_flag_e = 0; mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+            else if(mups_mbm_flag_e != 0 && try_again > 3)
+                {try_again = 0; mups_mbm_flag_e = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
+            else if(mups_mbm_flag_e == 0)
+                {mups_service_stages = TURNE_ON_ALL_CHS_IN_SEPARATE_MODULE; break;}
+            break; 
+        }
+        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM:       // just delay during 1 sec to init
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_NORM; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_NORM; break;}
+        }
+        case READ_SEPARATE_MODULE_NORM:                     // just read ALL mups modules
+        {
+            start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SEPARATE_MODULE_NORM; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_SEPARATE_MODULE_NORM:           // analysis norm status IN THE CURRENT mups modul
+        {
+            check_mups_online_status(4, 1, (individual_moduls_num - 1), 0);
+            mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT;
+            break;
+        }
+        case TURNE_ON_RELEYS_HIGH_CURRENT:                 // turne on high curren turne on releys (84-85-86-87) AP4 CAB14
+        {
+            mups_mbm_flag_d = 0;
+            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, high_current, 115200, &mups_mbm_flag_d);
+            if(mups_mbm_flag_d != 0)
+                {mups_mbm_flag_d = 0; mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
+            else if(mups_mbm_flag_d == 0)
+                {mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT; break;}
+            break;
+        }
+        case ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT:       // just delay during 1 sec to init
+        {
+            start_1_sec_timer = 1;
+            _1_sec();
+            if(end_1_sec_timer == 1){start_1_sec_timer = 0; end_1_sec_timer = 0; mups_service_stages = READ_SEPARATE_MODULE_HIGH_CURRENT; break;}
+            else{mups_service_stages = ONE_SEC_DELAY_INIT_SEPARATE_MODULE_HIGH_CURRENT; break;}
+        }
+        case READ_SEPARATE_MODULE_HIGH_CURRENT:                 // just read ALL mups modules
+        {
+            start_var_sec_timer = 1;
+            _var_sec(time_delay);
+            if(end_var_sec_timer == 0)
+            {
+                MUPS_S_control_flag(usart_e_2, &read_mups_conf);
+            }else {read_mups_conf = 0; mups_service_stages = DATA_ANALYSIS_SEPARATE_HIGH_CURRENT; start_var_sec_timer = 0; end_var_sec_timer = 0; break;}
+            break;
+        }
+        case DATA_ANALYSIS_SEPARATE_HIGH_CURRENT:               // analysis high current status IN THE CURRENT mups modul
+        {
+            check_mups_online_status(5, 1, (individual_moduls_num - 1), 0);
+            mups_service_stages = TURNE_OFF_RELEYS_HIGH_CURRENT;
+            break;
+        }
+        case TURNE_OFF_RELEYS_HIGH_CURRENT:                     // turne off high curren turne off releys (84-85-86-87) AP4 CAB14 
+        {
+            mups_mbm_flag_d = 0;
+            mbm_16_flag(usart_d_4,_530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, none, 115200, &mups_mbm_flag_d);
+            if(mups_mbm_flag_d != 0)
+                {mups_mbm_flag_d = 0; mups_service_stages = TURNE_OFF_RELEYS_IN_SEPARATE_MODULE; break;}
+            else if(mups_mbm_flag_d == 0)
+                {mups_service_stages = TURNE_OFF_RELEYS_HIGH_CURRENT; break;}
+            break;
+        }
+        case TURNE_OFF_RELEYS_IN_SEPARATE_MODULE:               // turne off releys IN THE CURRENT mups module com.1 - releys off
+        {
+            mups_mbm_flag_e = 0;
+            mbm_16_flag(usart_e_2, individual_moduls_num, mups_reley_start_reg, mups_reley_quant_reg, mups_start_rel_buff, 115200, &mups_mbm_flag_e);
+            if(mups_mbm_flag_e != 0)
+                {mups_mbm_flag_e= 0; mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
+            else if(mups_mbm_flag_e == 0)
+                {mups_service_stages = TURNE_OFF_RELEYS_IN_SEPARATE_MODULE; break;}
+            break;
+        }
+        case TURNE_OFF_LOAS_RELEYS_FOR_MODULE:                  // turne off load 
+        {
+            mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, none, 115200, &mups_mbm_flag_d);
+            mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, none, 115200, &mups_mbm_flag_f);
+            if(mups_mbm_flag_d != 0 && mups_mbm_flag_f !=0)
+                {mups_mbm_flag_d = 0; mups_mbm_flag_f = 0; mups_service_stages = CHECK; break;}
+            else if(mups_mbm_flag_d == 0 || mups_mbm_flag_f == 0)
+                {mups_service_stages = TURNE_OFF_LOAS_RELEYS_FOR_MODULE; break;}
+            break;
+        }
+        case CHECK:
+        {
+            // check errors on current power level
+            int check_power;
+            for(check_power = 0; check_power < mups_size_buf; check_power++)
+            {
+                if(MUPS_statment[check_power].mups_statment.mups_not_operable == 1)
+                {
+                    switch(power_toggle)
+                    {
+                        case 0:{supply_err_buff[check_power]._18v_err = 1; break;}
+                        case 1:{supply_err_buff[check_power]._24v_err = 1; break;}
+                        case 2:{supply_err_buff[check_power]._28v_err = 1; break;}
+                    }
+                }
+                if(MUPS_statment[check_power].mups_statment.mups_not_operable == 0)
+                {
+                    switch(power_toggle)
+                    {
+                        case 0:{supply_err_buff[check_power]._18v_err = 0; break;}
+                        case 1:{supply_err_buff[check_power]._24v_err = 0; break;}
+                        case 2:{supply_err_buff[check_power]._28v_err = 0; break;}
+                    }
+                }
+            }
+            ++individual_moduls_num;    // incr mups id
+            
+            // EXITE
+            if(individual_moduls_num > mups_size_buf && power_toggle == 2)
+            {
+                individual_moduls_num = 0;
+                power_toggle = 0;
+                mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS;
+                
+                // copy supply errors to mups struct
+                unsigned short j;
+                for(j = 0; j < mups_size_buf; j++)
+                {
+                    memcpy(&MUPS_statment[j].mups_power_supply_error, &supply_err_buff[j], sizeof(supply_err_buff[j]));
+                    //clear local sup err 
+                    memset(&supply_err_buff[j], 0, sizeof(supply_err_buff[j]));
+                }
+                
+                int i, ii;
+                // copy the buffer for data swap to transfer to the top
+                for(i = 0; i < mups_size_buf; i++)    
+                {
+                    for(ii = 0; ii <= mups_size_main_buf; ii++)
+                    {
+                        MUPS_statment_sw[i].main_buff[ii] = swapshort(MUPS_statment[i].main_buff[ii]);
+                    }
+                }
+                conf_stand.stand_commands.mups_diagnostics_in_progress = 0;
+                conf_stand_sw.stand_commands.mups_diagnostics_in_progress = 0;
+                
+//                // clear timeout errors 
+//                // timeout
+//                memset(&Stand.mups_timeout_err, 0, sizeof(Stand.mups_timeout_err));
+//                // crc
+//                memset(&Stand.mups_crc_err, 0, sizeof(Stand.mups_crc_err));
+//                // col_1
+//                memset(&Stand.mups_coll_1_err, 0, sizeof(Stand.mups_coll_1_err));
+//                // col_2
+//                memset(&Stand.mups_coll_2_err, 0, sizeof(Stand.mups_coll_2_err));
+//                // col_3
+//                memset(&Stand.mups_coll_3_err, 0, sizeof(Stand.mups_coll_3_err));
+                
+                break;
+            }
+            // UP SUPPLY
+            else if(individual_moduls_num > mups_size_buf && power_toggle < 2)
+            {
+                individual_moduls_num = 0;
+                power_toggle++;
+                mups_service_stages = TURNE_ON_18V;
+                break;
+            }
+            // NEXT MUPS
+            else if(individual_moduls_num <= mups_size_buf)
+            {
+                mups_service_stages = CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM;
+                break;
+            }
+            break;
+        }
+    }
+}
