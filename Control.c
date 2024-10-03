@@ -779,7 +779,7 @@ void check_mops_online_status(unsigned short ch_statment, unsigned short just_ch
             Stand_sw.mops_timeout_err[mops_num_] = 0;
             MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_statment.mops_online = 1;
             if(just_check_online == 0){continue;}  // just check online end function
-            memcpy(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8); break;
+            memcpy(MACRO_SELECT_MOPS_STATMENT(power_cycle_mops)[mops_num_].mops_current_ch_status, MOPS_S_arr[mops_num_].status, sizeof(unsigned short)*8);
         }
         if(Stand.active_mops[mops_num_] > 0 && Stand.mops_timeout_err[mops_num_] > 0)   // ActivMOPS == 1 && connection with modul == 0 // 1 - timeout
         {
@@ -955,7 +955,11 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
         }
         case READ_MOPS_CONNACTION_STATMENT:     // check connection module and normal statment
         {
-            memset(MACRO_SELECT_MOPS_STATMENT(power_cycle), 0, sizeof(MACRO_SELECT_MOPS_STATMENT(power_cycle)));    //clear MOPS_statment 18 24 28
+            int i = 0;
+            for(i = 0; i < mops_size_buf; i++)
+            {
+                memset(&MACRO_SELECT_MOPS_STATMENT(power_cycle)[i], 0, sizeof(union tag_mops_stand_statment));    //clear MOPS_statment 18 24 28
+            }
             check_mops_online_status(2, 1, power_cycle); // check normal
             mops_service_check_stages++;     // next step
             break;
