@@ -642,4 +642,41 @@
      (power_cycle_mups) == 1 ? _530_board_just_24v :   \
                                _530_board_just_28v)
 
+
+/**
+ * @brief macros to set error flag in channel
+ * @param mups MACRO_SELECT_MUPS_STATMENT
+ * @param ch_statment current ch statment 
+ * @param id_mups current mups address
+ * @param ch_num current ch num
+ */
+#define MACRO_SET_ERR_CH_FLAG(mups, ch_statment, id_mups, ch_num_)                              \
+do                                                                                              \
+{                                                                                               \
+    switch((ch_statment))                                                                       \
+    {                                                                                           \
+        case 1:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_break_ch_off[(ch_num_)] = 1;        \
+            break;                                                                              \
+        case 2:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_norm_ch_off[(ch_num_)] = 1;         \
+            break;                                                                              \
+        case 3:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_sc_ch_off[(ch_num_)] = 1;           \
+            break;                                                                              \
+        case 4:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_norm_ch_on[(ch_num_)] = 1;          \
+            break;                                                                              \
+        case 5:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[(ch_num_)] = 1; \
+            break;                                                                              \
+        case 6:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_break_ch_on[(ch_num_)] = 1;         \
+            break;                                                                              \
+    }                                                                                           \
+    (mups)[(id_mups)].mups_statment.mups_not_operable = 1;                                      \
+}                                                                                               \
+while(0)                                                                                        
+
+
 #endif //DEFINE_H
