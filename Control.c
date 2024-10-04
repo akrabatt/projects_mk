@@ -1277,14 +1277,15 @@ void mops_service_check(struct tag_usartm * usart_a, struct tag_usartm * usart_b
 //====== MUPS AREA ======//
 /**
  * @brief this function checks the status of the connection to the module, as 
- * well as the status of the channels
+ *        well as the status of the channels
  * @param ch_strategy it is necessary to substitute the channel strategy number
  * @param just_check_online (0 - The function is just to check whether the module 
  * @param id_mups it is used only when checking one module if just_check_online 
- * is set to 0, if not used then set the value to 0
+ *        is set to 0, if not used then set the value to 0
  * @param single_module_mode set 0 if you want to test one module, set 1 if you 
- * want to test all modules
- * is online or not) (1 - full-fledged verification with channels)
+ *        want to test all modules is online or not) (1 - full-fledged 
+ *        verification with channels)
+ * @param power_toggle current supply valtage 18v 24v 28v
  */
 void check_mups_online_status(unsigned short ch_statment, unsigned short just_check_online, unsigned short id_mups, unsigned short single_module_mode, unsigned short power_toggle)
 {
@@ -1296,7 +1297,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
             {
                 Stand.mups_timeout_err[id_mups] = 0;
                 Stand_sw.mups_timeout_err[id_mups] = 0;
-                MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle), 1, 0, 0, 0, 0); // online flag up
+                MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[id_mups], 1, 0, 0, 0, 0); // online flag up
                 if(just_check_online == 0){return;}  // just check online end function
                 memcpy(MACRO_SELECT_MUPS_STATMENT(power_toggle)[id_mups].mups_current_ch_status, MUPS_S_arr[id_mups].Ch_State, sizeof(unsigned short)*4);  // copy current ch status
             }
@@ -1305,7 +1306,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
                 MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[id_mups], 0, 1, 0, 1, 0); // online_err ^1; not_oper ^1
                 return;
             }
-            if(Stand.active_mups[id_mups] > 0 && Stand.mups_crc_err[id_mups] > 0)   // ActivMUPS == 1 && crc error    // 1 - crc
+            if(Stand.active_mups[id_mups] > 0 && Stand.mups_crc_err[id_mups] > 0)   // ActivMUPS == 1 && crc error    // 2 - crc
             {
                 MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[id_mups], 0, 2, 0, 1, 0); // online_err ^2; not_oper ^1
                 return;
@@ -1336,7 +1337,7 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
             {
                 if(MACRO_SELECT_MUPS_STATMENT(power_toggle)[id_mups].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
                 {
-                    MACRO_SET_ERR_CH_FLAG(MACRO_SELECT_MUPS_STATMENT(power_toggle), ch_statment, id_mups, ch_num_);
+                    MACRO_SET_ERR_CH_FLAG(MACRO_SELECT_MUPS_STATMENT(power_toggle), ch_statment, id_mups, ch_num_);     // set ch error
                 }
             }
             break;
@@ -1351,102 +1352,47 @@ void check_mups_online_status(unsigned short ch_statment, unsigned short just_ch
                 {
                     Stand.mups_timeout_err[mups_num_] = 0;
                     Stand_sw.mups_timeout_err[mups_num_] = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_online = 1;
-                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_], 1, 0, 0, 0, 0); // online flag up
                     if(just_check_online == 0){continue;}  // just check online end function
-                    memcpy(MUPS_statment[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
+                    memcpy(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_].mups_current_ch_status, MUPS_S_arr[mups_num_].Ch_State, sizeof(unsigned short)*4);
                 }
-                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] > 0)   // ActivMUPS == 1 && connection with modul == 0
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_timeout_err[mups_num_] > 0)   // ActivMUPS == 1 && connection with modul == 0  // 1 - timeout
                 {
-                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 1;     // 1 - timeout
-                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_], 0, 1, 0, 1, 0); // online_err ^1; not_oper ^1
                     continue;
                 }
-                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_crc_err[mups_num_] > 0)   // ActivMUPS == 1 && crc error
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_crc_err[mups_num_] > 0)   // ActivMUPS == 1 && crc error  // 1 - crc
                 {
-                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 2;     // 1 - crc
-                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_], 0, 2, 0, 1, 0); // online_err ^2; not_oper ^1
                     continue;
                 }
-                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_1_err[mups_num_] > 0)   // ActivMUPS == 1 && col_1 error
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_1_err[mups_num_] > 0)   // ActivMUPS == 1 && col_1 error  // 3 - col_1
                 {
-                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 3;     // 3 - col_1
-                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_], 0, 3, 0, 1, 0); // online_err ^3; not_oper ^1
                     continue;
                 }
-                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_2_err[mups_num_] > 0)   // ActivMUPS == 1 && col_2 error
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_2_err[mups_num_] > 0)   // ActivMUPS == 1 && col_2 error  // 4 - col_2
                 {
-                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 4;     // 4 - col_2
-                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_], 0, 4, 0, 1, 0); // online_err ^4; not_oper ^1
                     continue;
                 }
-                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_3_err[mups_num_] > 0)   // ActivMUPS == 1 && col_3 error
+                if(Stand.active_mups[mups_num_] > 0 && Stand.mups_coll_3_err[mups_num_] > 0)   // ActivMUPS == 1 && col_3 error  // 5 - col_3
                 {
-                    MUPS_statment[mups_num_].mups_statment.mups_online_err = 5;     // 5 - col_3
-                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_offline = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_], 0, 5, 0, 1, 0); // online_err ^3; not_oper ^1
                     continue;
                 }
                 if(Stand.active_mups[mups_num_] == 0)       // ActivMOPS == 0
                 {
-                    MUPS_statment[mups_num_].mups_statment.mups_online = 0;
-                    MUPS_statment[mups_num_].mups_statment.mups_offline = 1;
+                    MACRO_SET_MUPS_STATMENT(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_], 0, 0, 1, 0, 0); // offline ^1
                     continue;
                 }
                 unsigned short ch_num_;
-                size_t ch_num = sizeof(MUPS_statment[mups_num_].mups_current_ch_status)/sizeof(MUPS_statment[mups_num_].mups_current_ch_status[0]);
+                size_t ch_num = sizeof(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_].mups_current_ch_status)/sizeof(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_].mups_current_ch_status[0]);
                 for(ch_num_ = 0; ch_num_ < ch_num; ch_num_++)   // start of the verification cycle for each channel
                 {
-                    if(MUPS_statment[mups_num_].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
+                    if(MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_num_].mups_current_ch_status[ch_num_] != ch_statment)    //check ch status
                     {
-                        switch(ch_statment)
-                        {
-                            case 1: 
-                            {
-                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_off[ch_num_] = 1;
-                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-                                break;
-                            }
-                            case 2: 
-                            {
-                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_off[ch_num_] = 1;
-                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-                                break;
-                            }
-                            case 3: 
-                            {
-                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_sc_ch_off[ch_num_] = 1;
-                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-                                break;
-                            }
-                            case 4: 
-                            {
-                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_norm_ch_on[ch_num_] = 1;
-                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-                                break;
-                            }
-                            case 5: 
-                            {
-                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[ch_num_] = 1;
-                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-                                break;
-                            }
-                            case 6: 
-                            {
-                                MUPS_statment[mups_num_].mups_ch_statement.mups_ch_err_break_ch_on[ch_num_] = 1;
-                                MUPS_statment[mups_num_].mups_statment.mups_not_operable = 1;
-                                break;
-                            }
-                        }
+                        MACRO_SET_ERR_CH_FLAG(MACRO_SELECT_MUPS_STATMENT(power_toggle), ch_statment, mups_num_, ch_num_);     // set ch error
                     }
                 }
             }
@@ -1560,10 +1506,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
                 conf_stand.stand_commands.start_check_mups = 0; 
                 conf_stand_sw.stand_commands.start_check_mups = 0; 
                 int i = 0;
-                for(i = 0; i < mups_size_buf; i++)
-                {
-                    memset(&MACRO_SELECT_MUPS_STATMENT(power_toggle)[i], 0, sizeof(union tag_mups_stand_statment)); //clear MUPS_statment
-                }
+                for(i = 0; i < mups_size_buf; i++) {memset(&MACRO_SELECT_MUPS_STATMENT(power_toggle)[i], 0, sizeof(union tag_mups_stand_statment));} //clear MUPS_statment
                 break;
             }
             else{mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS; break;}
@@ -1590,7 +1533,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         }
         case WRITE_DOWN_THE_DEFAULT_STRATEGY:       // write strategy 1 - oborudovanie
         {
-            check_mups_online_status(0, 0, 0, 1); 
+            check_mups_online_status(0, 0, 0, 1, power_toggle); 
             if(mups_id >= 10){mups_id = 0; mups_service_stages = WRITE_TURNE_OFF_MUPS_RELEYS; break;}
             if(Stand.active_mups[mups_id] != 0 && MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_id].mups_statment.mups_online == 1)
                 {mups_mbm_flag_e = 0; mbm_16_flag(usart_e_2, (mups_id + 1), mups_strat_start_reg, mups_strat_quant_reg, mups_strat_buff, 115200, &mups_mbm_flag_e);} 
@@ -1603,7 +1546,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         case WRITE_TURNE_OFF_MUPS_RELEYS:           // releys in all mups turne off
         { 
             if(mups_id >= 10){mups_id = 0; mups_service_stages = TEST_READING_MODULES_2; break;}
-            if(Stand.active_mups[mups_id] != 0 && MUPS_statment[mups_id].mups_statment.mups_online == 1)
+            if(Stand.active_mups[mups_id] != 0 && MACRO_SELECT_MUPS_STATMENT(power_toggle)[mups_id].mups_statment.mups_online == 1)
                 {mups_mbm_flag_e = 0; mbm_16_flag(usart_e_2, (mups_id + 1), mups_reley_start_reg, mups_reley_quant_reg, mups_start_rel_buff, 115200, &mups_mbm_flag_e);} 
             else 
                 {mups_id++;}
@@ -1650,7 +1593,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         }
         case DATA_ANALYSIS_BREAK:                   // analysis break status in ALL mups modules
         {
-            check_mups_online_status(1, 1, 0, 1);
+            check_mups_online_status(1, 1, 0, 1, power_toggle);
             mups_service_stages = TURNE_ON_RELEY_NORMA;
             break;
         }
@@ -1683,7 +1626,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         }
         case DATA_ANALYSIS_NORMA:                   // analysis norm ch off status in ALL mups modules
         {
-            check_mups_online_status(2, 1, 0, 1);
+            check_mups_online_status(2, 1, 0, 1, power_toggle);
             mups_service_stages = TURNE_ON_RELEY_SC;
             break;
         }
@@ -1716,7 +1659,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         }
         case DATA_ANALYSIS_SC:                      // analysis sc status in ALL mups modules               
         {
-            check_mups_online_status(3, 1, 0, 1);
+            check_mups_online_status(3, 1, 0, 1, power_toggle);
             mups_service_stages = ALL_RELEYS_TURNE_OFF;
             break;
         }
@@ -1735,7 +1678,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         ///////////////////////////////////////////////////////////////        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         case CONNECT_A_SEPARATE_MODULE_TO_THE_LOAD_NORM:    // connect load for CURRENT mups
         {
-            if(MUPS_statment[(individual_moduls_num - 1)].mups_statment.mups_online == 1)
+            if(MACRO_SELECT_MUPS_STATMENT(power_toggle)[(individual_moduls_num - 1)].mups_statment.mups_online == 1)
             {
                 switch(individual_moduls_num)
                 {
@@ -1868,7 +1811,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         }
         case DATA_ANALYSIS_SEPARATE_MODULE_NORM:           // analysis norm status IN THE CURRENT mups modul
         {
-            check_mups_online_status(4, 1, (individual_moduls_num - 1), 0);
+            check_mups_online_status(4, 1, (individual_moduls_num - 1), 0, power_toggle);
             mups_service_stages = TURNE_ON_RELEYS_HIGH_CURRENT;
             break;
         }
@@ -1901,7 +1844,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         }
         case DATA_ANALYSIS_SEPARATE_HIGH_CURRENT:               // analysis high current status IN THE CURRENT mups modul
         {
-            check_mups_online_status(5, 1, (individual_moduls_num - 1), 0);
+            check_mups_online_status(5, 1, (individual_moduls_num - 1), 0, power_toggle);
             mups_service_stages = TURNE_OFF_RELEYS_HIGH_CURRENT;
             break;
         }
