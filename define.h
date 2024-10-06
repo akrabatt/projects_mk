@@ -679,4 +679,9 @@ do                                                                              
 while(0)                                                                                        
 
 
+
+/**
+ * @param macros return _*_mups_on_cab_load_norm_xp_*
+ */
+
 #endif //DEFINE_H
