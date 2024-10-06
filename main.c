@@ -5,7 +5,7 @@
 #include "global.h"
 #include "define.h"
 
-
+// main
 int main(void)
 {
     InitializeSystem();
