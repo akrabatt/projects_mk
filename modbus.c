@@ -751,7 +751,12 @@ void mbs_uni (struct tag_usart * usart, unsigned char mbs_addres)
                         if (READ_MUPS_SHORT){ mbs_03 (usart, (unsigned short*)MUPS_S_arr_sw, (start_reg - START_READ_MUPS_SHORT), num_reg); break;} //7000 ... 7900
                         if (READ_MOPS_SHORT){ mbs_03 (usart, (unsigned short*)MOPS_S_arr_sw, (start_reg - START_READ_MOPS_SHORT), num_reg); break;} //8000 ... 8900
                         if (READ_STAND_CONF_AREA) {mbs_03 (usart, conf_stand_sw.comm_buff, (start_reg - START_READ_STAND_CONF_AREA), num_reg); break;} //9000 ... 9900
-                        if (READ_STAND_MOPS_AREA) {mbs_03 (usart, (unsigned short*)MOPS_statment_sw, (start_reg - START_READ_STAND_MOPS_AREA), num_reg); break;} //10000 ... 10900
+                        if (READ_STAND_MOPS_AREA_18V) {mbs_03 (usart, (unsigned short*)MOPS_statment_sw_18v, (start_reg - START_READ_STAND_MOPS_AREA_18V), num_reg); break;} //10000 ... 10900
+                        if (READ_STAND_MUPS_AREA_18V) {mbs_03 (usart, (unsigned short*)MUPS_statment_sw_18v, (start_reg - START_READ_STAND_MUPS_AREA_18V), num_reg); break;} //11000 ... 11900
+                        if (READ_STAND_MOPS_AREA_24V) {mbs_03 (usart, (unsigned short*)MOPS_statment_sw_24v, (start_reg - START_READ_STAND_MOPS_AREA_24V), num_reg); break;} //12000 ... 12900
+                        if (READ_STAND_MUPS_AREA_24V) {mbs_03 (usart, (unsigned short*)MUPS_statment_sw_24v, (start_reg - START_READ_STAND_MUPS_AREA_24V), num_reg); break;} //13000 ... 13900
+                        if (READ_STAND_MOPS_AREA_28V) {mbs_03 (usart, (unsigned short*)MOPS_statment_sw_28v, (start_reg - START_READ_STAND_MOPS_AREA_28V), num_reg); break;} //14000 ... 14900
+                        if (READ_STAND_MUPS_AREA_28V) {mbs_03 (usart, (unsigned short*)MUPS_statment_sw_28v, (start_reg - START_READ_STAND_MUPS_AREA_28V), num_reg); break;} //15000 ... 15900
                         answer_illegal_data_addr (usart);
                         break; 
                     }			

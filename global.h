@@ -692,8 +692,23 @@ unsigned short high_current[8] = {NONE_530, NONE_530, SW_HIGH_CURRENT, NONE_530,
 // none
 unsigned short none[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
 
-//mups_1 load
-unsigned short _1_mups_load_norm[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp1
+unsigned short _1_mups_on_cab_load_norm_xp_1[8] = {SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp2
+unsigned short _1_mups_on_cab_load_norm_xp_2[8] = {NONE_530, NONE_530, SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp3
+unsigned short _1_mups_on_cab_load_norm_xp_3[8] = {NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_1_NORM_LOAD, NONE_530, NONE_530, NONE_530};
+//mups_1 load xp4
+unsigned short _1_mups_on_cab_load_norm_xp_4[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_1_NORM_LOAD, NONE_530};
+
+//mups_2 load xp1
+unsigned short _2_mups_on_cab_load_norm_xp_1[8] = {SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_2 load xp2
+unsigned short _2_mups_on_cab_load_norm_xp_2[8] = {NONE_530, NONE_530, SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530, NONE_530, NONE_530};
+//mups_2 load xp3
+unsigned short _2_mups_on_cab_load_norm_xp_3[8] = {NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2, NONE_530, NONE_530};
+//mups_2 load xp4
+unsigned short _2_mups_on_cab_load_norm_xp_4[8] = {NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, NONE_530, SW_MUPS_2_NORM_LOAD_1, SW_MUPS_2_NORM_LOAD_2};
 
 
 //var for function _1_sec
@@ -740,9 +755,17 @@ union tag_mops_stand_statment
     unsigned short main_buff[56];
 }mops_stand_statment;
 
-//struct mups array
-union tag_mops_stand_statment MOPS_statment[10];
-union tag_mops_stand_statment MOPS_statment_sw[10];
+//struct mups array 18v
+union tag_mops_stand_statment MOPS_statment_18v[10];
+union tag_mops_stand_statment MOPS_statment_sw_18v[10];
+
+//struct mups array 24v
+union tag_mops_stand_statment MOPS_statment_24v[10];
+union tag_mops_stand_statment MOPS_statment_sw_24v[10];
+
+//struct mups array 28v
+union tag_mops_stand_statment MOPS_statment_28v[10];
+union tag_mops_stand_statment MOPS_statment_sw_28v[10];
 
 //union for configuration stand
 union tag_conf_stand
@@ -793,9 +816,17 @@ union tag_mups_stand_statment
     unsigned short main_buff[36];
 }mups_stand_statment;
 
-//struct mups array
-union tag_mups_stand_statment MUPS_statment[10];
-union tag_mups_stand_statment MUPS_statment_sw[10];
+//struct mups array 18v
+union tag_mups_stand_statment MUPS_statment_18v[10];
+union tag_mups_stand_statment MUPS_statment_sw_18v[10];
+
+//struct mups array 24v 
+union tag_mups_stand_statment MUPS_statment_24v[10];
+union tag_mups_stand_statment MUPS_statment_sw_24v[10];
+
+//struct mups array 28v
+union tag_mups_stand_statment MUPS_statment_28v[10];
+union tag_mups_stand_statment MUPS_statment_sw_28v[10];
 
 
 #endif // GLOBAL_H

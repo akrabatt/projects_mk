@@ -216,10 +216,17 @@
 #define HIGH_CURRENT                    0x7800
 #define SW_HIGH_CURRENT                 0x0078
 
-// mups1 norm lad
-#define MUPS_1_NORM_LOAD                0x0b6d
+// mups1 norm load
+#define MUPS_1_NORM_LOAD                0x0b6d      // 0000 1011 0110 1101
 // swapped mups1 norm load
 #define SW_MUPS_1_NORM_LOAD             0x6d0b
+
+// mups2 norm load
+#define MUPS_2_NORM_LOAD_1              0xd000      // 1101 0000 0000 0000 
+#define MUPS_2_NORM_LOAD_2              0x00b6      // 0000 0000 1011 0110       
+// swapped mups2 norm load
+#define SW_MUPS_2_NORM_LOAD_1           0x00d0      // 1101 0000 0000 0000 
+#define SW_MUPS_2_NORM_LOAD_2           0xb600      // 0000 0000 1011 0110 
 
 // none
 #define NONE_530                    0x0000
@@ -233,10 +240,35 @@
 #define READ_STAND_CONF_AREA           ((start_reg>=START_READ_STAND_CONF_AREA)&&(last_reg<=END_READ_STAND_CONF_AREA))
 #define WRITE_STAND_CONF_AREA          ((start_reg>=START_WRITE_STAND_CONF_AREA)&&(last_reg<=END_WRITE_STAND_CONF_AREA))
 
-/*stand read mops area*/
-#define START_READ_STAND_MOPS_AREA      10000
-#define END_READ_STAND_MOPS_AREA        10900
-#define READ_STAND_MOPS_AREA            ((start_reg>=START_READ_STAND_MOPS_AREA)&&(last_reg<=END_READ_STAND_MOPS_AREA))
+/*stand read mops area 18v*/
+#define START_READ_STAND_MOPS_AREA_18V  10000
+#define END_READ_STAND_MOPS_AREA_18V    10900
+#define READ_STAND_MOPS_AREA_18V        ((start_reg>=START_READ_STAND_MOPS_AREA_18V)&&(last_reg<=END_READ_STAND_MOPS_AREA_18V))
+
+/*stand read mups area 18v*/
+#define START_READ_STAND_MUPS_AREA_18V  11000
+#define END_READ_STAND_MUPS_AREA_18V    11900
+#define READ_STAND_MUPS_AREA_18V        ((start_reg>=START_READ_STAND_MUPS_AREA_18V)&&(last_reg<=END_READ_STAND_MUPS_AREA_18V)) 
+    
+/*stand read mops area 24v*/
+#define START_READ_STAND_MOPS_AREA_24V  12000
+#define END_READ_STAND_MOPS_AREA_24V    12900
+#define READ_STAND_MOPS_AREA_24V        ((start_reg>=START_READ_STAND_MOPS_AREA_24V)&&(last_reg<=END_READ_STAND_MOPS_AREA_24V))
+
+/*stand read mups area 24v*/
+#define START_READ_STAND_MUPS_AREA_24V  13000
+#define END_READ_STAND_MUPS_AREA_24V    13900
+#define READ_STAND_MUPS_AREA_24V        ((start_reg>=START_READ_STAND_MUPS_AREA_24V)&&(last_reg<=END_READ_STAND_MUPS_AREA_24V)) 
+    
+/*stand read mops area 28v*/
+#define START_READ_STAND_MOPS_AREA_28V  14000
+#define END_READ_STAND_MOPS_AREA_28V    14900
+#define READ_STAND_MOPS_AREA_28V        ((start_reg>=START_READ_STAND_MOPS_AREA_28V)&&(last_reg<=END_READ_STAND_MOPS_AREA_28V))
+
+/*stand read mups area 28v*/
+#define START_READ_STAND_MUPS_AREA_28V  15000
+#define END_READ_STAND_MUPS_AREA_28V    15900
+#define READ_STAND_MUPS_AREA_28V        ((start_reg>=START_READ_STAND_MUPS_AREA_28V)&&(last_reg<=END_READ_STAND_MUPS_AREA_28V)) 
     
 /*read MOPS*/
 #define START_READ_MUPS     5000
@@ -468,5 +500,245 @@
 #define AO_5CYL_ERROR_ODD       15
 
     
+
+// MACROS MOPS
+
+/**
+ * @brief macros to set mops statment
+ */
+#define MACRO_SET_MOPS_STATMENT(mops, online, online_err, offline, not_operable, operable) \
+    do { \
+        (mops).mops_online = (online); \
+        (mops).mops_online_err = (online_err); \
+        (mops).mops_offline = (offline); \
+        (mops).mops_not_operable = (not_operable); \
+        (mops).mops_operable = (operable); \
+    } while(0)
+
+
+/**
+ * @brief macros to set mops arr
+ */
+#define MACRO_SELECT_MOPS_STATMENT(power_cycle_mops) \
+    ((power_cycle_mops) == 0 ? MOPS_statment_18v :   \
+     (power_cycle_mops) == 1 ? MOPS_statment_24v :   \
+                               MOPS_statment_28v)
+
+
+/**
+ * @brief macros to set mops arr swapped
+ */
+#define MACRO_SELECT_MOPS_STATMENT_SW(power_cycle_mops) \
+    ((power_cycle_mops) == 0 ? MOPS_statment_sw_18v :   \
+     (power_cycle_mops) == 1 ? MOPS_statment_sw_24v :   \
+                               MOPS_statment_sw_28v)
+
+
+/**
+ * @brief macros to select powersupply
+ */
+#define MACRO_SELECT_SW_RELEY_ON_START_4(power_cycle) \
+    ((power_cycle) == 0 ? SW_RELEY_ON_START_4_001_1 : \
+     (power_cycle) == 1 ? SW_RELEY_ON_START_4_011_1 : \
+                          SW_RELEY_ON_START_4_111_1)  \
+                          
+
+/**
+ * @brief macros to select vars 3id 530 board
+ */
+#define MACRO_SELECT_VAR_3ID_530(power_cycle) \
+    ((power_cycle) == 0 ? 0x0100 : \
+     (power_cycle) == 1 ? 0x0300 : \
+                          0x0700)  \
     
+
+/**
+ * @brief macros if mbm send
+ */
+#define MACRO_MBM_END_SEND(a, b, c, d) ((a) > 0 && (b) > 0 && (c) > 0 && (d) > 0)
+
+
+/**
+ * @brief macros reset flags
+ */
+#define MACRO_MBM_RESET_FLAGS(a, b, c, d) \
+    do {                                  \
+        (a) = 0;                          \
+        (b) = 0;                          \
+        (c) = 0;                          \
+        (d) = 0;                          \
+    } while(0)
+
+
+/**
+ * @brief Select 18v, 24v, or 28v error field
+ * @param power_cycle - Select between 18v, 24v, 28v error fields
+ * @param statment - the mops_statment structure to access the error field
+ */
+#define MACRO_SELECT_SUPPLY(statment, power_cycle)    \
+    (((power_cycle) == 0) ? (statment).mops_power_supply_error.mops_18v_error :    \
+     ((power_cycle) == 1) ? (statment).mops_power_supply_error.mops_24v_error :    \
+                            (statment).mops_power_supply_error.mops_28v_error)
+
+
+
+ 
+
+/**
+ * @brief Set mops supply error flag up or down
+ * @param statment - mops buffer structure (union tag_mops_stand_statment)
+ * @param power_cycle - Select between 18v, 24v, or 28v error field
+ * @param value - Set error flag up (1) or down (0)
+ */
+#define MACRO_SET_SUPPLY_FLAG(statment, power_cycle, value)  \
+     do {                                                       \
+        if ((power_cycle) == 0)                                \
+            (statment).mops_power_supply_error.mops_18v_error = (value); \
+        else if ((power_cycle) == 1)                           \
+            (statment).mops_power_supply_error.mops_24v_error = (value); \
+        else                                                   \
+            (statment).mops_power_supply_error.mops_28v_error = (value); \
+    } while (0)
+
+
+
+// MACROS MUPS
+
+/**
+ * @brief macros to set mops statment
+ */
+#define MACRO_SET_MUPS_STATMENT(mups, online, online_err, offline, not_operable, operable) \
+    do { \
+        (mups).mups_statment.mups_online = (online); \
+        (mups).mups_statment.mups_online_err = (online_err); \
+        (mups).mups_statment.mups_offline = (offline); \
+        (mups).mups_statment.mups_not_operable = (not_operable); \
+        (mups).mups_statment.mups_operable = (operable); \
+    } while(0)
+
+
+
+/**
+ * @brief macros to set mups arr
+ */
+#define MACRO_SELECT_MUPS_STATMENT(power_cycle_mups) \
+    ((power_cycle_mups) == 0 ? MUPS_statment_18v :   \
+     (power_cycle_mups) == 1 ? MUPS_statment_24v :   \
+                               MUPS_statment_28v)
+
+/**
+ * @brief macros to set mups arr swapped
+ */
+#define MACRO_SELECT_MUPS_STATMENT_SW(power_cycle_mups) \
+    ((power_cycle_mups) == 0 ? MUPS_statment_sw_18v :   \
+     (power_cycle_mups) == 1 ? MUPS_statment_sw_24v :   \
+                               MUPS_statment_sw_28v)
+
+
+/**
+ * @brief macros return 530 board mups supply
+ */
+#define MACRO_530_SUPPLY(power_cycle_mups) \
+    ((power_cycle_mups) == 0 ? _530_board_just_18v :   \
+     (power_cycle_mups) == 1 ? _530_board_just_24v :   \
+                               _530_board_just_28v)
+
+
+/**
+ * @brief macros to set error flag in channel
+ * @param mups MACRO_SELECT_MUPS_STATMENT
+ * @param ch_statment current ch statment 
+ * @param id_mups current mups address
+ * @param ch_num current ch num
+ */
+#define MACRO_SET_ERR_CH_FLAG(mups, ch_statment, id_mups, ch_num_)                              \
+do                                                                                              \
+{                                                                                               \
+    switch((ch_statment))                                                                       \
+    {                                                                                           \
+        case 1:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_break_ch_off[(ch_num_)] = 1;        \
+            break;                                                                              \
+        case 2:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_norm_ch_off[(ch_num_)] = 1;         \
+            break;                                                                              \
+        case 3:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_sc_ch_off[(ch_num_)] = 1;           \
+            break;                                                                              \
+        case 4:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_norm_ch_on[(ch_num_)] = 1;          \
+            break;                                                                              \
+        case 5:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_cur_up_ch_off_force[(ch_num_)] = 1; \
+            break;                                                                              \
+        case 6:                                                                                 \
+            (mups)[(id_mups)].mups_ch_statement.mups_ch_err_break_ch_on[(ch_num_)] = 1;         \
+            break;                                                                              \
+    }                                                                                           \
+    (mups)[(id_mups)].mups_statment.mups_not_operable = 1;                                      \
+}                                                                                               \
+while(0)                                                                                        
+
+
+
+/**
+ * @brief macros return _*_mups_on_cab_load_norm_xp_*
+ * @param current mupses id
+ */
+#define MACRO_RET_XP(individual_moduls_num) \
+    ((individual_moduls_num) == 1 ? _1_mups_on_cab_load_norm_xp_1 : \
+    (individual_moduls_num) == 2 ? _2_mups_on_cab_load_norm_xp_1 : \
+    (individual_moduls_num) == 3 ? _1_mups_on_cab_load_norm_xp_2 : \
+    (individual_moduls_num) == 4 ? _2_mups_on_cab_load_norm_xp_2 : \
+    (individual_moduls_num) == 5 ? _1_mups_on_cab_load_norm_xp_3 : \
+    (individual_moduls_num) == 6 ? _2_mups_on_cab_load_norm_xp_3 : \
+    (individual_moduls_num) == 7 ? _1_mups_on_cab_load_norm_xp_4 : \
+    (individual_moduls_num) == 8 ? _2_mups_on_cab_load_norm_xp_4 : \
+    (individual_moduls_num) == 9 ? _1_mups_on_cab_load_norm_xp_1 : \
+    _2_mups_on_cab_load_norm_xp_1)
+
+
+/**
+ * @brief macros return mups_mbm_flag_*
+ * @param current mupses id
+ */
+#define MACRO_RET_FLAG(num)   \
+    ((num) >= 1 && (num) <= 8 ? mups_mbm_flag_f : \
+    (num) == 9 || (num) == 10 ? mups_mbm_flag_d : mups_mbm_flag_d) 
+    
+
+/**
+ * @brief macros return usart_*_*
+ * @param current mupses id
+ */
+#define MACRO_RET_USART(num)   \
+    ((num) >= 1 && (num) <= 8 ? usart_f_5 : \
+    (num) == 9 || (num) == 10 ? usart_d_4 : usart_d_4) \
+    
+
+/**
+ * @brief macros return _530_board_*
+ * @param current mupses id
+ */
+#define MACRO_RET_530_BOARD(num)   \
+    ((num) >= 1 && (num) <= 8 ? _530_board_u5_ap5_id1 : \
+    (num) == 9 || (num) == 10 ? _530_board_u4_ap4_id4 : _530_board_u4_ap4_id4) \
+
+
+/**
+ * @brief Set mups supply error flag up or down
+ * @param statment - mups buffer structure (union tag_mops_stand_statment)
+ * @param power_cycle - Select between 18v, 24v, or 28v error field
+ * @param value - Set error flag up (1) or down (0)
+ */
+#define MACRO_SET_MUPS_SUPPLY_FLAG(statment, power_cycle, value)  \
+     do {                                                       \
+        if ((power_cycle) == 0)                                \
+            (statment).mups_power_supply_error.mups_18v_error = (value); \
+        else if ((power_cycle) == 1)                           \
+            (statment).mups_power_supply_error.mups_24v_error = (value); \
+        else                                                   \
+            (statment).mups_power_supply_error.mups_28v_error = (value); \
+    } while (0)
+
 #endif //DEFINE_H
