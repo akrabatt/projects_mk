@@ -609,12 +609,13 @@
  */
 #define MACRO_SET_MUPS_STATMENT(mups, online, online_err, offline, not_operable, operable) \
     do { \
-        (mups).mups_online = (online); \
-        (mups).mups_online_err = (online_err); \
-        (mups).mups_offline = (offline); \
-        (mups).mups_not_operable = (not_operable); \
-        (mups).mups_operable = (operable); \
+        (mups).mups_statment.mups_online = (online); \
+        (mups).mups_statment.mups_online_err = (online_err); \
+        (mups).mups_statment.mups_offline = (offline); \
+        (mups).mups_statment.mups_not_operable = (not_operable); \
+        (mups).mups_statment.mups_operable = (operable); \
     } while(0)
+
 
 
 /**
