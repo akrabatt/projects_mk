@@ -740,7 +740,14 @@ while(0)
         else                                                   \
             (statment).mups_power_supply_error.mups_28v_error = (value); \
     } while (0)
-
-
+//#define MACRO_SET_MUPS_SUPPLY_FLAG(statment, power_cycle, value)  \
+//     do {                                                       \
+//         if ((power_cycle) == 0)                                \
+//             (statment)->mups_power_supply_error.mups_18v_error = (value); \
+//         else if ((power_cycle) == 1)                           \
+//             (statment)->mups_power_supply_error.mups_24v_error = (value); \
+//         else                                                   \
+//             (statment)->mups_power_supply_error.mups_28v_error = (value); \
+//     } while (0)
 
 #endif //DEFINE_H

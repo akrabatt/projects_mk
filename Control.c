@@ -1667,26 +1667,67 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         {
             if(MACRO_SELECT_MUPS_STATMENT(power_toggle)[(individual_moduls_num - 1)].mups_statment.mups_online == 1)
             {
-                switch(individual_moduls_num)
+                 switch(individual_moduls_num)
                 {
-                    case 1:
-                    case 3:
-                    case 5:
-                    case 7:
-                    case 9:
+                    case 1:  
                     {
                         mups_mbm_flag_f = 0;
-                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, MACRO_RET_XP(individual_moduls_num), 115200, &mups_mbm_flag_f);
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
                         break;
                     }
-                    case 2:
-                    case 4:
-                    case 6:
-                    case 8:
-                    case 10:
+                    case 3: 
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 5:  
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 7:             
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 9:
                     {
                         mups_mbm_flag_d = 0;
-                        mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, MACRO_RET_XP(individual_moduls_num), 115200, &mups_mbm_flag_d);
+                        mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _1_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
+                        break;
+                    }
+                    case 2:   
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 4:
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_2, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 6:  
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_3, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 8:             
+
+                    {
+                        mups_mbm_flag_f = 0;
+                        mbm_16_flag(usart_f_5, _530_board_u5_ap5_id1, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_4, 115200, &mups_mbm_flag_f);
+                        break;
+                    }
+                    case 10:            // 10 } _2_mups_on_cab_load_norm
+                    {
+                        mups_mbm_flag_d = 0;
+                        mbm_16_flag(usart_d_4, _530_board_u4_ap4_id4, _530_board_start_register, _530_board_quant_reg, _2_mups_on_cab_load_norm_xp_1, 115200, &mups_mbm_flag_d);
                         break;
                     }
                 }
@@ -1827,17 +1868,17 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
         case CHECK:
         {
             // set errors on current power supply and current module
-            if(MACRO_SELECT_MUPS_STATMENT(power_toggle)[individual_moduls_num].mups_statment.mups_not_operable == 1)
+            if(MACRO_SELECT_MUPS_STATMENT(power_toggle)[(individual_moduls_num - 1)].mups_statment.mups_not_operable >= 1)
             {
-                MACRO_SET_MUPS_SUPPLY_FLAG(MACRO_SELECT_MUPS_STATMENT(power_toggle)[individual_moduls_num], power_toggle, 1);
+                MACRO_SET_MUPS_SUPPLY_FLAG(MACRO_SELECT_MUPS_STATMENT(power_toggle)[(individual_moduls_num - 1)], power_toggle, 1);
             }
-            else {MACRO_SET_MUPS_SUPPLY_FLAG(MACRO_SELECT_MUPS_STATMENT(power_toggle)[individual_moduls_num], power_toggle, 0);}
+            else {MACRO_SET_MUPS_SUPPLY_FLAG(MACRO_SELECT_MUPS_STATMENT(power_toggle)[(individual_moduls_num - 1)], power_toggle, 0);}
             
             // swap and copy current module 
             int i = 0;
             for(i = 0; i < mups_size_main_buf; i++)
             {
-                MACRO_SELECT_MUPS_STATMENT_SW(power_toggle)[individual_moduls_num].main_buff[i] = swapshort(MACRO_SELECT_MUPS_STATMENT(power_toggle)[individual_moduls_num].main_buff[i]);
+                MACRO_SELECT_MUPS_STATMENT_SW(power_toggle)[(individual_moduls_num - 1)].main_buff[i] = swapshort(MACRO_SELECT_MUPS_STATMENT(power_toggle)[(individual_moduls_num - 1)].main_buff[i]);
             }
             
             ++individual_moduls_num;    // incr mups id
@@ -1845,7 +1886,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             // EXITE
             if(individual_moduls_num > mups_size_buf && power_toggle == 2)
             {
-                individual_moduls_num = 0;
+                individual_moduls_num = 1;
                 power_toggle = 0;
                 mups_service_stages = CHECK_BUTTON_TO_START_CHECK_MUPS;
                 
@@ -1870,7 +1911,7 @@ void mups_service_check(struct tag_usartm* usart_d_4, struct tag_usartm* usart_e
             // UP SUPPLY
             else if(individual_moduls_num > mups_size_buf && power_toggle < 2)
             {
-                individual_moduls_num = 0;
+                individual_moduls_num = 1;
                 power_toggle++;
                 mups_service_stages = TURNE_ON_18V;
                 break;
