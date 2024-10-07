@@ -702,16 +702,16 @@ while(0)
  * @brief macros return mups_mbm_flag_*
  * @param current mupses id
  */
-#define MACRO_RET_FLAG(individual_moduls_num)   \
+#define MACRO_RET_FLAG(num)   \
     ((num) >= 1 && (num) <= 8 ? mups_mbm_flag_f : \
-    (num) == 9 || (num) == 10 ? mups_mbm_flag_d : mups_mbm_flag_d) \
+    (num) == 9 || (num) == 10 ? mups_mbm_flag_d : mups_mbm_flag_d) 
     
 
 /**
  * @brief macros return usart_*_*
  * @param current mupses id
  */
-#define MACRO_RET_USART(individual_moduls_num)   \
+#define MACRO_RET_USART(num)   \
     ((num) >= 1 && (num) <= 8 ? usart_f_5 : \
     (num) == 9 || (num) == 10 ? usart_d_4 : usart_d_4) \
     
@@ -720,9 +720,27 @@ while(0)
  * @brief macros return _530_board_*
  * @param current mupses id
  */
-#define MACRO_RET_530_BOARD(individual_moduls_num)   \
+#define MACRO_RET_530_BOARD(num)   \
     ((num) >= 1 && (num) <= 8 ? _530_board_u5_ap5_id1 : \
     (num) == 9 || (num) == 10 ? _530_board_u4_ap4_id4 : _530_board_u4_ap4_id4) \
+
+
+/**
+ * @brief Set mups supply error flag up or down
+ * @param statment - mups buffer structure (union tag_mops_stand_statment)
+ * @param power_cycle - Select between 18v, 24v, or 28v error field
+ * @param value - Set error flag up (1) or down (0)
+ */
+#define MACRO_SET_MUPS_SUPPLY_FLAG(statment, power_cycle, value)  \
+     do {                                                       \
+        if ((power_cycle) == 0)                                \
+            (statment).mups_power_supply_error.mups_18v_error = (value); \
+        else if ((power_cycle) == 1)                           \
+            (statment).mups_power_supply_error.mups_24v_error = (value); \
+        else                                                   \
+            (statment).mups_power_supply_error.mups_28v_error = (value); \
+    } while (0)
+
 
 
 #endif //DEFINE_H
