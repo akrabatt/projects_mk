@@ -682,7 +682,47 @@ while(0)
 
 
 /**
- * @param macros return _*_mups_on_cab_load_norm_xp_*
+ * @brief macros return _*_mups_on_cab_load_norm_xp_*
+ * @param current mupses id
  */
+#define MACRO_RET_XP(individual_moduls_num) \
+    ((individual_moduls_num) == 1 ? _1_mups_on_cab_load_norm_xp_1 : \
+    (individual_moduls_num) == 2 ? _2_mups_on_cab_load_norm_xp_1 : \
+    (individual_moduls_num) == 3 ? _1_mups_on_cab_load_norm_xp_2 : \
+    (individual_moduls_num) == 4 ? _2_mups_on_cab_load_norm_xp_2 : \
+    (individual_moduls_num) == 5 ? _1_mups_on_cab_load_norm_xp_3 : \
+    (individual_moduls_num) == 6 ? _2_mups_on_cab_load_norm_xp_3 : \
+    (individual_moduls_num) == 7 ? _1_mups_on_cab_load_norm_xp_4 : \
+    (individual_moduls_num) == 8 ? _2_mups_on_cab_load_norm_xp_4 : \
+    (individual_moduls_num) == 9 ? _1_mups_on_cab_load_norm_xp_1 : \
+    _2_mups_on_cab_load_norm_xp_1)
+
+
+/**
+ * @brief macros return mups_mbm_flag_*
+ * @param current mupses id
+ */
+#define MACRO_RET_FLAG(individual_moduls_num)   \
+    ((num) >= 1 && (num) <= 8 ? mups_mbm_flag_f : \
+    (num) == 9 || (num) == 10 ? mups_mbm_flag_d : mups_mbm_flag_d) \
+    
+
+/**
+ * @brief macros return usart_*_*
+ * @param current mupses id
+ */
+#define MACRO_RET_USART(individual_moduls_num)   \
+    ((num) >= 1 && (num) <= 8 ? usart_f_5 : \
+    (num) == 9 || (num) == 10 ? usart_d_4 : usart_d_4) \
+    
+
+/**
+ * @brief macros return _530_board_*
+ * @param current mupses id
+ */
+#define MACRO_RET_530_BOARD(individual_moduls_num)   \
+    ((num) >= 1 && (num) <= 8 ? _530_board_u5_ap5_id1 : \
+    (num) == 9 || (num) == 10 ? _530_board_u4_ap4_id4 : _530_board_u4_ap4_id4) \
+
 
 #endif //DEFINE_H
